@@ -29,6 +29,7 @@ public partial class TestDataProviderManager : IDataProviderManager
                 DataProviderType.Sqlite => new SqliteNopDataProvider(),
                 DataProviderType.Tidb => new MySqlNopDataProvider(),
                 DataProviderType.Oracle => new OracleNopDataProvider(),
+                DataProviderType.OpenGauss or DataProviderType.GaussDB => new PostgreSqlDataProvider(),
                 _ => throw new NopException($"Unknown [{Singleton<DataConfig>.Instance.DataProvider}] DataProvider")
             };
         }

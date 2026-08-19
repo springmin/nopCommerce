@@ -38,6 +38,7 @@ public class NopGeneratorAccessor : IGeneratorAccessor
             DataProviderType.Sqlite => FindGenerator(generators, GeneratorIdConstants.SQLite),
             DataProviderType.Tidb => FindGenerator(generators, GeneratorIdConstants.MySql8),
             DataProviderType.Oracle => FindGenerator(generators, GeneratorIdConstants.Oracle),
+            DataProviderType.OpenGauss or DataProviderType.GaussDB => FindGenerator(generators, GeneratorIdConstants.PostgreSQL15_0),
             _ => throw new InvalidOperationException(
                 $@"A migration generator for Data provider type {dataSettings.DataProvider} couldn't be found.")
         };

@@ -47,5 +47,17 @@ public enum DataProviderType
     /// Oracle
     /// </summary>
     [EnumMember(Value = "oracle")]
-    Oracle
+    Oracle,
+
+    /// <summary>
+    /// openGauss (PostgreSQL protocol compatible, derived from PostgreSQL)
+    /// </summary>
+    [EnumMember(Value = "opengauss")]
+    OpenGauss,
+
+    /// <summary>
+    /// Huawei Cloud GaussDB (PostgreSQL-compatible edition)
+    /// </summary>
+    [EnumMember(Value = "gaussdb")]
+    GaussDB
 }

@@ -39,6 +39,7 @@ public class NopProcessorAccessor : IProcessorAccessor
             DataProviderType.Sqlite => FindProcessor(processors, ProcessorIdConstants.SQLite),
             DataProviderType.Tidb => FindProcessor(processors, ProcessorIdConstants.MySql8),
             DataProviderType.Oracle => FindProcessor(processors, ProcessorIdConstants.Oracle),
+            DataProviderType.OpenGauss or DataProviderType.GaussDB => FindProcessor(processors, ProcessorIdConstants.PostgreSQL15_0),
             _ => throw new ProcessorFactoryNotFoundException(
                 $@"A migration processor for Data provider type {dataSettings.DataProvider} couldn't be found.")
         };

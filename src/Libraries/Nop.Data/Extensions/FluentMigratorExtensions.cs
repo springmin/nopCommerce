@@ -94,6 +94,7 @@ public static class FluentMigratorExtensions
             DataProviderType.Sqlite => builder.AddSQLite(),
             DataProviderType.Tidb => builder.AddMySql8(),
             DataProviderType.Oracle => builder.AddOracle(),
+            DataProviderType.OpenGauss or DataProviderType.GaussDB => builder.AddPostgres15_0(),
             _ => throw new NotImplementedException(),
         };
     }

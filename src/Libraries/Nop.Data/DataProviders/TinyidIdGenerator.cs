@@ -148,7 +148,7 @@ public partial class TinyidIdGenerator : IEntityIdGenerator
         {
             DataProviderType.SqlServer => SqlServerTools.GetDataProvider(),
             DataProviderType.MySql or DataProviderType.Tidb => MySqlTools.GetDataProvider(MySqlVersion.MySql80),
-            DataProviderType.PostgreSQL => PostgreSQLTools.GetDataProvider(),
+            DataProviderType.PostgreSQL or DataProviderType.OpenGauss or DataProviderType.GaussDB => PostgreSQLTools.GetDataProvider(),
             DataProviderType.Sqlite or DataProviderType.Unknown => SQLiteTools.GetDataProvider(SQLiteProvider.Microsoft),
             DataProviderType.Oracle => OracleTools.GetDataProvider(OracleVersion.v12),
             _ => throw new NopException($"Unsupported data provider: {dataSettings.DataProvider}")
