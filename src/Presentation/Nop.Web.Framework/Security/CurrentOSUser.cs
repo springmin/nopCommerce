@@ -69,10 +69,12 @@ public static class CurrentOSUser
 
         var res = process.StandardOutput.ReadToEnd();
 
-        var respars = res.Split("\n");
+        var respars = res.Split("\n", StringSplitOptions.RemoveEmptyEntries);
 
-        UserId = respars[0];
-        Groups = respars[1].Split(" ").ToList();
+        UserId = respars.Length > 0 ? respars[0] : Name;
+        Groups = respars.Length > 1
+            ? respars[1].Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList()
+            : new List<string>();
     }
 
     #endregion
