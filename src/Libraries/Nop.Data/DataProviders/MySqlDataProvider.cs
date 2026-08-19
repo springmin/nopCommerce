@@ -307,7 +307,7 @@ public partial class MySqlNopDataProvider : BaseDataProvider, INopDataProvider
         //only split when the part after the last colon is a pure number to avoid
         //breaking IPv6 literals.
         var lastColon = server.LastIndexOf(':');
-        if (lastColon > 0 && int.TryParse(server[(lastColon + 1)..], out var parsedPort))
+        if (lastColon > 0 && server.IndexOf(':') == lastColon && int.TryParse(server[(lastColon + 1)..], out var parsedPort))
         {
             port = (uint)parsedPort;
             server = server[..lastColon];

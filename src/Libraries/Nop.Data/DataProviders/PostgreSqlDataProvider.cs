@@ -390,14 +390,34 @@ public partial class PostgreSqlDataProvider : BaseDataProvider, INopDataProvider
         if (nopConnectionString.IntegratedSecurity)
             throw new NopException("Data provider supports connection only with login and password");
 
+        var server = nopConnectionString.ServerName;
+        var port = 0;
+
+        //support "host:port" syntax (e.g. GaussDB default port 8000, openGauss 5432).
+        //Npgsql does not parse the port out of the Host option, so split it here.
+        //only split when the part after the last colon is a pure number to avoid
+        //breaking IPv6 literals.
+        var lastColon = server.LastIndexOf(':');
+        if (lastColon > 0 && server.IndexOf(':') == lastColon && int.TryParse(server[(lastColon + 1)..], out var parsedPort))
+        {
+            port = parsedPort;
+            server = server[..lastColon];
+        }
+
         var builder = new NpgsqlConnectionStringBuilder
         {
-            Host = nopConnectionString.ServerName,
+            Host = server,
             //Cast DatabaseName to lowercase to avoid case-sensitivity problems
             Database = nopConnectionString.DatabaseName.ToLowerInvariant(),
             Username = nopConnectionString.Username,
             Password = nopConnectionString.Password,
         };
+
+        //only set the port when it was explicitly provided in the server name;
+        //otherwise keep the builder default so existing connection strings remain
+        //unchanged
+        if (port != 0)
+            builder.Port = port;
 
         return builder.ConnectionString;
     }
