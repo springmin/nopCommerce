@@ -25,7 +25,10 @@ public partial class TestDataProviderManager : IDataProviderManager
                 DataProviderType.SqlServer => new MsSqlNopDataProvider(),
                 DataProviderType.MySql => new MySqlNopDataProvider(),
                 DataProviderType.PostgreSQL => new PostgreSqlDataProvider(),
-                DataProviderType.Unknown => new SqLiteNopDataProvider(),
+                DataProviderType.Unknown => new SqliteNopDataProvider(),
+                DataProviderType.Sqlite => new SqliteNopDataProvider(),
+                DataProviderType.Tidb => new MySqlNopDataProvider(),
+                DataProviderType.Oracle => new OracleNopDataProvider(),
                 _ => throw new NopException($"Unknown [{Singleton<DataConfig>.Instance.DataProvider}] DataProvider")
             };
         }

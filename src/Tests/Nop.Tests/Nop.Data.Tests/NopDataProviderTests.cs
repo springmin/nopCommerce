@@ -1,8 +1,9 @@
 ﻿using System.Text;
-using FluentAssertions;
+using AwesomeAssertions;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Gdpr;
+using Nop.Core.Domain.Logging;
 using Nop.Data;
 using Nop.Web.Models.Install;
 using NUnit.Framework;
@@ -117,7 +118,7 @@ public class NopDataProviderTests : BaseNopTest
         await using var data = await dataProvider.CreateTempDataStorageAsync(tableName,
             productRepository.Table.Select(p => new { p.Name, p.Id, p.Deleted }));
 
-        data.Count().Should().Be(productRepository.GetAll(query => query).Count);
+        data.Count().Should().Be((await productRepository.GetAllAsync(query => query)).Count);
 
         var rez = await dataProvider.QueryAsync<object>($"select * from {tableName}");
 
@@ -359,7 +360,7 @@ public class NopDataProviderTests : BaseNopTest
         {
             case DataProviderType.Unknown:
                 connStr.Should()
-                    .Be(@$"Data Source={CommonHelper.DefaultFileProvider.MapPath($"~/App_Data/")}test_db.sqlite;Mode=ReadWrite;Cache=Shared;Password=passwd");
+                    .Be(@$"Data Source={CommonHelper.DefaultFileProvider.MapPath($"~/App_Data/")}test_db.sqlite;Mode=ReadWriteCreate;Cache=Default;Password=passwd;Default Timeout=60");
                 break;
             case DataProviderType.SqlServer:
                 connStr.Should()
@@ -367,7 +368,7 @@ public class NopDataProviderTests : BaseNopTest
                 break;
             case DataProviderType.MySql:
                 connStr.Should()
-                    .Be(@"Server=127.0.0.1;User ID=test;Password=passwd;Database=test_db;Allow User Variables=True");
+                    .Be(@"Server=127.0.0.1;User ID=test;Password=passwd;Database=test_db;Connection Idle Timeout=60;Allow User Variables=True;Connection Timeout=60;Use XA Transactions=False");
                 break;
             case DataProviderType.PostgreSQL:
                 connStr.Should()
@@ -384,6 +385,29 @@ public class NopDataProviderTests : BaseNopTest
         {
             IntegratedSecurity = true
         }));
+    }
+
+    [Test]
+    [TestCase(DataProviderType.Unknown)]
+    [TestCase(DataProviderType.SqlServer)]
+    [TestCase(DataProviderType.MySql)]
+    [TestCase(DataProviderType.PostgreSQL)]
+    public async Task CanGetDatabaseSize(DataProviderType type)
+    {
+        if (!SetDataProviderType(type))
+            return;
+
+        var dataProvider = GetService<INopDataProvider>();
+        await dataProvider.InsertEntityAsync(new Log
+        {
+            CreatedOnUtc = DateTime.UtcNow,
+            FullMessage = "Test log entry to ensure non zero database size",
+            LogLevel = LogLevel.Debug,
+            ShortMessage = "Test log entry"
+        });
+
+        var dbSize = await dataProvider.GetDatabaseSizeAsync();
+        dbSize.Should().BeGreaterThan(0);
     }
 
     [Test]
