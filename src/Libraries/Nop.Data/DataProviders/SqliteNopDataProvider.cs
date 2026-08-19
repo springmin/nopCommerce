@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using System.Data.Common;
 using System.Linq.Expressions;
 using System.Text;
@@ -6,18 +6,17 @@ using LinqToDB;
 using LinqToDB.Data;
 using LinqToDB.DataProvider;
 using LinqToDB.DataProvider.SQLite;
-using LinqToDB.Tools;
 using Microsoft.Data.Sqlite;
 using Nop.Core;
 using Nop.Core.ComponentModel;
-using Nop.Data;
 using Nop.Data.DataProviders;
-namespace Nop.Tests;
+
+namespace Nop.Data.DataProviders;
 
 /// <summary>
 /// Represents the SQLite data provider
 /// </summary>
-public partial class SqLiteNopDataProvider : BaseDataProvider, INopDataProvider
+public partial class SqliteNopDataProvider : BaseDataProvider, INopDataProvider
 {
     #region Consts
 
@@ -31,7 +30,7 @@ public partial class SqLiteNopDataProvider : BaseDataProvider, INopDataProvider
 
     #region Methods
 
-    public void CreateDatabase(string collation, int triesToConnect = 10)
+    public void CreateDatabase(int triesToConnect = 10)
     {
         ExecuteNonQueryAsync("PRAGMA journal_mode=WAL;").Wait();
     }
@@ -60,6 +59,15 @@ public partial class SqLiteNopDataProvider : BaseDataProvider, INopDataProvider
     {
         using (new ReaderWriteLockDisposable(_locker))
         {
+            //pre-assigned id strategy (e.g. Tinyid/Yitter): generate the id before insert
+            if (IdGenerator.PreGenerateIds)
+            {
+                entity.Id = IdGenerator.NextId();
+                DataContext.Insert(entity);
+
+                return entity;
+            }
+
             entity.Id = DataContext.InsertWithInt32Identity(entity);
             return entity;
         }
@@ -165,8 +173,8 @@ public partial class SqLiteNopDataProvider : BaseDataProvider, INopDataProvider
     /// <typeparam name="TEntity">Entity type</typeparam>
     public override Task BulkInsertEntitiesAsync<TEntity>(IEnumerable<TEntity> entities)
     {
-        using (new ReaderWriteLockDisposable(_locker))
-            DataContext.BulkCopy(new BulkCopyOptions(), entities.RetrieveIdentity(DataContext));
+        foreach (var entity in entities)
+            InsertEntity(entity);
 
         return Task.CompletedTask;
     }
@@ -263,6 +271,33 @@ public partial class SqLiteNopDataProvider : BaseDataProvider, INopDataProvider
     }
 
     /// <summary>
+    /// Shrinks database
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation</returns>
+    public virtual Task ShrinkDatabaseAsync()
+    {
+        using (new ReaderWriteLockDisposable(_locker))
+            DataContext.Execute("VACUUM;");
+
+        return Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// Gets the database size in Kb
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation
+    /// The task result contains the database size
+    /// </returns>
+    public virtual async Task<long> GetDatabaseSizeAsync()
+    {
+        using var currentConnection = CreateDataConnection();
+        var result = await currentConnection.QueryToListAsync<long>("SELECT page_count * page_size as size FROM pragma_page_count(), pragma_page_size()");
+
+        return result.FirstOrDefault();
+    }
+
+    /// <summary>
     /// Build the connection string
     /// </summary>
     /// <param name="nopConnectionString">Connection string info</param>
@@ -278,8 +313,12 @@ public partial class SqLiteNopDataProvider : BaseDataProvider, INopDataProvider
         {
             DataSource = CommonHelper.DefaultFileProvider.MapPath($"~/App_Data/{nopConnectionString.DatabaseName}.sqlite"),
             Password = nopConnectionString.Password,
-            Mode = SqliteOpenMode.ReadWrite,
-            Cache = SqliteCacheMode.Shared
+            Mode = SqliteOpenMode.ReadWriteCreate,
+            //file-backed databases do not need the shared page cache (it is only
+            //required for in-memory databases and causes SQLITE_LOCKED conflicts
+            //when multiple connections write concurrently, e.g. during migrations)
+            Cache = SqliteCacheMode.Default,
+            DefaultTimeout = 60
         };
 
         return builder.ConnectionString;
@@ -312,7 +351,7 @@ public partial class SqLiteNopDataProvider : BaseDataProvider, INopDataProvider
     /// <returns>Returns collection of query result records</returns>
     public override Task<IList<T>> QueryProcAsync<T>(string procedureName, params DataParameter[] parameters)
     {
-        //stored procedure is not support by SqLite
+        //stored procedure is not support by SQLite
         return Task.FromResult<IList<T>>(new List<T>());
     }
 
@@ -339,7 +378,9 @@ public partial class SqLiteNopDataProvider : BaseDataProvider, INopDataProvider
     {
         using (new ReaderWriteLockDisposable(_locker, ReaderWriteLockType.Read))
         {
-            var command = CreateDbCommand(sql, dataParameters);
+            using var dataConnection = CreateDataConnection(LinqToDbDataProvider);
+            var command = new CommandInfo(dataConnection, sql, dataParameters);
+
             return command.ExecuteAsync();
         }
     }
@@ -369,12 +410,29 @@ public partial class SqLiteNopDataProvider : BaseDataProvider, INopDataProvider
     /// </summary>
     /// <param name="resetIdentity">Performs reset identity column</param>
     /// <typeparam name="TEntity">Entity type</typeparam>
-    public override Task TruncateAsync<TEntity>(bool resetIdentity = false)
+    /// <returns>
+    /// A task that represents the asynchronous operation
+    /// The task result contains the number of records, affected by command execution.
+    /// </returns>
+    public override Task<int> TruncateAsync<TEntity>(bool resetIdentity = false)
     {
+        var affectedRows = 0;
         using (new ReaderWriteLockDisposable(_locker))
-            DataContext.GetTable<TEntity>().Truncate(resetIdentity);
+            affectedRows = DataContext.GetTable<TEntity>().Truncate(resetIdentity);
 
-        return Task.CompletedTask;
+        return Task.FromResult(affectedRows);
+    }
+
+    /// <summary>
+    /// Gets the name of the database collation
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation
+    /// The task result contains an empty string
+    /// </returns>
+    public Task<string> GetDataBaseCollationAsync()
+    {
+        return Task.FromResult(string.Empty);
     }
 
     #endregion
@@ -386,7 +444,7 @@ public partial class SqLiteNopDataProvider : BaseDataProvider, INopDataProvider
     /// <summary>
     /// Linq2Db data provider
     /// </summary>
-    protected override IDataProvider LinqToDbDataProvider { get; } = SQLiteTools.GetDataProvider(ProviderName.SQLiteMS);
+    protected override IDataProvider LinqToDbDataProvider { get; } = SQLiteTools.GetDataProvider(SQLiteProvider.Microsoft);
 
     /// <summary>
     /// Gets allowed a limit input value of the data for hashing functions, returns 0 if not limited
