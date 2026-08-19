@@ -1,32 +1,36 @@
-﻿using System.Collections.Concurrent;
-using System.Data.Common;
+﻿using System.Data.Common;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Transactions;
 using FluentMigrator;
-using FluentMigrator.Builders.Create.Table;
-using FluentMigrator.Expressions;
 using LinqToDB;
 using LinqToDB.Data;
 using LinqToDB.DataProvider;
-using LinqToDB.Mapping;
 using LinqToDB.Tools;
 using Nop.Core;
 using Nop.Core.Infrastructure;
-using Nop.Data.Extensions;
+using Nop.Data.Configuration;
 using Nop.Data.Mapping;
 using Nop.Data.Migrations;
 
 namespace Nop.Data.DataProviders;
 
-public abstract partial class BaseDataProvider : IMappingEntityAccessor
+public abstract partial class BaseDataProvider
 {
-    #region Fields
-
-    protected static ConcurrentDictionary<Type, NopEntityDescriptor> EntityDescriptors { get; } = new ConcurrentDictionary<Type, NopEntityDescriptor>();
-
-    #endregion
-
     #region Utilities
+
+    /// <summary>
+    /// Creates options used for bulk insert operations
+    /// </summary>
+    /// <returns>Bulk copy options derived from current data configuration</returns>
+    protected virtual BulkCopyOptions CreateBulkCopyOptions()
+    {
+        return new BulkCopyOptions
+        {
+            CheckConstraints = DataSettings.BulkCopyWithCheckConstraints,
+            KeepIdentity = true
+        };
+    }
 
     /// <summary>
     /// Gets a connection to the database for a current data provider
@@ -44,20 +48,6 @@ public abstract partial class BaseDataProvider : IMappingEntityAccessor
     }
 
     /// <summary>
-    /// Creates database command instance using provided command text and parameters.
-    /// </summary>
-    /// <param name="sql">Command text</param>
-    /// <param name="dataParameters">Command parameters</param>
-    protected virtual CommandInfo CreateDbCommand(string sql, DataParameter[] dataParameters)
-    {
-        ArgumentNullException.ThrowIfNull(dataParameters);
-
-        var dataConnection = CreateDataConnection(LinqToDbDataProvider);
-
-        return new CommandInfo(dataConnection, sql, dataParameters);
-    }
-
-    /// <summary>
     /// Creates the database connection
     /// </summary>
     /// <param name="dataProvider">Data provider</param>
@@ -66,10 +56,17 @@ public abstract partial class BaseDataProvider : IMappingEntityAccessor
     {
         ArgumentNullException.ThrowIfNull(dataProvider);
 
-        var dataConnection = new DataConnection(dataProvider, CreateDbConnection(), GetMappingSchema())
-        {
-            CommandTimeout = DataSettingsManager.GetSqlCommandTimeout()
-        };
+        var dataConnection = new DataConnection(
+            new DataOptions()
+            .UseConnection(dataProvider, CreateDbConnection())
+            .UseMappingSchema(NopMappingSchema.GetMappingSchema(ConfigurationName, LinqToDbDataProvider))
+            );
+
+        var sqlCommandTimeout = DataSettings.SQLCommandTimeout ?? -1;
+        if (sqlCommandTimeout == -1)
+            dataConnection.ResetCommandTimeout();
+        else
+            dataConnection.CommandTimeout = sqlCommandTimeout;
 
         return dataConnection;
     }
@@ -81,7 +78,32 @@ public abstract partial class BaseDataProvider : IMappingEntityAccessor
     /// <returns>Connection to a database</returns>
     protected virtual DbConnection CreateDbConnection(string connectionString = null)
     {
-        return GetInternalDbConnection(!string.IsNullOrEmpty(connectionString) ? connectionString : GetCurrentConnectionString());
+        return GetInternalDbConnection(!string.IsNullOrEmpty(connectionString) ? connectionString : DataSettings.ConnectionString);
+    }
+
+    /// <summary>
+    /// Gets scalar value from the database
+    /// </summary>
+    /// <param name="sql">The text command to run</param>
+    /// <param name="parameters">Database parameters</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation
+    /// The first column of the first row in the first result set.
+    /// </returns>
+    protected virtual async Task<string> GetSqlStringValueAsync(string sql, params DataParameter[] parameters)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(sql);
+
+        await using var dbConnection = CreateDbConnection();
+        await using var command = dbConnection.CreateCommand();
+        command.Connection = dbConnection;
+        command.CommandText = sql;
+        command.Parameters.AddRange(parameters);
+        await dbConnection.OpenAsync();
+
+        var value = await command.ExecuteScalarAsync();
+
+        return value?.ToString() ?? string.Empty;
     }
 
     /// <summary>
@@ -144,46 +166,6 @@ public abstract partial class BaseDataProvider : IMappingEntityAccessor
     }
 
     /// <summary>
-    /// Returns mapped entity descriptor
-    /// </summary>
-    /// <param name="entityType">Type of entity</param>
-    /// <returns>Mapped entity descriptor</returns>
-    public virtual NopEntityDescriptor GetEntityDescriptor(Type entityType)
-    {
-        return EntityDescriptors.GetOrAdd(entityType, t =>
-        {
-            var tableName = NameCompatibilityManager.GetTableName(t);
-            var expression = new CreateTableExpression { TableName = tableName };
-            var builder = new CreateTableExpressionBuilder(expression, new NullMigrationContext());
-            builder.RetrieveTableExpressions(t);
-
-            return new NopEntityDescriptor
-            {
-                EntityName = tableName,
-                SchemaName = builder.Expression.SchemaName,
-                Fields = builder.Expression.Columns.Select(column => new NopEntityFieldDescriptor
-                {
-                    Name = column.Name,
-                    IsPrimaryKey = column.IsPrimaryKey,
-                    IsNullable = column.IsNullable,
-                    Size = column.Size,
-                    Precision = column.Precision,
-                    IsIdentity = column.IsIdentity,
-                    Type = getPropertyTypeByColumnName(t, column.Name)
-                }).ToList()
-            };
-        });
-
-        static Type getPropertyTypeByColumnName(Type targetType, string name)
-        {
-            var (mappedType, _) = Array.Find(targetType
-                .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.SetProperty), pi => name.Equals(NameCompatibilityManager.GetColumnName(targetType, pi.Name))).PropertyType.GetTypeToMap();
-
-            return mappedType;
-        }
-    }
-
-    /// <summary>
     /// Get hash values of a stored entity field
     /// </summary>
     /// <param name="predicate">A function to test each element for a condition.</param>
@@ -195,17 +177,11 @@ public abstract partial class BaseDataProvider : IMappingEntityAccessor
         Expression<Func<TEntity, int>> keySelector,
         Expression<Func<TEntity, object>> fieldSelector) where TEntity : BaseEntity
     {
-        if (keySelector.Body is not MemberExpression keyMember ||
-            keyMember.Member is not PropertyInfo keyPropInfo)
-        {
+        if (keySelector.Body is not MemberExpression { Member: PropertyInfo keyPropInfo })
             throw new ArgumentException($"Expression '{keySelector}' refers to method or field, not a property.");
-        }
 
-        if (fieldSelector.Body is not MemberExpression member ||
-            member.Member is not PropertyInfo propInfo)
-        {
+        if (fieldSelector.Body is not MemberExpression { Member: PropertyInfo propInfo })
             throw new ArgumentException($"Expression '{fieldSelector}' refers to a method or field, not a property.");
-        }
 
         var hashes = GetTable<TEntity>()
             .Where(predicate)
@@ -219,17 +195,6 @@ public abstract partial class BaseDataProvider : IMappingEntityAccessor
     }
 
     /// <summary>
-    /// Get or create mapping schema with specified configuration name (<see cref="ConfigurationName"/>) and base mapping schema
-    /// </summary>
-    public MappingSchema GetMappingSchema()
-    {
-        return Singleton<MappingSchema>.Instance ??= new MappingSchema(ConfigurationName, LinqToDbDataProvider.MappingSchema)
-        {
-            MetadataReader = new FluentMigratorMetadataReader(this)
-        };
-    }
-
-    /// <summary>
     /// Returns queryable source for specified mapping class for current connection,
     /// mapped to database table or view.
     /// </summary>
@@ -237,12 +202,23 @@ public abstract partial class BaseDataProvider : IMappingEntityAccessor
     /// <returns>Queryable source</returns>
     public virtual IQueryable<TEntity> GetTable<TEntity>() where TEntity : BaseEntity
     {
-        return new DataContext(LinqToDbDataProvider, GetCurrentConnectionString())
-            {
-                MappingSchema = GetMappingSchema(),
-                CommandTimeout = DataSettingsManager.GetSqlCommandTimeout()
-            }
-            .GetTable<TEntity>();
+        var options = new DataOptions()
+            .UseConnectionString(LinqToDbDataProvider, DataSettings.ConnectionString)
+            .UseMappingSchema(NopMappingSchema.GetMappingSchema(ConfigurationName, LinqToDbDataProvider));
+
+        var dataContext = new DataContext(options)
+        {
+            CloseAfterUse = DataSettings.CloseDataContextAfterUse
+        };
+
+        var sqlCommandTimeout = DataSettings.SQLCommandTimeout ?? -1;
+
+        if (sqlCommandTimeout == -1)
+            dataContext.ResetCommandTimeout();
+        else
+            dataContext.CommandTimeout = sqlCommandTimeout;
+
+        return dataContext.GetTable<TEntity>();
     }
 
     /// <summary>
@@ -257,6 +233,16 @@ public abstract partial class BaseDataProvider : IMappingEntityAccessor
     public virtual async Task<TEntity> InsertEntityAsync<TEntity>(TEntity entity) where TEntity : BaseEntity
     {
         using var dataContext = CreateDataConnection();
+
+        //pre-assigned id strategy (e.g. Yitter): the id is generated before insert
+        if (IdGenerator.PreGenerateIds)
+        {
+            entity.Id = IdGenerator.NextId();
+            await dataContext.InsertAsync(entity);
+
+            return entity;
+        }
+
         entity.Id = await dataContext.InsertWithInt32IdentityAsync(entity);
         return entity;
     }
@@ -270,6 +256,16 @@ public abstract partial class BaseDataProvider : IMappingEntityAccessor
     public virtual TEntity InsertEntity<TEntity>(TEntity entity) where TEntity : BaseEntity
     {
         using var dataContext = CreateDataConnection();
+
+        //pre-assigned id strategy (e.g. Yitter): the id is generated before insert
+        if (IdGenerator.PreGenerateIds)
+        {
+            entity.Id = IdGenerator.NextId();
+            dataContext.Insert(entity);
+
+            return entity;
+        }
+
         entity.Id = dataContext.InsertWithInt32Identity(entity);
         return entity;
     }
@@ -384,12 +380,16 @@ public abstract partial class BaseDataProvider : IMappingEntityAccessor
     {
         using var dataContext = CreateDataConnection();
         if (entities.All(entity => entity.Id == 0))
+        {
             foreach (var entity in entities)
                 dataContext.Delete(entity);
+        }
         else
+        {
             dataContext.GetTable<TEntity>()
                 .Where(e => e.Id.In(entities.Select(x => x.Id)))
                 .Delete();
+        }
     }
 
     /// <summary>
@@ -434,7 +434,21 @@ public abstract partial class BaseDataProvider : IMappingEntityAccessor
     public virtual async Task BulkInsertEntitiesAsync<TEntity>(IEnumerable<TEntity> entities) where TEntity : BaseEntity
     {
         using var dataContext = CreateDataConnection(LinqToDbDataProvider);
-        await dataContext.BulkCopyAsync(new BulkCopyOptions(), entities.RetrieveIdentity(dataContext));
+
+        //pre-assigned id strategy (e.g. Yitter): assign ids upfront, then bulk
+        //copy with KeepIdentity so the pre-assigned ids are written as-is
+        if (IdGenerator.PreGenerateIds)
+        {
+            var entityList = entities.ToList();
+            foreach (var entity in entityList)
+                entity.Id = IdGenerator.NextId();
+
+            await dataContext.BulkCopyAsync(CreateBulkCopyOptions(), entityList);
+
+            return;
+        }
+
+        await dataContext.BulkCopyAsync(CreateBulkCopyOptions(), entities.RetrieveIdentity(dataContext, useSequenceName: false));
     }
 
     /// <summary>
@@ -445,7 +459,21 @@ public abstract partial class BaseDataProvider : IMappingEntityAccessor
     public virtual void BulkInsertEntities<TEntity>(IEnumerable<TEntity> entities) where TEntity : BaseEntity
     {
         using var dataContext = CreateDataConnection(LinqToDbDataProvider);
-        dataContext.BulkCopy(new BulkCopyOptions(), entities.RetrieveIdentity(dataContext));
+
+        //pre-assigned id strategy (e.g. Yitter): assign ids upfront, then bulk
+        //copy with KeepIdentity so the pre-assigned ids are written as-is
+        if (IdGenerator.PreGenerateIds)
+        {
+            var entityList = entities.ToList();
+            foreach (var entity in entityList)
+                entity.Id = IdGenerator.NextId();
+
+            dataContext.BulkCopy(CreateBulkCopyOptions(), entityList);
+
+            return;
+        }
+
+        dataContext.BulkCopy(CreateBulkCopyOptions(), entities.RetrieveIdentity(dataContext, useSequenceName: false));
     }
 
     /// <summary>
@@ -459,7 +487,8 @@ public abstract partial class BaseDataProvider : IMappingEntityAccessor
     /// </returns>
     public virtual async Task<int> ExecuteNonQueryAsync(string sql, params DataParameter[] dataParameters)
     {
-        var command = CreateDbCommand(sql, dataParameters);
+        using var dataConnection = CreateDataConnection(LinqToDbDataProvider);
+        var command = new CommandInfo(dataConnection, sql, dataParameters);
 
         return await command.ExecuteAsync();
     }
@@ -477,7 +506,9 @@ public abstract partial class BaseDataProvider : IMappingEntityAccessor
     /// </returns>
     public virtual Task<IList<T>> QueryProcAsync<T>(string procedureName, params DataParameter[] parameters)
     {
-        var command = CreateDbCommand(procedureName, parameters);
+        using var dataConnection = CreateDataConnection(LinqToDbDataProvider);
+        var command = new CommandInfo(dataConnection, procedureName, parameters);
+
         var rez = command.QueryProc<T>()?.ToList();
         return Task.FromResult<IList<T>>(rez ?? new List<T>());
     }
@@ -503,10 +534,51 @@ public abstract partial class BaseDataProvider : IMappingEntityAccessor
     /// </summary>
     /// <param name="resetIdentity">Performs reset identity column</param>
     /// <typeparam name="TEntity">Entity type</typeparam>
-    public virtual async Task TruncateAsync<TEntity>(bool resetIdentity = false) where TEntity : BaseEntity
+    /// <returns>
+    /// A task that represents the asynchronous operation
+    /// The task result contains the number of records, affected by command execution.
+    /// </returns>
+    public virtual async Task<int> TruncateAsync<TEntity>(bool resetIdentity = false) where TEntity : BaseEntity
     {
         using var dataContext = CreateDataConnection(LinqToDbDataProvider);
-        await dataContext.GetTable<TEntity>().TruncateAsync(resetIdentity);
+        return await dataContext.GetTable<TEntity>().TruncateAsync(resetIdentity);
+    }
+
+    /// <summary>
+    /// Creates a new <see cref="TransactionScope"/> with appropriate options for bulk database operations
+    /// </summary>
+    /// <returns>The created transaction scope</returns>
+    public virtual TransactionScope CreateTransactionScope()
+    {
+        var dataSettings = DataSettingsManager.LoadSettings();
+
+        //try to use the SQL command timeout value as the transaction scope timeout
+        var timeout = dataSettings.SQLCommandTimeout is > 0
+            ? TimeSpan.FromSeconds(dataSettings.SQLCommandTimeout.Value)
+            : TransactionManager.DefaultTimeout;
+
+        //the default new TransactionScope(...) constructor uses IsolationLevel.Serializable.
+        //Which holds range locks (RangeS-S / RangeI-N on SQL Server) for the duration of bulk insert/update/delete.
+        //This isolation level may cause the deadlocks on SQL Server reported in #6482 and #6681.
+        //See David Browne (Microsoft), "Using New TransactionScope() Considered Harmful" article for more details.
+        //https://learn.microsoft.com/en-us/archive/blogs/dbrowne/using-new-transactionscope-considered-harmful
+
+        //But, while Serializable is the most "limiting" isolation level(concerning locking, deadlocks, etc.),
+        //It is also the most "safe" isolation level (concerning consistency of data).
+
+        //also important to note that nopCommerce can work with other DBMSs that do not have such restrictions.
+
+        //So, we will use the Serializable isolation level to ensure data consistency and avoid potential issues with other DBMSs.
+        //but if you are using only SQL Server and understand the possible issues and still want to avoid potential deadlocks,
+        //You can set a lower isolation level(e.g., ReadCommitted) in your custom repository implementation by overriding or changing this method.
+
+        var transactionOptions = new TransactionOptions
+        {
+            IsolationLevel = IsolationLevel.Serializable,
+            Timeout = timeout
+        };
+
+        return new TransactionScope(TransactionScopeOption.Required, transactionOptions, TransactionScopeAsyncFlowOption.Enabled);
     }
 
     #endregion
@@ -514,17 +586,37 @@ public abstract partial class BaseDataProvider : IMappingEntityAccessor
     #region Properties
 
     /// <summary>
+    /// Gets the configured entity id generator (database or pre-assigned strategy);
+    /// falls back to the database strategy when no generator is registered
+    /// </summary>
+    protected IEntityIdGenerator IdGenerator
+    {
+        get
+        {
+            try
+            {
+                return EngineContext.Current.Resolve<IEntityIdGenerator>();
+            }
+            catch
+            {
+                //not registered (e.g. unit tests without the web startup):
+                //default to the database strategy
+                return _defaultIdGenerator;
+            }
+        }
+    }
+
+    private static readonly IEntityIdGenerator _defaultIdGenerator = new DatabaseIdGenerator();
+
+    /// <summary>
     /// Linq2Db data provider
     /// </summary>
     protected abstract IDataProvider LinqToDbDataProvider { get; }
 
     /// <summary>
-    /// Database connection string
+    /// Gets the current data settings
     /// </summary>
-    protected static string GetCurrentConnectionString()
-    {
-        return DataSettingsManager.LoadSettings().ConnectionString;
-    }
+    protected DataConfig DataSettings => DataSettingsManager.LoadSettings();
 
     /// <summary>
     /// Name of database provider

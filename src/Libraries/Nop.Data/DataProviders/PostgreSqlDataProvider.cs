@@ -1,12 +1,13 @@
 ﻿using System.Data;
 using System.Data.Common;
 using LinqToDB;
-using LinqToDB.Common;
 using LinqToDB.Data;
 using LinqToDB.DataProvider;
 using LinqToDB.SqlQuery;
+using LinqToDB.Tools;
 using Nop.Core;
 using Nop.Data.DataProviders.LinqToDB;
+using Nop.Data.Mapping;
 using Npgsql;
 
 namespace Nop.Data.DataProviders;
@@ -38,9 +39,9 @@ public partial class PostgreSqlDataProvider : BaseDataProvider, INopDataProvider
     /// Gets the connection string builder
     /// </summary>
     /// <returns>The connection string builder</returns>
-    protected static NpgsqlConnectionStringBuilder GetConnectionStringBuilder()
+    protected virtual NpgsqlConnectionStringBuilder GetConnectionStringBuilder()
     {
-        return new NpgsqlConnectionStringBuilder(GetCurrentConnectionString());
+        return new NpgsqlConnectionStringBuilder(DataSettings.ConnectionString);
     }
 
     /// <summary>
@@ -65,7 +66,7 @@ public partial class PostgreSqlDataProvider : BaseDataProvider, INopDataProvider
     {
         ArgumentNullException.ThrowIfNull(dataConnection);
 
-        var descriptor = GetEntityDescriptor(typeof(TEntity)) 
+        var descriptor = NopMappingSchema.GetEntityDescriptor(typeof(TEntity)) 
                          ?? throw new NopException($"Mapped entity descriptor is not found: {typeof(TEntity).Name}");
 
         var tableName = descriptor.EntityName;
@@ -83,11 +84,33 @@ public partial class PostgreSqlDataProvider : BaseDataProvider, INopDataProvider
     #region Methods
 
     /// <summary>
+    /// Performs bulk insert operation for entity collection.
+    /// </summary>
+    /// <param name="entities">Entities for insert operation</param>
+    /// <typeparam name="TEntity">Entity type</typeparam>
+    /// <returns>A task that represents the asynchronous operation</returns>
+    public override async Task BulkInsertEntitiesAsync<TEntity>(IEnumerable<TEntity> entities)
+    {
+        using var dataContext = CreateDataConnection(LinqToDbDataProvider);
+        await dataContext.BulkCopyAsync(entities.RetrieveIdentity(dataContext, useSequenceName: false));
+    }
+
+    /// <summary>
+    /// Performs bulk insert operation for entity collection.
+    /// </summary>
+    /// <param name="entities">Entities for insert operation</param>
+    /// <typeparam name="TEntity">Entity type</typeparam>
+    public override void BulkInsertEntities<TEntity>(IEnumerable<TEntity> entities)
+    {
+        using var dataContext = CreateDataConnection(LinqToDbDataProvider);
+        dataContext.BulkCopy(entities.RetrieveIdentity(dataContext, useSequenceName: false));
+    }
+
+    /// <summary>
     /// Creates the database by using the loaded connection string
     /// </summary>
-    /// <param name="collation"></param>
     /// <param name="triesToConnect"></param>
-    public void CreateDatabase(string collation, int triesToConnect = 10)
+    public virtual void CreateDatabase(int triesToConnect = 10)
     {
         if (DatabaseExists())
             return;
@@ -103,8 +126,12 @@ public partial class PostgreSqlDataProvider : BaseDataProvider, INopDataProvider
         using (var connection = GetInternalDbConnection(builder.ConnectionString))
         {
             var query = $"CREATE DATABASE \"{databaseName}\" WITH OWNER = '{builder.Username}'";
-            if (!string.IsNullOrWhiteSpace(collation))
-                query = $"{query} LC_COLLATE = '{collation}'";
+
+            if (!string.IsNullOrWhiteSpace(DataSettings.CharacterSet))
+                query = $"{query} ENCODING '{DataSettings.CharacterSet}'";
+
+            if (!string.IsNullOrWhiteSpace(DataSettings.Collation))
+                query = $"{query} LC_COLLATE = '{DataSettings.Collation}' TEMPLATE template0";
 
             var command = connection.CreateCommand();
             command.CommandText = query;
@@ -127,9 +154,7 @@ public partial class PostgreSqlDataProvider : BaseDataProvider, INopDataProvider
                 throw new Exception("Unable to connect to the new database. Please try one more time");
 
             if (!DatabaseExists())
-            {
                 Thread.Sleep(1000);
-            }
             else
             {
                 builder.Database = databaseName;
@@ -149,11 +174,11 @@ public partial class PostgreSqlDataProvider : BaseDataProvider, INopDataProvider
     /// Checks if the specified database exists, returns true if database exists
     /// </summary>
     /// <returns>Returns true if the database exists.</returns>
-    public bool DatabaseExists()
+    public virtual bool DatabaseExists()
     {
         try
         {
-            using var connection = GetInternalDbConnection(GetCurrentConnectionString());
+            using var connection = GetInternalDbConnection(DataSettings.ConnectionString);
 
             //just try to connect
             connection.Open();
@@ -173,11 +198,11 @@ public partial class PostgreSqlDataProvider : BaseDataProvider, INopDataProvider
     /// A task that represents the asynchronous operation
     /// The task result contains the returns true if the database exists.
     /// </returns>
-    public async Task<bool> DatabaseExistsAsync()
+    public virtual async Task<bool> DatabaseExistsAsync()
     {
         try
         {
-            await using var connection = GetInternalDbConnection(GetCurrentConnectionString());
+            await using var connection = GetInternalDbConnection(DataSettings.ConnectionString);
 
             //just try to connect
             await connection.OpenAsync();
@@ -247,12 +272,22 @@ public partial class PostgreSqlDataProvider : BaseDataProvider, INopDataProvider
     public override TEntity InsertEntity<TEntity>(TEntity entity)
     {
         using var dataContext = CreateDataConnection();
+
+        //pre-assigned id strategy (e.g. Tinyid/Yitter): generate the id before insert
+        if (IdGenerator.PreGenerateIds)
+        {
+            entity.Id = IdGenerator.NextId();
+            dataContext.Insert(entity);
+
+            return entity;
+        }
+
         try
         {
             entity.Id = dataContext.InsertWithInt32Identity(entity);
         }
         // Ignore when we try insert foreign entity via InsertWithInt32IdentityAsync method
-        catch (SqlException ex) when (ex.Message.StartsWith("Identity field must be defined for"))
+        catch (LinqToDBException ex) when (ex.Message.StartsWith("Identity field must be defined for"))
         {
             dataContext.Insert(entity);
         }
@@ -272,12 +307,22 @@ public partial class PostgreSqlDataProvider : BaseDataProvider, INopDataProvider
     public override async Task<TEntity> InsertEntityAsync<TEntity>(TEntity entity)
     {
         using var dataContext = CreateDataConnection();
+
+        //pre-assigned id strategy (e.g. Tinyid/Yitter): generate the id before insert
+        if (IdGenerator.PreGenerateIds)
+        {
+            entity.Id = IdGenerator.NextId();
+            await dataContext.InsertAsync(entity);
+
+            return entity;
+        }
+
         try
         {
             entity.Id = await dataContext.InsertWithInt32IdentityAsync(entity);
         }
         // Ignore when we try insert foreign entity via InsertWithInt32IdentityAsync method
-        catch (SqlException ex) when (ex.Message.StartsWith("Identity field must be defined for"))
+        catch (LinqToDBException ex) when (ex.Message.StartsWith("Identity field must be defined for"))
         {
             await dataContext.InsertAsync(entity);
         }
@@ -302,7 +347,35 @@ public partial class PostgreSqlDataProvider : BaseDataProvider, INopDataProvider
     public virtual async Task ReIndexTablesAsync()
     {
         using var currentConnection = CreateDataConnection();
-        await currentConnection.ExecuteAsync($"REINDEX DATABASE \"{currentConnection.Connection.Database}\";");
+        await currentConnection.ExecuteAsync($"REINDEX DATABASE \"{GetConnectionStringBuilder().Database}\";");
+    }
+
+    /// <summary>
+    /// Shrinks database
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation</returns>
+    public virtual async Task ShrinkDatabaseAsync()
+    {
+        using var currentConnection = CreateDataConnection();
+        var tables = currentConnection.Query<string>($"SELECT table_name FROM information_schema.tables WHERE table_type = 'BASE TABLE' AND table_schema = 'public'").ToList();
+
+        foreach (var table in tables)
+            await currentConnection.ExecuteAsync($"VACUUM FULL \"{table}\";");
+    }
+
+    /// <summary>
+    /// Gets the database size in Kb
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation
+    /// The task result contains the database size
+    /// </returns>
+    public virtual async Task<long> GetDatabaseSizeAsync()
+    {
+        using var currentConnection = CreateDataConnection();
+        var result = await currentConnection.QueryToListAsync<long>($"SELECT pg_database_size('{GetConnectionStringBuilder().Database}') / 1024 as sizebytes");
+
+        return result.FirstOrDefault();
     }
 
     /// <summary>
@@ -351,6 +424,19 @@ public partial class PostgreSqlDataProvider : BaseDataProvider, INopDataProvider
     public virtual string GetIndexName(string targetTable, string targetColumn)
     {
         return $"IX_{targetTable}_{targetColumn}";
+    }
+    
+    /// <summary>
+    /// Gets the name of the database collation
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation
+    /// The task result contains the collation name
+    /// </returns>
+    public virtual Task<string> GetDataBaseCollationAsync()
+    {
+        var builder = GetConnectionStringBuilder();
+        return GetSqlStringValueAsync($"SELECT datcollate AS collation FROM pg_database WHERE datname = '{builder.Database}';");
     }
 
     #endregion
