@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Data.Common;
 using System.Text;
+using System.Transactions;
 using LinqToDB;
 using LinqToDB.Data;
 using LinqToDB.DataProvider;
@@ -8,6 +9,7 @@ using LinqToDB.DataProvider.MySql;
 using LinqToDB.SqlQuery;
 using MySqlConnector;
 using Nop.Core;
+using Nop.Data.Mapping;
 
 namespace Nop.Data.DataProviders;
 
@@ -32,6 +34,13 @@ public partial class MySqlNopDataProvider : BaseDataProvider, INopDataProvider
         dataContext.MappingSchema.SetDataType(typeof(Guid), new SqlDataType(DataType.NChar, typeof(Guid), 36));
         dataContext.MappingSchema.SetConvertExpression<string, Guid>(strGuid => new Guid(strGuid));
 
+        //when no explicit SQL command timeout is configured, cap the command
+        //timeout instead of leaving it infinite: a connection silently dropped
+        //by the server/proxy (e.g. TiDB Cloud Serverless) would otherwise hang
+        //the command forever
+        if (DataSettings.SQLCommandTimeout is null)
+            dataContext.CommandTimeout = 300;
+
         return dataContext;
     }
 
@@ -39,9 +48,9 @@ public partial class MySqlNopDataProvider : BaseDataProvider, INopDataProvider
     /// Gets the connection string builder
     /// </summary>
     /// <returns>The connection string builder</returns>
-    protected static MySqlConnectionStringBuilder GetConnectionStringBuilder()
+    protected virtual MySqlConnectionStringBuilder GetConnectionStringBuilder()
     {
-        return new MySqlConnectionStringBuilder(GetCurrentConnectionString());
+        return new MySqlConnectionStringBuilder(DataSettings.ConnectionString);
     }
 
     /// <summary>
@@ -63,9 +72,8 @@ public partial class MySqlNopDataProvider : BaseDataProvider, INopDataProvider
     /// <summary>
     /// Creates the database by using the loaded connection string
     /// </summary>
-    /// <param name="collation"></param>
     /// <param name="triesToConnect"></param>
-    public void CreateDatabase(string collation, int triesToConnect = 10)
+    public virtual void CreateDatabase(int triesToConnect = 10)
     {
         if (DatabaseExists())
             return;
@@ -81,8 +89,12 @@ public partial class MySqlNopDataProvider : BaseDataProvider, INopDataProvider
         using (var connection = GetInternalDbConnection(builder.ConnectionString))
         {
             var query = $"CREATE DATABASE IF NOT EXISTS {databaseName}";
-            if (!string.IsNullOrWhiteSpace(collation))
-                query = $"{query} COLLATE {collation}";
+
+            if (!string.IsNullOrWhiteSpace(DataSettings.CharacterSet))
+                query = $"{query} CHARACTER SET {DataSettings.CharacterSet}";
+
+            if (!string.IsNullOrWhiteSpace(DataSettings.Collation))
+                query = $"{query} COLLATE {DataSettings.Collation}";
 
             var command = connection.CreateCommand();
             command.CommandText = query;
@@ -118,11 +130,11 @@ public partial class MySqlNopDataProvider : BaseDataProvider, INopDataProvider
     /// A task that represents the asynchronous operation
     /// The task result contains the returns true if the database exists.
     /// </returns>
-    public async Task<bool> DatabaseExistsAsync()
+    public virtual async Task<bool> DatabaseExistsAsync()
     {
         try
         {
-            await using var connection = GetInternalDbConnection(GetCurrentConnectionString());
+            await using var connection = GetInternalDbConnection(DataSettings.ConnectionString);
 
             //just try to connect
             await connection.OpenAsync();
@@ -139,7 +151,7 @@ public partial class MySqlNopDataProvider : BaseDataProvider, INopDataProvider
     /// Checks if the specified database exists, returns true if database exists
     /// </summary>
     /// <returns>Returns true if the database exists.</returns>
-    public bool DatabaseExists()
+    public virtual bool DatabaseExists()
     {
         try
         {
@@ -166,12 +178,12 @@ public partial class MySqlNopDataProvider : BaseDataProvider, INopDataProvider
     public virtual async Task<int?> GetTableIdentAsync<TEntity>() where TEntity : BaseEntity
     {
         using var currentConnection = CreateDataConnection();
-        var tableName = GetEntityDescriptor(typeof(TEntity)).EntityName;
-        var databaseName = currentConnection.Connection.Database;
+        var tableName = NopMappingSchema.GetEntityDescriptor(typeof(TEntity)).EntityName;
+        var databaseName = GetConnectionStringBuilder().Database;
 
         //we're using the DbConnection object until linq2db solve this issue https://github.com/linq2db/linq2db/issues/1987
         //with DataContext we could be used KeepConnectionAlive option
-        await using var dbConnection = GetInternalDbConnection(GetCurrentConnectionString());
+        await using var dbConnection = GetInternalDbConnection(DataSettings.ConnectionString);
 
         dbConnection.StateChange += (sender, e) =>
         {
@@ -214,7 +226,7 @@ public partial class MySqlNopDataProvider : BaseDataProvider, INopDataProvider
             return;
 
         using var currentConnection = CreateDataConnection();
-        var tableName = GetEntityDescriptor(typeof(TEntity)).EntityName;
+        var tableName = NopMappingSchema.GetEntityDescriptor(typeof(TEntity)).EntityName;
 
         await currentConnection.ExecuteAsync($"ALTER TABLE `{tableName}` AUTO_INCREMENT = {ident};");
     }
@@ -245,10 +257,34 @@ public partial class MySqlNopDataProvider : BaseDataProvider, INopDataProvider
     public virtual async Task ReIndexTablesAsync()
     {
         using var currentConnection = CreateDataConnection();
-        var tables = currentConnection.Query<string>($"SHOW TABLES FROM `{currentConnection.Connection.Database}`").ToList();
+        var tables = currentConnection.Query<string>($"SHOW TABLES FROM `{GetConnectionStringBuilder().Database}`").ToList();
 
         if (tables.Count > 0)
             await currentConnection.ExecuteAsync($"OPTIMIZE TABLE `{string.Join("`, `", tables)}`");
+    }
+
+    /// <summary>
+    /// Shrinks database
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation</returns>
+    public virtual Task ShrinkDatabaseAsync()
+    {
+        throw new DataException("This database provider does not support database shrinking.  Instead, use Re-index operation to optimize database space. Optimization is only available when the 'innodb_file_per_table' setting is enabled");
+    }
+
+    /// <summary>
+    /// Gets the database size in Kb
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation
+    /// The task result contains the database size
+    /// </returns>
+    public virtual async Task<long> GetDatabaseSizeAsync()
+    {
+        using var currentConnection = CreateDataConnection();
+        var result = await currentConnection.QueryToListAsync<long>($"SELECT ROUND(SUM(data_length + index_length) / 1024, 1) FROM information_schema.tables where table_schema='{GetConnectionStringBuilder().Database}' GROUP BY table_schema");
+
+        return result.FirstOrDefault();
     }
 
     /// <summary>
@@ -263,16 +299,43 @@ public partial class MySqlNopDataProvider : BaseDataProvider, INopDataProvider
         if (nopConnectionString.IntegratedSecurity)
             throw new NopException("Data provider supports connection only with login and password");
 
+        var server = nopConnectionString.ServerName;
+        var port = 0u;
+
+        //support "host:port" syntax (e.g. for TiDB on port 4000). MySqlConnector
+        //does not parse the port out of the Server option, so split it here.
+        //only split when the part after the last colon is a pure number to avoid
+        //breaking IPv6 literals.
+        var lastColon = server.LastIndexOf(':');
+        if (lastColon > 0 && int.TryParse(server[(lastColon + 1)..], out var parsedPort))
+        {
+            port = (uint)parsedPort;
+            server = server[..lastColon];
+        }
+
         var builder = new MySqlConnectionStringBuilder
         {
-            Server = nopConnectionString.ServerName,
+            Server = server,
             //Cast DatabaseName to lowercase to avoid case-sensitivity problems
             Database = nopConnectionString.DatabaseName.ToLowerInvariant(),
             AllowUserVariables = true,
             UserID = nopConnectionString.Username,
             Password = nopConnectionString.Password,
-            UseXaTransactions = false
+            UseXaTransactions = false,
+            //TiDB Cloud (and some MySQL proxies) terminate idle connections after
+            //~340 seconds and TCP keepalive cannot prevent it. Recycle pooled
+            //connections well before that so a stale connection is never reused.
+            ConnectionIdleTimeout = 60,
+            //TiDB Cloud Serverless can be slow to accept new connections
+            //(cold start), so allow more time than the 15s default.
+            ConnectionTimeout = 60
         };
+
+        //only set the port when it was explicitly provided in the server name
+        //("host:port"); otherwise keep the builder default so existing connection
+        //strings remain unchanged
+        if (port != 0)
+            builder.Port = port;
 
         return builder.ConnectionString;
     }
@@ -304,6 +367,47 @@ public partial class MySqlNopDataProvider : BaseDataProvider, INopDataProvider
         return "IX_" + HashHelper.CreateHash(Encoding.UTF8.GetBytes($"{targetTable}_{targetColumn}"), HASH_ALGORITHM);
     }
 
+    /// <summary>
+    /// Gets the name of the database collation
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation
+    /// The task result contains the collation name
+    /// </returns>
+    public virtual Task<string> GetDataBaseCollationAsync()
+    {
+        var connectionBuilder = GetConnectionStringBuilder();
+
+        return GetSqlStringValueAsync($"SELECT DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = '{connectionBuilder.Database}';");
+    }
+
+    /// <summary>
+    /// Creates a new <see cref="TransactionScope"/> with appropriate options for bulk database operations
+    /// </summary>
+    /// <returns>The created transaction scope</returns>
+    public override TransactionScope CreateTransactionScope()
+    {
+        var dataSettings = DataSettingsManager.LoadSettings();
+
+        //try to use the SQL command timeout value as the transaction scope timeout
+        var timeout = dataSettings.SQLCommandTimeout is > 0
+            ? TimeSpan.FromSeconds(dataSettings.SQLCommandTimeout.Value)
+            : TransactionManager.DefaultTimeout;
+
+        //TiDB does not support the SERIALIZABLE isolation level (SET
+        //transaction isolation level SERIALIZABLE is rejected unless
+        //tidb_skip_isolation_level_check=1). REPEATABLE READ is the default
+        //isolation level of both MySQL and TiDB and is the closest equivalent,
+        //so use it instead of the base implementation's Serializable.
+        var transactionOptions = new TransactionOptions
+        {
+            IsolationLevel = System.Transactions.IsolationLevel.RepeatableRead,
+            Timeout = timeout
+        };
+
+        return new TransactionScope(TransactionScopeOption.Required, transactionOptions, TransactionScopeAsyncFlowOption.Enabled);
+    }
+
     #endregion
 
     #region Properties
@@ -311,7 +415,7 @@ public partial class MySqlNopDataProvider : BaseDataProvider, INopDataProvider
     /// <summary>
     /// MySql data provider
     /// </summary>
-    protected override IDataProvider LinqToDbDataProvider => MySqlTools.GetDataProvider(ProviderName.MySqlConnector);
+    protected override IDataProvider LinqToDbDataProvider => MySqlTools.GetDataProvider(MySqlVersion.MySql80);
 
     /// <summary>
     /// Gets allowed a limit input value of the data for hashing functions, returns 0 if not limited
