@@ -1,7 +1,7 @@
 {
   "sdk": {
-    "version": "8.0.100",
-    "rollForward": "latestFeature",
-    "allowPrerelease": false
+    "version": "11.0.100-dev",
+    "rollForward": "latestPatch",
+    "allowPrerelease": true
   }
 } 
