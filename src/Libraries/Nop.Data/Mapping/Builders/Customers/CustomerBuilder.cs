@@ -22,9 +22,12 @@ public partial class CustomerBuilder : NopEntityBuilder<Customer>
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(Customer.Username)).AsString(1000).Nullable()
-            .WithColumn(nameof(Customer.Email)).AsString(1000).Nullable()
-            .WithColumn(nameof(Customer.EmailToRevalidate)).AsString(1000).Nullable()
+            // Username/Email are indexed columns: on utf8mb4 databases (MySQL 8,
+            // TiDB) an index key is limited to 3072 bytes, so a VARCHAR(1000) column
+            // (4000 bytes) would exceed it. 255 chars matches NewsLetterSubscription.Email.
+            .WithColumn(nameof(Customer.Username)).AsString(255).Nullable()
+            .WithColumn(nameof(Customer.Email)).AsString(255).Nullable()
+            .WithColumn(nameof(Customer.EmailToRevalidate)).AsString(255).Nullable()
             .WithColumn(nameof(Customer.FirstName)).AsString(1000).Nullable()
             .WithColumn(nameof(Customer.LastName)).AsString(1000).Nullable()
             .WithColumn(nameof(Customer.Gender)).AsString(1000).Nullable()

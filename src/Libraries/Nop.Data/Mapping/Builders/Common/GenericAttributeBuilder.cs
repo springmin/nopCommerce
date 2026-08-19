@@ -17,8 +17,12 @@ public partial class GenericAttributeBuilder : NopEntityBuilder<GenericAttribute
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(GenericAttribute.KeyGroup)).AsString(400).NotNullable()
-            .WithColumn(nameof(GenericAttribute.Key)).AsString(400).NotNullable()
+            // KeyGroup + Key are covered by the combined index
+            // IX_GenericAttribute_EntityId_KeyGroup_and_Key: on utf8mb4 databases
+            // (MySQL 8, TiDB) an index key is limited to 3072 bytes, so two
+            // VARCHAR(400) columns (1600+1600=3200 bytes) would exceed it.
+            .WithColumn(nameof(GenericAttribute.KeyGroup)).AsString(255).NotNullable()
+            .WithColumn(nameof(GenericAttribute.Key)).AsString(255).NotNullable()
             .WithColumn(nameof(GenericAttribute.Value)).AsString(int.MaxValue).NotNullable();
     }
 
