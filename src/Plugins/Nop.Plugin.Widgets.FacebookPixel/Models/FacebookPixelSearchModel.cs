@@ -21,7 +21,7 @@ public record FacebookPixelSearchModel : BaseSearchModel
     #region Properties
 
     [NopResourceDisplayName("Plugins.Widgets.FacebookPixel.Configuration.Search.Store")]
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 
     public IList<SelectListItem> AvailableStores { get; set; }
 

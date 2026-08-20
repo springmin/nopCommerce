@@ -20,7 +20,7 @@ public class ZettleRecord : BaseEntity
     /// <summary>
     /// Gets or sets the product identifier
     /// </summary>
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     /// <summary>
     /// Gets or sets the unique identifier as UUID version 1 of product variant
@@ -30,7 +30,7 @@ public class ZettleRecord : BaseEntity
     /// <summary>
     /// Gets or sets the product attribute combination identifier
     /// </summary>
-    public int CombinationId { get; set; }
+    public long CombinationId { get; set; }
 
     /// <summary>
     /// Gets or sets the image URL
@@ -40,7 +40,7 @@ public class ZettleRecord : BaseEntity
     /// <summary>
     /// Gets or sets an operation type identifier
     /// </summary>
-    public int OperationTypeId { get; set; }
+    public long OperationTypeId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether to sync price for this product
@@ -56,6 +56,11 @@ public class ZettleRecord : BaseEntity
     /// Gets or sets a value indicating whether to track inventory for this product
     /// </summary>
     public bool InventoryTrackingEnabled { get; set; }
+
+    /// <summary>
+    /// Gets or sets the unique identifier as UUID version 1 (used when changing inventory balance)
+    /// </summary>
+    public string ExternalUuid { get; set; }
 
     /// <summary>
     /// Gets or sets the date and time when the record was updated

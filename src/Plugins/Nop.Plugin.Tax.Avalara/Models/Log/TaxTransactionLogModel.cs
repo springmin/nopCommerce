@@ -23,7 +23,7 @@ public record TaxTransactionLogModel : BaseNopEntityModel
     public string ResponseMessage { get; set; }
 
     [NopResourceDisplayName("Plugins.Tax.Avalara.Log.Customer")]
-    public int? CustomerId { get; set; }
+    public long? CustomerId { get; set; }
     public string CustomerEmail { get; set; }
 
     [NopResourceDisplayName("Plugins.Tax.Avalara.Log.CreatedDate")]

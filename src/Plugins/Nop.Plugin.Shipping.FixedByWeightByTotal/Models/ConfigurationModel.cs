@@ -21,22 +21,22 @@ public record ConfigurationModel : BaseSearchModel
     }
 
     [NopResourceDisplayName("Plugins.Shipping.FixedByWeightByTotal.Fields.Store")]
-    public int SearchStoreId { get; set; }
+    public long SearchStoreId { get; set; }
 
     [NopResourceDisplayName("Plugins.Shipping.FixedByWeightByTotal.Fields.Warehouse")]
-    public int SearchWarehouseId { get; set; }
+    public long SearchWarehouseId { get; set; }
 
     [NopResourceDisplayName("Plugins.Shipping.FixedByWeightByTotal.Fields.Country")]
-    public int SearchCountryId { get; set; }
+    public long SearchCountryId { get; set; }
 
     [NopResourceDisplayName("Plugins.Shipping.FixedByWeightByTotal.Fields.StateProvince")]
-    public int SearchStateProvinceId { get; set; }
+    public long SearchStateProvinceId { get; set; }
 
     [NopResourceDisplayName("Plugins.Shipping.FixedByWeightByTotal.Fields.Zip")]
     public string SearchZip { get; set; }
 
     [NopResourceDisplayName("Plugins.Shipping.FixedByWeightByTotal.Fields.ShippingMethod")]
-    public int SearchShippingMethodId { get; set; }
+    public long SearchShippingMethodId { get; set; }
 
     public IList<SelectListItem> AvailableCountries { get; set; }
     public IList<SelectListItem> AvailableStates { get; set; }

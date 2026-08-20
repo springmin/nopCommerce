@@ -11,6 +11,6 @@ public class BaseEntityEqualityComparer<T> : IEqualityComparer<T> where T : Base
 
     public int GetHashCode(T obj)
     {
-        return obj.Id;
+        return (int)obj.Id;
     }
 }

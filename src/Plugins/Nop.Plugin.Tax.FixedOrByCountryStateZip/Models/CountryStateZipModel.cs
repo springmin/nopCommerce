@@ -6,22 +6,22 @@ namespace Nop.Plugin.Tax.FixedOrByCountryStateZip.Models;
 public record CountryStateZipModel : BaseNopEntityModel
 {
     [NopResourceDisplayName("Plugins.Tax.FixedOrByCountryStateZip.Fields.Store")]
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
     [NopResourceDisplayName("Plugins.Tax.FixedOrByCountryStateZip.Fields.Store")]
     public string StoreName { get; set; }
 
     [NopResourceDisplayName("Plugins.Tax.FixedOrByCountryStateZip.Fields.TaxCategory")]
-    public int TaxCategoryId { get; set; }
+    public long TaxCategoryId { get; set; }
     [NopResourceDisplayName("Plugins.Tax.FixedOrByCountryStateZip.Fields.TaxCategory")]
     public string TaxCategoryName { get; set; }
 
     [NopResourceDisplayName("Plugins.Tax.FixedOrByCountryStateZip.Fields.Country")]
-    public int CountryId { get; set; }
+    public long CountryId { get; set; }
     [NopResourceDisplayName("Plugins.Tax.FixedOrByCountryStateZip.Fields.Country")]
     public string CountryName { get; set; }
 
     [NopResourceDisplayName("Plugins.Tax.FixedOrByCountryStateZip.Fields.StateProvince")]
-    public int StateProvinceId { get; set; }
+    public long StateProvinceId { get; set; }
     [NopResourceDisplayName("Plugins.Tax.FixedOrByCountryStateZip.Fields.StateProvince")]
     public string StateProvinceName { get; set; }
 

@@ -13,14 +13,14 @@ public class BrevoSettings : ISettings
     public string ApiKey { get; set; }
 
     /// <summary>
-    /// Gets or sets the identifier of list to synchronize contacts
-    /// </summary>
-    public int ListId { get; set; }
-
-    /// <summary>
     /// Gets or sets the identifier of unsubscribe event webhook
     /// </summary>
-    public int UnsubscribeWebhookId { get; set; }
+    public long UnsubscribeWebhookId { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether partner value already set
+    /// </summary>
+    public bool PartnerValueSet { get; set; }
 
     /// <summary>
     /// Gets or sets the SMTP key (Master password)
@@ -40,7 +40,7 @@ public class BrevoSettings : ISettings
     /// <summary>
     /// Gets or sets the identifier of email account (for transactional emails)
     /// </summary>
-    public int EmailAccountId { get; set; }
+    public long EmailAccountId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether to use SMS notifications
@@ -71,4 +71,9 @@ public class BrevoSettings : ISettings
     /// Gets or sets a value indicating whether to use Marketing Automation
     /// </summary>
     public bool UseMarketingAutomation { get; set; }
+
+    /// <summary>
+    /// Gets or sets the collection of subscription type and Brevo list mappings
+    /// </summary>
+    public Dictionary<long, long> SubscriptionTypeMappings { get; set; } = new();
 }

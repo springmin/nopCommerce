@@ -32,7 +32,7 @@ public class ConversionsEventDatum
     /// Gets or sets a store identifier
     /// </summary>
     [JsonIgnore]
-    public int? StoreId { get; set; }
+    public long? StoreId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the event is custom

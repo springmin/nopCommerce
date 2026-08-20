@@ -17,11 +17,11 @@ using Nop.Services.Catalog;
 using Nop.Services.Cms;
 using Nop.Services.Common;
 using Nop.Services.Directory;
+using Nop.Services.Helpers;
 using Nop.Services.Logging;
 using Nop.Services.Orders;
 using Nop.Services.Tax;
 using Nop.Web.Framework.Models.Cms;
-using Nop.Web.Infrastructure.Cache;
 using Nop.Web.Models.Catalog;
 
 namespace Nop.Plugin.Widgets.FacebookPixel.Services;
@@ -386,7 +386,7 @@ public class FacebookPixelService
     /// <param name="isCustomEvent">Whether the event is a custom one</param>
     /// <returns>A task that represents the asynchronous operation</returns>
     protected async Task PrepareTrackedEventScriptAsync(string eventName, string eventObject,
-        int? customerId = null, int? storeId = null, bool isCustomEvent = false)
+        long? customerId = null, long? storeId = null, bool isCustomEvent = false)
     {
         //prepare script and store it into the session data, we use this later
         var customer = await _workContext.GetCurrentCustomerAsync();
@@ -526,7 +526,7 @@ public class FacebookPixelService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of configurations
     /// </returns>
-    protected async Task<IList<FacebookPixelConfiguration>> GetConfigurationsAsync(int storeId = 0)
+    protected async Task<IList<FacebookPixelConfiguration>> GetConfigurationsAsync(long storeId = 0)
     {
         var key = _staticCacheManager.PrepareKeyForDefaultCache(FacebookPixelDefaults.ConfigurationsCacheKey, storeId);
 
@@ -551,7 +551,7 @@ public class FacebookPixelService
     /// A task that represents the asynchronous operation
     /// The task result contains the value whether handling was successful
     /// </returns>
-    protected async Task<bool> HandleEventAsync(Func<Task<ConversionsEvent>> prepareModel, string eventName, int? storeId = null)
+    protected async Task<bool> HandleEventAsync(Func<Task<ConversionsEvent>> prepareModel, string eventName, long? storeId = null)
     {
         storeId ??= (await _storeContext.GetCurrentStoreAsync()).Id;
         var configurations = (await GetConfigurationsAsync(storeId ?? 0)).Where(configuration => eventName switch
@@ -1205,7 +1205,7 @@ public class FacebookPixelService
     /// A task that represents the asynchronous operation
     /// The task result contains the paged list of configurations
     /// </returns>
-    public async Task<IPagedList<FacebookPixelConfiguration>> GetPagedConfigurationsAsync(int storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
+    public async Task<IPagedList<FacebookPixelConfiguration>> GetPagedConfigurationsAsync(long storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
     {
         var query = _facebookPixelConfigurationRepository.Table;
 
@@ -1226,7 +1226,7 @@ public class FacebookPixelService
     /// A task that represents the asynchronous operation
     /// The task result contains the configuration
     /// </returns>
-    public async Task<FacebookPixelConfiguration> GetConfigurationByIdAsync(int configurationId)
+    public async Task<FacebookPixelConfiguration> GetConfigurationByIdAsync(long configurationId)
     {
         if (configurationId == 0)
             return null;
@@ -1283,7 +1283,7 @@ public class FacebookPixelService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of custom events
     /// </returns>
-    public async Task<IList<CustomEvent>> GetCustomEventsAsync(int configurationId, string widgetZone = null)
+    public async Task<IList<CustomEvent>> GetCustomEventsAsync(long configurationId, string widgetZone = null)
     {
         var cachedCustomEvents = await _staticCacheManager.GetAsync(_staticCacheManager.PrepareKeyForDefaultCache(FacebookPixelDefaults.CustomEventsCacheKey, configurationId), async () =>
         {
@@ -1308,7 +1308,7 @@ public class FacebookPixelService
     /// <param name="eventName">Event name</param>
     /// <param name="widgetZones">Widget zones names</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public async Task SaveCustomEventsAsync(int configurationId, string eventName, IList<string> widgetZones)
+    public async Task SaveCustomEventsAsync(long configurationId, string eventName, IList<string> widgetZones)
     {
         if (string.IsNullOrEmpty(eventName))
             return;

@@ -28,7 +28,7 @@ public class AvalaraTaxSettings : ISettings
     /// <summary>
     /// Gets or sets company id
     /// </summary>
-    public int? CompanyId { get; set; }
+    public long? CompanyId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether to use sandbox (testing environment)
@@ -101,7 +101,7 @@ public class AvalaraTaxSettings : ISettings
     /// <summary>
     /// Gets or sets the identifiers of customer roles for which certificates are available
     /// </summary>
-    public List<int> CustomerRoleIds { get; set; } = new();
+    public List<long> CustomerRoleIds { get; set; } = new();
 
     /// <summary>
     /// Gets or sets a value indicating whether to disaply a preview of customer's new certificate before signing and submitting
@@ -130,7 +130,7 @@ public class AvalaraTaxSettings : ISettings
     /// <summary>
     /// Gets or sets the identifiers of countries for which the HS code needs to be calculated
     /// </summary>
-    public List<int> SelectedCountryIds { get; set; } = new();
+    public List<long> SelectedCountryIds { get; set; } = new();
 
     #endregion
 }

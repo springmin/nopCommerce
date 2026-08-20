@@ -38,7 +38,7 @@ public class TaxTransactionLogService
     /// A task that represents the asynchronous operation
     /// The task result contains the paged list of tax transaction log items
     /// </returns>
-    public async Task<IPagedList<TaxTransactionLog>> GetTaxTransactionLogAsync(int? customerId = null,
+    public async Task<IPagedList<TaxTransactionLog>> GetTaxTransactionLogAsync(long? customerId = null,
         DateTime? createdFromUtc = null, DateTime? createdToUtc = null,
         int pageIndex = 0, int pageSize = int.MaxValue)
     {
@@ -70,7 +70,7 @@ public class TaxTransactionLogService
     /// A task that represents the asynchronous operation
     /// The task result contains the log item
     /// </returns>
-    public async Task<TaxTransactionLog> GetTaxTransactionLogByIdAsync(int logItemId)
+    public async Task<TaxTransactionLog> GetTaxTransactionLogByIdAsync(long logItemId)
     {
         return await _taxTransactionLogRepository.GetByIdAsync(logItemId);
     }
@@ -114,7 +114,7 @@ public class TaxTransactionLogService
     /// </summary>
     /// <param name="ids">Log items identifiers</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public async Task DeleteTaxTransactionLogAsync(int[] ids)
+    public async Task DeleteTaxTransactionLogAsync(long[] ids)
     {
         await _taxTransactionLogRepository.DeleteAsync(logItem => ids.Contains(logItem.Id));
     }

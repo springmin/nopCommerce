@@ -32,16 +32,14 @@ public record StorePickupPointModel : BaseNopEntityModel
 
     public List<SelectListItem> AvailableStores { get; set; }
     [NopResourceDisplayName("Plugins.Pickup.PickupInStore.Fields.Store")]
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
     public string StoreName { get; set; }
 
-    [DataType(DataType.Text)]
-    [DisplayFormat(DataFormatString = "{0:F8}", ApplyFormatInEditMode = true)]
+    [UIHint("DecimalNullable")]
     [NopResourceDisplayName("Plugins.Pickup.PickupInStore.Fields.Latitude")]
     public decimal? Latitude { get; set; }
 
-    [DataType(DataType.Text)]
-    [DisplayFormat(DataFormatString = "{0:F8}", ApplyFormatInEditMode = true)]
+    [UIHint("DecimalNullable")]
     [NopResourceDisplayName("Plugins.Pickup.PickupInStore.Fields.Longitude")]
     public decimal? Longitude { get; set; }
 
@@ -59,11 +57,11 @@ public class AddressModel
     }
 
     [NopResourceDisplayName("Admin.Address.Fields.Country")]
-    public int? CountryId { get; set; }
+    public long? CountryId { get; set; }
     public IList<SelectListItem> AvailableCountries { get; set; }
 
     [NopResourceDisplayName("Admin.Address.Fields.StateProvince")]
-    public int? StateProvinceId { get; set; }
+    public long? StateProvinceId { get; set; }
     public IList<SelectListItem> AvailableStates { get; set; }
 
     [NopResourceDisplayName("Admin.Address.Fields.County")]

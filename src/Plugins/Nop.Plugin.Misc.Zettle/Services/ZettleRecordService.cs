@@ -50,7 +50,7 @@ public class ZettleRecordService
     /// A task that represents the asynchronous operation
     /// The task result contains the prepared records; the number of products that were not added
     /// </returns>
-    protected async Task<(List<ZettleRecord> Records, int InvalidProducts)> PrepareRecordsToAddAsync(List<int> productIds)
+    protected async Task<(List<ZettleRecord> Records, long InvalidProducts)> PrepareRecordsToAddAsync(List<long> productIds)
     {
         var products = await _productRepository.GetByIdsAsync(productIds, null, false);
         var productsWithSku = products.Where(product => !string.IsNullOrEmpty(product.Sku)).ToList();
@@ -103,7 +103,7 @@ public class ZettleRecordService
     /// A task that represents the asynchronous operation
     /// The task result contains the record for synchronization
     /// </returns>
-    public async Task<ZettleRecord> GetRecordByIdAsync(int id)
+    public async Task<ZettleRecord> GetRecordByIdAsync(long id)
     {
         return await _repository.GetByIdAsync(id, null);
     }
@@ -163,7 +163,7 @@ public class ZettleRecordService
     /// </summary>
     /// <param name="ids">Records identifiers</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public async Task DeleteRecordsAsync(List<int> ids)
+    public async Task DeleteRecordsAsync(List<long> ids)
     {
         await _repository.DeleteAsync(record => ids.Contains(record.Id));
     }
@@ -233,13 +233,13 @@ public class ZettleRecordService
     /// <param name="productId">Product identifier</param>
     /// <param name="attributeCombinationId">Product attribute combination identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public async Task CreateOrUpdateRecordAsync(OperationType operationType, int productId, int attributeCombinationId = 0)
+    public async Task CreateOrUpdateRecordAsync(OperationType operationType, long productId, long attributeCombinationId = 0)
     {
         if (productId == 0 && attributeCombinationId == 0)
             return;
 
-        var existingRecord = _repository.Table.
-            FirstOrDefault(record => record.ProductId == productId && record.CombinationId == attributeCombinationId);
+        var existingRecord = await _repository.Table.
+            FirstOrDefaultAsync(record => record.ProductId == productId && record.CombinationId == attributeCombinationId);
 
         if (existingRecord is null)
         {
@@ -249,7 +249,7 @@ public class ZettleRecordService
             if (!_zettleSettings.AutoAddRecordsEnabled)
                 return;
 
-            if (attributeCombinationId == 0 || _repository.Table.FirstOrDefault(record => record.ProductId == productId) is not ZettleRecord productRecord)
+            if (attributeCombinationId == 0 || (await _repository.Table.FirstOrDefaultAsync(record => record.ProductId == productId)) is not ZettleRecord productRecord)
             {
                 var (records, _) = await PrepareRecordsToAddAsync([productId]);
                 await InsertRecordsAsync(records);
@@ -312,14 +312,15 @@ public class ZettleRecordService
     /// A task that represents the asynchronous operation
     /// The task result contains the number of products that were not added
     /// </returns>
-    public async Task<int?> AddRecordsAsync(List<int> productIds)
+    public async Task<long> AddRecordsAsync(List<long> productIds)
     {
         if (!productIds?.Any() ?? true)
-            return null;
+            return 0;
 
-        var newProductIds = productIds.Except(_repository.Table.Select(record => record.ProductId)).ToList();
+        var newProductIds = productIds.Except(await _repository.Table.Select(record => record.ProductId).ToListAsync()).ToList();
+        
         if (!newProductIds.Any())
-            return null;
+            return 0;
 
         var (records, invalidProducts) = await PrepareRecordsToAddAsync(newProductIds);
         await InsertRecordsAsync(records);

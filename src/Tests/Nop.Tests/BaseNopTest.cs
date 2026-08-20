@@ -664,7 +664,7 @@ public partial class BaseNopTest
         /// <summary>
         /// Generates the next identifier
         /// </summary>
-        public int NextId()
+        public long NextId()
         {
             if (_tinyid != null)
                 return _tinyid.NextId();

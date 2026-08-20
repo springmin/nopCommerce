@@ -11,11 +11,11 @@ public class RequirementModel
     }
 
     [NopResourceDisplayName("Plugins.DiscountRules.CustomerRoles.Fields.CustomerRole")]
-    public int CustomerRoleId { get; set; }
+    public long CustomerRoleId { get; set; }
 
-    public int DiscountId { get; set; }
+    public long DiscountId { get; set; }
 
-    public int RequirementId { get; set; }
+    public long RequirementId { get; set; }
 
     public IList<SelectListItem> AvailableCustomerRoles { get; set; }
 }

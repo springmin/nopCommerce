@@ -1,11 +1,8 @@
-﻿﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Nop.Core;
-using Nop.Core.Domain.Customers;
 using Nop.Plugin.Tax.FixedOrByCountryStateZip.Domain;
 using Nop.Plugin.Tax.FixedOrByCountryStateZip.Models;
 using Nop.Plugin.Tax.FixedOrByCountryStateZip.Services;
-using Nop.Services.Common;
 using Nop.Services.Configuration;
 using Nop.Services.Directory;
 using Nop.Services.Localization;
@@ -18,250 +15,217 @@ using Nop.Web.Framework.Models.Extensions;
 using Nop.Web.Framework.Mvc;
 using Nop.Web.Framework.Mvc.Filters;
 
- namespace Nop.Plugin.Tax.FixedOrByCountryStateZip.Controllers; 
+namespace Nop.Plugin.Tax.FixedOrByCountryStateZip.Controllers;
 
- [AuthorizeAdmin]
- [Area(AreaNames.ADMIN)]
- [AutoValidateAntiforgeryToken]
- public class FixedOrByCountryStateZipController : BasePluginController
- {
-     #region Fields
+[AuthorizeAdmin]
+[Area(AreaNames.ADMIN)]
+[AutoValidateAntiforgeryToken]
+public class FixedOrByCountryStateZipController : BasePluginController
+{
+    #region Fields
 
-     protected readonly FixedOrByCountryStateZipTaxSettings _countryStateZipSettings;
-     protected readonly ICountryService _countryService;
-     protected readonly ICountryStateZipService _taxRateService;
-     protected readonly ILocalizationService _localizationService;
-     protected readonly IPermissionService _permissionService;
-     protected readonly ISettingService _settingService;
-     protected readonly IStateProvinceService _stateProvinceService;
-     protected readonly IStoreService _storeService;
-     protected readonly ITaxCategoryService _taxCategoryService;
-     protected readonly IGenericAttributeService _genericAttributeService;
-     protected readonly IWorkContext _workContext;
+    protected readonly FixedOrByCountryStateZipTaxSettings _countryStateZipSettings;
+    protected readonly ICountryService _countryService;
+    protected readonly ICountryStateZipService _taxRateService;
+    protected readonly ILocalizationService _localizationService;
+    protected readonly IPermissionService _permissionService;
+    protected readonly ISettingService _settingService;
+    protected readonly IStateProvinceService _stateProvinceService;
+    protected readonly IStoreService _storeService;
+    protected readonly ITaxCategoryService _taxCategoryService;
 
-     #endregion
+    #endregion
 
-     #region Ctor
+    #region Ctor
 
-     public FixedOrByCountryStateZipController(FixedOrByCountryStateZipTaxSettings countryStateZipSettings,
-         ICountryService countryService,
-         ICountryStateZipService taxRateService,
-         ILocalizationService localizationService,
-         IPermissionService permissionService,
-         ISettingService settingService,
-         IStateProvinceService stateProvinceService,
-         IStoreService storeService,
-         ITaxCategoryService taxCategoryService,
-         IGenericAttributeService genericAttributeService,
-         IWorkContext workContext)
+    public FixedOrByCountryStateZipController(FixedOrByCountryStateZipTaxSettings countryStateZipSettings,
+        ICountryService countryService,
+        ICountryStateZipService taxRateService,
+        ILocalizationService localizationService,
+        IPermissionService permissionService,
+        ISettingService settingService,
+        IStateProvinceService stateProvinceService,
+        IStoreService storeService,
+        ITaxCategoryService taxCategoryService)
 
-     {
-         _countryStateZipSettings = countryStateZipSettings;
-         _countryService = countryService;
-         _taxRateService = taxRateService;
-         _permissionService = permissionService;
-         _localizationService = localizationService;
-         _settingService = settingService;
-         _stateProvinceService = stateProvinceService;
-         _storeService = storeService;
-         _taxCategoryService = taxCategoryService;
-         _genericAttributeService = genericAttributeService;
-         _workContext = workContext;
+    {
+        _countryStateZipSettings = countryStateZipSettings;
+        _countryService = countryService;
+        _taxRateService = taxRateService;
+        _permissionService = permissionService;
+        _localizationService = localizationService;
+        _settingService = settingService;
+        _stateProvinceService = stateProvinceService;
+        _storeService = storeService;
+        _taxCategoryService = taxCategoryService;
 
-     }
+    }
 
-     #endregion
+    #endregion
 
-     #region Methods
+    #region Methods
 
-     public async Task<IActionResult> Configure(bool showtour = false)
-     {
-         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageTaxSettings))
-             return AccessDeniedView();
+    [CheckPermission(StandardPermission.Configuration.MANAGE_TAX_SETTINGS)]
+    public async Task<IActionResult> Configure()
+    {
+        var taxCategories = await _taxCategoryService.GetAllTaxCategoriesAsync();
 
-         var taxCategories = await _taxCategoryService.GetAllTaxCategoriesAsync();
+        if (!taxCategories.Any())
+        {
+            var errorModel = new ConfigurationModel
+            {
+                TaxCategoriesCanNotLoadedError = string.Format(
+                    await _localizationService.GetResourceAsync(
+                        "Plugins.Tax.FixedOrByCountryStateZip.TaxCategoriesCanNotLoaded"),
+                    Url.Action("Categories", "Tax"))
+            };
 
-         if (!taxCategories.Any())
-         {
-             var errorModel = new ConfigurationModel
-             {
-                 TaxCategoriesCanNotLoadedError = string.Format(
-                     await _localizationService.GetResourceAsync(
-                         "Plugins.Tax.FixedOrByCountryStateZip.TaxCategoriesCanNotLoaded"),
-                     Url.Action("Categories", "Tax"))
-             };
+            return View("~/Plugins/Tax.FixedOrByCountryStateZip/Views/Configure.cshtml", errorModel);
+        }
 
-             return View("~/Plugins/Tax.FixedOrByCountryStateZip/Views/Configure.cshtml", errorModel);
-         }
+        var model = new ConfigurationModel { CountryStateZipEnabled = _countryStateZipSettings.CountryStateZipEnabled };
 
-         var model = new ConfigurationModel { CountryStateZipEnabled = _countryStateZipSettings.CountryStateZipEnabled };
+        //stores
+        model.AvailableStores.Add(new SelectListItem { Text = "*", Value = "0" });
+        var stores = await _storeService.GetAllStoresAsync();
+        foreach (var s in stores)
+            model.AvailableStores.Add(new SelectListItem { Text = s.Name, Value = s.Id.ToString() });
+        //tax categories
+        foreach (var tc in taxCategories)
+            model.AvailableTaxCategories.Add(new SelectListItem { Text = tc.Name, Value = tc.Id.ToString() });
+        //countries
+        var countries = await _countryService.GetAllCountriesAsync(showHidden: true);
+        foreach (var c in countries)
+            model.AvailableCountries.Add(new SelectListItem { Text = c.Name, Value = c.Id.ToString() });
+        //states
+        model.AvailableStates.Add(new SelectListItem { Text = "*", Value = "0" });
+        var defaultCountry = countries.FirstOrDefault();
+        if (defaultCountry != null)
+        {
+            var states = await _stateProvinceService.GetStateProvincesByCountryIdAsync(defaultCountry.Id);
+            foreach (var s in states)
+                model.AvailableStates.Add(new SelectListItem { Text = s.Name, Value = s.Id.ToString() });
+        }
 
-         //stores
-         model.AvailableStores.Add(new SelectListItem { Text = "*", Value = "0" });
-         var stores = await _storeService.GetAllStoresAsync();
-         foreach (var s in stores)
-             model.AvailableStores.Add(new SelectListItem { Text = s.Name, Value = s.Id.ToString() });
-         //tax categories
-         foreach (var tc in taxCategories)
-             model.AvailableTaxCategories.Add(new SelectListItem { Text = tc.Name, Value = tc.Id.ToString() });
-         //countries
-         var countries = await _countryService.GetAllCountriesAsync(showHidden: true);
-         foreach (var c in countries)
-             model.AvailableCountries.Add(new SelectListItem { Text = c.Name, Value = c.Id.ToString() });
-         //states
-         model.AvailableStates.Add(new SelectListItem { Text = "*", Value = "0" });
-         var defaultCountry = countries.FirstOrDefault();
-         if (defaultCountry != null)
-         {
-             var states = await _stateProvinceService.GetStateProvincesByCountryIdAsync(defaultCountry.Id);
-             foreach (var s in states)
-                 model.AvailableStates.Add(new SelectListItem { Text = s.Name, Value = s.Id.ToString() });
-         }
+        return View("~/Plugins/Tax.FixedOrByCountryStateZip/Views/Configure.cshtml", model);
+    }
 
-         //show configuration tour
-         if (showtour)
-         {
-             var customer = await _workContext.GetCurrentCustomerAsync();
-             var hideCard = await _genericAttributeService.GetAttributeAsync<bool>(customer, NopCustomerDefaults.HideConfigurationStepsAttribute);
-             var closeCard = await _genericAttributeService.GetAttributeAsync<bool>(customer, NopCustomerDefaults.CloseConfigurationStepsAttribute);
+    [HttpPost]
+    [CheckPermission(StandardPermission.Configuration.MANAGE_TAX_SETTINGS)]
+    public async Task<IActionResult> SaveMode(bool value)
+    {
+        //save settings
+        _countryStateZipSettings.CountryStateZipEnabled = value;
+        await _settingService.SaveSettingAsync(_countryStateZipSettings);
 
-             if (!hideCard && !closeCard)
-                 ViewBag.ShowTour = true;
-         }
+        return Json(new { Result = true });
+    }
 
-         return View("~/Plugins/Tax.FixedOrByCountryStateZip/Views/Configure.cshtml", model);
-     }
+    #region Fixed tax
 
-     [HttpPost]
-     public async Task<IActionResult> SaveMode(bool value)
-     {
-         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageTaxSettings))
-             return Content("Access denied");
+    [HttpPost]
+    [CheckPermission(StandardPermission.Configuration.MANAGE_TAX_SETTINGS)]
+    public async Task<IActionResult> FixedRatesList(ConfigurationModel searchModel)
+    {
+        var categories = (await _taxCategoryService.GetAllTaxCategoriesAsync()).ToPagedList(searchModel);
 
-         //save settings
-         _countryStateZipSettings.CountryStateZipEnabled = value;
-         await _settingService.SaveSettingAsync(_countryStateZipSettings);
+        var gridModel = await new FixedTaxRateListModel().PrepareToGridAsync(searchModel, categories, () =>
+        {
+            return categories.SelectAwait(async taxCategory => new FixedTaxRateModel
+            {
+                TaxCategoryId = taxCategory.Id,
+                TaxCategoryName = taxCategory.Name,
 
-         return Json(new { Result = true });
-     }
+                Rate = await _settingService
+                    .GetSettingByKeyAsync<decimal>(string.Format(FixedOrByCountryStateZipDefaults.FIXED_RATE_SETTINGS_KEY, taxCategory.Id))
+            });
+        });
 
-     #region Fixed tax
+        return Json(gridModel);
+    }
 
-     [HttpPost]
-     public async Task<IActionResult> FixedRatesList(ConfigurationModel searchModel)
-     {
-         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageTaxSettings))
-             return await AccessDeniedDataTablesJson();
+    [HttpPost]
+    [CheckPermission(StandardPermission.Configuration.MANAGE_TAX_SETTINGS)]
+    public async Task<IActionResult> FixedRateUpdate(FixedTaxRateModel model)
+    {
+        await _settingService.SetSettingAsync(string.Format(FixedOrByCountryStateZipDefaults.FIXED_RATE_SETTINGS_KEY, model.TaxCategoryId), model.Rate);
 
-         var categories = (await _taxCategoryService.GetAllTaxCategoriesAsync()).ToPagedList(searchModel);
+        return new NullJsonResult();
+    }
 
-         var gridModel = await new FixedTaxRateListModel().PrepareToGridAsync(searchModel, categories, () =>
-         {
-             return categories.SelectAwait(async taxCategory => new FixedTaxRateModel
-             {
-                 TaxCategoryId = taxCategory.Id,
-                 TaxCategoryName = taxCategory.Name,
+    #endregion
 
-                 Rate = await _settingService
-                     .GetSettingByKeyAsync<decimal>(string.Format(FixedOrByCountryStateZipDefaults.FIXED_RATE_SETTINGS_KEY, taxCategory.Id))
-             });
-         });
+    #region Tax by country/state/zip
 
-         return Json(gridModel);
-     }
+    [HttpPost]
+    [CheckPermission(StandardPermission.Configuration.MANAGE_TAX_SETTINGS)]
+    public async Task<IActionResult> RatesByCountryStateZipList(ConfigurationModel searchModel)
+    {
+        var records = await _taxRateService.GetAllTaxRatesAsync(searchModel.Page - 1, searchModel.PageSize);
 
-     [HttpPost]
-     public async Task<IActionResult> FixedRateUpdate(FixedTaxRateModel model)
-     {
-         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageTaxSettings))
-             return Content("Access denied");
+        var gridModel = await new CountryStateZipListModel().PrepareToGridAsync(searchModel, records, () =>
+        {
+            return records.SelectAwait(async record => new CountryStateZipModel
+            {
+                Id = record.Id,
+                StoreId = record.StoreId,
+                StoreName = (await _storeService.GetStoreByIdAsync(record.StoreId))?.Name ?? "*",
+                TaxCategoryId = record.TaxCategoryId,
+                TaxCategoryName = (await _taxCategoryService.GetTaxCategoryByIdAsync(record.TaxCategoryId))?.Name ?? string.Empty,
+                CountryId = record.CountryId,
+                CountryName = (await _countryService.GetCountryByIdAsync(record.CountryId))?.Name ?? "Unavailable",
+                StateProvinceId = record.StateProvinceId,
+                StateProvinceName = (await _stateProvinceService.GetStateProvinceByIdAsync(record.StateProvinceId))?.Name ?? "*",
 
-         await _settingService.SetSettingAsync(string.Format(FixedOrByCountryStateZipDefaults.FIXED_RATE_SETTINGS_KEY, model.TaxCategoryId), model.Rate);
+                Zip = !string.IsNullOrEmpty(record.Zip) ? record.Zip : "*",
+                Percentage = record.Percentage
+            });
+        });
 
-         return new NullJsonResult();
-     }
+        return Json(gridModel);
+    }
 
-     #endregion
+    [HttpPost]
+    [CheckPermission(StandardPermission.Configuration.MANAGE_TAX_SETTINGS)]
+    public async Task<IActionResult> AddRateByCountryStateZip(ConfigurationModel model)
+    {
+        await _taxRateService.InsertTaxRateAsync(new TaxRate
+        {
+            StoreId = model.AddStoreId,
+            TaxCategoryId = model.AddTaxCategoryId,
+            CountryId = model.AddCountryId,
+            StateProvinceId = model.AddStateProvinceId,
+            Zip = model.AddZip,
+            Percentage = model.AddPercentage
+        });
 
-     #region Tax by country/state/zip
+        return Json(new { Result = true });
+    }
 
-     [HttpPost]
-     public async Task<IActionResult> RatesByCountryStateZipList(ConfigurationModel searchModel)
-     {
-         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageTaxSettings))
-             return await AccessDeniedDataTablesJson();
+    [HttpPost]
+    [CheckPermission(StandardPermission.Configuration.MANAGE_TAX_SETTINGS)]
+    public async Task<IActionResult> UpdateRateByCountryStateZip(CountryStateZipModel model)
+    {
+        var taxRate = await _taxRateService.GetTaxRateByIdAsync(model.Id);
+        taxRate.Zip = model.Zip == "*" ? null : model.Zip;
+        taxRate.Percentage = model.Percentage;
+        await _taxRateService.UpdateTaxRateAsync(taxRate);
 
-         var records = await _taxRateService.GetAllTaxRatesAsync(searchModel.Page - 1, searchModel.PageSize);
+        return new NullJsonResult();
+    }
 
-         var gridModel = await new CountryStateZipListModel().PrepareToGridAsync(searchModel, records, () =>
-         {
-             return records.SelectAwait(async record => new CountryStateZipModel
-             {
-                 Id = record.Id,
-                 StoreId = record.StoreId,
-                 StoreName = (await _storeService.GetStoreByIdAsync(record.StoreId))?.Name ?? "*",
-                 TaxCategoryId = record.TaxCategoryId,
-                 TaxCategoryName = (await _taxCategoryService.GetTaxCategoryByIdAsync(record.TaxCategoryId))?.Name ?? string.Empty,
-                 CountryId = record.CountryId,
-                 CountryName = (await _countryService.GetCountryByIdAsync(record.CountryId))?.Name ?? "Unavailable",
-                 StateProvinceId = record.StateProvinceId,
-                 StateProvinceName = (await _stateProvinceService.GetStateProvinceByIdAsync(record.StateProvinceId))?.Name ?? "*",
+    [HttpPost]
+    [CheckPermission(StandardPermission.Configuration.MANAGE_TAX_SETTINGS)]
+    public async Task<IActionResult> DeleteRateByCountryStateZip(long id)
+    {
+        var taxRate = await _taxRateService.GetTaxRateByIdAsync(id);
+        if (taxRate != null)
+            await _taxRateService.DeleteTaxRateAsync(taxRate);
 
-                 Zip = !string.IsNullOrEmpty(record.Zip) ? record.Zip : "*",
-                 Percentage = record.Percentage
-             });
-         });
+        return new NullJsonResult();
+    }
 
-         return Json(gridModel);
-     }
+    #endregion
 
-     [HttpPost]
-     public async Task<IActionResult> AddRateByCountryStateZip(ConfigurationModel model)
-     {
-         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageTaxSettings))
-             return Content("Access denied");
-
-         await _taxRateService.InsertTaxRateAsync(new TaxRate
-         {
-             StoreId = model.AddStoreId,
-             TaxCategoryId = model.AddTaxCategoryId,
-             CountryId = model.AddCountryId,
-             StateProvinceId = model.AddStateProvinceId,
-             Zip = model.AddZip,
-             Percentage = model.AddPercentage
-         });
-
-         return Json(new { Result = true });
-     }
-
-     [HttpPost]
-     public async Task<IActionResult> UpdateRateByCountryStateZip(CountryStateZipModel model)
-     {
-         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageTaxSettings))
-             return Content("Access denied");
-
-         var taxRate = await _taxRateService.GetTaxRateByIdAsync(model.Id);
-         taxRate.Zip = model.Zip == "*" ? null : model.Zip;
-         taxRate.Percentage = model.Percentage;
-         await _taxRateService.UpdateTaxRateAsync(taxRate);
-
-         return new NullJsonResult();
-     }
-
-     [HttpPost]
-     public async Task<IActionResult> DeleteRateByCountryStateZip(int id)
-     {
-         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageTaxSettings))
-             return Content("Access denied");
-
-         var taxRate = await _taxRateService.GetTaxRateByIdAsync(id);
-         if (taxRate != null)
-             await _taxRateService.DeleteTaxRateAsync(taxRate);
-
-         return new NullJsonResult();
-     }
-
-     #endregion
-
-     #endregion
- }
+    #endregion
+}

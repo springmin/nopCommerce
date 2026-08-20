@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Core;
+using Nop.Core.Http;
 using Nop.Plugin.Tax.Avalara.Models.Customer;
 using Nop.Plugin.Tax.Avalara.Services;
 using Nop.Services.Customers;
@@ -49,17 +50,17 @@ public class AvalaraPublicController : BasePublicController
 
         //ensure that Avalara tax provider is active
         if (!await _taxPluginManager.IsPluginActiveAsync(AvalaraTaxDefaults.SystemName, customer))
-            return RedirectToRoute("CustomerInfo");
+            return RedirectToRoute(NopRouteNames.General.CUSTOMER_INFO);
 
         if (!_avalaraTaxSettings.EnableCertificates)
-            return RedirectToRoute("CustomerInfo");
+            return RedirectToRoute(NopRouteNames.General.CUSTOMER_INFO);
 
         //ACL
         if (_avalaraTaxSettings.CustomerRoleIds.Any())
         {
             var customerRoleIds = await _customerService.GetCustomerRoleIdsAsync(customer);
             if (!customerRoleIds.Intersect(_avalaraTaxSettings.CustomerRoleIds).Any())
-                return RedirectToRoute("CustomerInfo");
+                return RedirectToRoute(NopRouteNames.General.CUSTOMER_INFO);
         }
 
         var token = await _avalaraTaxManager.CreateTokenAsync(customer);
@@ -87,7 +88,7 @@ public class AvalaraPublicController : BasePublicController
     }
 
     [CheckLanguageSeoCode(ignore: true)]
-    public async Task<IActionResult> DownloadCertificate(int id)
+    public async Task<IActionResult> DownloadCertificate(long id)
     {
         var customer = await _workContext.GetCurrentCustomerAsync();
         if (!await _customerService.IsRegisteredAsync(customer))
@@ -95,17 +96,17 @@ public class AvalaraPublicController : BasePublicController
 
         //ensure that Avalara tax provider is active
         if (!await _taxPluginManager.IsPluginActiveAsync(AvalaraTaxDefaults.SystemName, customer))
-            return RedirectToRoute("CustomerInfo");
+            return RedirectToRoute(NopRouteNames.General.CUSTOMER_INFO);
 
         if (!_avalaraTaxSettings.EnableCertificates)
-            return RedirectToRoute("CustomerInfo");
+            return RedirectToRoute(NopRouteNames.General.CUSTOMER_INFO);
 
         //ACL
         if (_avalaraTaxSettings.CustomerRoleIds.Any())
         {
             var customerRoleIds = await _customerService.GetCustomerRoleIdsAsync(customer);
             if (!customerRoleIds.Intersect(_avalaraTaxSettings.CustomerRoleIds).Any())
-                return RedirectToRoute("CustomerInfo");
+                return RedirectToRoute(NopRouteNames.General.CUSTOMER_INFO);
         }
 
         //try to get a file by the identifier

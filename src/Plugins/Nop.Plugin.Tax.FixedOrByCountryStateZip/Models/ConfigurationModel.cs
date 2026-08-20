@@ -15,15 +15,15 @@ public record ConfigurationModel : BaseSearchModel
     }
 
     [NopResourceDisplayName("Plugins.Tax.FixedOrByCountryStateZip.Fields.Store")]
-    public int AddStoreId { get; set; }
+    public long AddStoreId { get; set; }
     [NopResourceDisplayName("Plugins.Tax.FixedOrByCountryStateZip.Fields.Country")]
-    public int AddCountryId { get; set; }
+    public long AddCountryId { get; set; }
     [NopResourceDisplayName("Plugins.Tax.FixedOrByCountryStateZip.Fields.StateProvince")]
-    public int AddStateProvinceId { get; set; }
+    public long AddStateProvinceId { get; set; }
     [NopResourceDisplayName("Plugins.Tax.FixedOrByCountryStateZip.Fields.Zip")]
     public string AddZip { get; set; }
     [NopResourceDisplayName("Plugins.Tax.FixedOrByCountryStateZip.Fields.TaxCategory")]
-    public int AddTaxCategoryId { get; set; }
+    public long AddTaxCategoryId { get; set; }
     [NopResourceDisplayName("Plugins.Tax.FixedOrByCountryStateZip.Fields.Percentage")]
     public decimal AddPercentage { get; set; }
 

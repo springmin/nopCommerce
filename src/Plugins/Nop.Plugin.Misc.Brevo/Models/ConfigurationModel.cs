@@ -15,6 +15,7 @@ public record ConfigurationModel : BaseNopModel
     public ConfigurationModel()
     {
         AvailableLists = new List<SelectListItem>();
+        NewsLetterSubscriptionTypes = new List<NewsLetterSubscriptionMapModel>();
         AvailableSenders = new List<SelectListItem>();
         AvailableMessageTemplates = new List<SelectListItem>();
         MessageTemplateSearchModel = new BrevoMessageTemplateSearchModel();
@@ -26,15 +27,14 @@ public record ConfigurationModel : BaseNopModel
 
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Plugins.Misc.Brevo.Fields.ApiKey")]
     public string ApiKey { get; set; }
 
-    [NopResourceDisplayName("Plugins.Misc.Brevo.Fields.List")]
-    public int ListId { get; set; }
-    public bool ListId_OverrideForStore { get; set; }
     public IList<SelectListItem> AvailableLists { get; set; }
+
+    public IList<NewsLetterSubscriptionMapModel> NewsLetterSubscriptionTypes { get; set; }
 
     [NopResourceDisplayName("Plugins.Misc.Brevo.Fields.SmtpKey")]
     public string SmtpKey { get; set; }
@@ -61,7 +61,7 @@ public record ConfigurationModel : BaseNopModel
     public string StoreOwnerPhoneNumber { get; set; }
 
     [NopResourceDisplayName("Plugins.Misc.Brevo.Fields.CampaignList")]
-    public int CampaignListId { get; set; }
+    public long CampaignListId { get; set; }
 
     [NopResourceDisplayName("Plugins.Misc.Brevo.Fields.CampaignSenderName")]
     public string CampaignSenderName { get; set; }

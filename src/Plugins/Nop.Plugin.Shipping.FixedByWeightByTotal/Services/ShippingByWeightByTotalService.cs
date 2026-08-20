@@ -49,21 +49,23 @@ public class ShippingByWeightByTotalService : IShippingByWeightByTotalService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of the shipping by weight record
     /// </returns>
-    private async Task<IList<ShippingByWeightByTotalRecord>> GetRecordsAsync(int shippingMethodId,
-        int storeId,
-        int warehouseId,
-        int countryId,
-        int stateProvinceId,
+    private async Task<IList<ShippingByWeightByTotalRecord>> GetRecordsAsync(long shippingMethodId,
+        long storeId,
+        long warehouseId,
+        long countryId,
+        long stateProvinceId,
         string zip)
     {
-        var rez = await _shortTermCacheManager.GetAsync(async ()=> await _sbwtRepository.GetAllAsync(async query =>
+        var rez = await _shortTermCacheManager.GetAsync(async () => await _sbwtRepository.GetAllAsync(async query =>
         {
             var data = _pluginSettings.LoadAllRecord
                 ? (await _shortTermCacheManager.GetAsync(async () => await _sbwtRepository.GetAllAsync(q => q), FixedByWeightByTotalDefaults.ShippingByWeightByTotalCacheKey, null, null, null, null, null, null)).AsQueryable()
                 : query;
 
             //filter by shipping method
-            data = data.Where(sbw => sbw.ShippingMethodId == shippingMethodId);
+            data = shippingMethodId <= 0
+                ? data
+                : data = data.Where(sbw => sbw.ShippingMethodId == shippingMethodId);
 
             //filter by store
             data = storeId == 0
@@ -102,7 +104,7 @@ public class ShippingByWeightByTotalService : IShippingByWeightByTotalService
 
             return data;
         }), FixedByWeightByTotalDefaults.ShippingByWeightByTotalCacheKey, shippingMethodId, storeId, warehouseId, countryId, stateProvinceId, zip);
-            
+
         return rez;
     }
 
@@ -127,14 +129,14 @@ public class ShippingByWeightByTotalService : IShippingByWeightByTotalService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of the shipping by weight record
     /// </returns>
-    public virtual async Task<IPagedList<ShippingByWeightByTotalRecord>> FindRecordsAsync(int shippingMethodId, int storeId, int warehouseId,
-        int countryId, int stateProvinceId, string zip, decimal? weight, decimal? orderSubtotal, int pageIndex, int pageSize)
+    public virtual async Task<IPagedList<ShippingByWeightByTotalRecord>> FindRecordsAsync(long shippingMethodId, long storeId, long warehouseId,
+        long countryId, long stateProvinceId, string zip, decimal? weight, decimal? orderSubtotal, int pageIndex, int pageSize)
     {
         //filter by weight
         var existingRates =
             (await GetRecordsAsync(shippingMethodId, storeId, warehouseId, countryId, stateProvinceId, zip))
             .Where(sbw => !weight.HasValue || weight >= sbw.WeightFrom && weight <= sbw.WeightTo);
-                
+
         //filter by order subtotal
         existingRates = !orderSubtotal.HasValue ? existingRates :
             existingRates.Where(sbw => orderSubtotal >= sbw.OrderSubtotalFrom && orderSubtotal <= sbw.OrderSubtotalTo);
@@ -167,8 +169,8 @@ public class ShippingByWeightByTotalService : IShippingByWeightByTotalService
     /// A task that represents the asynchronous operation
     /// The task result contains the shipping by weight record
     /// </returns>
-    public virtual async Task<ShippingByWeightByTotalRecord> FindRecordsAsync(int shippingMethodId, int storeId, int warehouseId,
-        int countryId, int stateProvinceId, string zip, decimal weight, decimal orderSubtotal)
+    public virtual async Task<ShippingByWeightByTotalRecord> FindRecordsAsync(long shippingMethodId, long storeId, long warehouseId,
+        long countryId, long stateProvinceId, string zip, decimal weight, decimal orderSubtotal)
     {
         var foundRecords = await FindRecordsAsync(shippingMethodId, storeId, warehouseId, countryId, stateProvinceId, zip, weight, orderSubtotal, 0, int.MaxValue);
 
@@ -183,7 +185,7 @@ public class ShippingByWeightByTotalService : IShippingByWeightByTotalService
     /// A task that represents the asynchronous operation
     /// The task result contains the shipping by weight record
     /// </returns>
-    public virtual async Task<ShippingByWeightByTotalRecord> GetByIdAsync(int shippingByWeightRecordId)
+    public virtual async Task<ShippingByWeightByTotalRecord> GetByIdAsync(long shippingByWeightRecordId)
     {
         return await _sbwtRepository.GetByIdAsync(shippingByWeightRecordId);
     }

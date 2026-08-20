@@ -1,10 +1,9 @@
-﻿using ClosedXML.Excel;
-using FluentAssertions;
+﻿using AwesomeAssertions;
+using ClosedXML.Excel;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Directory;
-using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Payments;
 using Nop.Core.Domain.Shipping;
@@ -105,8 +104,11 @@ public class ExportManagerTests : ServiceTest
 
     #region Utilities
 
-    protected static T PropertiesShouldEqual<T, L, Tp>(T actual, PropertyManager<Tp, L> manager, IDictionary<string, string> replacePairs, params string[] filter) where L : Language
+    protected static void PropertiesShouldEqual<T, Tp>(T actual, PropertyManager<Tp> manager, IDictionary<string, string> replacePairs, params string[] filter)
     {
+        if (actual == null)
+            return;
+
         var objectProperties = typeof(T).GetProperties();
         foreach (var property in manager.GetDefaultProperties)
         {
@@ -122,13 +124,19 @@ public class ExportManagerTests : ServiceTest
             var objectPropertyValue = objectProperty.GetValue(actual);
             var propertyValue = property.PropertyValue;
 
-            if (propertyValue is XLCellValue { IsBlank: true }) 
+            if (propertyValue is XLCellValue { IsBlank: true })
                 propertyValue = null;
+
+            if (string.IsNullOrEmpty(propertyValue?.ToString() ?? string.Empty) && objectPropertyValue is null)
+                continue;
 
             switch (objectPropertyValue)
             {
                 case int:
                     propertyValue = property.IntValue;
+                    break;
+                case long:
+                    propertyValue = (long)property.IntValue;
                     break;
                 case Guid:
                     propertyValue = property.GuidValue;
@@ -136,7 +144,7 @@ public class ExportManagerTests : ServiceTest
                 case string:
                     propertyValue = property.StringValue;
                     break;
-                case DateTime time: ;
+                case DateTime time:
                     objectPropertyValue = new DateTime(time.Year, time.Month, time.Day, time.Hour, time.Minute, time.Second);
                     if (DateTime.TryParse(property.StringValue, out var date))
                         propertyValue = date;
@@ -149,9 +157,9 @@ public class ExportManagerTests : ServiceTest
                 case decimal:
                     propertyValue = property.DecimalValue;
                     break;
-            }   
+            }
 
-            if (objectProperty.PropertyType.IsEnum)
+            if (objectProperty.PropertyType.IsEnum && objectPropertyValue != null)
             {
                 objectPropertyValue = (int)objectPropertyValue;
                 propertyValue = property.IntValue;
@@ -159,11 +167,9 @@ public class ExportManagerTests : ServiceTest
 
             propertyValue.Should().Be(objectPropertyValue, $"The property \"{typeof(T).Name}.{property.PropertyName}\" of these objects is not equal");
         }
-
-        return actual;
     }
 
-    protected async Task<PropertyManager<T, Language>> GetPropertyManagerAsync<T>(XLWorkbook workbook)
+    protected async Task<PropertyManager<T>> GetPropertyManagerAsync<T>(XLWorkbook workbook)
     {
         var languages = await _languageService.GetAllLanguagesAsync();
 
@@ -172,7 +178,7 @@ public class ExportManagerTests : ServiceTest
         var defaultProperties = metadata.DefaultProperties;
         var localizedProperties = metadata.LocalizedProperties;
 
-        return new PropertyManager<T, Language>(defaultProperties, _catalogSettings, localizedProperties);
+        return new PropertyManager<T>(defaultProperties, _catalogSettings, localizedProperties);
     }
 
     protected XLWorkbook GetWorkbook(byte[] excelData)
@@ -181,7 +187,7 @@ public class ExportManagerTests : ServiceTest
         return new XLWorkbook(stream);
     }
 
-    protected T AreAllObjectPropertiesPresent<T, L>(T obj, PropertyManager<T, L> manager, params string[] filters) where L : Language
+    protected T AreAllObjectPropertiesPresent<T>(T obj, PropertyManager<T> manager, params string[] filters)
     {
         foreach (var propertyInfo in typeof(T).GetProperties())
         {
@@ -191,7 +197,7 @@ public class ExportManagerTests : ServiceTest
             if (manager.GetDefaultProperties.Any(p => p.PropertyName == propertyInfo.Name))
                 continue;
 
-            Assert.Fail("The property \"{0}.{1}\" no present on excel file", typeof(T).Name, propertyInfo.Name);
+            Assert.Fail($"The property \"{typeof(T).Name}.{propertyInfo.Name}\" no present on excel file");
         }
 
         return obj;
@@ -241,7 +247,7 @@ public class ExportManagerTests : ServiceTest
             "CaptureTransactionId", "CaptureTransactionResult", "SubscriptionTransactionId", "PaidDateUtc",
             "Deleted", "PickupAddress", "RedeemedRewardPointsEntryId", "DiscountUsageHistory", "GiftCardUsageHistory",
             "OrderNotes", "OrderItems", "Shipments", "OrderStatus", "PaymentStatus", "ShippingStatus",
-            "CustomerTaxDisplayType", "CustomOrderNumber"
+            "CustomerTaxDisplayType", "CustomOrderNumber", "DesiredDeliveryDateUtc", "LastPendingOrderFollowUpNumber", "LastPendingOrderFollowUpDateUtc"
         });
 
         //fields tested individually
@@ -286,7 +292,7 @@ public class ExportManagerTests : ServiceTest
 
         const string shippingPattern = "Shipping";
         replacePairs = addressFields.ToDictionary(p => shippingPattern + p, p => p);
-        var testShippingAddress = await _addressService.GetAddressByIdAsync(order.ShippingAddressId ?? 0);
+        var testShippingAddress = await _addressService.GetAddressByIdAsync((order.PickupInStore ? order.PickupAddressId : order.ShippingAddressId) ?? 0);
         PropertiesShouldEqual(testShippingAddress, manager, replacePairs, "CreatedOnUtc", "ShippingCountry");
         country = await _countryService.GetCountryByAddressAsync(testShippingAddress);
         manager.GetDefaultProperties.First(p => p.PropertyName == "ShippingCountry").StringValue.Should().Be(country.Name);
@@ -334,20 +340,21 @@ public class ExportManagerTests : ServiceTest
         manager.SetSelectList("VatNumberStatus", await VatNumberStatus.Unknown.ToSelectListAsync(useLocalization: false));
 
         var customer = customers.First();
-            
+
         var ignore = new List<string> { "Id", "ExternalAuthenticationRecords", "ShoppingCartItems",
             "ReturnRequests", "BillingAddress", "ShippingAddress", "Addresses", "AdminComment",
-            "EmailToRevalidate", "HasShoppingCartItems", "RequireReLogin", "FailedLoginAttempts",
+            "EmailToRevalidate", "PhoneSmsVerified", "HasShoppingCartItems", "RequireReLogin", "FailedLoginAttempts",
             "CannotLoginUntilDateUtc", "Deleted", "IsSystemAccount", "SystemName", "LastIpAddress",
             "LastLoginDateUtc", "LastActivityDateUtc", "RegisteredInStoreId", "BillingAddressId", "ShippingAddressId",
             "CustomerCustomerRoleMappings", "CustomerAddressMappings", "EntityCacheKey", "VendorId",
             "DateOfBirth", "CountryId",
             "StateProvinceId", "VatNumberStatusId", "TimeZoneId",
-            "CurrencyId", "LanguageId", "TaxDisplayTypeId", "TaxDisplayType", "TaxDisplayType", "VatNumberStatusId" };
+            "CurrencyId", "LanguageId", "TaxDisplayTypeId", "TaxDisplayType", "TaxDisplayType", "VatNumberStatusId", "MustChangePassword",
+            "LastShoppingCartUpdateDateUtc", "LastAbandonedCartFollowUpNumber", "LastAbandonedCartFollowUpDateUtc", "RegistrationFollowUpDateUtc" };
 
-        if (!_customerSettings.FirstNameEnabled) 
+        if (!_customerSettings.FirstNameEnabled)
             ignore.Add("FirstName");
-            
+
         if (!_customerSettings.LastNameEnabled)
             ignore.Add("LastName");
 
@@ -375,15 +382,15 @@ public class ExportManagerTests : ServiceTest
         if (!_customerSettings.CountryEnabled)
             ignore.Add("Country");
 
-        if(!_customerSettings.StateProvinceEnabled)
+        if (!_customerSettings.StateProvinceEnabled)
             ignore.Add("StateProvince");
 
-        if(!_customerSettings.PhoneEnabled)
+        if (!_customerSettings.PhoneEnabled)
             ignore.Add("Phone");
 
-        if(!_customerSettings.FaxEnabled)
+        if (!_customerSettings.FaxEnabled)
             ignore.Add("Fax");
-            
+
         AreAllObjectPropertiesPresent(customer, manager, ignore.ToArray());
         PropertiesShouldEqual(customer, manager, new Dictionary<string, string>());
     }
@@ -404,7 +411,7 @@ public class ExportManagerTests : ServiceTest
         manager.ReadDefaultFromXlsx(worksheet, 2);
         var category = categories.First();
 
-        var ignore = new List<string> { "CreatedOnUtc", "EntityCacheKey", "Picture", "PictureId", "AppliedDiscounts", "UpdatedOnUtc", "SubjectToAcl", "LimitedToStores", "Deleted", "DiscountCategoryMappings" };
+        var ignore = new List<string> { "CreatedOnUtc", "EntityCacheKey", "Picture", "PictureId", "AppliedDiscounts", "UpdatedOnUtc", "SubjectToAcl", "LimitedToStores", "Deleted", "DiscountCategoryMappings", "RestrictFromVendors" };
 
         AreAllObjectPropertiesPresent(category, manager, ignore.ToArray());
         PropertiesShouldEqual(category, manager, new Dictionary<string, string>());
@@ -443,12 +450,9 @@ public class ExportManagerTests : ServiceTest
             "ProductTags", "ProductAttributeMappings", "ProductAttributeCombinations", "TierPrices",
             "AppliedDiscounts", "ProductWarehouseInventory", "ApprovedRatingSum", "NotApprovedRatingSum",
             "ApprovedTotalReviews", "NotApprovedTotalReviews", "SubjectToAcl", "LimitedToStores", "Deleted",
-            "DownloadExpirationDays", "HasTierPrices", "HasDiscountsApplied", "AvailableStartDateTimeUtc",
+            "DownloadExpirationDays", "AvailableStartDateTimeUtc",
             "AvailableEndDateTimeUtc", "DisplayOrder", "CreatedOnUtc", "UpdatedOnUtc", "ProductProductTagMappings",
             "DiscountProductMappings", "EntityCacheKey" };
-
-        if (!_productEditorSettings.DisplayAttributeCombinationImagesOnly)
-            ignore.Add("DisplayAttributeCombinationImagesOnly");
 
         ignore.AddRange(replacePairs.Values);
 

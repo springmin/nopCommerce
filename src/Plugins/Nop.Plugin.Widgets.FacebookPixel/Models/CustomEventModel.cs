@@ -22,7 +22,7 @@ public record CustomEventModel : BaseNopModel
 
     #region Properties
 
-    public int ConfigurationId { get; set; }
+    public long ConfigurationId { get; set; }
 
     [NopResourceDisplayName("Plugins.Widgets.FacebookPixel.Configuration.CustomEvents.Fields.EventName")]
     public string EventName { get; set; }

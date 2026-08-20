@@ -18,7 +18,7 @@ public class StorePickupPointService : IStorePickupPointService
     /// <remarks>
     /// {0} : current store ID
     /// </remarks>
-    protected readonly CacheKey _pickupPointAllKey = new("Nop.pickuppoint.all-{0}", PICKUP_POINT_PATTERN_KEY);
+    protected readonly CacheKey _pickupPointAllKey = new("Nop.pickuppoint.all-{0}");
     protected const string PICKUP_POINT_PATTERN_KEY = "Nop.pickuppoint.";
 
     #endregion
@@ -62,7 +62,7 @@ public class StorePickupPointService : IStorePickupPointService
     /// A task that represents the asynchronous operation
     /// The task result contains the pickup points
     /// </returns>
-    public virtual async Task<IPagedList<StorePickupPoint>> GetAllStorePickupPointsAsync(int storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
+    public virtual async Task<IPagedList<StorePickupPoint>> GetAllStorePickupPointsAsync(long storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
     {
         var rez = await _shortTermCacheManager.GetAsync(async () => await _storePickupPointRepository.GetAllAsync(query =>
         {
@@ -84,7 +84,7 @@ public class StorePickupPointService : IStorePickupPointService
     /// A task that represents the asynchronous operation
     /// The task result contains the pickup point
     /// </returns>
-    public virtual async Task<StorePickupPoint> GetStorePickupPointByIdAsync(int pickupPointId)
+    public virtual async Task<StorePickupPoint> GetStorePickupPointByIdAsync(long pickupPointId)
     {
         return await _storePickupPointRepository.GetByIdAsync(pickupPointId);
     }

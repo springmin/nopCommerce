@@ -134,8 +134,8 @@ public class IdGenerationTests : BaseNopTest
         var secondGenerator = new TestEntityIdGenerator();
         secondGenerator.UseTinyid(new IdGenerationConfig { TinyidStep = 10, TinyidStartId = startId });
 
-        var ids1 = new List<int>();
-        var ids2 = new List<int>();
+        var ids1 = new List<long>();
+        var ids2 = new List<long>();
         for (var i = 0; i < 5; i++)
         {
             ids1.Add(_generator.NextId());

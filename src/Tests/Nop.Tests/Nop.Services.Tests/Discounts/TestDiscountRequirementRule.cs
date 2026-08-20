@@ -35,7 +35,7 @@ public partial class TestDiscountRequirementRule : BasePlugin, IDiscountRequirem
     /// <param name="discountId">Discount identifier</param>
     /// <param name="discountRequirementId">Discount requirement identifier (if editing)</param>
     /// <returns>URL</returns>
-    public string GetConfigurationUrl(int discountId, int? discountRequirementId)
+    public string GetConfigurationUrl(long discountId, long? discountRequirementId)
     {
         throw new NotImplementedException();
     }

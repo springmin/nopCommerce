@@ -40,8 +40,8 @@ public class ItemClassificationService
     /// A task that represents the asynchronous operation
     /// The task result contains the paged list of classification items
     /// </returns>
-    public async Task<IPagedList<ItemClassification>> GetItemClassificationAsync(int? countryId = null,
-        int? productId = null,
+    public async Task<IPagedList<ItemClassification>> GetItemClassificationAsync(long? countryId = null,
+        long? productId = null,
         int pageIndex = 0, int pageSize = int.MaxValue)
     {
         //get all items
@@ -69,7 +69,7 @@ public class ItemClassificationService
     /// A task that represents the asynchronous operation
     /// The task result contains the item classification
     /// </returns>
-    public async Task<ItemClassification> GetItemClassificationByIdAsync(int itemId)
+    public async Task<ItemClassification> GetItemClassificationByIdAsync(long itemId)
     {
         return await _itemClassificationRepository.GetByIdAsync(itemId);
     }
@@ -95,20 +95,18 @@ public class ItemClassificationService
     /// Add items for classification
     /// </summary>
     /// <param name="productIds">Product identifiers</param>
-    /// <returns>A task that represents the asynchronous operation
-    /// The task result contains the number of products that were not added
-    /// </returns>
-    public async Task<int?> AddItemClassificationAsync(List<int> productIds)
+    /// <returns>A task that represents the asynchronous operation</returns>
+    public async Task AddItemClassificationAsync(List<long> productIds)
     {
         if (!productIds?.Any() ?? true)
-            return productIds.Count;
+            return;
 
-        var newProductIds = productIds.Except(_itemClassificationRepository.Table.Select(record => record.ProductId)).ToList();
+        var newProductIds = productIds.Except(await _itemClassificationRepository.Table.Select(record => record.ProductId).ToListAsync()).ToList();
         if (!newProductIds.Any())
-            return productIds.Count;
+            return;
 
         if (!_avalaraTaxSettings.SelectedCountryIds?.Any() ?? true)
-            return productIds.Count;
+            return;
 
         var records = _avalaraTaxSettings.SelectedCountryIds.SelectMany(countryId => newProductIds.Select(productId => new ItemClassification
         {
@@ -118,8 +116,6 @@ public class ItemClassificationService
         }));
 
         await _itemClassificationRepository.InsertAsync(records.ToList(), false);
-
-        return productIds.Count - newProductIds.Count;
     }
 
     /// <summary>
@@ -139,7 +135,7 @@ public class ItemClassificationService
     /// </summary>
     /// <param name="ids">Items identifiers</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public async Task DeleteItemsAsync(List<int> ids)
+    public async Task DeleteItemsAsync(List<long> ids)
     {
         await _itemClassificationRepository.DeleteAsync(item => ids.Contains(item.Id));
     }

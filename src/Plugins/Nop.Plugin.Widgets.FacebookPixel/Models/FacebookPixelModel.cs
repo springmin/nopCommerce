@@ -41,7 +41,7 @@ public record FacebookPixelModel : BaseNopEntityModel
     public bool ConversionsApiEnabled { get; set; }
 
     [NopResourceDisplayName("Plugins.Widgets.FacebookPixel.Configuration.Fields.Store")]
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
     public string StoreName { get; set; }
     public IList<SelectListItem> AvailableStores { get; set; }
     public bool HideStoresList { get; set; }

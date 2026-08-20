@@ -6,7 +6,7 @@ namespace Nop.Plugin.Payments.Manual.Models;
 
 public record ConfigurationModel : BaseNopModel
 {
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Plugins.Payments.Manual.Fields.AdditionalFeePercentage")]
     public bool AdditionalFeePercentage { get; set; }
@@ -16,7 +16,7 @@ public record ConfigurationModel : BaseNopModel
     public decimal AdditionalFee { get; set; }
     public bool AdditionalFee_OverrideForStore { get; set; }
 
-    public int TransactModeId { get; set; }
+    public long TransactModeId { get; set; }
     [NopResourceDisplayName("Plugins.Payments.Manual.Fields.TransactMode")]
     public SelectList TransactModeValues { get; set; }
     public bool TransactModeId_OverrideForStore { get; set; }

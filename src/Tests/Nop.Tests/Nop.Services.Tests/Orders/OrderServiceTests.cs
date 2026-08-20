@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿using AwesomeAssertions;
 using Nop.Core.Domain.Orders;
 using Nop.Data;
 using Nop.Services.Orders;
@@ -34,7 +34,7 @@ public class OrderServiceTests : ServiceTest
     [Test]
     public async Task ItShouldReturnEmptyOrdersWhenOrderIdsEmpty()
     {
-        var orders = await _orderService.GetOrdersByIdsAsync(Array.Empty<int>());
+        var orders = await _orderService.GetOrdersByIdsAsync(Array.Empty<long>());
         orders.Count.Should().Be(0);
     }
 

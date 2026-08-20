@@ -23,9 +23,9 @@ public record ConfigurationModel : BaseNopModel, IAclSupportedModel
         TaxOriginAddressTypes = new List<SelectListItem>();
         TaxTransactionLogSearchModel = new TaxTransactionLogSearchModel();
         ItemClassificationSearchModel = new ItemClassificationSearchModel();
-        SelectedCustomerRoleIds = new List<int>();
+        SelectedCustomerRoleIds = new List<long>();
         AvailableCustomerRoles = new List<SelectListItem>();
-        SelectedCountryIds = new List<int>();
+        SelectedCountryIds = new List<long>();
         AvailableCountries = new List<SelectListItem>();
     }
 
@@ -76,7 +76,7 @@ public record ConfigurationModel : BaseNopModel, IAclSupportedModel
     public bool ValidateAddress { get; set; }
 
     [NopResourceDisplayName("Plugins.Tax.Avalara.Fields.TaxOriginAddressType")]
-    public int TaxOriginAddressTypeId { get; set; }
+    public long TaxOriginAddressTypeId { get; set; }
     public IList<SelectListItem> TaxOriginAddressTypes { get; set; }
 
     [NopResourceDisplayName("Plugins.Tax.Avalara.Fields.UseTaxRateTables")]
@@ -103,7 +103,7 @@ public record ConfigurationModel : BaseNopModel, IAclSupportedModel
 
     //ACL (customer roles)
     [NopResourceDisplayName("Plugins.Tax.Avalara.Fields.CustomerRoles")]
-    public IList<int> SelectedCustomerRoleIds { get; set; }
+    public IList<long> SelectedCustomerRoleIds { get; set; }
     public IList<SelectListItem> AvailableCustomerRoles { get; set; }
 
     #endregion
@@ -114,7 +114,7 @@ public record ConfigurationModel : BaseNopModel, IAclSupportedModel
     public bool UseItemClassification { get; set; }
 
     [NopResourceDisplayName("Plugins.Tax.Avalara.Fields.Countries")]
-    public IList<int> SelectedCountryIds { get; set; }
+    public IList<long> SelectedCountryIds { get; set; }
     public IList<SelectListItem> AvailableCountries { get; set; }
 
     public ItemClassificationSearchModel ItemClassificationSearchModel { get; set; }

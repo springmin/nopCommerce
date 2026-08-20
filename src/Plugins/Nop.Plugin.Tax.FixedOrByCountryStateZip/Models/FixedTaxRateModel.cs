@@ -5,7 +5,7 @@ namespace Nop.Plugin.Tax.FixedOrByCountryStateZip.Models;
 
 public record FixedTaxRateModel : BaseNopModel
 {
-    public int TaxCategoryId { get; set; }
+    public long TaxCategoryId { get; set; }
 
     [NopResourceDisplayName("Plugins.Tax.FixedOrByCountryStateZip.Fields.TaxCategoryName")]
     public string TaxCategoryName { get; set; }
