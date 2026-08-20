@@ -10,14 +10,13 @@ public partial class ExportSpecificationAttribute : ProductSpecificationAttribut
     /// <summary>
     /// Gets or sets the specification attribute identifier
     /// </summary>
-    public int SpecificationAttributeId { get; set; }
+    public long SpecificationAttributeId { get; set; }
 
     /// <summary>
     /// Create data to export the product specification attribute
     /// </summary>
     /// <param name="specificationAttribute">The product specification attribute to export</param>
     /// <param name="specificationAttributeService">Specification attribute service</param>
-    /// <param name="localizationService"></param>
     /// <returns></returns>
     public static async Task<ExportSpecificationAttribute> CreateAsync(ProductSpecificationAttribute specificationAttribute, ISpecificationAttributeService specificationAttributeService)
     {

@@ -84,16 +84,16 @@ public partial class ShipmentService : IShipmentService
     /// A task that represents the asynchronous operation
     /// The task result contains the shipments
     /// </returns>
-    public virtual async Task<IPagedList<Shipment>> GetAllShipmentsAsync(int vendorId = 0, int warehouseId = 0,
-        int shippingCountryId = 0,
-        int shippingStateId = 0,
+    public virtual async Task<IPagedList<Shipment>> GetAllShipmentsAsync(long vendorId = 0, long warehouseId = 0,
+        long shippingCountryId = 0,
+        long shippingStateId = 0,
         string shippingCounty = null,
         string shippingCity = null,
         string trackingNumber = null,
         bool loadNotShipped = false,
         bool loadNotReadyForPickup = false,
         bool loadNotDelivered = false,
-        int orderId = 0,
+        long orderId = 0,
         DateTime? createdFromUtc = null, DateTime? createdToUtc = null,
         int pageIndex = 0, int pageSize = int.MaxValue)
     {
@@ -106,48 +106,60 @@ public partial class ShipmentService : IShipmentService
                 query = query.Where(s => s.TrackingNumber.Contains(trackingNumber));
 
             if (shippingCountryId > 0)
+            {
                 query = from s in query
                     join o in _orderRepository.Table on s.OrderId equals o.Id
                     where _addressRepository.Table.Any(a =>
                         a.Id == (o.PickupInStore ? o.PickupAddressId : o.ShippingAddressId) &&
                         a.CountryId == shippingCountryId)
                     select s;
+            }
 
             if (shippingStateId > 0)
+            {
                 query = from s in query
                     join o in _orderRepository.Table on s.OrderId equals o.Id
                     where _addressRepository.Table.Any(a =>
                         a.Id == (o.PickupInStore ? o.PickupAddressId : o.ShippingAddressId) &&
                         a.StateProvinceId == shippingStateId)
                     select s;
+            }
 
             if (!string.IsNullOrWhiteSpace(shippingCounty))
+            {
                 query = from s in query
                     join o in _orderRepository.Table on s.OrderId equals o.Id
                     where _addressRepository.Table.Any(a =>
                         a.Id == (o.PickupInStore ? o.PickupAddressId : o.ShippingAddressId) &&
                         a.County.Contains(shippingCounty))
                     select s;
+            }
 
             if (!string.IsNullOrWhiteSpace(shippingCity))
+            {
                 query = from s in query
                     join o in _orderRepository.Table on s.OrderId equals o.Id
                     where _addressRepository.Table.Any(a =>
                         a.Id == (o.PickupInStore ? o.PickupAddressId : o.ShippingAddressId) &&
                         a.City.Contains(shippingCity))
                     select s;
+            }
 
             if (loadNotShipped)
+            {
                 query = from s in query
                     join o in _orderRepository.Table on s.OrderId equals o.Id
                     where !s.ShippedDateUtc.HasValue && !o.PickupInStore
                     select s;
+            }
 
             if (loadNotReadyForPickup)
+            {
                 query = from s in query
                     join o in _orderRepository.Table on s.OrderId equals o.Id
                     where !s.ReadyForPickupDateUtc.HasValue && o.PickupInStore
                     select s;
+            }
 
             if (loadNotDelivered)
                 query = query.Where(s => !s.DeliveryDateUtc.HasValue);
@@ -206,7 +218,7 @@ public partial class ShipmentService : IShipmentService
     /// A task that represents the asynchronous operation
     /// The task result contains the shipments
     /// </returns>
-    public virtual async Task<IList<Shipment>> GetShipmentsByIdsAsync(int[] shipmentIds)
+    public virtual async Task<IList<Shipment>> GetShipmentsByIdsAsync(long[] shipmentIds)
     {
         return await _shipmentRepository.GetByIdsAsync(shipmentIds);
     }
@@ -219,7 +231,7 @@ public partial class ShipmentService : IShipmentService
     /// A task that represents the asynchronous operation
     /// The task result contains the shipment
     /// </returns>
-    public virtual async Task<Shipment> GetShipmentByIdAsync(int shipmentId)
+    public virtual async Task<Shipment> GetShipmentByIdAsync(long shipmentId)
     {
         return await _shipmentRepository.GetByIdAsync(shipmentId, cache => default, useShortTermCache: true);
     }
@@ -235,7 +247,7 @@ public partial class ShipmentService : IShipmentService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public virtual async Task<IList<Shipment>> GetShipmentsByOrderIdAsync(int orderId, bool? shipped = null, bool? readyForPickup = null, int vendorId = 0)
+    public virtual async Task<IList<Shipment>> GetShipmentsByOrderIdAsync(long orderId, bool? shipped = null, bool? readyForPickup = null, long vendorId = 0)
     {
         if (orderId == 0)
             return new List<Shipment>();
@@ -279,7 +291,7 @@ public partial class ShipmentService : IShipmentService
     /// A task that represents the asynchronous operation
     /// The task result contains the shipment items
     /// </returns>
-    public virtual async Task<IList<ShipmentItem>> GetShipmentItemsByShipmentIdAsync(int shipmentId)
+    public virtual async Task<IList<ShipmentItem>> GetShipmentItemsByShipmentIdAsync(long shipmentId)
     {
         if (shipmentId == 0)
             return null;
@@ -325,7 +337,7 @@ public partial class ShipmentService : IShipmentService
     /// A task that represents the asynchronous operation
     /// The task result contains the shipment item
     /// </returns>
-    public virtual async Task<ShipmentItem> GetShipmentItemByIdAsync(int shipmentItemId)
+    public virtual async Task<ShipmentItem> GetShipmentItemByIdAsync(long shipmentItemId)
     {
         return await _siRepository.GetByIdAsync(shipmentItemId, cache => default, useShortTermCache: true);
     }
@@ -341,7 +353,7 @@ public partial class ShipmentService : IShipmentService
     /// A task that represents the asynchronous operation
     /// The task result contains the quantity
     /// </returns>
-    public virtual async Task<int> GetQuantityInShipmentsAsync(Product product, int warehouseId,
+    public virtual async Task<int> GetQuantityInShipmentsAsync(Product product, long warehouseId,
         bool ignoreShipped, bool ignoreDelivered)
     {
         ArgumentNullException.ThrowIfNull(product);
@@ -352,7 +364,7 @@ public partial class ShipmentService : IShipmentService
         if (!product.UseMultipleWarehouses)
             return 0;
 
-        const int cancelledOrderStatusId = (int)OrderStatus.Cancelled;
+        const long cancelledOrderStatusId = (int)OrderStatus.Cancelled;
 
         var query = _siRepository.Table;
 

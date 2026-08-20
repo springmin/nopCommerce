@@ -60,15 +60,15 @@ public partial class ProductTagService : IProductTagService
     /// Delete a product-product tag mapping
     /// </summary>
     /// <param name="productId">Product identifier</param>
-    /// <param name="productTagId">Product tag identifier</param>
+    /// <param name="productTagIds">Product tag identifiers</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    protected virtual async Task DeleteProductProductTagMappingAsync(int productId, int productTagId)
+    protected virtual async Task DeleteProductProductTagMappingAsync(long productId, IList<long> productTagIds)
     {
-        var mappingRecord = await _productProductTagMappingRepository.Table
-                                .FirstOrDefaultAsync(pptm => pptm.ProductId == productId && pptm.ProductTagId == productTagId)
-                            ?? throw new Exception("Mapping record not found");
+        var mappingRecords = await _productProductTagMappingRepository.Table
+            .Where(pptm => pptm.ProductId == productId && productTagIds.Contains(pptm.ProductTagId))
+                                .ToListAsync();
 
-        await _productProductTagMappingRepository.DeleteAsync(mappingRecord);
+        await _productProductTagMappingRepository.DeleteAsync(mappingRecords);
     }
 
     /// <summary>
@@ -80,7 +80,7 @@ public partial class ProductTagService : IProductTagService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    protected virtual async Task<bool> ProductTagExistsAsync(Product product, int productTagId)
+    protected virtual async Task<bool> ProductTagExistsAsync(Product product, long productTagId)
     {
         ArgumentNullException.ThrowIfNull(product);
 
@@ -169,7 +169,7 @@ public partial class ProductTagService : IProductTagService
     /// A task that represents the asynchronous operation
     /// The task result contains the product tags
     /// </returns>
-    public virtual async Task<IList<ProductTag>> GetAllProductTagsByProductIdAsync(int productId)
+    public virtual async Task<IList<ProductTag>> GetAllProductTagsByProductIdAsync(long productId)
     {
         var key = _staticCacheManager.PrepareKeyForDefaultCache(NopCatalogDefaults.ProductTagsByProductCacheKey, productId);
 
@@ -193,7 +193,7 @@ public partial class ProductTagService : IProductTagService
     /// A task that represents the asynchronous operation
     /// The task result contains the product tag
     /// </returns>
-    public virtual async Task<ProductTag> GetProductTagByIdAsync(int productTagId)
+    public virtual async Task<ProductTag> GetProductTagByIdAsync(long productTagId)
     {
         return await _productTagRepository.GetByIdAsync(productTagId, cache => default);
     }
@@ -206,7 +206,7 @@ public partial class ProductTagService : IProductTagService
     /// A task that represents the asynchronous operation
     /// The task result contains the product tags
     /// </returns>
-    public virtual async Task<IList<ProductTag>> GetProductTagsByIdsAsync(int[] productTagIds)
+    public virtual async Task<IList<ProductTag>> GetProductTagsByIdsAsync(long[] productTagIds)
     {
         return await _productTagRepository.GetByIdsAsync(productTagIds);
     }
@@ -246,7 +246,7 @@ public partial class ProductTagService : IProductTagService
     /// A task that represents the asynchronous operation
     /// The task result contains the number of products
     /// </returns>
-    public virtual async Task<int> GetProductCountByProductTagIdAsync(int productTagId, int storeId, bool showHidden = false)
+    public virtual async Task<long> GetProductCountByProductTagIdAsync(long productTagId, long storeId, bool showHidden = false)
     {
         var dictionary = await GetProductCountAsync(storeId, showHidden);
         if (dictionary.TryGetValue(productTagId, out var value))
@@ -264,7 +264,7 @@ public partial class ProductTagService : IProductTagService
     /// A task that represents the asynchronous operation
     /// The task result contains the dictionary of "product tag ID : product count"
     /// </returns>
-    public virtual async Task<Dictionary<int, int>> GetProductCountAsync(int storeId, bool showHidden = false)
+    public virtual async Task<Dictionary<long, int>> GetProductCountAsync(long storeId, bool showHidden = false)
     {
         var customer = await _workContext.GetCurrentCustomerAsync();
         var customerRoleIds = await _customerService.GetCustomerRoleIdsAsync(customer);
@@ -274,14 +274,12 @@ public partial class ProductTagService : IProductTagService
         return await _staticCacheManager.GetAsync(key, async () =>
         {
             var query = _productProductTagMappingRepository.Table;
-            var productsQuery = _productRepository.Table;
+            var productsQuery = _productRepository.Table.Where(p => !p.Deleted);
 
             if (!showHidden || storeId > 0)
             {
                 //apply store mapping constraints
                 productsQuery = await _storeMappingService.ApplyStoreMapping(productsQuery, storeId);
-
-                query = query.Where(pc => productsQuery.Any(p => !p.Deleted && pc.ProductId == p.Id));
             }
 
             if (!showHidden)
@@ -290,9 +288,9 @@ public partial class ProductTagService : IProductTagService
 
                 //apply ACL constraints
                 productsQuery = await _aclService.ApplyAcl(productsQuery, customerRoleIds);
-
-                query = query.Where(pc => productsQuery.Any(p => !p.Deleted && pc.ProductId == p.Id));
             }
+
+            query = query.Where(pc => productsQuery.Any(p => pc.ProductId == p.Id));
 
             var pTagCount = from pt in _productTagRepository.Table
                 join ptm in query on pt.Id equals ptm.ProductTagId
@@ -303,7 +301,7 @@ public partial class ProductTagService : IProductTagService
                     ProductCount = ptmGrouped.Count()
                 };
 
-            return pTagCount.ToDictionary(item => item.ProductTagId, item => item.ProductCount);
+            return await pTagCount.ToDictionaryAsync(item => item.ProductTagId, item => item.ProductCount);
         });
     }
 
@@ -319,7 +317,7 @@ public partial class ProductTagService : IProductTagService
 
         //product tags
         var existingProductTags = await GetAllProductTagsByProductIdAsync(product.Id);
-        var productTagsToRemove = new List<ProductTag>();
+        var productTagIdsToRemove = new List<long>();
         foreach (var existingProductTag in existingProductTags)
         {
             var found = false;
@@ -333,11 +331,10 @@ public partial class ProductTagService : IProductTagService
             }
 
             if (!found)
-                productTagsToRemove.Add(existingProductTag);
+                productTagIdsToRemove.Add(existingProductTag.Id);
         }
-
-        foreach (var productTag in productTagsToRemove)
-            await DeleteProductProductTagMappingAsync(product.Id, productTag.Id);
+        
+        await DeleteProductProductTagMappingAsync(product.Id, productTagIdsToRemove);
 
         foreach (var productTagName in productTags)
         {

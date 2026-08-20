@@ -87,20 +87,6 @@ public partial class StoreService : IStoreService
     }
 
     /// <summary>
-    /// Gets all stores
-    /// </summary>
-    /// <returns>
-    /// The stores
-    /// </returns>
-    public virtual IList<Store> GetAllStores()
-    {
-        return _storeRepository.GetAll(query =>
-        {
-            return from s in query orderby s.DisplayOrder, s.Id select s;
-        }, _ => default, includeDeleted: false);
-    }
-
-    /// <summary>
     /// Gets a store 
     /// </summary>
     /// <param name="storeId">Store identifier</param>
@@ -108,7 +94,7 @@ public partial class StoreService : IStoreService
     /// A task that represents the asynchronous operation
     /// The task result contains the store
     /// </returns>
-    public virtual async Task<Store> GetStoreByIdAsync(int storeId)
+    public virtual async Task<Store> GetStoreByIdAsync(long storeId)
     {
         return await _storeRepository.GetByIdAsync(storeId, cache => default, false);
     }
@@ -131,15 +117,6 @@ public partial class StoreService : IStoreService
     public virtual async Task UpdateStoreAsync(Store store)
     {
         await _storeRepository.UpdateAsync(store);
-    }
-
-    /// <summary>
-    /// Updates the store
-    /// </summary>
-    /// <param name="store">Store</param>
-    public virtual void UpdateStore(Store store)
-    {
-        _storeRepository.Update(store);
     }
 
     /// <summary>
@@ -168,7 +145,7 @@ public partial class StoreService : IStoreService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of names and/or IDs not existing stores
     /// </returns>
-    public async Task<string[]> GetNotExistingStoresAsync(string[] storeIdsNames)
+    public virtual async Task<string[]> GetNotExistingStoresAsync(string[] storeIdsNames)
     {
         ArgumentNullException.ThrowIfNull(storeIdsNames);
 

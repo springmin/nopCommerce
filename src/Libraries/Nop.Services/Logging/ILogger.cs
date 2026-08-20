@@ -62,7 +62,7 @@ public partial interface ILogger
     /// A task that represents the asynchronous operation
     /// The task result contains the log item
     /// </returns>
-    Task<Log> GetLogByIdAsync(int logId);
+    Task<Log> GetLogByIdAsync(long logId);
 
     /// <summary>
     /// Get log items by identifiers
@@ -72,7 +72,7 @@ public partial interface ILogger
     /// A task that represents the asynchronous operation
     /// The task result contains the log items
     /// </returns>
-    Task<IList<Log>> GetLogByIdsAsync(int[] logIds);
+    Task<IList<Log>> GetLogByIdsAsync(long[] logIds);
 
     /// <summary>
     /// Inserts a log item
@@ -83,21 +83,8 @@ public partial interface ILogger
     /// <param name="customer">The customer to associate log record with</param>
     /// <returns>
     /// A task that represents the asynchronous operation
-    /// The task result contains a log item
     /// </returns>
-    Task<Log> InsertLogAsync(LogLevel logLevel, string shortMessage, string fullMessage = "", Customer customer = null);
-
-    /// <summary>
-    /// Inserts a log item
-    /// </summary>
-    /// <param name="logLevel">Log level</param>
-    /// <param name="shortMessage">The short message</param>
-    /// <param name="fullMessage">The full message</param>
-    /// <param name="customer">The customer to associate log record with</param>
-    /// <returns>
-    /// Log item
-    /// </returns>
-    Log InsertLog(LogLevel logLevel, string shortMessage, string fullMessage = "", Customer customer = null);
+    Task InsertLogAsync(LogLevel logLevel, string shortMessage, string fullMessage = "", Customer customer = null);
 
     /// <summary>
     /// Information
@@ -109,14 +96,6 @@ public partial interface ILogger
     Task InformationAsync(string message, Exception exception = null, Customer customer = null);
 
     /// <summary>
-    /// Information
-    /// </summary>
-    /// <param name="message">Message</param>
-    /// <param name="exception">Exception</param>
-    /// <param name="customer">Customer</param>
-    void Information(string message, Exception exception = null, Customer customer = null);
-
-    /// <summary>
     /// Warning
     /// </summary>
     /// <param name="message">Message</param>
@@ -124,14 +103,6 @@ public partial interface ILogger
     /// <param name="customer">Customer</param>
     /// <returns>A task that represents the asynchronous operation</returns>
     Task WarningAsync(string message, Exception exception = null, Customer customer = null);
-
-    /// <summary>
-    /// Warning
-    /// </summary>
-    /// <param name="message">Message</param>
-    /// <param name="exception">Exception</param>
-    /// <param name="customer">Customer</param>
-    void Warning(string message, Exception exception = null, Customer customer = null);
 
     /// <summary>
     /// Error
@@ -142,11 +113,4 @@ public partial interface ILogger
     /// <returns>A task that represents the asynchronous operation</returns>
     Task ErrorAsync(string message, Exception exception = null, Customer customer = null);
 
-    /// <summary>
-    /// Error
-    /// </summary>
-    /// <param name="message">Message</param>
-    /// <param name="exception">Exception</param>
-    /// <param name="customer">Customer</param>
-    void Error(string message, Exception exception = null, Customer customer = null);
 }

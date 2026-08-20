@@ -23,7 +23,7 @@ public partial interface IStateProvinceService
     /// A task that represents the asynchronous operation
     /// The task result contains the state/province
     /// </returns>
-    Task<StateProvince> GetStateProvinceByIdAsync(int stateProvinceId);
+    Task<StateProvince> GetStateProvinceByIdAsync(long stateProvinceId);
 
     /// <summary>
     /// Gets a state/province by abbreviation
@@ -34,7 +34,7 @@ public partial interface IStateProvinceService
     /// A task that represents the asynchronous operation
     /// The task result contains the state/province
     /// </returns>
-    Task<StateProvince> GetStateProvinceByAbbreviationAsync(string abbreviation, int? countryId = null);
+    Task<StateProvince> GetStateProvinceByAbbreviationAsync(string abbreviation, long? countryId = null);
 
     /// <summary>
     /// Gets a state/province by address 
@@ -56,7 +56,7 @@ public partial interface IStateProvinceService
     /// A task that represents the asynchronous operation
     /// The task result contains the states
     /// </returns>
-    Task<IList<StateProvince>> GetStateProvincesByCountryIdAsync(int countryId, int languageId = 0, bool showHidden = false);
+    Task<IList<StateProvince>> GetStateProvincesByCountryIdAsync(long countryId, long languageId = 0, bool showHidden = false);
 
     /// <summary>
     /// Gets all states/provinces

@@ -18,7 +18,7 @@ public partial interface IWidgetPluginManager : IPluginManager<IWidgetPlugin>
     /// A task that represents the asynchronous operation
     /// The task result contains the list of active widget
     /// </returns>
-    Task<IList<IWidgetPlugin>> LoadActivePluginsAsync(Customer customer = null, int storeId = 0, string widgetZone = null);
+    Task<IList<IWidgetPlugin>> LoadActivePluginsAsync(Customer customer = null, long storeId = 0, string widgetZone = null);
 
     /// <summary>
     /// Check whether the passed widget is active
@@ -37,5 +37,5 @@ public partial interface IWidgetPluginManager : IPluginManager<IWidgetPlugin>
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, int storeId = 0);
+    Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, long storeId = 0);
 }

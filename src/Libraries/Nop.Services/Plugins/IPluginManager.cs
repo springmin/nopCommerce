@@ -17,7 +17,7 @@ public partial interface IPluginManager<TPlugin> where TPlugin : class, IPlugin
     /// A task that represents the asynchronous operation
     /// The task result contains the list of plugins
     /// </returns>
-    Task<IList<TPlugin>> LoadAllPluginsAsync(Customer customer = null, int storeId = 0);
+    Task<IList<TPlugin>> LoadAllPluginsAsync(Customer customer = null, long storeId = 0);
 
     /// <summary>
     /// Load plugin by system name
@@ -29,7 +29,7 @@ public partial interface IPluginManager<TPlugin> where TPlugin : class, IPlugin
     /// A task that represents the asynchronous operation
     /// The task result contains the plugin
     /// </returns>
-    Task<TPlugin> LoadPluginBySystemNameAsync(string systemName, Customer customer = null, int storeId = 0);
+    Task<TPlugin> LoadPluginBySystemNameAsync(string systemName, Customer customer = null, long storeId = 0);
 
     /// <summary>
     /// Load active plugins
@@ -41,7 +41,7 @@ public partial interface IPluginManager<TPlugin> where TPlugin : class, IPlugin
     /// A task that represents the asynchronous operation
     /// The task result contains the list of active plugins
     /// </returns>
-    Task<IList<TPlugin>> LoadActivePluginsAsync(List<string> systemNames, Customer customer = null, int storeId = 0);
+    Task<IList<TPlugin>> LoadActivePluginsAsync(List<string> systemNames, Customer customer = null, long storeId = 0);
 
     /// <summary>
     /// Check whether the passed plugin is active

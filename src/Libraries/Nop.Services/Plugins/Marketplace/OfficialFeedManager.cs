@@ -115,8 +115,8 @@ public partial class OfficialFeedManager
     /// A task that represents the asynchronous operation
     /// The task result contains the plugins
     /// </returns>
-    public virtual async Task<IPagedList<OfficialFeedPlugin>> GetAllPluginsAsync(int categoryId = 0,
-        int versionId = 0, int price = 0, string searchTerm = "",
+    public virtual async Task<IPagedList<OfficialFeedPlugin>> GetAllPluginsAsync(long categoryId = 0,
+        long versionId = 0, int price = 0, string searchTerm = "",
         int pageIndex = 0, int pageSize = int.MaxValue)
     {
         //load XML

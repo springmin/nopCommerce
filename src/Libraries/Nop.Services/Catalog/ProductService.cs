@@ -2,7 +2,6 @@
 using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Domain.Catalog;
-using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Discounts;
 using Nop.Core.Domain.Localization;
@@ -12,11 +11,13 @@ using Nop.Core.Domain.Stores;
 using Nop.Core.Infrastructure;
 using Nop.Data;
 using Nop.Services.Customers;
+using Nop.Services.Directory;
 using Nop.Services.Localization;
 using Nop.Services.Messages;
 using Nop.Services.Security;
 using Nop.Services.Shipping.Date;
 using Nop.Services.Stores;
+using Nop.Services.Vendors;
 
 namespace Nop.Services.Catalog;
 
@@ -28,12 +29,12 @@ public partial class ProductService : IProductService
     #region Fields
 
     protected readonly CatalogSettings _catalogSettings;
-    protected readonly CommonSettings _commonSettings;
     protected readonly IAclService _aclService;
     protected readonly ICustomerService _customerService;
     protected readonly IDateRangeService _dateRangeService;
     protected readonly ILanguageService _languageService;
     protected readonly ILocalizationService _localizationService;
+    protected readonly IMeasureService _measureService;
     protected readonly IProductAttributeParser _productAttributeParser;
     protected readonly IProductAttributeService _productAttributeService;
     protected readonly IRepository<Category> _categoryRepository;
@@ -42,14 +43,13 @@ public partial class ProductService : IProductService
     protected readonly IRepository<LocalizedProperty> _localizedPropertyRepository;
     protected readonly IRepository<Manufacturer> _manufacturerRepository;
     protected readonly IRepository<Product> _productRepository;
+    protected readonly IRepository<Product3dObject> _product3dObjectRepository;
     protected readonly IRepository<ProductAttributeCombination> _productAttributeCombinationRepository;
     protected readonly IRepository<ProductAttributeMapping> _productAttributeMappingRepository;
     protected readonly IRepository<ProductCategory> _productCategoryRepository;
     protected readonly IRepository<ProductManufacturer> _productManufacturerRepository;
     protected readonly IRepository<ProductPicture> _productPictureRepository;
     protected readonly IRepository<ProductProductTagMapping> _productTagMappingRepository;
-    protected readonly IRepository<ProductReview> _productReviewRepository;
-    protected readonly IRepository<ProductReviewHelpfulness> _productReviewHelpfulnessRepository;
     protected readonly IRepository<ProductSpecificationAttribute> _productSpecificationAttributeRepository;
     protected readonly IRepository<ProductTag> _productTagRepository;
     protected readonly IRepository<ProductVideo> _productVideoRepository;
@@ -61,7 +61,7 @@ public partial class ProductService : IProductService
     protected readonly ISearchPluginManager _searchPluginManager;
     protected readonly IStaticCacheManager _staticCacheManager;
     protected readonly IStoreMappingService _storeMappingService;
-    protected readonly IStoreService _storeService;
+    protected readonly IVendorService _vendorService;
     protected readonly IWorkContext _workContext;
     protected readonly LocalizationSettings _localizationSettings;
     private static readonly char[] _separator = [','];
@@ -71,12 +71,12 @@ public partial class ProductService : IProductService
     #region Ctor
 
     public ProductService(CatalogSettings catalogSettings,
-        CommonSettings commonSettings,
         IAclService aclService,
         ICustomerService customerService,
         IDateRangeService dateRangeService,
         ILanguageService languageService,
         ILocalizationService localizationService,
+        IMeasureService measureService,
         IProductAttributeParser productAttributeParser,
         IProductAttributeService productAttributeService,
         IRepository<Category> categoryRepository,
@@ -85,14 +85,13 @@ public partial class ProductService : IProductService
         IRepository<LocalizedProperty> localizedPropertyRepository,
         IRepository<Manufacturer> manufacturerRepository,
         IRepository<Product> productRepository,
+        IRepository<Product3dObject> product3dObjectRepository,
         IRepository<ProductAttributeCombination> productAttributeCombinationRepository,
         IRepository<ProductAttributeMapping> productAttributeMappingRepository,
         IRepository<ProductCategory> productCategoryRepository,
         IRepository<ProductManufacturer> productManufacturerRepository,
         IRepository<ProductPicture> productPictureRepository,
         IRepository<ProductProductTagMapping> productTagMappingRepository,
-        IRepository<ProductReview> productReviewRepository,
-        IRepository<ProductReviewHelpfulness> productReviewHelpfulnessRepository,
         IRepository<ProductSpecificationAttribute> productSpecificationAttributeRepository,
         IRepository<ProductTag> productTagRepository,
         IRepository<ProductVideo> productVideoRepository,
@@ -103,18 +102,18 @@ public partial class ProductService : IProductService
         IRepository<TierPrice> tierPriceRepository,
         ISearchPluginManager searchPluginManager,
         IStaticCacheManager staticCacheManager,
-        IStoreService storeService,
+        IVendorService vendorService,
         IStoreMappingService storeMappingService,
         IWorkContext workContext,
         LocalizationSettings localizationSettings)
     {
         _catalogSettings = catalogSettings;
-        _commonSettings = commonSettings;
         _aclService = aclService;
         _customerService = customerService;
         _dateRangeService = dateRangeService;
         _languageService = languageService;
         _localizationService = localizationService;
+        _measureService = measureService;
         _productAttributeParser = productAttributeParser;
         _productAttributeService = productAttributeService;
         _categoryRepository = categoryRepository;
@@ -123,14 +122,13 @@ public partial class ProductService : IProductService
         _localizedPropertyRepository = localizedPropertyRepository;
         _manufacturerRepository = manufacturerRepository;
         _productRepository = productRepository;
+        _product3dObjectRepository = product3dObjectRepository;
         _productAttributeCombinationRepository = productAttributeCombinationRepository;
         _productAttributeMappingRepository = productAttributeMappingRepository;
         _productCategoryRepository = productCategoryRepository;
         _productManufacturerRepository = productManufacturerRepository;
         _productPictureRepository = productPictureRepository;
         _productTagMappingRepository = productTagMappingRepository;
-        _productReviewRepository = productReviewRepository;
-        _productReviewHelpfulnessRepository = productReviewHelpfulnessRepository;
         _productSpecificationAttributeRepository = productSpecificationAttributeRepository;
         _productTagRepository = productTagRepository;
         _productVideoRepository = productVideoRepository;
@@ -142,7 +140,7 @@ public partial class ProductService : IProductService
         _searchPluginManager = searchPluginManager;
         _staticCacheManager = staticCacheManager;
         _storeMappingService = storeMappingService;
-        _storeService = storeService;
+        _vendorService = vendorService;
         _workContext = workContext;
         _localizationSettings = localizationSettings;
     }
@@ -270,9 +268,7 @@ public partial class ProductService : IProductService
             else
             {
                 if (combination.AllowOutOfStockOrders)
-                {
                     stockMessage = await _localizationService.GetResourceAsync("Products.Availability.InStock");
-                }
                 else
                 {
                     var productAvailabilityRange = await
@@ -295,6 +291,7 @@ public partial class ProductService : IProductService
                 var selectedIds = allIds.Intersect(exIds).ToList();
 
                 if (selectedIds.Count != allIds.Count)
+                {
                     if (_catalogSettings.AttributeValueOutOfStockDisplayType == AttributeValueOutOfStockDisplayType.AlwaysDisplay)
                         return await _localizationService.GetResourceAsync("Products.Availability.SelectRequiredAttributes");
                     else
@@ -310,6 +307,7 @@ public partial class ProductService : IProductService
                         if (flag)
                             return await _localizationService.GetResourceAsync("Products.Availability.SelectRequiredAttributes");
                     }
+                }
 
                 var productAvailabilityRange = await
                     _dateRangeService.GetProductAvailabilityRangeByIdAsync(product.ProductAvailabilityRangeId);
@@ -319,9 +317,7 @@ public partial class ProductService : IProductService
                         await _localizationService.GetLocalizedAsync(productAvailabilityRange, range => range.Name));
             }
             else
-            {
                 stockMessage = await _localizationService.GetResourceAsync("Products.Availability.InStock");
-            }
         }
 
         return stockMessage;
@@ -408,9 +404,9 @@ public partial class ProductService : IProductService
 
         var qty = -quantity;
 
-        var productInventory = _productWarehouseInventoryRepository.Table.Where(pwi => pwi.ProductId == product.Id)
+        var productInventory = await _productWarehouseInventoryRepository.Table.Where(pwi => pwi.ProductId == product.Id)
             .OrderByDescending(pwi => pwi.StockQuantity - pwi.ReservedQuantity)
-            .ToList();
+            .ToListAsync();
 
         if (productInventory.Count <= 0)
             return;
@@ -487,7 +483,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the cross-sell products
     /// </returns>
-    protected virtual async Task<IList<CrossSellProduct>> GetCrossSellProductsByProductIdsAsync(int[] productIds, bool showHidden = false)
+    protected virtual async Task<IList<CrossSellProduct>> GetCrossSellProductsByProductIdsAsync(long[] productIds, bool showHidden = false)
     {
         if (productIds == null || productIds.Length == 0)
             return new List<CrossSellProduct>();
@@ -502,34 +498,6 @@ public partial class ProductService : IProductService
         var crossSellProducts = await query.ToListAsync();
 
         return crossSellProducts;
-    }
-
-    /// <summary>
-    /// Gets ratio of useful and not useful product reviews 
-    /// </summary>
-    /// <param name="productReview">Product review</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the result
-    /// </returns>
-    protected virtual async Task<(int usefulCount, int notUsefulCount)> GetHelpfulnessCountsAsync(ProductReview productReview)
-    {
-        ArgumentNullException.ThrowIfNull(productReview);
-
-        var productReviewHelpfulness = _productReviewHelpfulnessRepository.Table.Where(prh => prh.ProductReviewId == productReview.Id);
-
-        return (await productReviewHelpfulness.CountAsync(prh => prh.WasHelpful),
-            await productReviewHelpfulness.CountAsync(prh => !prh.WasHelpful));
-    }
-
-    /// <summary>
-    /// Inserts a product review helpfulness record
-    /// </summary>
-    /// <param name="productReviewHelpfulness">Product review helpfulness record</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    protected virtual async Task InsertProductReviewHelpfulnessAsync(ProductReviewHelpfulness productReviewHelpfulness)
-    {
-        await _productReviewHelpfulnessRepository.InsertAsync(productReviewHelpfulness);
     }
 
     #endregion
@@ -581,14 +549,14 @@ public partial class ProductService : IProductService
     }
 
     /// <summary>
-    /// Gets product
+    /// Gets a product
     /// </summary>
     /// <param name="productId">Product identifier</param>
     /// <returns>
     /// A task that represents the asynchronous operation
     /// The task result contains the product
     /// </returns>
-    public virtual async Task<Product> GetProductByIdAsync(int productId)
+    public virtual async Task<Product> GetProductByIdAsync(long productId)
     {
         return await _productRepository.GetByIdAsync(productId, cache => default);
     }
@@ -601,7 +569,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the products
     /// </returns>
-    public virtual async Task<IList<Product>> GetProductsByIdsAsync(int[] productIds)
+    public virtual async Task<IList<Product>> GetProductsByIdsAsync(long[] productIds)
     {
         return await _productRepository.GetByIdsAsync(productIds, cache => default, false);
     }
@@ -617,6 +585,16 @@ public partial class ProductService : IProductService
     }
 
     /// <summary>
+    /// Inserts products
+    /// </summary>
+    /// <param name="products">Products to insert</param>
+    /// <returns>A task that represents the asynchronous operation</returns>
+    public virtual async Task InsertProductsAsync(IList<Product> products)
+    {
+        await _productRepository.InsertAsync(products);
+    }
+
+    /// <summary>
     /// Updates the product
     /// </summary>
     /// <param name="product">Product</param>
@@ -624,6 +602,16 @@ public partial class ProductService : IProductService
     public virtual async Task UpdateProductAsync(Product product)
     {
         await _productRepository.UpdateAsync(product);
+    }
+
+    /// <summary>
+    /// Update products
+    /// </summary>
+    /// <param name="products">Products to update</param>
+    /// <returns>A task that represents the asynchronous operation</returns>
+    public virtual async Task UpdateProductsAsync(IList<Product> products)
+    {
+        await _productRepository.UpdateAsync(products);
     }
 
     /// <summary>
@@ -635,7 +623,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of featured products
     /// </returns>
-    public virtual async Task<IList<Product>> GetCategoryFeaturedProductsAsync(int categoryId, int storeId = 0)
+    public virtual async Task<IList<Product>> GetCategoryFeaturedProductsAsync(long categoryId, long storeId = 0)
     {
         IList<Product> featuredProducts = new List<Product>();
 
@@ -662,7 +650,7 @@ public partial class ProductService : IProductService
             //apply ACL constraints
             query = await _aclService.ApplyAcl(query, customerRoleIds);
 
-            featuredProducts = query.ToList();
+            featuredProducts = await query.ToListAsync();
 
             return featuredProducts.Select(p => p.Id).ToList();
         });
@@ -682,7 +670,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of featured products
     /// </returns>
-    public virtual async Task<IList<Product>> GetManufacturerFeaturedProductsAsync(int manufacturerId, int storeId = 0)
+    public virtual async Task<IList<Product>> GetManufacturerFeaturedProductsAsync(long manufacturerId, long storeId = 0)
     {
         IList<Product> featuredProducts = new List<Product>();
 
@@ -709,7 +697,7 @@ public partial class ProductService : IProductService
             //apply ACL constraints
             query = await _aclService.ApplyAcl(query, customerRoleIds);
 
-            return query.Select(p => p.Id).ToList();
+            return await query.Select(p => p.Id).ToListAsync();
         });
 
         if (!featuredProducts.Any() && featuredProductIds.Any())
@@ -728,7 +716,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of new products
     /// </returns>
-    public virtual async Task<IPagedList<Product>> GetProductsMarkedAsNewAsync(int storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
+    public virtual async Task<IPagedList<Product>> GetProductsMarkedAsNewAsync(long storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
     {
         var query = from p in _productRepository.Table
             where p.Published && p.VisibleIndividually && p.MarkAsNew && !p.Deleted &&
@@ -757,7 +745,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the number of products
     /// </returns>
-    public virtual async Task<int> GetNumberOfProductsInCategoryAsync(IList<int> categoryIds = null, int storeId = 0)
+    public virtual async Task<int> GetNumberOfProductsInCategoryAsync(IList<long> categoryIds = null, long storeId = 0)
     {
         //validate "categoryIds" parameter
         if (categoryIds != null && categoryIds.Contains(0))
@@ -786,7 +774,7 @@ public partial class ProductService : IProductService
             .PrepareKeyForDefaultCache(NopCatalogDefaults.CategoryProductsNumberCacheKey, customerRoleIds, storeId, categoryIds);
 
         //only distinct products
-        return await _staticCacheManager.GetAsync(cacheKey, () => query.Select(p => p.Id).Count());
+        return await _staticCacheManager.GetAsync(cacheKey, () => query.Select(p => p.Id).CountAsync());
     }
 
     /// <summary>
@@ -826,23 +814,23 @@ public partial class ProductService : IProductService
     public virtual async Task<IPagedList<Product>> SearchProductsAsync(
         int pageIndex = 0,
         int pageSize = int.MaxValue,
-        IList<int> categoryIds = null,
-        IList<int> manufacturerIds = null,
-        int storeId = 0,
-        int vendorId = 0,
-        int warehouseId = 0,
+        IList<long> categoryIds = null,
+        IList<long> manufacturerIds = null,
+        long storeId = 0,
+        long vendorId = 0,
+        long warehouseId = 0,
         ProductType? productType = null,
         bool visibleIndividuallyOnly = false,
         bool excludeFeaturedProducts = false,
         decimal? priceMin = null,
         decimal? priceMax = null,
-        int productTagId = 0,
+        long productTagId = 0,
         string keywords = null,
         bool searchDescriptions = false,
         bool searchManufacturerPartNumber = true,
         bool searchSku = true,
         bool searchProductTags = false,
-        int languageId = 0,
+        long languageId = 0,
         IList<SpecificationAttributeOption> filteredSpecOptions = null,
         ProductSortingEnum orderBy = ProductSortingEnum.Position,
         bool showHidden = false,
@@ -895,7 +883,7 @@ public partial class ProductService : IProductService
             select p;
 
         var activeSearchProvider = await _searchPluginManager.LoadPrimaryPluginAsync(customer, storeId);
-        var providerResults = new List<int>();
+        var providerResults = new List<long>();
 
         if (!string.IsNullOrEmpty(keywords))
         {
@@ -903,14 +891,23 @@ public partial class ProductService : IProductService
 
             //Set a flag which will to points need to search in localized properties. If showHidden doesn't set to true should be at least two published languages.
             var searchLocalizedValue = languageId > 0 && langs.Count >= 2 && (showHidden || langs.Count(l => l.Published) >= 2);
-            IQueryable<int> productsByKeywords;
+            var productsByKeywords = new List<long>().AsQueryable();
+            var runStandardSearch = activeSearchProvider is null || showHidden;
 
-            if (activeSearchProvider is not null && !showHidden)
+            try
             {
-                providerResults = await activeSearchProvider.SearchProductsAsync(keywords, searchLocalizedValue);
-                productsByKeywords = providerResults.AsQueryable();
+                if (!runStandardSearch)
+                {
+                    providerResults = await activeSearchProvider.SearchProductsAsync(keywords, searchLocalizedValue);
+                    productsByKeywords = providerResults.AsQueryable();
+                }
             }
-            else
+            catch
+            {
+                runStandardSearch = _catalogSettings.UseStandardSearchWhenSearchProviderThrowsException;
+            }
+
+            if (runStandardSearch)
             {
                 productsByKeywords =
                     from p in _productRepository.Table
@@ -1054,13 +1051,14 @@ public partial class ProductService : IProductService
             {
                 var productCategoryQuery =
                     from pc in _productCategoryRepository.Table
+                    join c in _categoryRepository.Table on pc.CategoryId equals c.Id
                     where (!excludeFeaturedProducts || !pc.IsFeaturedProduct) &&
                           categoryIds.Contains(pc.CategoryId)
-                    group pc by pc.ProductId into pc
+                    group c.DisplayOrder by pc.ProductId into gr
                     select new
                     {
-                        ProductId = pc.Key,
-                        DisplayOrder = pc.First().DisplayOrder
+                        ProductId = gr.Key,
+                        DisplayOrder = gr.Min()
                     };
 
                 productsQuery =
@@ -1129,20 +1127,19 @@ public partial class ProductService : IProductService
             }
         }
 
-        var products = await productsQuery.OrderBy(_localizedPropertyRepository, await _workContext.GetWorkingLanguageAsync(), orderBy).ToPagedListAsync(pageIndex, pageSize);
-
         if (providerResults.Any() && orderBy == ProductSortingEnum.Position && !showHidden)
         {
-            var sortedProducts = products.OrderBy(p => 
-            {
-                var index = providerResults.IndexOf(p.Id);
-                return index == -1 ? products.TotalCount : index;
-            }).ToList();
+            var sortedProducts = from p in productsQuery
+                                 join pr in providerResults.Select((id, ind) => new { ind, id }) on p.Id equals pr.id into orderSeq
+                                 from os in orderSeq.DefaultIfEmpty()
+                                 orderby os == null ? int.MaxValue : os.ind
+                                 select p;
+                                 
 
-            return new PagedList<Product>(sortedProducts, pageIndex, pageSize, products.TotalCount);
+            return await sortedProducts.ToPagedListAsync(pageIndex, pageSize);
         }
 
-        return products;
+        return await productsQuery.OrderBy(_localizedPropertyRepository, await _workContext.GetWorkingLanguageAsync(), orderBy).ToPagedListAsync(pageIndex, pageSize);
     }
 
     /// <summary>
@@ -1155,7 +1152,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the products
     /// </returns>
-    public virtual async Task<IPagedList<Product>> GetProductsByProductAttributeIdAsync(int productAttributeId,
+    public virtual async Task<IPagedList<Product>> GetProductsByProductAttributeIdAsync(long productAttributeId,
         int pageIndex = 0, int pageSize = int.MaxValue)
     {
         var query = from p in _productRepository.Table
@@ -1180,8 +1177,8 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the products
     /// </returns>
-    public virtual async Task<IList<Product>> GetAssociatedProductsAsync(int parentGroupedProductId,
-        int storeId = 0, int vendorId = 0, bool showHidden = false)
+    public virtual async Task<IList<Product>> GetAssociatedProductsAsync(long parentGroupedProductId,
+        long storeId = 0, long vendorId = 0, bool showHidden = false)
     {
         var query = _productRepository.Table;
         query = query.Where(x => x.ParentGroupedProductId == parentGroupedProductId);
@@ -1195,61 +1192,24 @@ public partial class ProductService : IProductService
                 (!p.AvailableEndDateTimeUtc.HasValue || p.AvailableEndDateTimeUtc.Value > DateTime.UtcNow));
         }
         //vendor filtering
-        if (vendorId > 0)
-        {
+        if (vendorId > 0) 
             query = query.Where(p => p.VendorId == vendorId);
+
+        //apply store mapping constraints
+        if (!showHidden && storeId > 0)
+            query = await _storeMappingService.ApplyStoreMapping(query, storeId);
+
+        if (!showHidden)
+        {
+            //apply ACL constraints
+            var customer = await _workContext.GetCurrentCustomerAsync();
+            query = await _aclService.ApplyAcl(query, customer);
         }
 
         query = query.Where(x => !x.Deleted);
         query = query.OrderBy(x => x.DisplayOrder).ThenBy(x => x.Id);
 
-        var products = await query.ToListAsync();
-
-        //ACL mapping
-        if (!showHidden)
-            products = await products.WhereAwait(async x => await _aclService.AuthorizeAsync(x)).ToListAsync();
-
-        //Store mapping
-        if (!showHidden && storeId > 0)
-            products = await products.WhereAwait(async x => await _storeMappingService.AuthorizeAsync(x, storeId)).ToListAsync();
-
-        return products;
-    }
-
-    /// <summary>
-    /// Update product review totals
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task UpdateProductReviewTotalsAsync(Product product)
-    {
-        ArgumentNullException.ThrowIfNull(product);
-
-        var approvedRatingSum = 0;
-        var notApprovedRatingSum = 0;
-        var approvedTotalReviews = 0;
-        var notApprovedTotalReviews = 0;
-
-        var reviews = _productReviewRepository.Table
-            .Where(r => r.ProductId == product.Id)
-            .ToAsyncEnumerable();
-        await foreach (var pr in reviews)
-            if (pr.IsApproved)
-            {
-                approvedRatingSum += pr.Rating;
-                approvedTotalReviews++;
-            }
-            else
-            {
-                notApprovedRatingSum += pr.Rating;
-                notApprovedTotalReviews++;
-            }
-
-        product.ApprovedRatingSum = approvedRatingSum;
-        product.NotApprovedRatingSum = notApprovedRatingSum;
-        product.ApprovedTotalReviews = approvedTotalReviews;
-        product.NotApprovedTotalReviews = notApprovedTotalReviews;
-        await UpdateProductAsync(product);
+        return await query.ToListAsync();
     }
 
     /// <summary>
@@ -1264,7 +1224,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the products
     /// </returns>
-    public virtual async Task<IPagedList<Product>> GetLowStockProductsAsync(int? vendorId = null, bool? loadPublishedOnly = true,
+    public virtual async Task<IPagedList<Product>> GetLowStockProductsAsync(long? vendorId = null, bool? loadPublishedOnly = true,
         int pageIndex = 0, int pageSize = int.MaxValue, bool getOnlyTotalCount = false)
     {
         var query = _productRepository.Table;
@@ -1308,7 +1268,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the product combinations
     /// </returns>
-    public virtual async Task<IPagedList<ProductAttributeCombination>> GetLowStockProductCombinationsAsync(int? vendorId = null, bool? loadPublishedOnly = true,
+    public virtual async Task<IPagedList<ProductAttributeCombination>> GetLowStockProductCombinationsAsync(long? vendorId = null, bool? loadPublishedOnly = true,
         int pageIndex = 0, int pageSize = int.MaxValue, bool getOnlyTotalCount = false)
     {
         var combinations = from pac in _productAttributeCombinationRepository.Table
@@ -1366,7 +1326,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the products
     /// </returns>
-    public async Task<IList<Product>> GetProductsBySkuAsync(string[] skuArray, int vendorId = 0)
+    public virtual async Task<IList<Product>> GetProductsBySkuAsync(string[] skuArray, long vendorId = 0)
     {
         ArgumentNullException.ThrowIfNull(skuArray);
 
@@ -1380,32 +1340,6 @@ public partial class ProductService : IProductService
     }
 
     /// <summary>
-    /// Update HasTierPrices property (used for performance optimization)
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task UpdateHasTierPricesPropertyAsync(Product product)
-    {
-        ArgumentNullException.ThrowIfNull(product);
-
-        product.HasTierPrices = (await GetTierPricesByProductAsync(product.Id)).Any();
-        await UpdateProductAsync(product);
-    }
-
-    /// <summary>
-    /// Update HasDiscountsApplied property (used for performance optimization)
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task UpdateHasDiscountsAppliedAsync(Product product)
-    {
-        ArgumentNullException.ThrowIfNull(product);
-
-        product.HasDiscountsApplied = _discountProductMappingRepository.Table.Any(dpm => dpm.EntityId == product.Id);
-        await UpdateProductAsync(product);
-    }
-
-    /// <summary>
     /// Gets number of products by vendor identifier
     /// </summary>
     /// <param name="vendorId">Vendor identifier</param>
@@ -1413,7 +1347,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the number of products
     /// </returns>
-    public async Task<int> GetNumberOfProductsByVendorIdAsync(int vendorId)
+    public virtual async Task<long> GetNumberOfProductsByVendorIdAsync(long vendorId)
     {
         if (vendorId == 0)
             return 0;
@@ -1426,20 +1360,22 @@ public partial class ProductService : IProductService
     /// </summary>
     /// <param name="product">Product</param>
     /// <returns>A list of required product IDs</returns>
-    public virtual int[] ParseRequiredProductIds(Product product)
+    public virtual long[] ParseRequiredProductIds(Product product)
     {
         ArgumentNullException.ThrowIfNull(product);
 
         if (string.IsNullOrEmpty(product.RequiredProductIds))
-            return Array.Empty<int>();
+            return Array.Empty<long>();
 
-        var ids = new List<int>();
+        var ids = new List<long>();
 
         foreach (var idStr in product.RequiredProductIds
                      .Split(_separator, StringSplitOptions.RemoveEmptyEntries)
                      .Select(x => x.Trim()))
+        {
             if (int.TryParse(idStr, out var id))
                 ids.Add(id);
+        }
 
         return ids.ToArray();
     }
@@ -1506,7 +1442,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public virtual async Task<int> GetTotalStockQuantityAsync(Product product, bool useReservedQuantity = true, int warehouseId = 0)
+    public virtual async Task<int> GetTotalStockQuantityAsync(Product product, bool useReservedQuantity = true, long warehouseId = 0)
     {
         ArgumentNullException.ThrowIfNull(product);
 
@@ -1692,37 +1628,6 @@ public partial class ProductService : IProductService
     }
 
     /// <summary>
-    /// Update product store mappings
-    /// </summary>
-    /// <param name="product">Product</param>
-    /// <param name="limitedToStoresIds">A list of store ids for mapping</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task UpdateProductStoreMappingsAsync(Product product, IList<int> limitedToStoresIds)
-    {
-        product.LimitedToStores = limitedToStoresIds.Any();
-
-        var limitedToStoresIdsSet = limitedToStoresIds.ToHashSet();
-        var existingStoreMappingsByStoreId = (await _storeMappingService.GetStoreMappingsAsync(product))
-            .ToDictionary(sm => sm.StoreId);
-        var allStores = await _storeService.GetAllStoresAsync();
-        foreach (var store in allStores)
-        {
-            if (limitedToStoresIdsSet.Contains(store.Id))
-            {
-                //new store
-                if (!existingStoreMappingsByStoreId.ContainsKey(store.Id))
-                    await _storeMappingService.InsertStoreMappingAsync(product, store.Id);
-            }
-            else
-            {
-                //remove store
-                if (existingStoreMappingsByStoreId.TryGetValue(store.Id, out var storeMappingToDelete))
-                    await _storeMappingService.DeleteStoreMappingAsync(storeMappingToDelete);
-            }
-        }
-    }
-
-    /// <summary>
     /// Gets the value whether the sequence contains downloadable products
     /// </summary>
     /// <param name="productIds">Product identifiers</param>
@@ -1730,7 +1635,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public virtual async Task<bool> HasAnyDownloadableProductAsync(int[] productIds)
+    public virtual async Task<bool> HasAnyDownloadableProductAsync(long[] productIds)
     {
         return await _productRepository.Table
             .AnyAsync(p => productIds.Contains(p.Id) && p.IsDownload);
@@ -1744,7 +1649,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public virtual async Task<bool> HasAnyGiftCardProductAsync(int[] productIds)
+    public virtual async Task<bool> HasAnyGiftCardProductAsync(long[] productIds)
     {
         return await _productRepository.Table
             .AnyAsync(p => productIds.Contains(p.Id) && p.IsGiftCard);
@@ -1758,7 +1663,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public virtual async Task<bool> HasAnyRecurringProductAsync(int[] productIds)
+    public virtual async Task<bool> HasAnyRecurringProductAsync(long[] productIds)
     {
         return await _productRepository.Table
             .AnyAsync(p => productIds.Contains(p.Id) && p.IsRecurring);
@@ -1784,6 +1689,52 @@ public partial class ProductService : IProductService
             .ToListAsync();
 
         return queryFilter.Except(filter).ToArray();
+    }
+
+    /// <summary>
+    /// Get base price (PAngV)
+    /// </summary>
+    /// <param name="product">Product</param>
+    /// <param name="productPrice">Product price (in primary currency). Pass null if you want to use a default produce price</param>
+    /// <param name="totalWeight">Total weight of product (with attribute weight adjustment). Pass null if you want to use a default produce weight</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation
+    /// The task result contains the base price
+    /// </returns>
+    public virtual async Task<decimal?> GetBaseProductPriceAsync(Product product, decimal? productPrice, decimal? totalWeight = null)
+    {
+        ArgumentNullException.ThrowIfNull(product);
+
+        if (!product.BasepriceEnabled)
+            return null;
+
+        var productAmount = totalWeight.HasValue && totalWeight.Value > decimal.Zero ? totalWeight.Value : product.BasepriceAmount;
+
+        //amount in product cannot be 0
+        if (productAmount == 0)
+            return null;
+        
+        var referenceAmount = product.BasepriceBaseAmount;
+        var productUnit = await _measureService.GetMeasureWeightByIdAsync(product.BasepriceUnitId);
+
+        //measure weight cannot be loaded
+        if (productUnit == null)
+            return null;
+
+        var referenceUnit = await _measureService.GetMeasureWeightByIdAsync(product.BasepriceBaseUnitId);
+
+        //measure weight cannot be loaded
+        if (referenceUnit == null)
+            return null;
+
+        productPrice ??= product.Price;
+
+        var basePrice = productPrice.Value /
+                        //do not round. otherwise, it can cause issues
+                        await _measureService.ConvertWeightAsync(productAmount, productUnit, referenceUnit, false) *
+                        referenceAmount;
+        
+        return basePrice;
     }
 
     #endregion
@@ -1837,6 +1788,12 @@ public partial class ProductService : IProductService
                 //do not inject IWorkflowMessageService via constructor because it'll cause circular references
                 var workflowMessageService = EngineContext.Current.Resolve<IWorkflowMessageService>();
                 await workflowMessageService.SendQuantityBelowStoreOwnerNotificationAsync(product, _localizationSettings.DefaultAdminLanguageId);
+
+                if (product.VendorId != 0)
+                {
+                    var vendor = await _vendorService.GetVendorByIdAsync(product.VendorId);
+                    await workflowMessageService.SendQuantityBelowVendorNotificationAsync(product, vendor, _localizationSettings.DefaultAdminLanguageId);
+                }
             }
         }
 
@@ -1853,9 +1810,8 @@ public partial class ProductService : IProductService
 
                 if (product.AllowAddingOnlyExistingAttributeCombinations)
                 {
-                    var totalStockByAllCombinations = await (await _productAttributeService.GetAllProductAttributeCombinationsAsync(product.Id))
-                        .ToAsyncEnumerable()
-                        .SumAsync(c => c.StockQuantity);
+                    var totalStockByAllCombinations = (await _productAttributeService.GetAllProductAttributeCombinationsAsync(product.Id))
+                        .Sum(c => c.StockQuantity);
 
                     await ApplyLowStockActivityAsync(product, totalStockByAllCombinations);
                 }
@@ -1866,6 +1822,12 @@ public partial class ProductService : IProductService
                     //do not inject IWorkflowMessageService via constructor because it'll cause circular references
                     var workflowMessageService = EngineContext.Current.Resolve<IWorkflowMessageService>();
                     await workflowMessageService.SendQuantityBelowStoreOwnerNotificationAsync(combination, _localizationSettings.DefaultAdminLanguageId);
+
+                    if (product.VendorId != 0)
+                    {
+                        var vendor = await _vendorService.GetVendorByIdAsync(product.VendorId);
+                        await workflowMessageService.SendQuantityBelowVendorNotificationAsync(combination, vendor, _localizationSettings.DefaultAdminLanguageId);
+                    }
                 }
             }
         }
@@ -1879,10 +1841,8 @@ public partial class ProductService : IProductService
 
             //associated product (bundle)
             var associatedProduct = await GetProductByIdAsync(attributeValue.AssociatedProductId);
-            if (associatedProduct != null)
-            {
+            if (associatedProduct != null) 
                 await AdjustInventoryAsync(associatedProduct, quantityToChange * attributeValue.Quantity, message);
-            }
         }
     }
 
@@ -1894,7 +1854,7 @@ public partial class ProductService : IProductService
     /// <param name="quantity">Quantity, must be negative</param>
     /// <param name="message">Message for the stock quantity history</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task BookReservedInventoryAsync(Product product, int warehouseId, int quantity, string message = "")
+    public virtual async Task BookReservedInventoryAsync(Product product, long warehouseId, int quantity, string message = "")
     {
         ArgumentNullException.ThrowIfNull(product);
 
@@ -1986,7 +1946,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the related products
     /// </returns>
-    public virtual async Task<IList<RelatedProduct>> GetRelatedProductsByProductId1Async(int productId, bool showHidden = false)
+    public virtual async Task<IList<RelatedProduct>> GetRelatedProductsByProductId1Async(long productId, bool showHidden = false)
     {
         var query = from rp in _relatedProductRepository.Table
             join p in _productRepository.Table on rp.ProductId2 equals p.Id
@@ -2009,7 +1969,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the related product
     /// </returns>
-    public virtual async Task<RelatedProduct> GetRelatedProductByIdAsync(int relatedProductId)
+    public virtual async Task<RelatedProduct> GetRelatedProductByIdAsync(long relatedProductId)
     {
         return await _relatedProductRepository.GetByIdAsync(relatedProductId, cache => default);
     }
@@ -2041,7 +2001,7 @@ public partial class ProductService : IProductService
     /// <param name="productId1">The first product identifier</param>
     /// <param name="productId2">The second product identifier</param>
     /// <returns>Related product</returns>
-    public virtual RelatedProduct FindRelatedProduct(IList<RelatedProduct> source, int productId1, int productId2)
+    public virtual RelatedProduct FindRelatedProduct(IList<RelatedProduct> source, long productId1, long productId2)
     {
         return source.FirstOrDefault(rp => rp.ProductId1 == productId1 && rp.ProductId2 == productId2);
     }
@@ -2069,7 +2029,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the cross-sell products
     /// </returns>
-    public virtual async Task<IList<CrossSellProduct>> GetCrossSellProductsByProductId1Async(int productId1, bool showHidden = false)
+    public virtual async Task<IList<CrossSellProduct>> GetCrossSellProductsByProductId1Async(long productId1, bool showHidden = false)
     {
         return await GetCrossSellProductsByProductIdsAsync([productId1], showHidden);
     }
@@ -2082,7 +2042,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the cross-sell product
     /// </returns>
-    public virtual async Task<CrossSellProduct> GetCrossSellProductByIdAsync(int crossSellProductId)
+    public virtual async Task<CrossSellProduct> GetCrossSellProductByIdAsync(long crossSellProductId)
     {
         return await _crossSellProductRepository.GetByIdAsync(crossSellProductId, cache => default);
     }
@@ -2130,7 +2090,7 @@ public partial class ProductService : IProductService
     /// <param name="productId1">The first product identifier</param>
     /// <param name="productId2">The second product identifier</param>
     /// <returns>Cross-sell product</returns>
-    public virtual CrossSellProduct FindCrossSellProduct(IList<CrossSellProduct> source, int productId1, int productId2)
+    public virtual CrossSellProduct FindCrossSellProduct(IList<CrossSellProduct> source, long productId1, long productId2)
     {
         return source.FirstOrDefault(csp => csp.ProductId1 == productId1 && csp.ProductId2 == productId2);
     }
@@ -2151,9 +2111,6 @@ public partial class ProductService : IProductService
         ArgumentNullException.ThrowIfNull(product);
         ArgumentNullException.ThrowIfNull(customer);
 
-        if (!product.HasTierPrices)
-            return null;
-
         //get actual tier prices
         return (await GetTierPricesByProductAsync(product.Id))
             .OrderBy(price => price.Quantity)
@@ -2169,13 +2126,11 @@ public partial class ProductService : IProductService
     /// </summary>
     /// <param name="productId">Product identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task<IList<TierPrice>> GetTierPricesByProductAsync(int productId)
+    public virtual async Task<IList<TierPrice>> GetTierPricesByProductAsync(long productId)
     {
-        var query = _tierPriceRepository.Table.Where(tp => tp.ProductId == productId);
-
         return await _staticCacheManager.GetAsync(
             _staticCacheManager.PrepareKeyForDefaultCache(NopCatalogDefaults.TierPricesByProductCacheKey, productId),
-            async () => await query.ToListAsync());
+            async () => await _tierPriceRepository.Table.Where(tp => tp.ProductId == productId).ToListAsync());
     }
 
     /// <summary>
@@ -2196,7 +2151,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the ier price
     /// </returns>
-    public virtual async Task<TierPrice> GetTierPriceByIdAsync(int tierPriceId)
+    public virtual async Task<TierPrice> GetTierPriceByIdAsync(long tierPriceId)
     {
         return await _tierPriceRepository.GetByIdAsync(tierPriceId, cache => default);
     }
@@ -2237,9 +2192,6 @@ public partial class ProductService : IProductService
         ArgumentNullException.ThrowIfNull(product);
         ArgumentNullException.ThrowIfNull(customer);
 
-        if (!product.HasTierPrices)
-            return null;
-
         //get the most suitable tier price based on the passed quantity
         return (await GetTierPricesAsync(product, customer, store))?.LastOrDefault(price => quantity >= price.Quantity);
     }
@@ -2266,7 +2218,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the product pictures
     /// </returns>
-    public virtual async Task<IList<ProductPicture>> GetProductPicturesByProductIdAsync(int productId)
+    public virtual async Task<IList<ProductPicture>> GetProductPicturesByProductIdAsync(long productId)
     {
         var query = from pp in _productPictureRepository.Table
             where pp.ProductId == productId
@@ -2286,7 +2238,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the product picture
     /// </returns>
-    public virtual async Task<ProductPicture> GetProductPictureByIdAsync(int productPictureId)
+    public virtual async Task<ProductPicture> GetProductPictureByIdAsync(long productPictureId)
     {
         return await _productPictureRepository.GetByIdAsync(productPictureId, cache => default);
     }
@@ -2319,7 +2271,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the all picture identifiers grouped by product ID
     /// </returns>
-    public async Task<IDictionary<int, int[]>> GetProductsImagesIdsAsync(int[] productsIds)
+    public virtual async Task<IDictionary<long, long[]>> GetProductsImagesIdsAsync(long[] productsIds)
     {
         var productPictures = await _productPictureRepository.Table
             .Where(p => productsIds.Contains(p.ProductId))
@@ -2339,16 +2291,18 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of products
     /// </returns>
-    public virtual async Task<IPagedList<Product>> GetProductsWithAppliedDiscountAsync(int? discountId = null,
+    public virtual async Task<IPagedList<Product>> GetProductsWithAppliedDiscountAsync(long? discountId = null,
         bool showHidden = false, int pageIndex = 0, int pageSize = int.MaxValue)
     {
-        var products = _productRepository.Table.Where(product => product.HasDiscountsApplied);
+        var products = _productRepository.Table;
 
         if (discountId.HasValue)
+        {
             products = from product in products
                 join dpm in _discountProductMappingRepository.Table on product.Id equals dpm.EntityId
                 where dpm.DiscountId == discountId.Value
                 select product;
+        }
 
         if (!showHidden)
             products = products.Where(product => !product.Deleted);
@@ -2380,7 +2334,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the product videos
     /// </returns>
-    public virtual async Task<IList<ProductVideo>> GetProductVideosByProductIdAsync(int productId)
+    public virtual async Task<IList<ProductVideo>> GetProductVideosByProductIdAsync(long productId)
     {
         var query = from pvm in _productVideoRepository.Table
             where pvm.ProductId == productId
@@ -2400,7 +2354,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the product video
     /// </returns>
-    public virtual async Task<ProductVideo> GetProductVideoByIdAsync(int productVideoId)
+    public virtual async Task<ProductVideo> GetProductVideoByIdAsync(long productVideoId)
     {
         return await _productVideoRepository.GetByIdAsync(productVideoId, cache => default);
     }
@@ -2427,219 +2381,6 @@ public partial class ProductService : IProductService
 
     #endregion
 
-    #region Product reviews
-
-    /// <summary>
-    /// Gets all product reviews
-    /// </summary>
-    /// <param name="customerId">Customer identifier (who wrote a review); 0 to load all records</param>
-    /// <param name="approved">A value indicating whether to content is approved; null to load all records</param> 
-    /// <param name="fromUtc">Item creation from; null to load all records</param>
-    /// <param name="toUtc">Item item creation to; null to load all records</param>
-    /// <param name="message">Search title or review text; null to load all records</param>
-    /// <param name="storeId">The store identifier, where a review has been created; pass 0 to load all records</param>
-    /// <param name="productId">The product identifier; pass 0 to load all records</param>
-    /// <param name="vendorId">The vendor identifier (limit to products of this vendor); pass 0 to load all records</param>
-    /// <param name="showHidden">A value indicating whether to show hidden records</param>
-    /// <param name="pageIndex">Page index</param>
-    /// <param name="pageSize">Page size</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the reviews
-    /// </returns>
-    public virtual async Task<IPagedList<ProductReview>> GetAllProductReviewsAsync(int customerId = 0, bool? approved = null,
-        DateTime? fromUtc = null, DateTime? toUtc = null,
-        string message = null, int storeId = 0, int productId = 0, int vendorId = 0, bool showHidden = false,
-        int pageIndex = 0, int pageSize = int.MaxValue)
-    {
-        var productReviews = await _productReviewRepository.GetAllPagedAsync(async query =>
-        {
-            if (!showHidden)
-            {
-                var productsQuery = _productRepository.Table.Where(p => p.Published);
-
-                //apply store mapping constraints
-                productsQuery = await _storeMappingService.ApplyStoreMapping(productsQuery, storeId);
-
-                //apply ACL constraints
-                var customer = await _workContext.GetCurrentCustomerAsync();
-                productsQuery = await _aclService.ApplyAcl(productsQuery, customer);
-
-                query = query.Where(review => productsQuery.Any(product => product.Id == review.ProductId));
-            }
-
-            if (approved.HasValue)
-                query = query.Where(pr => pr.IsApproved == approved);
-            if (customerId > 0)
-                query = query.Where(pr => pr.CustomerId == customerId);
-            if (fromUtc.HasValue)
-                query = query.Where(pr => fromUtc.Value <= pr.CreatedOnUtc);
-            if (toUtc.HasValue)
-                query = query.Where(pr => toUtc.Value >= pr.CreatedOnUtc);
-            if (!string.IsNullOrEmpty(message))
-                query = query.Where(pr => pr.Title.Contains(message) || pr.ReviewText.Contains(message));
-            if (storeId > 0)
-                query = query.Where(pr => pr.StoreId == storeId);
-            if (productId > 0)
-                query = query.Where(pr => pr.ProductId == productId);
-
-            query = from productReview in query
-                join product in _productRepository.Table on productReview.ProductId equals product.Id
-                where
-                    (vendorId == 0 || product.VendorId == vendorId) &&
-                    //ignore deleted products
-                    !product.Deleted
-                select productReview;
-
-            query = _catalogSettings.ProductReviewsSortByCreatedDateAscending
-                ? query.OrderBy(pr => pr.CreatedOnUtc).ThenBy(pr => pr.Id)
-                : query.OrderByDescending(pr => pr.CreatedOnUtc).ThenBy(pr => pr.Id);
-
-            return query;
-        }, pageIndex, pageSize);
-
-        return productReviews;
-    }
-
-    /// <summary>
-    /// Gets product review
-    /// </summary>
-    /// <param name="productReviewId">Product review identifier</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the product review
-    /// </returns>
-    public virtual async Task<ProductReview> GetProductReviewByIdAsync(int productReviewId)
-    {
-        return await _productReviewRepository.GetByIdAsync(productReviewId, cache => default);
-    }
-
-    /// <summary>
-    /// Get product reviews by identifiers
-    /// </summary>
-    /// <param name="productReviewIds">Product review identifiers</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the product reviews
-    /// </returns>
-    public virtual async Task<IList<ProductReview>> GetProductReviewsByIdsAsync(int[] productReviewIds)
-    {
-        return await _productReviewRepository.GetByIdsAsync(productReviewIds);
-    }
-
-    /// <summary>
-    /// Inserts a product review
-    /// </summary>
-    /// <param name="productReview">Product review</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task InsertProductReviewAsync(ProductReview productReview)
-    {
-        await _productReviewRepository.InsertAsync(productReview);
-    }
-
-    /// <summary>
-    /// Deletes a product review
-    /// </summary>
-    /// <param name="productReview">Product review</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task DeleteProductReviewAsync(ProductReview productReview)
-    {
-        await _productReviewRepository.DeleteAsync(productReview);
-    }
-
-    /// <summary>
-    /// Deletes product reviews
-    /// </summary>
-    /// <param name="productReviews">Product reviews</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task DeleteProductReviewsAsync(IList<ProductReview> productReviews)
-    {
-        await _productReviewRepository.DeleteAsync(productReviews);
-    }
-
-    /// <summary>
-    /// Sets or create a product review helpfulness record
-    /// </summary>
-    /// <param name="productReview">Product review</param>
-    /// <param name="helpfulness">Value indicating whether a review a helpful</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task SetProductReviewHelpfulnessAsync(ProductReview productReview, bool helpfulness)
-    {
-        ArgumentNullException.ThrowIfNull(productReview);
-
-        var customer = await _workContext.GetCurrentCustomerAsync();
-        var prh = _productReviewHelpfulnessRepository.Table
-            .SingleOrDefault(h => h.ProductReviewId == productReview.Id && h.CustomerId == customer.Id);
-
-        if (prh is null)
-        {
-            //insert new helpfulness
-            prh = new ProductReviewHelpfulness
-            {
-                ProductReviewId = productReview.Id,
-                CustomerId = customer.Id,
-                WasHelpful = helpfulness,
-            };
-
-            await InsertProductReviewHelpfulnessAsync(prh);
-        }
-        else
-        {
-            //existing one
-            prh.WasHelpful = helpfulness;
-
-            await _productReviewHelpfulnessRepository.UpdateAsync(prh);
-        }
-    }
-
-    /// <summary>
-    /// Updates a product review
-    /// </summary>
-    /// <param name="productReview">Product review</param>
-    /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task UpdateProductReviewAsync(ProductReview productReview)
-    {
-        await _productReviewRepository.UpdateAsync(productReview);
-    }
-
-    /// <summary>
-    /// Updates a totals helpfulness count for product review
-    /// </summary>
-    /// <param name="productReview">Product review</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the result
-    /// </returns>
-    public virtual async Task UpdateProductReviewHelpfulnessTotalsAsync(ProductReview productReview)
-    {
-        ArgumentNullException.ThrowIfNull(productReview);
-
-        (productReview.HelpfulYesTotal, productReview.HelpfulNoTotal) = await GetHelpfulnessCountsAsync(productReview);
-
-        await _productReviewRepository.UpdateAsync(productReview);
-    }
-
-    /// <summary>
-    /// Check possibility added review for current customer
-    /// </summary>
-    /// <param name="productId">Current product</param>
-    /// <param name="storeId">The store identifier; pass 0 to load all records</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the 
-    /// </returns>
-    public virtual async Task<bool> CanAddReviewAsync(int productId, int storeId = 0)
-    {
-        var customer = await _workContext.GetCurrentCustomerAsync();
-
-        if (_catalogSettings.OneReviewPerProductFromCustomer)
-            return (await GetAllProductReviewsAsync(customerId: customer.Id, productId: productId, storeId: storeId)).TotalCount == 0;
-
-        return true;
-    }
-
-    #endregion
-
     #region Product warehouses
 
     /// <summary>
@@ -2647,7 +2388,7 @@ public partial class ProductService : IProductService
     /// </summary>
     /// <param name="productId">Product identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task<IList<ProductWarehouseInventory>> GetAllProductWarehouseInventoryRecordsAsync(int productId)
+    public virtual async Task<IList<ProductWarehouseInventory>> GetAllProductWarehouseInventoryRecordsAsync(long productId)
     {
         return await _productWarehouseInventoryRepository.GetAllAsync(query => query.Where(pwi => pwi.ProductId == productId));
     }
@@ -2707,7 +2448,7 @@ public partial class ProductService : IProductService
     /// <param name="combinationId">Product attribute combination identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
     public virtual async Task AddStockQuantityHistoryEntryAsync(Product product, int quantityAdjustment, int stockQuantity,
-        int warehouseId = 0, string message = "", int? combinationId = null)
+        long warehouseId = 0, string message = "", long? combinationId = null)
     {
         ArgumentNullException.ThrowIfNull(product);
 
@@ -2740,7 +2481,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of stock quantity change entries
     /// </returns>
-    public virtual async Task<IPagedList<StockQuantityHistory>> GetStockQuantityHistoryAsync(Product product, int warehouseId = 0, int combinationId = 0,
+    public virtual async Task<IPagedList<StockQuantityHistory>> GetStockQuantityHistoryAsync(Product product, long warehouseId = 0, long combinationId = 0,
         int pageIndex = 0, int pageSize = int.MaxValue)
     {
         ArgumentNullException.ThrowIfNull(product);
@@ -2771,21 +2512,11 @@ public partial class ProductService : IProductService
     {
         ArgumentNullException.ThrowIfNull(discount);
 
-        var mappingsWithProducts =
-            from dcm in _discountProductMappingRepository.Table
-            join p in _productRepository.Table on dcm.EntityId equals p.Id
-            where dcm.DiscountId == discount.Id
-            select new { product = p, dcm };
+        var mappingsWithProducts = await _discountProductMappingRepository.Table
+            .Where(dpm => dpm.DiscountId == discount.Id)
+            .ToListAsync();
 
-        var mappingsToDelete = new List<DiscountProductMapping>();
-        await foreach (var pdcm in mappingsWithProducts.ToAsyncEnumerable())
-        {
-            mappingsToDelete.Add(pdcm.dcm);
-
-            //update "HasDiscountsApplied" property
-            await UpdateHasDiscountsAppliedAsync(pdcm.product);
-        }
-        await _discountProductMappingRepository.DeleteAsync(mappingsToDelete);
+        await _discountProductMappingRepository.DeleteAsync(mappingsWithProducts);
     }
 
     /// <summary>
@@ -2793,7 +2524,7 @@ public partial class ProductService : IProductService
     /// </summary>
     /// <param name="productId">Product identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task<IList<DiscountProductMapping>> GetAllDiscountsAppliedToProductAsync(int productId)
+    public virtual async Task<IList<DiscountProductMapping>> GetAllDiscountsAppliedToProductAsync(long productId)
     {
         return await _discountProductMappingRepository.GetAllAsync(query => query.Where(dcm => dcm.EntityId == productId));
     }
@@ -2807,7 +2538,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public virtual async Task<DiscountProductMapping> GetDiscountAppliedToProductAsync(int productId, int discountId)
+    public virtual async Task<DiscountProductMapping> GetDiscountAppliedToProductAsync(long productId, long discountId)
     {
         return await _discountProductMappingRepository.Table
             .FirstOrDefaultAsync(dcm => dcm.EntityId == productId && dcm.DiscountId == discountId);
@@ -2831,6 +2562,52 @@ public partial class ProductService : IProductService
     public virtual async Task DeleteDiscountProductMappingAsync(DiscountProductMapping discountProductMapping)
     {
         await _discountProductMappingRepository.DeleteAsync(discountProductMapping);
+    }
+
+    #endregion
+
+    #region Product 3D objects
+
+    /// <summary>
+    /// Gets the 3D object associated with the product
+    /// </summary>
+    /// <param name="product">Product</param>
+    /// <returns>The task result contains the associated 3D object, or <c>null</c> if the 3D object is not found</returns>
+    public virtual async Task<Product3dObject> GetProduct3dObjectAsync(Product product)
+    {
+        ArgumentNullException.ThrowIfNull(product);
+
+        return await _product3dObjectRepository.Table.FirstOrDefaultAsync(x => x.ProductId == product.Id);
+    }
+
+    /// <summary>
+    /// Deletes the 3D object
+    /// </summary>
+    /// <param name="product3dObject">The 3D object</param>
+    /// <returns>A task that represents the asynchronous operation</returns>
+    public virtual async Task DeleteProduct3dObjectAsync(Product3dObject product3dObject)
+    {
+        await _product3dObjectRepository.DeleteAsync(product3dObject);
+    }
+
+    /// <summary>
+    /// Inserts the 3D object
+    /// </summary>
+    /// <param name="product3dObject">The 3D object</param>
+    /// <returns>A task that represents the asynchronous operation</returns>
+    public virtual async Task InsertProduct3dObjectAsync(Product3dObject product3dObject)
+    {
+        await _product3dObjectRepository.InsertAsync(product3dObject);
+    }
+
+    /// <summary>
+    /// Updates the 3D object
+    /// </summary>
+    /// <param name="product3dObject">The 3D object</param>
+    /// <returns>A task that represents the asynchronous operation</returns>
+    public virtual async Task UpdateProduct3dObjectAsync(Product3dObject product3dObject)
+    {
+        await _product3dObjectRepository.UpdateAsync(product3dObject);
     }
 
     #endregion

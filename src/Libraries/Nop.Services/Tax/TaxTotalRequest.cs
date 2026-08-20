@@ -37,7 +37,7 @@ public partial class TaxTotalRequest
     /// <summary>
     /// Gets or sets a store identifier
     /// </summary>
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 
     #endregion
 }

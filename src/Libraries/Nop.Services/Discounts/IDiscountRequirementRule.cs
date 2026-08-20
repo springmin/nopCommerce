@@ -23,5 +23,5 @@ public partial interface IDiscountRequirementRule : IPlugin
     /// <param name="discountId">Discount identifier</param>
     /// <param name="discountRequirementId">Discount requirement identifier (if editing)</param>
     /// <returns>URL</returns>
-    string GetConfigurationUrl(int discountId, int? discountRequirementId);
+    string GetConfigurationUrl(long discountId, long? discountRequirementId);
 }

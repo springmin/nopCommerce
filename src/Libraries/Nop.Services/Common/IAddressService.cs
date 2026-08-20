@@ -22,7 +22,7 @@ public partial interface IAddressService
     /// A task that represents the asynchronous operation
     /// The task result contains the number of addresses
     /// </returns>
-    Task<int> GetAddressTotalByCountryIdAsync(int countryId);
+    Task<long> GetAddressTotalByCountryIdAsync(long countryId);
 
     /// <summary>
     /// Gets total number of addresses by state/province identifier
@@ -32,7 +32,7 @@ public partial interface IAddressService
     /// A task that represents the asynchronous operation
     /// The task result contains the number of addresses
     /// </returns>
-    Task<int> GetAddressTotalByStateProvinceIdAsync(int stateProvinceId);
+    Task<long> GetAddressTotalByStateProvinceIdAsync(long stateProvinceId);
 
     /// <summary>
     /// Gets an address by address identifier
@@ -42,7 +42,7 @@ public partial interface IAddressService
     /// A task that represents the asynchronous operation
     /// The task result contains the address
     /// </returns>
-    Task<Address> GetAddressByIdAsync(int addressId);
+    Task<Address> GetAddressByIdAsync(long addressId);
 
     /// <summary>
     /// Inserts an address
@@ -88,8 +88,8 @@ public partial interface IAddressService
     /// <param name="customAttributes">Custom address attributes (XML format)</param>
     /// <returns>Address</returns>
     Address FindAddress(List<Address> source, string firstName, string lastName, string phoneNumber, string email,
-        string faxNumber, string company, string address1, string address2, string city, string county, int? stateProvinceId,
-        string zipPostalCode, int? countryId, string customAttributes);
+        string faxNumber, string company, string address1, string address2, string city, string county, long? stateProvinceId,
+        string zipPostalCode, long? countryId, string customAttributes);
 
     /// <summary>
     /// Clone address
@@ -108,5 +108,5 @@ public partial interface IAddressService
     /// A task that represents the asynchronous operation
     /// Address line, array address fields
     /// </returns> 
-    Task<(string, KeyValuePair<AddressField, string>[])> FormatAddressAsync(Address address, int languageId = 0, string separator = ", ", bool htmlEncode = false);
+    Task<(string, KeyValuePair<AddressField, string>[])> FormatAddressAsync(Address address, long languageId = 0, string separator = ", ", bool htmlEncode = false);
 }

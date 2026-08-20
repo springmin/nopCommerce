@@ -52,7 +52,7 @@ public partial class MeasureService : IMeasureService
     /// A task that represents the asynchronous operation
     /// The task result contains the measure dimension
     /// </returns>
-    public virtual async Task<MeasureDimension> GetMeasureDimensionByIdAsync(int measureDimensionId)
+    public virtual async Task<MeasureDimension> GetMeasureDimensionByIdAsync(long measureDimensionId)
     {
         return await _measureDimensionRepository.GetByIdAsync(measureDimensionId, cache => default);
     }
@@ -72,8 +72,11 @@ public partial class MeasureService : IMeasureService
 
         var measureDimensions = await GetAllMeasureDimensionsAsync();
         foreach (var measureDimension in measureDimensions)
+        {
             if (measureDimension.SystemKeyword.ToLowerInvariant() == systemKeyword.ToLowerInvariant())
                 return measureDimension;
+        }
+
         return null;
     }
 
@@ -224,7 +227,7 @@ public partial class MeasureService : IMeasureService
     /// A task that represents the asynchronous operation
     /// The task result contains the measure weight
     /// </returns>
-    public virtual async Task<MeasureWeight> GetMeasureWeightByIdAsync(int measureWeightId)
+    public virtual async Task<MeasureWeight> GetMeasureWeightByIdAsync(long measureWeightId)
     {
         return await _measureWeightRepository.GetByIdAsync(measureWeightId, cache => default);
     }
@@ -244,8 +247,11 @@ public partial class MeasureService : IMeasureService
 
         var measureWeights = await GetAllMeasureWeightsAsync();
         foreach (var measureWeight in measureWeights)
+        {
             if (measureWeight.SystemKeyword.ToLowerInvariant() == systemKeyword.ToLowerInvariant())
                 return measureWeight;
+        }
+
         return null;
     }
 

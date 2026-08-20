@@ -19,7 +19,7 @@ public partial interface IOrderService
     /// A task that represents the asynchronous operation
     /// The task result contains the order
     /// </returns>
-    Task<Order> GetOrderByIdAsync(int orderId);
+    Task<Order> GetOrderByIdAsync(long orderId);
 
     /// <summary>
     /// Gets an order
@@ -39,7 +39,7 @@ public partial interface IOrderService
     /// A task that represents the asynchronous operation
     /// The task result contains the order
     /// </returns>
-    Task<Order> GetOrderByOrderItemAsync(int orderItemId);
+    Task<Order> GetOrderByOrderItemAsync(long orderItemId);
 
     /// <summary>
     /// Get orders by identifiers
@@ -49,7 +49,7 @@ public partial interface IOrderService
     /// A task that represents the asynchronous operation
     /// The task result contains the order
     /// </returns>
-    Task<IList<Order>> GetOrdersByIdsAsync(int[] orderIds);
+    Task<IList<Order>> GetOrdersByIdsAsync(long[] orderIds);
 
     /// <summary>
     /// Get orders by guids
@@ -105,12 +105,12 @@ public partial interface IOrderService
     /// A task that represents the asynchronous operation
     /// The task result contains the orders
     /// </returns>
-    Task<IPagedList<Order>> SearchOrdersAsync(int storeId = 0,
-        int vendorId = 0, int customerId = 0,
-        int productId = 0, int affiliateId = 0, int warehouseId = 0,
-        int billingCountryId = 0, string paymentMethodSystemName = null,
+    Task<IPagedList<Order>> SearchOrdersAsync(long storeId = 0,
+        long vendorId = 0, long customerId = 0,
+        long productId = 0, long affiliateId = 0, long warehouseId = 0,
+        long billingCountryId = 0, string paymentMethodSystemName = null,
         DateTime? createdFromUtc = null, DateTime? createdToUtc = null,
-        List<int> osIds = null, List<int> psIds = null, List<int> ssIds = null,
+        List<long> osIds = null, List<long> psIds = null, List<long> ssIds = null,
         string billingPhone = null, string billingEmail = null, string billingLastName = "",
         string orderNotes = null, int pageIndex = 0, int pageSize = int.MaxValue, bool getOnlyTotalCount = false);
 
@@ -188,7 +188,7 @@ public partial interface IOrderService
     /// A task that represents the asynchronous operation
     /// The task result contains the order item
     /// </returns>
-    Task<OrderItem> GetOrderItemByIdAsync(int orderItemId);
+    Task<OrderItem> GetOrderItemByIdAsync(long orderItemId);
 
     /// <summary>
     /// Gets a product of specify order item
@@ -198,7 +198,7 @@ public partial interface IOrderService
     /// A task that represents the asynchronous operation
     /// The task result contains the product
     /// </returns>
-    Task<Product> GetProductByOrderItemIdAsync(int orderItemId);
+    Task<Product> GetProductByOrderItemIdAsync(long orderItemId);
 
     /// <summary>
     /// Gets a list items of order
@@ -211,7 +211,7 @@ public partial interface IOrderService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    Task<IList<OrderItem>> GetOrderItemsAsync(int orderId, bool? isNotReturnable = null, bool? isShipEnabled = null, int vendorId = 0);
+    Task<IList<OrderItem>> GetOrderItemsAsync(long orderId, bool? isNotReturnable = null, bool? isShipEnabled = null, long vendorId = 0);
 
     /// <summary>
     /// Gets an order item
@@ -231,7 +231,7 @@ public partial interface IOrderService
     /// A task that represents the asynchronous operation
     /// The task result contains the order items
     /// </returns>
-    Task<IList<OrderItem>> GetDownloadableOrderItemsAsync(int customerId);
+    Task<IList<OrderItem>> GetDownloadableOrderItemsAsync(long customerId);
 
     /// <summary>
     /// Delete an order item
@@ -306,7 +306,7 @@ public partial interface IOrderService
     /// A task that represents the asynchronous operation
     /// The task result contains the order note
     /// </returns>
-    Task<OrderNote> GetOrderNoteByIdAsync(int orderNoteId);
+    Task<OrderNote> GetOrderNoteByIdAsync(long orderNoteId);
 
     /// <summary>
     /// Gets a list notes of order
@@ -317,7 +317,7 @@ public partial interface IOrderService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    Task<IList<OrderNote>> GetOrderNotesByOrderIdAsync(int orderId, bool? displayToCustomer = null);
+    Task<IList<OrderNote>> GetOrderNotesByOrderIdAsync(long orderId, bool? displayToCustomer = null);
 
     /// <summary>
     /// Deletes an order note
@@ -359,7 +359,7 @@ public partial interface IOrderService
     /// A task that represents the asynchronous operation
     /// The task result contains the recurring payment
     /// </returns>
-    Task<RecurringPayment> GetRecurringPaymentByIdAsync(int recurringPaymentId);
+    Task<RecurringPayment> GetRecurringPaymentByIdAsync(long recurringPaymentId);
 
     /// <summary>
     /// Inserts a recurring payment
@@ -389,8 +389,8 @@ public partial interface IOrderService
     /// A task that represents the asynchronous operation
     /// The task result contains the recurring payments
     /// </returns>
-    Task<IPagedList<RecurringPayment>> SearchRecurringPaymentsAsync(int storeId = 0,
-        int customerId = 0, int initialOrderId = 0, OrderStatus? initialOrderStatus = null,
+    Task<IPagedList<RecurringPayment>> SearchRecurringPaymentsAsync(long storeId = 0,
+        long customerId = 0, long initialOrderId = 0, OrderStatus? initialOrderStatus = null,
         int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false);
 
     #endregion

@@ -31,7 +31,7 @@ public partial interface ITopicTemplateService
     /// A task that represents the asynchronous operation
     /// The task result contains the topic template
     /// </returns>
-    Task<TopicTemplate> GetTopicTemplateByIdAsync(int topicTemplateId);
+    Task<TopicTemplate> GetTopicTemplateByIdAsync(long topicTemplateId);
 
     /// <summary>
     /// Inserts topic template

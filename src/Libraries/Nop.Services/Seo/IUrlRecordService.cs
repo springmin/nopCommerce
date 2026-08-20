@@ -23,7 +23,7 @@ public partial interface IUrlRecordService
     /// A task that represents the asynchronous operation
     /// The task result contains the uRL record
     /// </returns>
-    Task<IList<UrlRecord>> GetUrlRecordsByIdsAsync(int[] urlRecordIds);
+    Task<IList<UrlRecord>> GetUrlRecordsByIdsAsync(long[] urlRecordIds);
 
     /// <summary>
     /// Inserts an URL record
@@ -61,7 +61,7 @@ public partial interface IUrlRecordService
     /// A task that represents the asynchronous operation
     /// The task result contains the uRL records
     /// </returns>
-    Task<IPagedList<UrlRecord>> GetAllUrlRecordsAsync(string slug = "", int? languageId = null, bool? isActive = null, int pageIndex = 0, int pageSize = int.MaxValue);
+    Task<IPagedList<UrlRecord>> GetAllUrlRecordsAsync(string slug = "", long? languageId = null, bool? isActive = null, int pageIndex = 0, int pageSize = int.MaxValue);
 
     /// <summary>
     /// Find slug
@@ -73,7 +73,7 @@ public partial interface IUrlRecordService
     /// A task that represents the asynchronous operation
     /// The task result contains the found slug
     /// </returns>
-    Task<string> GetActiveSlugAsync(int entityId, string entityName, int languageId);
+    Task<string> GetActiveSlugAsync(long entityId, string entityName, long languageId);
 
     /// <summary>
     /// Save slug
@@ -83,7 +83,7 @@ public partial interface IUrlRecordService
     /// <param name="slug">Slug</param>
     /// <param name="languageId">Language ID</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task SaveSlugAsync<T>(T entity, string slug, int languageId) where T : BaseEntity, ISlugSupported;
+    Task SaveSlugAsync<T>(T entity, string slug, long languageId) where T : BaseEntity, ISlugSupported;
 
     /// <summary>
     ///  Get search engine friendly name (slug)
@@ -97,7 +97,7 @@ public partial interface IUrlRecordService
     /// A task that represents the asynchronous operation
     /// The task result contains the search engine  name (slug)
     /// </returns>
-    Task<string> GetSeNameAsync<T>(T entity, int? languageId = null, bool returnDefaultValue = true,
+    Task<string> GetSeNameAsync<T>(T entity, long? languageId = null, bool returnDefaultValue = true,
         bool ensureTwoPublishedLanguages = true) where T : BaseEntity, ISlugSupported;
 
     /// <summary>
@@ -112,7 +112,7 @@ public partial interface IUrlRecordService
     /// A task that represents the asynchronous operation
     /// The task result contains the search engine  name (slug)
     /// </returns>
-    Task<string> GetSeNameAsync(int entityId, string entityName, int? languageId = null,
+    Task<string> GetSeNameAsync(long entityId, string entityName, long? languageId = null,
         bool returnDefaultValue = true, bool ensureTwoPublishedLanguages = true);
 
     /// <summary>
@@ -152,5 +152,5 @@ public partial interface IUrlRecordService
     /// A task that represents the asynchronous operation
     /// The task result contains the valid seName
     /// </returns>
-    Task<string> ValidateSeNameAsync(int entityId, string entityName, string seName, string name, bool ensureNotEmpty);
+    Task<string> ValidateSeNameAsync(long entityId, string entityName, string seName, string name, bool ensureNotEmpty);
 }

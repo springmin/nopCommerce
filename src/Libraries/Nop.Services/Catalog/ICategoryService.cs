@@ -11,6 +11,14 @@ namespace Nop.Services.Catalog;
 public partial interface ICategoryService
 {
     /// <summary>
+    /// Check the possibility of adding products to the category for the current vendor
+    /// </summary>
+    /// <param name="category">Category</param>
+    /// <param name="allCategories">All categories</param>
+    /// <returns>A task that represents the asynchronous operation</returns>
+    Task<bool> CanVendorAddProductsAsync(Category category, IList<Category> allCategories = null);
+
+    /// <summary>
     /// Clean up category references for a specified discount
     /// </summary>
     /// <param name="discount">Discount</param>
@@ -33,7 +41,7 @@ public partial interface ICategoryService
     /// A task that represents the asynchronous operation
     /// The task result contains the categories
     /// </returns>
-    Task<IList<Category>> GetAllCategoriesAsync(int storeId = 0, bool showHidden = false);
+    Task<IList<Category>> GetAllCategoriesAsync(long storeId = 0, bool showHidden = false);
 
     /// <summary>
     /// Gets all categories
@@ -52,7 +60,7 @@ public partial interface ICategoryService
     /// A task that represents the asynchronous operation
     /// The task result contains the categories
     /// </returns>
-    Task<IPagedList<Category>> GetAllCategoriesAsync(string categoryName, int storeId = 0,
+    Task<IPagedList<Category>> GetAllCategoriesAsync(string categoryName, long storeId = 0,
         int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false, bool? overridePublished = null);
 
     /// <summary>
@@ -64,7 +72,7 @@ public partial interface ICategoryService
     /// A task that represents the asynchronous operation
     /// The task result contains the categories
     /// </returns>
-    Task<IList<Category>> GetAllCategoriesByParentCategoryIdAsync(int parentCategoryId, bool showHidden = false);
+    Task<IList<Category>> GetAllCategoriesByParentCategoryIdAsync(long parentCategoryId, bool showHidden = false);
 
     /// <summary>
     /// Gets all categories displayed on the home page
@@ -85,7 +93,7 @@ public partial interface ICategoryService
     /// A task that represents the asynchronous operation
     /// The task result contains the category identifiers
     /// </returns>
-    Task<IList<int>> GetAppliedCategoryIdsAsync(Discount discount, Customer customer);
+    Task<IList<long>> GetAppliedCategoryIdsAsync(Discount discount, Customer customer);
 
     /// <summary>
     /// Gets child category identifiers
@@ -97,7 +105,7 @@ public partial interface ICategoryService
     /// A task that represents the asynchronous operation
     /// The task result contains the category identifiers
     /// </returns>
-    Task<IList<int>> GetChildCategoryIdsAsync(int parentCategoryId, int storeId = 0, bool showHidden = false);
+    Task<IList<long>> GetChildCategoryIdsAsync(long parentCategoryId, long storeId = 0, bool showHidden = false);
 
     /// <summary>
     /// Gets a category
@@ -107,7 +115,7 @@ public partial interface ICategoryService
     /// A task that represents the asynchronous operation
     /// The task result contains the category
     /// </returns>
-    Task<Category> GetCategoryByIdAsync(int categoryId);
+    Task<Category> GetCategoryByIdAsync(long categoryId);
 
     /// <summary>
     /// Get categories for which a discount is applied
@@ -120,7 +128,7 @@ public partial interface ICategoryService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of categories
     /// </returns>
-    Task<IPagedList<Category>> GetCategoriesByAppliedDiscountAsync(int? discountId = null,
+    Task<IPagedList<Category>> GetCategoriesByAppliedDiscountAsync(long? discountId = null,
         bool showHidden = false, int pageIndex = 0, int pageSize = int.MaxValue);
 
     /// <summary>
@@ -152,6 +160,13 @@ public partial interface ICategoryService
     Task DeleteProductCategoryAsync(ProductCategory productCategory);
 
     /// <summary>
+    /// Deletes a list of product category mapping
+    /// </summary>
+    /// <param name="productCategories">Product category</param>
+    /// <returns>A task that represents the asynchronous operation</returns>
+    Task DeleteProductCategoriesAsync(IList<ProductCategory> productCategories);
+
+    /// <summary>
     /// Get a discount-category mapping record
     /// </summary>
     /// <param name="categoryId">Category identifier</param>
@@ -160,7 +175,7 @@ public partial interface ICategoryService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    Task<DiscountCategoryMapping> GetDiscountAppliedToCategoryAsync(int categoryId, int discountId);
+    Task<DiscountCategoryMapping> GetDiscountAppliedToCategoryAsync(long categoryId, long discountId);
 
     /// <summary>
     /// Inserts a discount-category mapping record
@@ -187,7 +202,7 @@ public partial interface ICategoryService
     /// A task that represents the asynchronous operation
     /// The task result contains the product a category mapping collection
     /// </returns>
-    Task<IPagedList<ProductCategory>> GetProductCategoriesByCategoryIdAsync(int categoryId,
+    Task<IPagedList<ProductCategory>> GetProductCategoriesByCategoryIdAsync(long categoryId,
         int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false);
 
     /// <summary>
@@ -199,7 +214,7 @@ public partial interface ICategoryService
     /// A task that represents the asynchronous operation
     /// The task result contains the product category mapping collection
     /// </returns>
-    Task<IList<ProductCategory>> GetProductCategoriesByProductIdAsync(int productId, bool showHidden = false);
+    Task<IList<ProductCategory>> GetProductCategoriesByProductIdAsync(long productId, bool showHidden = false);
 
     /// <summary>
     /// Gets a product category mapping 
@@ -209,7 +224,7 @@ public partial interface ICategoryService
     /// A task that represents the asynchronous operation
     /// The task result contains the product category mapping
     /// </returns>
-    Task<ProductCategory> GetProductCategoryByIdAsync(int productCategoryId);
+    Task<ProductCategory> GetProductCategoryByIdAsync(long productCategoryId);
 
     /// <summary>
     /// Inserts a product category mapping
@@ -243,7 +258,7 @@ public partial interface ICategoryService
     /// A task that represents the asynchronous operation
     /// The task result contains the category IDs for products
     /// </returns>
-    Task<IDictionary<int, int[]>> GetProductCategoryIdsAsync(int[] productIds);
+    Task<IDictionary<long, long[]>> GetProductCategoryIdsAsync(long[] productIds);
 
     /// <summary>
     /// Gets categories by identifier
@@ -253,7 +268,7 @@ public partial interface ICategoryService
     /// A task that represents the asynchronous operation
     /// The task result contains the categories
     /// </returns>
-    Task<IList<Category>> GetCategoriesByIdsAsync(int[] categoryIds);
+    Task<IList<Category>> GetCategoriesByIdsAsync(long[] categoryIds);
 
     /// <summary>
     /// Returns a ProductCategory that has the specified values
@@ -262,7 +277,7 @@ public partial interface ICategoryService
     /// <param name="productId">Product identifier</param>
     /// <param name="categoryId">Category identifier</param>
     /// <returns>A ProductCategory that has the specified values; otherwise null</returns>
-    ProductCategory FindProductCategory(IList<ProductCategory> source, int productId, int categoryId);
+    ProductCategory FindProductCategory(IList<ProductCategory> source, long productId, long categoryId);
 
     /// <summary>
     /// Get formatted category breadcrumb 
@@ -277,7 +292,7 @@ public partial interface ICategoryService
     /// The task result contains the formatted breadcrumb
     /// </returns>
     Task<string> GetFormattedBreadCrumbAsync(Category category, IList<Category> allCategories = null,
-        string separator = ">>", int languageId = 0);
+        string separator = ">>", long languageId = 0);
 
     /// <summary>
     /// Get category breadcrumb 

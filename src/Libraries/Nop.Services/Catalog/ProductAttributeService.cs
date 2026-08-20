@@ -79,30 +79,27 @@ public partial class ProductAttributeService : IProductAttributeService
     {
         ArgumentNullException.ThrowIfNull(productAttributes);
 
-        foreach (var productAttribute in productAttributes)
-            await DeleteProductAttributeAsync(productAttribute);
+        await _productAttributeRepository.DeleteAsync(productAttributes);
     }
 
     /// <summary>
     /// Gets all product attributes
     /// </summary>
+    /// <param name="name">Filter by name</param>
     /// <param name="pageIndex">Page index</param>
     /// <param name="pageSize">Page size</param>
     /// <returns>
     /// A task that represents the asynchronous operation
     /// The task result contains the product attributes
     /// </returns>
-    public virtual async Task<IPagedList<ProductAttribute>> GetAllProductAttributesAsync(int pageIndex = 0,
-        int pageSize = int.MaxValue)
+    public virtual async Task<IPagedList<ProductAttribute>> GetAllProductAttributesAsync(string name = null, int pageIndex = 0, int pageSize = int.MaxValue)
     {
-        var productAttributes = await _productAttributeRepository.GetAllPagedAsync(query =>
-        {
-            return from pa in query
-                orderby pa.Name
-                select pa;
-        }, pageIndex, pageSize);
+        var query = _productAttributeRepository.Table;
 
-        return productAttributes;
+        if (!string.IsNullOrWhiteSpace(name))
+            query = query.Where(pa => pa.Name.Contains(name));
+
+        return await query.OrderBy(x => x.Name).ToPagedListAsync(pageIndex, pageSize);
     }
 
     /// <summary>
@@ -113,7 +110,7 @@ public partial class ProductAttributeService : IProductAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the product attribute 
     /// </returns>
-    public virtual async Task<ProductAttribute> GetProductAttributeByIdAsync(int productAttributeId)
+    public virtual async Task<ProductAttribute> GetProductAttributeByIdAsync(long productAttributeId)
     {
         return await _productAttributeRepository.GetByIdAsync(productAttributeId, cache => default);
     }
@@ -126,7 +123,7 @@ public partial class ProductAttributeService : IProductAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the product attributes 
     /// </returns>
-    public virtual async Task<IList<ProductAttribute>> GetProductAttributeByIdsAsync(int[] productAttributeIds)
+    public virtual async Task<IList<ProductAttribute>> GetProductAttributeByIdsAsync(long[] productAttributeIds)
     {
         return await _productAttributeRepository.GetByIdsAsync(productAttributeIds);
     }
@@ -159,7 +156,7 @@ public partial class ProductAttributeService : IProductAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of IDs not existing attributes
     /// </returns>
-    public virtual async Task<int[]> GetNotExistingAttributesAsync(int[] attributeId)
+    public virtual async Task<long[]> GetNotExistingAttributesAsync(long[] attributeId)
     {
         ArgumentNullException.ThrowIfNull(attributeId);
 
@@ -194,7 +191,7 @@ public partial class ProductAttributeService : IProductAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the product attribute mapping collection
     /// </returns>
-    public virtual async Task<IList<ProductAttributeMapping>> GetProductAttributeMappingsByProductIdAsync(int productId)
+    public virtual async Task<IList<ProductAttributeMapping>> GetProductAttributeMappingsByProductIdAsync(long productId)
     {
         var allCacheKey = _staticCacheManager.PrepareKeyForDefaultCache(NopCatalogDefaults.ProductAttributeMappingsByProductCacheKey, productId);
 
@@ -216,7 +213,7 @@ public partial class ProductAttributeService : IProductAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the product attribute mapping
     /// </returns>
-    public virtual async Task<ProductAttributeMapping> GetProductAttributeMappingByIdAsync(int productAttributeMappingId)
+    public virtual async Task<ProductAttributeMapping> GetProductAttributeMappingByIdAsync(long productAttributeMappingId)
     {
         return await _productAttributeMappingRepository.GetByIdAsync(productAttributeMappingId, cache => default);
     }
@@ -263,7 +260,7 @@ public partial class ProductAttributeService : IProductAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the product attribute mapping collection
     /// </returns>
-    public virtual async Task<IList<ProductAttributeValue>> GetProductAttributeValuesAsync(int productAttributeMappingId)
+    public virtual async Task<IList<ProductAttributeValue>> GetProductAttributeValuesAsync(long productAttributeMappingId)
     {
         var key = _staticCacheManager.PrepareKeyForDefaultCache(NopCatalogDefaults.ProductAttributeValuesByAttributeCacheKey, productAttributeMappingId);
 
@@ -284,7 +281,7 @@ public partial class ProductAttributeService : IProductAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the product attribute value
     /// </returns>
-    public virtual async Task<ProductAttributeValue> GetProductAttributeValueByIdAsync(int productAttributeValueId)
+    public virtual async Task<ProductAttributeValue> GetProductAttributeValueByIdAsync(long productAttributeValueId)
     {
         return await _productAttributeValueRepository.GetByIdAsync(productAttributeValueId, cache => default);
     }
@@ -314,13 +311,13 @@ public partial class ProductAttributeService : IProductAttributeService
     #region Product attribute value pictures
 
     /// <summary>
-    /// Deletes a product attribute value picture
+    /// Deletes a list of product attribute value picture
     /// </summary>
-    /// <param name="value">Product attribute value picture</param>
+    /// <param name="value">Product attribute value pictures</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task DeleteProductAttributeValuePictureAsync(ProductAttributeValuePicture valuePicture)
+    public virtual async Task DeleteProductAttributeValuePicturesAsync(IList<ProductAttributeValuePicture> valuePictures)
     {
-        await _productAttributeValuePictureRepository.DeleteAsync(valuePicture);
+        await _productAttributeValuePictureRepository.DeleteAsync(valuePictures);
     }
 
     /// <summary>
@@ -351,7 +348,7 @@ public partial class ProductAttributeService : IProductAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the product attribute value pictures
     /// </returns>
-    public virtual async Task<IList<ProductAttributeValuePicture>> GetProductAttributeValuePicturesAsync(int valueId)
+    public virtual async Task<IList<ProductAttributeValuePicture>> GetProductAttributeValuePicturesAsync(long valueId)
     {
         var allCacheKey = _staticCacheManager.PrepareKeyForDefaultCache(NopCatalogDefaults.ProductAttributeValuePicturesByValueCacheKey, valueId);
 
@@ -375,13 +372,9 @@ public partial class ProductAttributeService : IProductAttributeService
     /// <param name="valueId">Product attribute value identifier</param>
     /// <param name="pictureId">Picture identifier</param>
     /// <returns>A ProductAttributeValuePicture that has the specified values; otherwise null</returns>
-    public virtual ProductAttributeValuePicture FindProductAttributeValuePicture(IList<ProductAttributeValuePicture> source, int valueId, int pictureId)
+    public virtual ProductAttributeValuePicture FindProductAttributeValuePicture(IList<ProductAttributeValuePicture> source, long valueId, long pictureId)
     {
-        foreach (var valuePicture in source)
-            if (valuePicture.ProductAttributeValueId == valueId && valuePicture.PictureId == pictureId)
-                return valuePicture;
-
-        return null;
+        return source.FirstOrDefault(vp => vp.ProductAttributeValueId == valueId && vp.PictureId == pictureId);
     }
 
     #endregion
@@ -406,7 +399,7 @@ public partial class ProductAttributeService : IProductAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the product attribute mapping collection
     /// </returns>
-    public virtual async Task<IList<PredefinedProductAttributeValue>> GetPredefinedProductAttributeValuesAsync(int productAttributeId)
+    public virtual async Task<IList<PredefinedProductAttributeValue>> GetPredefinedProductAttributeValuesAsync(long productAttributeId)
     {
         var key = _staticCacheManager.PrepareKeyForDefaultCache(NopCatalogDefaults.PredefinedProductAttributeValuesByAttributeCacheKey, productAttributeId);
 
@@ -428,7 +421,7 @@ public partial class ProductAttributeService : IProductAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the predefined product attribute value
     /// </returns>
-    public virtual async Task<PredefinedProductAttributeValue> GetPredefinedProductAttributeValueByIdAsync(int id)
+    public virtual async Task<PredefinedProductAttributeValue> GetPredefinedProductAttributeValueByIdAsync(long id)
     {
         return await _predefinedProductAttributeValueRepository.GetByIdAsync(id, cache => default);
     }
@@ -475,7 +468,7 @@ public partial class ProductAttributeService : IProductAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the product attribute combinations
     /// </returns>
-    public virtual async Task<IList<ProductAttributeCombination>> GetAllProductAttributeCombinationsAsync(int productId)
+    public virtual async Task<IList<ProductAttributeCombination>> GetAllProductAttributeCombinationsAsync(long productId)
     {
         if (productId == 0)
             return new List<ProductAttributeCombination>();
@@ -499,7 +492,7 @@ public partial class ProductAttributeService : IProductAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the product attribute combination
     /// </returns>
-    public virtual async Task<ProductAttributeCombination> GetProductAttributeCombinationByIdAsync(int productAttributeCombinationId)
+    public virtual async Task<ProductAttributeCombination> GetProductAttributeCombinationByIdAsync(long productAttributeCombinationId)
     {
         return await _productAttributeCombinationRepository.GetByIdAsync(productAttributeCombinationId, cache => default);
     }
@@ -591,7 +584,7 @@ public partial class ProductAttributeService : IProductAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the product attribute combination pictures
     /// </returns>
-    public virtual async Task<IList<ProductAttributeCombinationPicture>> GetProductAttributeCombinationPicturesAsync(int combinationId)
+    public virtual async Task<IList<ProductAttributeCombinationPicture>> GetProductAttributeCombinationPicturesAsync(long combinationId)
     {
         var allCacheKey = _staticCacheManager.PrepareKeyForDefaultCache(NopCatalogDefaults.ProductAttributeCombinationPicturesByCombinationCacheKey, combinationId);
 
@@ -615,13 +608,9 @@ public partial class ProductAttributeService : IProductAttributeService
     /// <param name="combinationId">Product attribute combination identifier</param>
     /// <param name="pictureId">Picture identifier</param>
     /// <returns>A ProductAttributeCombinationPicture that has the specified values; otherwise null</returns>
-    public virtual ProductAttributeCombinationPicture FindProductAttributeCombinationPicture(IList<ProductAttributeCombinationPicture> source, int combinationId, int pictureId)
+    public virtual ProductAttributeCombinationPicture FindProductAttributeCombinationPicture(IList<ProductAttributeCombinationPicture> source, long combinationId, long pictureId)
     {
-        foreach (var combinationPicture in source)
-            if (combinationPicture.ProductAttributeCombinationId == combinationId && combinationPicture.PictureId == pictureId)
-                return combinationPicture;
-
-        return null;
+        return source.FirstOrDefault(pacp => pacp.ProductAttributeCombinationId == combinationId && pacp.PictureId == pictureId);
     }
 
     #endregion

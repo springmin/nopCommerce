@@ -29,7 +29,7 @@ public partial interface IProductTagService
     /// A task that represents the asynchronous operation
     /// The task result contains the product tags
     /// </returns>
-    Task<IList<ProductTag>> GetProductTagsByIdsAsync(int[] productTagIds);
+    Task<IList<ProductTag>> GetProductTagsByIdsAsync(long[] productTagIds);
 
     /// <summary>
     /// Gets all product tags
@@ -49,7 +49,7 @@ public partial interface IProductTagService
     /// A task that represents the asynchronous operation
     /// The task result contains the product tags
     /// </returns>
-    Task<IList<ProductTag>> GetAllProductTagsByProductIdAsync(int productId);
+    Task<IList<ProductTag>> GetAllProductTagsByProductIdAsync(long productId);
 
     /// <summary>
     /// Gets product tag
@@ -59,7 +59,7 @@ public partial interface IProductTagService
     /// A task that represents the asynchronous operation
     /// The task result contains the product tag
     /// </returns>
-    Task<ProductTag> GetProductTagByIdAsync(int productTagId);
+    Task<ProductTag> GetProductTagByIdAsync(long productTagId);
 
     /// <summary>
     /// Inserts a product-product tag mapping
@@ -85,7 +85,7 @@ public partial interface IProductTagService
     /// A task that represents the asynchronous operation
     /// The task result contains the number of products
     /// </returns>
-    Task<int> GetProductCountByProductTagIdAsync(int productTagId, int storeId, bool showHidden = false);
+    Task<long> GetProductCountByProductTagIdAsync(long productTagId, long storeId, bool showHidden = false);
 
     /// <summary>
     /// Get product count for every linked tag
@@ -96,7 +96,7 @@ public partial interface IProductTagService
     /// A task that represents the asynchronous operation
     /// The task result contains the dictionary of "product tag ID : product count"
     /// </returns>
-    Task<Dictionary<int, int>> GetProductCountAsync(int storeId, bool showHidden = false);
+    Task<Dictionary<long, int>> GetProductCountAsync(long storeId, bool showHidden = false);
 
     /// <summary>
     /// Update product tags

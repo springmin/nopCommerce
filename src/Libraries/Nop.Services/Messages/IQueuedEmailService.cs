@@ -44,7 +44,7 @@ public partial interface IQueuedEmailService
     /// A task that represents the asynchronous operation
     /// The task result contains the queued email
     /// </returns>
-    Task<QueuedEmail> GetQueuedEmailByIdAsync(int queuedEmailId);
+    Task<QueuedEmail> GetQueuedEmailByIdAsync(long queuedEmailId);
 
     /// <summary>
     /// Get queued emails by identifiers
@@ -54,7 +54,14 @@ public partial interface IQueuedEmailService
     /// A task that represents the asynchronous operation
     /// The task result contains the queued emails
     /// </returns>
-    Task<IList<QueuedEmail>> GetQueuedEmailsByIdsAsync(int[] queuedEmailIds);
+    Task<IList<QueuedEmail>> GetQueuedEmailsByIdsAsync(long[] queuedEmailIds);
+
+    /// <summary>
+    /// Requeue a queued emails
+    /// </summary>
+    /// <param name="queuedEmails">Queued emails</param>
+    /// <returns>A task that represents the asynchronous operation</returns>
+    Task RequeueQueuedEmailsAsync(IList<QueuedEmail> queuedEmails);
 
     /// <summary>
     /// Search queued emails

@@ -1259,7 +1259,7 @@ public partial class InstallationService
     /// <param name="value">Value</param>
     /// <param name="storeId">Store identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    protected virtual async Task SetSettingAsync(Dictionary<string, IList<Setting>> allSettings, Type type, string key, object value, int storeId = 0)
+    protected virtual async Task SetSettingAsync(Dictionary<string, IList<Setting>> allSettings, Type type, string key, object value, long storeId = 0)
     {
         ArgumentNullException.ThrowIfNull(key);
         key = key.Trim().ToLowerInvariant();
@@ -1297,7 +1297,7 @@ public partial class InstallationService
     /// <param name="settings">Setting instance</param>
     /// <param name="storeId">Store identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    protected virtual async Task SaveSettingAsync<T>(Dictionary<string, IList<Setting>> allSettings, T settings, int storeId = 0) where T : ISettings, new()
+    protected virtual async Task SaveSettingAsync<T>(Dictionary<string, IList<Setting>> allSettings, T settings, long storeId = 0) where T : ISettings, new()
     {
         foreach (var prop in typeof(T).GetProperties())
         {
@@ -1623,7 +1623,7 @@ public partial class InstallationService
             TranslateFromLanguageId = (await Table<Language>().FirstAsync()).Id,
             AllowPreTranslate = false,
             GoogleApiKey = string.Empty,
-            NotTranslateLanguages = new List<int>(),
+            NotTranslateLanguages = new List<long>(),
             DeepLAuthKey = string.Empty,
             TranslationServiceId = (int)TranslationServiceType.GoogleTranslate
         });

@@ -34,12 +34,14 @@ public static partial class CheckoutAttributeParserExtensions
             return result;
 
         //find attribute IDs to remove
-        var checkoutAttributeIdsToRemove = new List<int>();
+        var checkoutAttributeIdsToRemove = new List<long>();
         var attributes = await parser.ParseAttributesAsync(attributesXml);
 
         foreach (var ca in attributes)
+        {
             if (ca.ShippableProductRequired)
                 checkoutAttributeIdsToRemove.Add(ca.Id);
+        }
 
         //remove them from XML
         try

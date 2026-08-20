@@ -24,7 +24,7 @@ public partial interface ICountryService
     /// A task that represents the asynchronous operation
     /// The task result contains the countries
     /// </returns>
-    Task<IList<Country>> GetAllCountriesAsync(int languageId = 0, bool showHidden = false);
+    Task<IList<Country>> GetAllCountriesAsync(long languageId = 0, bool showHidden = false);
 
     /// <summary>
     /// Gets all countries that allow billing
@@ -35,7 +35,7 @@ public partial interface ICountryService
     /// A task that represents the asynchronous operation
     /// The task result contains the countries
     /// </returns>
-    Task<IList<Country>> GetAllCountriesForBillingAsync(int languageId = 0, bool showHidden = false);
+    Task<IList<Country>> GetAllCountriesForBillingAsync(long languageId = 0, bool showHidden = false);
 
     /// <summary>
     /// Gets all countries that allow shipping
@@ -46,7 +46,7 @@ public partial interface ICountryService
     /// A task that represents the asynchronous operation
     /// The task result contains the countries
     /// </returns>
-    Task<IList<Country>> GetAllCountriesForShippingAsync(int languageId = 0, bool showHidden = false);
+    Task<IList<Country>> GetAllCountriesForShippingAsync(long languageId = 0, bool showHidden = false);
 
     /// <summary>
     /// Gets a country by address 
@@ -66,7 +66,7 @@ public partial interface ICountryService
     /// A task that represents the asynchronous operation
     /// The task result contains the country
     /// </returns>
-    Task<Country> GetCountryByIdAsync(int countryId);
+    Task<Country> GetCountryByIdAsync(long countryId);
 
     /// <summary>
     /// Get countries by identifiers
@@ -76,7 +76,7 @@ public partial interface ICountryService
     /// A task that represents the asynchronous operation
     /// The task result contains the countries
     /// </returns>
-    Task<IList<Country>> GetCountriesByIdsAsync(int[] countryIds);
+    Task<IList<Country>> GetCountriesByIdsAsync(long[] countryIds);
 
     /// <summary>
     /// Gets a country by two letter ISO code

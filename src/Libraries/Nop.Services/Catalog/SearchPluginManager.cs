@@ -8,7 +8,7 @@ using Nop.Services.Plugins;
  /// <summary>
  /// Represents a search plugin manager implementation
  /// </summary>
- public class SearchPluginManager : PluginManager<ISearchProvider>, ISearchPluginManager
+ public partial class SearchPluginManager : PluginManager<ISearchProvider>, ISearchPluginManager
  {
      #region Fields
 
@@ -37,7 +37,7 @@ using Nop.Services.Plugins;
      /// A task that represents the asynchronous operation
      /// The task result contains the search provider
      /// </returns>
-     public virtual async Task<ISearchProvider> LoadPrimaryPluginAsync(Customer customer = null, int storeId = 0)
+     public virtual async Task<ISearchProvider> LoadPrimaryPluginAsync(Customer customer = null, long storeId = 0)
      {
          if (string.IsNullOrEmpty(_catalogSettings.ActiveSearchProviderSystemName))
              return null;
@@ -65,7 +65,7 @@ using Nop.Services.Plugins;
      /// A task that represents the asynchronous operation
      /// The task result contains the result
      /// </returns>
-     public virtual async Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, int storeId = 0)
+     public virtual async Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, long storeId = 0)
      {
          var searchProvider = await LoadPluginBySystemNameAsync(systemName, customer, storeId);
          return IsPluginActive(searchProvider);

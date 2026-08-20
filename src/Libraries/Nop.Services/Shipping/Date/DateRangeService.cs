@@ -38,7 +38,7 @@ public partial class DateRangeService : IDateRangeService
     /// A task that represents the asynchronous operation
     /// The task result contains the delivery date
     /// </returns>
-    public virtual async Task<DeliveryDate> GetDeliveryDateByIdAsync(int deliveryDateId)
+    public virtual async Task<DeliveryDate> GetDeliveryDateByIdAsync(long deliveryDateId)
     {
         return await _deliveryDateRepository.GetByIdAsync(deliveryDateId, cache => default);
     }
@@ -104,7 +104,7 @@ public partial class DateRangeService : IDateRangeService
     /// A task that represents the asynchronous operation
     /// The task result contains the product availability range
     /// </returns>
-    public virtual async Task<ProductAvailabilityRange> GetProductAvailabilityRangeByIdAsync(int productAvailabilityRangeId)
+    public virtual async Task<ProductAvailabilityRange> GetProductAvailabilityRangeByIdAsync(long productAvailabilityRangeId)
     {
         return productAvailabilityRangeId != 0 ? await _productAvailabilityRangeRepository.GetByIdAsync(productAvailabilityRangeId, cache => default) : null;
     }

@@ -66,7 +66,7 @@ public partial class LocalizationService : ILocalizationService
     /// A task that represents the asynchronous operation
     /// The task result contains the locale string resources
     /// </returns>
-    protected virtual async Task<IList<LocaleStringResource>> GetAllResourcesAsync(int languageId)
+    protected virtual async Task<IList<LocaleStringResource>> GetAllResourcesAsync(long languageId)
     {
         var locales = await _lsrRepository.GetAllAsync(query =>
         {
@@ -79,11 +79,12 @@ public partial class LocalizationService : ILocalizationService
         return locales;
     }
 
-    protected virtual HashSet<(string name, string value)> LoadLocaleResourcesFromStream(StreamReader xmlStreamReader, string language)
+    protected virtual HashSet<(string name, string value)> LoadLocaleResourcesFromStream(StreamReader xmlStreamReader)
     {
         var result = new HashSet<(string name, string value)>();
 
         using (var xmlReader = XmlReader.Create(xmlStreamReader))
+        {
             while (xmlReader.ReadToFollowing("Language"))
             {
                 if (xmlReader.NodeType != XmlNodeType.Element)
@@ -91,34 +92,37 @@ public partial class LocalizationService : ILocalizationService
 
                 using var languageReader = xmlReader.ReadSubtree();
                 while (languageReader.ReadToFollowing("LocaleResource"))
+                {
                     if (xmlReader.NodeType == XmlNodeType.Element && xmlReader.GetAttribute("Name") is string name)
                     {
                         using var lrReader = languageReader.ReadSubtree();
                         if (lrReader.ReadToFollowing("Value") && lrReader.NodeType == XmlNodeType.Element)
                             result.Add((name.ToLowerInvariant(), lrReader.ReadString()));
                     }
+                }
 
                 break;
             }
+        }
 
         return result;
     }
 
-    protected virtual Dictionary<string, KeyValuePair<int, string>> ResourceValuesToDictionary(IEnumerable<LocaleStringResource> locales)
+    protected virtual Dictionary<string, KeyValuePair<long, string>> ResourceValuesToDictionary(IEnumerable<LocaleStringResource> locales)
     {
         //format: <name, <id, keyValuePair>>
-        var dictionary = new Dictionary<string, KeyValuePair<int, string>>();
+        var dictionary = new Dictionary<string, KeyValuePair<long, string>>();
         foreach (var locale in locales)
         {
             var resourceName = locale.ResourceName.ToLowerInvariant();
             if (!dictionary.ContainsKey(resourceName))
-                dictionary.Add(resourceName, new KeyValuePair<int, string>(locale.Id, locale.ResourceValue));
+                dictionary.Add(resourceName, new KeyValuePair<long, string>(locale.Id, locale.ResourceValue));
         }
 
         return dictionary;
     }
 
-    protected virtual async Task<IDictionary<string, string>> UpdateLocaleResourceAsync(IDictionary<string, string> resources, int? languageId = null, bool clearCache = true)
+    protected virtual async Task<IDictionary<string, string>> UpdateLocaleResourceAsync(IDictionary<string, string> resources, long? languageId = null, bool clearCache = true)
     {
         var localResources = new Dictionary<string, string>(resources, StringComparer.InvariantCultureIgnoreCase);
         var keys = localResources.Keys.Select(key => key.ToLowerInvariant()).ToArray();
@@ -153,41 +157,6 @@ public partial class LocalizationService : ILocalizationService
             .ToDictionary(p => p.Key, p => p.Value);
     }
 
-    protected virtual IDictionary<string, string> UpdateLocaleResource(IDictionary<string, string> resources, int? languageId = null, bool clearCache = true)
-    {
-        var localResources = new Dictionary<string, string>(resources, StringComparer.InvariantCultureIgnoreCase);
-        var keys = localResources.Keys.Select(key => key.ToLowerInvariant()).ToArray();
-        var resourcesToUpdate = _lsrRepository.GetAll(query =>
-        {
-            var rez = query.Where(p => !languageId.HasValue || p.LanguageId == languageId)
-                .Where(p => keys.Contains(p.ResourceName.ToLower()));
-
-            return rez;
-        });
-
-        var existsResources = new List<string>();
-
-        foreach (var localeStringResource in resourcesToUpdate.ToList())
-        {
-            var newValue = localResources[localeStringResource.ResourceName];
-
-            if (localeStringResource.ResourceValue.Equals(newValue))
-                resourcesToUpdate.Remove(localeStringResource);
-
-            localeStringResource.ResourceValue = newValue;
-            existsResources.Add(localeStringResource.ResourceName);
-        }
-
-        _lsrRepository.Update(resourcesToUpdate);
-
-        //clear cache
-        if (clearCache)
-            _staticCacheManager.RemoveByPrefix(NopEntityCacheDefaults<LocaleStringResource>.Prefix);
-
-        return localResources.Where(item => !existsResources.Contains(item.Key, StringComparer.InvariantCultureIgnoreCase))
-            .ToDictionary(p => p.Key, p => p.Value);
-    }
-
     #endregion
 
     #region Methods
@@ -210,7 +179,7 @@ public partial class LocalizationService : ILocalizationService
     /// A task that represents the asynchronous operation
     /// The task result contains the locale string resource
     /// </returns>
-    public virtual async Task<LocaleStringResource> GetLocaleStringResourceByIdAsync(int localeStringResourceId)
+    public virtual async Task<LocaleStringResource> GetLocaleStringResourceByIdAsync(long localeStringResourceId)
     {
         return await _lsrRepository.GetByIdAsync(localeStringResourceId, cache => default);
     }
@@ -225,7 +194,7 @@ public partial class LocalizationService : ILocalizationService
     /// A task that represents the asynchronous operation
     /// The task result contains the locale string resource
     /// </returns>
-    public virtual async Task<LocaleStringResource> GetLocaleStringResourceByNameAsync(string resourceName, int languageId,
+    public virtual async Task<LocaleStringResource> GetLocaleStringResourceByNameAsync(string resourceName, long languageId,
         bool logIfNotFound = true)
     {
         var query = from lsr in _lsrRepository.Table
@@ -237,31 +206,6 @@ public partial class LocalizationService : ILocalizationService
 
         if (localeStringResource == null && logIfNotFound)
             await _logger.WarningAsync($"Resource string ({resourceName}) not found. Language ID = {languageId}");
-
-        return localeStringResource;
-    }
-
-    /// <summary>
-    /// Gets a locale string resource
-    /// </summary>
-    /// <param name="resourceName">A string representing a resource name</param>
-    /// <param name="languageId">Language identifier</param>
-    /// <param name="logIfNotFound">A value indicating whether to log error if locale string resource is not found</param>
-    /// <returns>
-    /// The locale string resource
-    /// </returns>
-    public virtual LocaleStringResource GetLocaleStringResourceByName(string resourceName, int languageId,
-        bool logIfNotFound = true)
-    {
-        var query = from lsr in _lsrRepository.Table
-            orderby lsr.ResourceName
-            where lsr.LanguageId == languageId && lsr.ResourceName == resourceName.ToLowerInvariant()
-            select lsr;
-
-        var localeStringResource = query.FirstOrDefault();
-
-        if (localeStringResource == null && logIfNotFound)
-            _logger.Warning($"Resource string ({resourceName}) not found. Language ID = {languageId}");
 
         return localeStringResource;
     }
@@ -290,15 +234,6 @@ public partial class LocalizationService : ILocalizationService
     }
 
     /// <summary>
-    /// Updates the locale string resource
-    /// </summary>
-    /// <param name="localeStringResource">Locale string resource</param>
-    public virtual void UpdateLocaleStringResource(LocaleStringResource localeStringResource)
-    {
-        _lsrRepository.Update(localeStringResource);
-    }
-
-    /// <summary>
     /// Gets all locale string resources by language identifier
     /// </summary>
     /// <param name="languageId">Language identifier</param>
@@ -307,17 +242,17 @@ public partial class LocalizationService : ILocalizationService
     /// A task that represents the asynchronous operation
     /// The task result contains the locale string resources
     /// </returns>
-    public virtual async Task<Dictionary<string, KeyValuePair<int, string>>> GetAllResourceValuesAsync(int languageId, bool? loadPublicLocales)
+    public virtual async Task<Dictionary<string, KeyValuePair<long, string>>> GetAllResourceValuesAsync(long languageId, bool? loadPublicLocales)
     {
         var key = _staticCacheManager.PrepareKeyForDefaultCache(NopLocalizationDefaults.LocaleStringResourcesAllCacheKey, languageId);
 
         //get all locale string resources by language identifier
         var allLocales =
-            await _staticCacheManager.GetAsync<Dictionary<string, KeyValuePair<int, string>>>(key);
+            await _staticCacheManager.GetAsync<Dictionary<string, KeyValuePair<long, string>>>(key);
 
         if (!loadPublicLocales.HasValue || allLocales != null)
         {
-            var rez = allLocales ?? await _staticCacheManager.GetAsync(key, () =>
+            var rez = allLocales ?? await _staticCacheManager.GetAsync(key, async () =>
             {
                 //we use no tracking here for performance optimization
                 //anyway records are loaded only for read-only operations
@@ -326,7 +261,7 @@ public partial class LocalizationService : ILocalizationService
                     where l.LanguageId == languageId
                     select l;
 
-                return ResourceValuesToDictionary(query);
+                return ResourceValuesToDictionary(await query.ToListAsync());
             });
 
             //remove separated resource 
@@ -342,7 +277,7 @@ public partial class LocalizationService : ILocalizationService
                 : NopLocalizationDefaults.LocaleStringResourcesAllAdminCacheKey,
             languageId);
 
-        return await _staticCacheManager.GetAsync(key, () =>
+        return await _staticCacheManager.GetAsync(key, async () =>
         {
             //we use no tracking here for performance optimization
             //anyway records are loaded only for read-only operations
@@ -352,7 +287,7 @@ public partial class LocalizationService : ILocalizationService
                 select l;
             query = loadPublicLocales.Value ? query.Where(r => !r.ResourceName.StartsWith(NopLocalizationDefaults.AdminLocaleStringResourcesPrefix)) : query.Where(r => r.ResourceName.StartsWith(NopLocalizationDefaults.AdminLocaleStringResourcesPrefix));
 
-            return ResourceValuesToDictionary(query);
+            return ResourceValuesToDictionary(await query.ToListAsync());
         });
     }
 
@@ -386,7 +321,7 @@ public partial class LocalizationService : ILocalizationService
     /// A task that represents the asynchronous operation
     /// The task result contains a string representing the requested resource string.
     /// </returns>
-    public virtual async Task<string> GetResourceAsync(string resourceKey, int languageId,
+    public virtual async Task<string> GetResourceAsync(string resourceKey, long languageId,
         bool logIfNotFound = true, string defaultValue = "", bool returnEmptyIfNotFound = false)
     {
         var result = string.Empty;
@@ -396,10 +331,8 @@ public partial class LocalizationService : ILocalizationService
         {
             //load all records (we know they are cached)
             var resources = await GetAllResourceValuesAsync(languageId, !resourceKey.StartsWith(NopLocalizationDefaults.AdminLocaleStringResourcesPrefix, StringComparison.InvariantCultureIgnoreCase));
-            if (resources.TryGetValue(resourceKey, out var keyValuePair))
-            {
+            if (resources.TryGetValue(resourceKey, out var keyValuePair)) 
                 result = keyValuePair.Value;
-            }
         }
         else
         {
@@ -425,9 +358,7 @@ public partial class LocalizationService : ILocalizationService
             await _logger.WarningAsync($"Resource string ({resourceKey}) is not found. Language ID = {languageId}");
 
         if (!string.IsNullOrEmpty(defaultValue))
-        {
             result = defaultValue;
-        }
         else
         {
             if (!returnEmptyIfNotFound)
@@ -491,28 +422,40 @@ public partial class LocalizationService : ILocalizationService
     {
         ArgumentNullException.ThrowIfNull(language);
 
-        if (xmlStreamReader.EndOfStream)
+        IList<(string name, string value)> parsedResources;
+        try
+        {
+            parsedResources = LoadLocaleResourcesFromStream(xmlStreamReader).ToList();
+        }
+        catch (XmlException)
+        {
+            parsedResources = new List<(string, string)>();
+        }
+
+        if (!parsedResources.Any())
             return;
 
         var lsNamesList = new Dictionary<string, LocaleStringResource>();
+        var locales = await _lsrRepository.Table
+            .Where(lsr => lsr.LanguageId == language.Id)
+            .OrderBy(lsr => lsr.Id)
+            .ToListAsync();
 
-        foreach (var localeStringResource in _lsrRepository.Table.Where(lsr => lsr.LanguageId == language.Id)
-                     .OrderBy(lsr => lsr.Id))
+        foreach (var localeStringResource in locales) 
             lsNamesList[localeStringResource.ResourceName.ToLowerInvariant()] = localeStringResource;
 
-        var lrsToUpdateList = new List<LocaleStringResource>();
+        var lrsToUpdateList = new Dictionary<string, LocaleStringResource>();
         var lrsToInsertList = new Dictionary<string, LocaleStringResource>();
 
-        foreach (var (name, value) in LoadLocaleResourcesFromStream(xmlStreamReader, language.Name))
+        foreach (var (name, value) in parsedResources)
         {
             if (lsNamesList.TryGetValue(name, out var localString))
             {
                 if (!updateExistingResources)
                     continue;
 
-                var lsr = localString;
-                lsr.ResourceValue = value;
-                lrsToUpdateList.Add(lsr);
+                localString.ResourceValue = value;
+                lrsToUpdateList[name] = localString;
             }
             else
             {
@@ -521,8 +464,11 @@ public partial class LocalizationService : ILocalizationService
             }
         }
 
-        await _lsrRepository.UpdateAsync(lrsToUpdateList, false);
-        await _lsrRepository.InsertAsync(lrsToInsertList.Values.ToList(), false);
+        if (lrsToUpdateList.Any())
+            await _lsrRepository.UpdateAsync(lrsToUpdateList.Values.ToList(), false);
+
+        if (lrsToInsertList.Any())
+            await _lsrRepository.InsertAsync(lrsToInsertList.Values.ToList(), false);
 
         //clear cache
         await _staticCacheManager.RemoveByPrefixAsync(NopEntityCacheDefaults<LocaleStringResource>.Prefix);
@@ -543,7 +489,7 @@ public partial class LocalizationService : ILocalizationService
     /// The task result contains the localized property
     /// </returns>
     public virtual async Task<TPropType> GetLocalizedAsync<TEntity, TPropType>(TEntity entity, Expression<Func<TEntity, TPropType>> keySelector,
-        int? languageId = null, bool returnDefaultValue = true, bool ensureTwoPublishedLanguages = true)
+        long? languageId = null, bool returnDefaultValue = true, bool ensureTwoPublishedLanguages = true)
         where TEntity : BaseEntity, ILocalizedEntity
     {
         ArgumentNullException.ThrowIfNull(entity);
@@ -588,7 +534,7 @@ public partial class LocalizationService : ILocalizationService
         //set default value if required
         if (!string.IsNullOrEmpty(resultStr) || !returnDefaultValue)
             return result;
-        var localizer = keySelector.Compile();
+        var localizer = keySelector.GetCompiled();
         result = localizer(entity);
 
         return result;
@@ -609,7 +555,7 @@ public partial class LocalizationService : ILocalizationService
     /// The task result contains the localized property
     /// </returns>
     public virtual async Task<string> GetLocalizedSettingAsync<TSettings>(TSettings settings, Expression<Func<TSettings, string>> keySelector,
-        int languageId, int storeId, bool returnDefaultValue = true, bool ensureTwoPublishedLanguages = true)
+        long languageId, long storeId, bool returnDefaultValue = true, bool ensureTwoPublishedLanguages = true)
         where TSettings : ISettings, new()
     {
         var key = _settingService.GetSettingKey(settings, keySelector);
@@ -635,7 +581,7 @@ public partial class LocalizationService : ILocalizationService
     /// The task result contains the localized property
     /// </returns>
     public virtual async Task SaveLocalizedSettingAsync<TSettings>(TSettings settings, Expression<Func<TSettings, string>> keySelector,
-        int languageId, string value) where TSettings : ISettings, new()
+        long languageId, string value) where TSettings : ISettings, new()
     {
         var key = _settingService.GetSettingKey(settings, keySelector);
 
@@ -657,7 +603,7 @@ public partial class LocalizationService : ILocalizationService
     /// A task that represents the asynchronous operation
     /// The task result contains the localized value
     /// </returns>
-    public virtual async Task<string> GetLocalizedEnumAsync<TEnum>(TEnum enumValue, int? languageId = null) where TEnum : struct
+    public virtual async Task<string> GetLocalizedEnumAsync<TEnum>(TEnum enumValue, long? languageId = null) where TEnum : struct
     {
         if (!typeof(TEnum).IsEnum)
             throw new ArgumentException("T must be an enumerated type");
@@ -669,7 +615,7 @@ public partial class LocalizationService : ILocalizationService
 
         //set default value if required
         if (string.IsNullOrEmpty(result))
-            result = CommonHelper.ConvertEnum(enumValue.ToString());
+            result = CommonHelper.SplitCamelCaseWord(enumValue.ToString());
 
         return result;
     }
@@ -684,7 +630,7 @@ public partial class LocalizationService : ILocalizationService
     /// A task that represents the asynchronous operation
     /// The task result contains the localized value
     /// </returns>
-    public virtual async Task<string> GetLocalizedPermissionNameAsync(PermissionRecord permissionRecord, int? languageId = null)
+    public virtual async Task<string> GetLocalizedPermissionNameAsync(PermissionRecord permissionRecord, long? languageId = null)
     {
         ArgumentNullException.ThrowIfNull(permissionRecord);
 
@@ -790,7 +736,7 @@ public partial class LocalizationService : ILocalizationService
     /// <param name="resources">Resource name-value pairs</param>
     /// <param name="languageId">Language identifier; pass null to add the passed resources for all languages</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task AddOrUpdateLocaleResourceAsync(IDictionary<string, string> resources, int? languageId = null)
+    public virtual async Task AddOrUpdateLocaleResourceAsync(IDictionary<string, string> resources, long? languageId = null)
     {
         //first update all previous locales with the passed names if they exist
         var resourcesToInsert = await UpdateLocaleResourceAsync(resources, languageId, false);
@@ -816,36 +762,6 @@ public partial class LocalizationService : ILocalizationService
     }
 
     /// <summary>
-    /// Add locale resources
-    /// </summary>
-    /// <param name="resources">Resource name-value pairs</param>
-    /// <param name="languageId">Language identifier; pass null to add the passed resources for all languages</param>
-    public virtual void AddOrUpdateLocaleResource(IDictionary<string, string> resources, int? languageId = null)
-    {
-        //first update all previous locales with the passed names if they exist
-        var resourcesToInsert = UpdateLocaleResource(resources, languageId, false);
-
-        if (resourcesToInsert.Any())
-        {
-            //insert new locale resources
-            var locales = _languageService.GetAllLanguages(true)
-                .Where(language => !languageId.HasValue || language.Id == languageId.Value)
-                .SelectMany(language => resourcesToInsert.Select(resource => new LocaleStringResource
-                {
-                    LanguageId = language.Id,
-                    ResourceName = resource.Key.Trim().ToLowerInvariant(),
-                    ResourceValue = resource.Value
-                }))
-                .ToList();
-
-            _lsrRepository.Insert(locales, false);
-        }
-
-        //clear cache
-        _staticCacheManager.RemoveByPrefix(NopEntityCacheDefaults<LocaleStringResource>.Prefix);
-    }
-
-    /// <summary>
     /// Delete a locale resource
     /// </summary>
     /// <param name="resourceName">Resource name</param>
@@ -866,7 +782,7 @@ public partial class LocalizationService : ILocalizationService
     /// <param name="resourceNames">Resource names</param>
     /// <param name="languageId">Language identifier; pass null to delete the passed resources from all languages</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task DeleteLocaleResourcesAsync(IList<string> resourceNames, int? languageId = null)
+    public virtual async Task DeleteLocaleResourcesAsync(IList<string> resourceNames, long? languageId = null)
     {
         await _lsrRepository.DeleteAsync(locale => (!languageId.HasValue || locale.LanguageId == languageId.Value) &&
                                                    resourceNames.Contains(locale.ResourceName, StringComparer.InvariantCultureIgnoreCase));
@@ -876,27 +792,12 @@ public partial class LocalizationService : ILocalizationService
     }
 
     /// <summary>
-    /// Delete locale resources
-    /// </summary>
-    /// <param name="resourceNames">Resource names</param>
-    /// <param name="languageId">Language identifier; pass null to delete the passed resources from all languages</param>
-    public virtual void DeleteLocaleResources(IList<string> resourceNames, int? languageId = null)
-    {
-        _lsrRepository.Delete(locale =>
-            (!languageId.HasValue || locale.LanguageId == languageId.Value) &&
-            resourceNames.Contains(locale.ResourceName, StringComparer.InvariantCultureIgnoreCase));
-
-        //clear cache
-        _staticCacheManager.RemoveByPrefix(NopEntityCacheDefaults<LocaleStringResource>.Prefix);
-    }
-
-    /// <summary>
     /// Delete locale resources by the passed name prefix
     /// </summary>
     /// <param name="resourceNamePrefix">Resource name prefix</param>
     /// <param name="languageId">Language identifier; pass null to delete resources by prefix from all languages</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task DeleteLocaleResourcesAsync(string resourceNamePrefix, int? languageId = null)
+    public virtual async Task DeleteLocaleResourcesAsync(string resourceNamePrefix, long? languageId = null)
     {
         await _lsrRepository.DeleteAsync(locale => (!languageId.HasValue || locale.LanguageId == languageId.Value) &&
                                                    !string.IsNullOrEmpty(locale.ResourceName) &&
@@ -917,7 +818,7 @@ public partial class LocalizationService : ILocalizationService
     /// A task that represents the asynchronous operation
     /// The task result contains the localized value
     /// </returns>
-    public virtual async Task<string> GetLocalizedFriendlyNameAsync<TPlugin>(TPlugin plugin, int languageId, bool returnDefaultValue = true)
+    public virtual async Task<string> GetLocalizedFriendlyNameAsync<TPlugin>(TPlugin plugin, long languageId, bool returnDefaultValue = true)
         where TPlugin : IPlugin
     {
         ArgumentNullException.ThrowIfNull(plugin);
@@ -945,7 +846,7 @@ public partial class LocalizationService : ILocalizationService
     /// <param name="languageId">Language identifier</param>
     /// <param name="localizedFriendlyName">Localized friendly name</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task SaveLocalizedFriendlyNameAsync<TPlugin>(TPlugin plugin, int languageId, string localizedFriendlyName)
+    public virtual async Task SaveLocalizedFriendlyNameAsync<TPlugin>(TPlugin plugin, long languageId, string localizedFriendlyName)
         where TPlugin : IPlugin
     {
         if (languageId == 0)

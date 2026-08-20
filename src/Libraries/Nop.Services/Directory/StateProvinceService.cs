@@ -51,7 +51,7 @@ public partial class StateProvinceService : IStateProvinceService
     /// A task that represents the asynchronous operation
     /// The task result contains the state/province
     /// </returns>
-    public virtual async Task<StateProvince> GetStateProvinceByIdAsync(int stateProvinceId)
+    public virtual async Task<StateProvince> GetStateProvinceByIdAsync(long stateProvinceId)
     {
         return await _stateProvinceRepository.GetByIdAsync(stateProvinceId, cache => default);
     }
@@ -65,7 +65,7 @@ public partial class StateProvinceService : IStateProvinceService
     /// A task that represents the asynchronous operation
     /// The task result contains the state/province
     /// </returns>
-    public virtual async Task<StateProvince> GetStateProvinceByAbbreviationAsync(string abbreviation, int? countryId = null)
+    public virtual async Task<StateProvince> GetStateProvinceByAbbreviationAsync(string abbreviation, long? countryId = null)
     {
         if (string.IsNullOrEmpty(abbreviation))
             return null;
@@ -105,7 +105,7 @@ public partial class StateProvinceService : IStateProvinceService
     /// A task that represents the asynchronous operation
     /// The task result contains the states
     /// </returns>
-    public virtual async Task<IList<StateProvince>> GetStateProvincesByCountryIdAsync(int countryId, int languageId = 0, bool showHidden = false)
+    public virtual async Task<IList<StateProvince>> GetStateProvincesByCountryIdAsync(long countryId, long languageId = 0, bool showHidden = false)
     {
         var key = _staticCacheManager.PrepareKeyForDefaultCache(NopDirectoryDefaults.StateProvincesByCountryCacheKey, countryId, languageId, showHidden);
 
@@ -120,10 +120,12 @@ public partial class StateProvinceService : IStateProvinceService
 
             if (languageId > 0)
                 //we should sort states by localized names when they have the same display order
+            {
                 stateProvinces = await stateProvinces.ToAsyncEnumerable()
                     .OrderBy(c => c.DisplayOrder)
-                    .ThenByAwait(async c => await _localizationService.GetLocalizedAsync(c, x => x.Name, languageId))
+                    .ThenBy(async (c, _) => await _localizationService.GetLocalizedAsync(c, x => x.Name, languageId))
                     .ToListAsync();
+            }
 
             return stateProvinces;
         });

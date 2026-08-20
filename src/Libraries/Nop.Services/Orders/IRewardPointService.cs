@@ -22,7 +22,7 @@ public partial interface IRewardPointService
     /// A task that represents the asynchronous operation
     /// The task result contains the reward point history records
     /// </returns>
-    Task<IPagedList<RewardPointsHistory>> GetRewardPointsHistoryAsync(int customerId = 0, int? storeId = null,
+    Task<IPagedList<RewardPointsHistory>> GetRewardPointsHistoryAsync(long customerId = 0, long? storeId = null,
         bool showNotActivated = false, Guid? orderGuid = null, int pageIndex = 0, int pageSize = int.MaxValue);
 
     /// <summary>
@@ -34,7 +34,7 @@ public partial interface IRewardPointService
     /// A task that represents the asynchronous operation
     /// The task result contains the balance
     /// </returns>
-    Task<int> GetRewardPointsBalanceAsync(int customerId, int storeId);
+    Task<int> GetRewardPointsBalanceAsync(long customerId, long storeId);
 
     /// <summary>
     /// Add reward points history record
@@ -51,7 +51,7 @@ public partial interface IRewardPointService
     /// A task that represents the asynchronous operation
     /// The task result contains the reward points history entry identifier
     /// </returns>
-    Task<int> AddRewardPointsHistoryEntryAsync(Customer customer, int points, int storeId, string message = "",
+    Task<long> AddRewardPointsHistoryEntryAsync(Customer customer, int points, long storeId, string message = "",
         Order usedWithOrder = null, decimal usedAmount = 0M, DateTime? activatingDate = null, DateTime? endDate = null);
 
     /// <summary>
@@ -62,7 +62,7 @@ public partial interface IRewardPointService
     /// A task that represents the asynchronous operation
     /// The task result contains the reward point history entry
     /// </returns>
-    Task<RewardPointsHistory> GetRewardPointsHistoryEntryByIdAsync(int rewardPointsHistoryId);
+    Task<RewardPointsHistory> GetRewardPointsHistoryEntryByIdAsync(long rewardPointsHistoryId);
 
     /// <summary>
     /// Updates the reward point history entry

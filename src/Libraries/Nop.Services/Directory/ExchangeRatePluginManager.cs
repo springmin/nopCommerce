@@ -38,7 +38,7 @@ public partial class ExchangeRatePluginManager : PluginManager<IExchangeRateProv
     /// A task that represents the asynchronous operation
     /// The task result contains the exchange rate provider
     /// </returns>
-    public virtual async Task<IExchangeRateProvider> LoadPrimaryPluginAsync(Customer customer = null, int storeId = 0)
+    public virtual async Task<IExchangeRateProvider> LoadPrimaryPluginAsync(Customer customer = null, long storeId = 0)
     {
         return await LoadPrimaryPluginAsync(_currencySettings.ActiveExchangeRateProviderSystemName, customer, storeId);
     }

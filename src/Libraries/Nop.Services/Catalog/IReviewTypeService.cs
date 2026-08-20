@@ -33,7 +33,7 @@ public partial interface IReviewTypeService
     /// A task that represents the asynchronous operation
     /// The task result contains the review type
     /// </returns>
-    Task<ReviewType> GetReviewTypeByIdAsync(int reviewTypeId);
+    Task<ReviewType> GetReviewTypeByIdAsync(long reviewTypeId);
 
     /// <summary>
     /// Insert the review type
@@ -61,7 +61,7 @@ public partial interface IReviewTypeService
     /// A task that represents the asynchronous operation
     /// The task result contains the product review and review type mapping collection
     /// </returns>
-    Task<IList<ProductReviewReviewTypeMapping>> GetProductReviewReviewTypeMappingsByProductReviewIdAsync(int productReviewId);
+    Task<IList<ProductReviewReviewTypeMapping>> GetProductReviewReviewTypeMappingsByProductReviewIdAsync(long productReviewId);
 
     /// <summary>
     /// Inserts a product review and review type mapping

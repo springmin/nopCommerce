@@ -27,7 +27,7 @@ public partial class TaxRateRequest
     /// <summary>
     /// Gets or sets a tax category identifier
     /// </summary>
-    public int TaxCategoryId { get; set; }
+    public long TaxCategoryId { get; set; }
 
     /// <summary>
     /// Gets or sets a price
@@ -37,5 +37,5 @@ public partial class TaxRateRequest
     /// <summary>
     /// Gets or sets a current store identifier
     /// </summary>
-    public int CurrentStoreId { get; set; }
+    public long CurrentStoreId { get; set; }
 }

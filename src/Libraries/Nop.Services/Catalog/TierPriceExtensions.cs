@@ -18,9 +18,9 @@ public static class TierPriceExtensions
     {
         ArgumentNullException.ThrowIfNull(source);
 
-        ArgumentNullException.ThrowIfNull(store);
+        var storeId = store?.Id ?? 0;
 
-        return source.Where(tierPrice => tierPrice.StoreId == 0 || tierPrice.StoreId == store.Id);
+        return source.Where(tierPrice => tierPrice.StoreId == 0 || tierPrice.StoreId == storeId);
     }
 
     /// <summary>
@@ -29,7 +29,7 @@ public static class TierPriceExtensions
     /// <param name="source">Tier prices</param>
     /// <param name="customerRoleIds">Customer role identifiers</param>
     /// <returns>Filtered tier prices</returns>
-    public static IEnumerable<TierPrice> FilterByCustomerRole(this IEnumerable<TierPrice> source, int[] customerRoleIds)
+    public static IEnumerable<TierPrice> FilterByCustomerRole(this IEnumerable<TierPrice> source, long[] customerRoleIds)
     {
         ArgumentNullException.ThrowIfNull(source);
 

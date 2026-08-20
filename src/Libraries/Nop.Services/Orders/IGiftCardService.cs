@@ -24,7 +24,7 @@ public partial interface IGiftCardService
     /// A task that represents the asynchronous operation
     /// The task result contains the gift card entry
     /// </returns>
-    Task<GiftCard> GetGiftCardByIdAsync(int giftCardId);
+    Task<GiftCard> GetGiftCardByIdAsync(long giftCardId);
 
     /// <summary>
     /// Gets all gift cards
@@ -42,7 +42,7 @@ public partial interface IGiftCardService
     /// A task that represents the asynchronous operation
     /// The task result contains the gift cards
     /// </returns>
-    Task<IPagedList<GiftCard>> GetAllGiftCardsAsync(int? purchasedWithOrderId = null, int? usedWithOrderId = null,
+    Task<IPagedList<GiftCard>> GetAllGiftCardsAsync(long? purchasedWithOrderId = null, long? usedWithOrderId = null,
         DateTime? createdFromUtc = null, DateTime? createdToUtc = null,
         bool? isGiftCardActivated = null, string giftCardCouponCode = null,
         string recipientName = null,
@@ -70,7 +70,7 @@ public partial interface IGiftCardService
     /// A task that represents the asynchronous operation
     /// The task result contains the gift card entries
     /// </returns>
-    Task<IList<GiftCard>> GetGiftCardsByPurchasedWithOrderItemIdAsync(int purchasedWithOrderItemId);
+    Task<IList<GiftCard>> GetGiftCardsByPurchasedWithOrderItemIdAsync(long purchasedWithOrderItemId);
 
     /// <summary>
     /// Get active gift cards that are applied by a customer

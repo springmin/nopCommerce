@@ -74,7 +74,7 @@ public partial class QueuedEmailService : IQueuedEmailService
     /// A task that represents the asynchronous operation
     /// The task result contains the queued email
     /// </returns>
-    public virtual async Task<QueuedEmail> GetQueuedEmailByIdAsync(int queuedEmailId)
+    public virtual async Task<QueuedEmail> GetQueuedEmailByIdAsync(long queuedEmailId)
     {
         return await _queuedEmailRepository.GetByIdAsync(queuedEmailId, cache => default, useShortTermCache: true);
     }
@@ -87,9 +87,42 @@ public partial class QueuedEmailService : IQueuedEmailService
     /// A task that represents the asynchronous operation
     /// The task result contains the queued emails
     /// </returns>
-    public virtual async Task<IList<QueuedEmail>> GetQueuedEmailsByIdsAsync(int[] queuedEmailIds)
+    public virtual async Task<IList<QueuedEmail>> GetQueuedEmailsByIdsAsync(long[] queuedEmailIds)
     {
         return await _queuedEmailRepository.GetByIdsAsync(queuedEmailIds);
+    }
+
+    /// <summary>
+    /// Requeue a queued emails
+    /// </summary>
+    /// <param name="queuedEmails">Queued emails</param>
+    /// <returns>A task that represents the asynchronous operation</returns>
+    public virtual async Task RequeueQueuedEmailsAsync(IList<QueuedEmail> queuedEmails)
+    {
+        ArgumentNullException.ThrowIfNull(queuedEmails);
+
+        var newEmails = queuedEmails.Select(queuedEmail => new QueuedEmail
+        {
+            PriorityId = queuedEmail.PriorityId,
+            From = queuedEmail.From,
+            FromName = queuedEmail.FromName,
+            To = queuedEmail.To,
+            ToName = queuedEmail.ToName,
+            ReplyTo = queuedEmail.ReplyTo,
+            ReplyToName = queuedEmail.ReplyToName,
+            CC = queuedEmail.CC,
+            Bcc = queuedEmail.Bcc,
+            Subject = queuedEmail.Subject,
+            Body = queuedEmail.Body,
+            AttachmentFilePath = queuedEmail.AttachmentFilePath,
+            AttachmentFileName = queuedEmail.AttachmentFileName,
+            AttachedDownloadId = queuedEmail.AttachedDownloadId,
+            CreatedOnUtc = DateTime.UtcNow,
+            EmailAccountId = queuedEmail.EmailAccountId,
+            DontSendBeforeDateUtc = queuedEmail.DontSendBeforeDateUtc
+        }).ToList();
+
+        await _queuedEmailRepository.InsertAsync(newEmails);
     }
 
     /// <summary>
@@ -167,7 +200,7 @@ public partial class QueuedEmailService : IQueuedEmailService
         if (createdToUtc.HasValue)
             query = query.Where(qe => qe.CreatedOnUtc <= createdToUtc);
 
-        var emails = query.ToArray();
+        var emails = await query.ToArrayAsync();
 
         await DeleteQueuedEmailsAsync(emails);
 

@@ -56,7 +56,7 @@ public partial interface IManufacturerService
     /// The task result contains the manufacturers
     /// </returns>
     Task<IPagedList<Manufacturer>> GetAllManufacturersAsync(string manufacturerName = "",
-        int storeId = 0,
+        long storeId = 0,
         int pageIndex = 0,
         int pageSize = int.MaxValue,
         bool showHidden = false,
@@ -71,7 +71,7 @@ public partial interface IManufacturerService
     /// A task that represents the asynchronous operation
     /// The task result contains the manufacturer identifiers
     /// </returns>
-    Task<IList<int>> GetAppliedManufacturerIdsAsync(Discount discount, Customer customer);
+    Task<IList<long>> GetAppliedManufacturerIdsAsync(Discount discount, Customer customer);
 
     /// <summary>
     /// Gets a manufacturer
@@ -81,7 +81,7 @@ public partial interface IManufacturerService
     /// A task that represents the asynchronous operation
     /// The task result contains the manufacturer
     /// </returns>
-    Task<Manufacturer> GetManufacturerByIdAsync(int manufacturerId);
+    Task<Manufacturer> GetManufacturerByIdAsync(long manufacturerId);
 
     /// <summary>
     /// Gets the manufacturers by category identifier
@@ -91,7 +91,7 @@ public partial interface IManufacturerService
     /// A task that represents the asynchronous operation
     /// The task result contains the manufacturers
     /// </returns>
-    Task<IList<Manufacturer>> GetManufacturersByCategoryIdAsync(int categoryId);
+    Task<IList<Manufacturer>> GetManufacturersByCategoryIdAsync(long categoryId);
 
     /// <summary>
     /// Gets manufacturers by identifier
@@ -101,7 +101,7 @@ public partial interface IManufacturerService
     /// A task that represents the asynchronous operation
     /// The task result contains the manufacturers
     /// </returns>
-    Task<IList<Manufacturer>> GetManufacturersByIdsAsync(int[] manufacturerIds);
+    Task<IList<Manufacturer>> GetManufacturersByIdsAsync(long[] manufacturerIds);
 
     /// <summary>
     /// Get manufacturers for which a discount is applied
@@ -114,7 +114,7 @@ public partial interface IManufacturerService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of manufacturers
     /// </returns>
-    Task<IPagedList<Manufacturer>> GetManufacturersWithAppliedDiscountAsync(int? discountId = null,
+    Task<IPagedList<Manufacturer>> GetManufacturersWithAppliedDiscountAsync(long? discountId = null,
         bool showHidden = false, int pageIndex = 0, int pageSize = int.MaxValue);
 
     /// <summary>
@@ -139,6 +139,13 @@ public partial interface IManufacturerService
     Task DeleteProductManufacturerAsync(ProductManufacturer productManufacturer);
 
     /// <summary>
+    /// Deletes a list of product manufacturer mapping
+    /// </summary>
+    /// <param name="productManufacturers">Product manufacturer mappings</param>
+    /// <returns>A task that represents the asynchronous operation</returns>
+    Task DeleteProductManufacturersAsync(IList<ProductManufacturer> productManufacturers);
+
+    /// <summary>
     /// Gets product manufacturer collection
     /// </summary>
     /// <param name="manufacturerId">Manufacturer identifier</param>
@@ -149,7 +156,7 @@ public partial interface IManufacturerService
     /// A task that represents the asynchronous operation
     /// The task result contains the product manufacturer collection
     /// </returns>
-    Task<IPagedList<ProductManufacturer>> GetProductManufacturersByManufacturerIdAsync(int manufacturerId,
+    Task<IPagedList<ProductManufacturer>> GetProductManufacturersByManufacturerIdAsync(long manufacturerId,
         int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false);
 
     /// <summary>
@@ -161,7 +168,7 @@ public partial interface IManufacturerService
     /// A task that represents the asynchronous operation
     /// The task result contains the product manufacturer mapping collection
     /// </returns>
-    Task<IList<ProductManufacturer>> GetProductManufacturersByProductIdAsync(int productId, bool showHidden = false);
+    Task<IList<ProductManufacturer>> GetProductManufacturersByProductIdAsync(long productId, bool showHidden = false);
 
     /// <summary>
     /// Gets a product manufacturer mapping 
@@ -171,7 +178,7 @@ public partial interface IManufacturerService
     /// A task that represents the asynchronous operation
     /// The task result contains the product manufacturer mapping
     /// </returns>
-    Task<ProductManufacturer> GetProductManufacturerByIdAsync(int productManufacturerId);
+    Task<ProductManufacturer> GetProductManufacturerByIdAsync(long productManufacturerId);
 
     /// <summary>
     /// Inserts a product manufacturer mapping
@@ -195,7 +202,7 @@ public partial interface IManufacturerService
     /// A task that represents the asynchronous operation
     /// The task result contains the manufacturer IDs for products
     /// </returns>
-    Task<IDictionary<int, int[]>> GetProductManufacturerIdsAsync(int[] productIds);
+    Task<IDictionary<long, long[]>> GetProductManufacturerIdsAsync(long[] productIds);
 
     /// <summary>
     /// Returns a list of names of not existing manufacturers
@@ -214,7 +221,7 @@ public partial interface IManufacturerService
     /// <param name="productId">Product identifier</param>
     /// <param name="manufacturerId">Manufacturer identifier</param>
     /// <returns>A ProductManufacturer that has the specified values; otherwise null</returns>
-    ProductManufacturer FindProductManufacturer(IList<ProductManufacturer> source, int productId, int manufacturerId);
+    ProductManufacturer FindProductManufacturer(IList<ProductManufacturer> source, long productId, long manufacturerId);
 
     /// <summary>
     /// Get a discount-manufacturer mapping record
@@ -225,7 +232,7 @@ public partial interface IManufacturerService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    Task<DiscountManufacturerMapping> GetDiscountAppliedToManufacturerAsync(int manufacturerId, int discountId);
+    Task<DiscountManufacturerMapping> GetDiscountAppliedToManufacturerAsync(long manufacturerId, long discountId);
 
     /// <summary>
     /// Inserts a discount-manufacturer mapping record

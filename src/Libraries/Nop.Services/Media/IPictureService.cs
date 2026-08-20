@@ -66,7 +66,7 @@ public partial interface IPictureService
     /// A task that represents the asynchronous operation
     /// The task result contains the picture URL
     /// </returns>
-    Task<string> GetPictureUrlAsync(int pictureId,
+    Task<string> GetPictureUrlAsync(long pictureId,
         int targetSize = 0,
         bool showDefaultPicture = true,
         string storeLocation = null,
@@ -91,18 +91,6 @@ public partial interface IPictureService
         PictureType defaultPictureType = PictureType.Entity);
 
     /// <summary>
-    /// Get a picture local path
-    /// </summary>
-    /// <param name="picture">Picture instance</param>
-    /// <param name="targetSize">The target picture size (longest side)</param>
-    /// <param name="showDefaultPicture">A value indicating whether the default picture is shown</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the 
-    /// </returns>
-    Task<string> GetThumbLocalPathAsync(Picture picture, int targetSize = 0, bool showDefaultPicture = true);
-
-    /// <summary>
     /// Gets a picture
     /// </summary>
     /// <param name="pictureId">Picture identifier</param>
@@ -110,7 +98,7 @@ public partial interface IPictureService
     /// A task that represents the asynchronous operation
     /// The task result contains the picture
     /// </returns>
-    Task<Picture> GetPictureByIdAsync(int pictureId);
+    Task<Picture> GetPictureByIdAsync(long pictureId);
 
     /// <summary>
     /// Deletes a picture
@@ -140,7 +128,7 @@ public partial interface IPictureService
     /// A task that represents the asynchronous operation
     /// The task result contains the pictures
     /// </returns>
-    Task<IList<Picture>> GetPicturesByProductIdAsync(int productId, int recordsToReturn = 0);
+    Task<IList<Picture>> GetPicturesByProductIdAsync(long productId, int recordsToReturn = 0);
 
     /// <summary>
     /// Inserts a picture
@@ -187,7 +175,7 @@ public partial interface IPictureService
     /// A task that represents the asynchronous operation
     /// The task result contains the picture
     /// </returns>
-    Task<Picture> UpdatePictureAsync(int pictureId, byte[] pictureBinary, string mimeType,
+    Task<Picture> UpdatePictureAsync(long pictureId, byte[] pictureBinary, string mimeType,
         string seoFilename, string altAttribute = null, string titleAttribute = null,
         bool isNew = true, bool validateBinary = true);
 
@@ -210,7 +198,7 @@ public partial interface IPictureService
     /// A task that represents the asynchronous operation
     /// The task result contains the picture
     /// </returns>
-    Task<Picture> SetSeoFilenameAsync(int pictureId, string seoFilename);
+    Task<Picture> SetSeoFilenameAsync(long pictureId, string seoFilename);
 
     /// <summary>
     /// Validates input picture dimensions
@@ -220,7 +208,7 @@ public partial interface IPictureService
     /// <param name="fileName">Name of file</param>
     /// <returns>
     /// A task that represents the asynchronous operation
-    /// The task result contains the picture binary or throws an exception
+    /// The task result contains the picture binary or throws a <see cref="NopException"/>
     /// </returns>
     Task<byte[]> ValidatePictureAsync(byte[] pictureBinary, string mimeType, string fileName);
 
@@ -236,6 +224,13 @@ public partial interface IPictureService
     /// <param name="isStoreInDb">A value indicating whether the images should be stored in data base</param>
     /// <returns>A task that represents the asynchronous operation</returns>
     Task SetIsStoreInDbAsync(bool isStoreInDb);
+
+    /// <summary>
+    /// Change path to store pictures
+    /// </summary>
+    /// <param name="path">New path</param>
+    /// <returns>A task that represents the asynchronous operation</returns>
+    Task ChangePicturesPathAsync(string path);
 
     /// <summary>
     /// Get product picture (for shopping cart and order details pages)
@@ -256,15 +251,15 @@ public partial interface IPictureService
     /// A task that represents the asynchronous operation
     /// The task result contains the picture binary
     /// </returns>
-    Task<PictureBinary> GetPictureBinaryByPictureIdAsync(int pictureId);
+    Task<PictureBinary> GetPictureBinaryByPictureIdAsync(long pictureId);
 
     /// <summary>
     /// Convert image from SVG format to PNG
     /// </summary>
-    /// <param name="filePath">SVG file path</param>
+    /// <param name="stream">Stream for SVG file</param>
     /// <returns>A task that represents the asynchronous operation
     /// The task result contains the byte array</returns>
-    Task<byte[]> ConvertSvgToPngAsync(string filePath);
+    Task<byte[]> ConvertSvgToPngAsync(Stream stream);
 
     /// <summary>
     /// Get content type for picture by file extension

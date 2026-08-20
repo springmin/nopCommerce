@@ -15,9 +15,9 @@ public partial interface IMultiFactorAuthenticationPluginManager : IPluginManage
     /// <param name="storeId">Filter by store; pass 0 to load all plugins</param>
     /// <returns>
     /// A task that represents the asynchronous operation
-    /// The task result contains the rue - if active multi-factor authentication methods
+    /// The task result contains true if we have active multi-factor authentication methods
     /// </returns>
-    Task<bool> HasActivePluginsAsync(Customer customer = null, int storeId = 0);
+    Task<bool> HasActivePluginsAsync(Customer customer = null, long storeId = 0);
 
     /// <summary>
     /// Load active multi-factor authentication methods
@@ -28,7 +28,7 @@ public partial interface IMultiFactorAuthenticationPluginManager : IPluginManage
     /// A task that represents the asynchronous operation
     /// The task result contains the list of active multi-factor authentication methods
     /// </returns>
-    Task<IList<IMultiFactorAuthenticationMethod>> LoadActivePluginsAsync(Customer customer = null, int storeId = 0);
+    Task<IList<IMultiFactorAuthenticationMethod>> LoadActivePluginsAsync(Customer customer = null, long storeId = 0);
 
     /// <summary>
     /// Check whether the passed multi-factor authentication method is active
@@ -47,5 +47,5 @@ public partial interface IMultiFactorAuthenticationPluginManager : IPluginManage
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, int storeId = 0);
+    Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, long storeId = 0);
 }

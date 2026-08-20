@@ -17,7 +17,7 @@ public partial interface IExchangeRatePluginManager : IPluginManager<IExchangeRa
     /// A task that represents the asynchronous operation
     /// The task result contains the exchange rate provider
     /// </returns>
-    Task<IExchangeRateProvider> LoadPrimaryPluginAsync(Customer customer = null, int storeId = 0);
+    Task<IExchangeRateProvider> LoadPrimaryPluginAsync(Customer customer = null, long storeId = 0);
 
     /// <summary>
     /// Check whether the passed exchange rate provider is active

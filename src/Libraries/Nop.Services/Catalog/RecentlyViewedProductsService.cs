@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Http;
 using Nop.Core.Security;
+using Nop.Services.Helpers;
 
 namespace Nop.Services.Catalog;
 
@@ -45,7 +45,7 @@ public partial class RecentlyViewedProductsService : IRecentlyViewedProductsServ
     /// Gets a list of identifier of recently viewed products
     /// </summary>
     /// <returns>List of identifier</returns>
-    protected List<int> GetRecentlyViewedProductsIds()
+    protected List<long> GetRecentlyViewedProductsIds()
     {
         return GetRecentlyViewedProductsIds(int.MaxValue);
     }
@@ -55,22 +55,22 @@ public partial class RecentlyViewedProductsService : IRecentlyViewedProductsServ
     /// </summary>
     /// <param name="number">Number of products to load</param>
     /// <returns>List of identifier</returns>
-    protected List<int> GetRecentlyViewedProductsIds(int number)
+    protected List<long> GetRecentlyViewedProductsIds(int number)
     {
         var httpContext = _httpContextAccessor.HttpContext;
         if (httpContext?.Request == null)
-            return new List<int>();
+            return new List<long>();
 
         //try to get cookie
         var cookieName = $"{NopCookieDefaults.Prefix}{NopCookieDefaults.RecentlyViewedProductsCookie}";
         if (!httpContext.Request.Cookies.TryGetValue(cookieName, out var productIdsCookie) || string.IsNullOrEmpty(productIdsCookie))
-            return new List<int>();
+            return new List<long>();
 
         //get array of string product identifiers from cookie
         var productIds = productIdsCookie.Split(_separator, StringSplitOptions.RemoveEmptyEntries);
 
         //return list of int product identifiers
-        return productIds.Select(int.Parse).Distinct().Take(number).ToList();
+        return productIds.Select(long.Parse).Distinct().Take(number).ToList();
     }
 
     /// <summary>
@@ -78,7 +78,7 @@ public partial class RecentlyViewedProductsService : IRecentlyViewedProductsServ
     /// </summary>
     /// <param name="recentlyViewedProductIds">Collection of the recently viewed products identifiers</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    protected virtual Task AddRecentlyViewedProductsCookieAsync(IEnumerable<int> recentlyViewedProductIds)
+    protected virtual Task AddRecentlyViewedProductsCookieAsync(IEnumerable<long> recentlyViewedProductIds)
     {
         //delete current cookie if exists
         var cookieName = $"{NopCookieDefaults.Prefix}{NopCookieDefaults.RecentlyViewedProductsCookie}";
@@ -129,7 +129,7 @@ public partial class RecentlyViewedProductsService : IRecentlyViewedProductsServ
     /// </summary>
     /// <param name="productId">Product identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task AddProductToRecentlyViewedListAsync(int productId)
+    public virtual async Task AddProductToRecentlyViewedListAsync(long productId)
     {
         if (_httpContextAccessor.HttpContext?.Response == null)
             return;

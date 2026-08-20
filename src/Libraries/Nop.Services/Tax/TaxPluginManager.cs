@@ -38,7 +38,7 @@ public partial class TaxPluginManager : PluginManager<ITaxProvider>, ITaxPluginM
     /// A task that represents the asynchronous operation
     /// The task result contains the ax provider
     /// </returns>
-    public virtual async Task<ITaxProvider> LoadPrimaryPluginAsync(Customer customer = null, int storeId = 0)
+    public virtual async Task<ITaxProvider> LoadPrimaryPluginAsync(Customer customer = null, long storeId = 0)
     {
         return await LoadPrimaryPluginAsync(_taxSettings.ActiveTaxProviderSystemName, customer, storeId);
     }
@@ -63,7 +63,7 @@ public partial class TaxPluginManager : PluginManager<ITaxProvider>, ITaxPluginM
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public virtual async Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, int storeId = 0)
+    public virtual async Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, long storeId = 0)
     {
         var taxProvider = await LoadPluginBySystemNameAsync(systemName, customer, storeId);
         return IsPluginActive(taxProvider);

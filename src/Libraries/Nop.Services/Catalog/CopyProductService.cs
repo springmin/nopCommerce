@@ -84,10 +84,8 @@ public partial class CopyProductService : ICopyProductService
     /// <returns>A task that represents the asynchronous operation</returns>
     protected virtual async Task CopyDiscountsMappingAsync(Product product, Product productCopy)
     {
-        foreach (var discountMapping in await _productService.GetAllDiscountsAppliedToProductAsync(product.Id))
-        {
+        foreach (var discountMapping in await _productService.GetAllDiscountsAppliedToProductAsync(product.Id)) 
             await _productService.InsertDiscountProductMappingAsync(new DiscountProductMapping { EntityId = productCopy.Id, DiscountId = discountMapping.DiscountId });
-        }
     }
 
     /// <summary>
@@ -124,6 +122,7 @@ public partial class CopyProductService : ICopyProductService
     protected virtual async Task CopyTierPricesAsync(Product product, Product productCopy)
     {
         foreach (var tierPrice in await _productService.GetTierPricesByProductAsync(product.Id))
+        {
             await _productService.InsertTierPriceAsync(new TierPrice
             {
                 ProductId = productCopy.Id,
@@ -134,6 +133,7 @@ public partial class CopyProductService : ICopyProductService
                 StartDateTimeUtc = tierPrice.StartDateTimeUtc,
                 EndDateTimeUtc = tierPrice.EndDateTimeUtc
             });
+        }
     }
 
     /// <summary>
@@ -143,16 +143,16 @@ public partial class CopyProductService : ICopyProductService
     /// <param name="productCopy">New product</param>
     /// <param name="originalNewPictureIdentifiers">Identifiers of pictures</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    protected virtual async Task CopyAttributesMappingAsync(Product product, Product productCopy, Dictionary<int, int> originalNewPictureIdentifiers)
+    protected virtual async Task CopyAttributesMappingAsync(Product product, Product productCopy, Dictionary<long, long> originalNewPictureIdentifiers)
     {
-        var associatedAttributes = new Dictionary<int, int>();
-        var associatedAttributeValues = new Dictionary<int, int>();
+        var associatedAttributes = new Dictionary<long, long>();
+        var associatedAttributeValues = new Dictionary<long, long>();
 
         //attribute mapping with condition attributes
         var oldCopyWithConditionAttributes = new List<ProductAttributeMapping>();
 
         //all product attribute mapping copies
-        var productAttributeMappingCopies = new Dictionary<int, ProductAttributeMapping>();
+        var productAttributeMappingCopies = new Dictionary<long, ProductAttributeMapping>();
 
         var languages = await _languageService.GetAllLanguagesAsync(true);
 
@@ -178,16 +178,16 @@ public partial class CopyProductService : ICopyProductService
             {
                 var textPrompt = await _localizationService.GetLocalizedAsync(productAttributeMapping, x => x.TextPrompt, lang.Id, false, false);
                 if (!string.IsNullOrEmpty(textPrompt))
+                {
                     await _localizedEntityService.SaveLocalizedValueAsync(productAttributeMappingCopy, x => x.TextPrompt, textPrompt,
                         lang.Id);
+                }
             }
 
             productAttributeMappingCopies.Add(productAttributeMappingCopy.Id, productAttributeMappingCopy);
 
-            if (!string.IsNullOrEmpty(productAttributeMapping.ConditionAttributeXml))
-            {
+            if (!string.IsNullOrEmpty(productAttributeMapping.ConditionAttributeXml)) 
                 oldCopyWithConditionAttributes.Add(productAttributeMapping);
-            }
 
             //save associated value (used for combinations copying)
             associatedAttributes.Add(productAttributeMapping.Id, productAttributeMappingCopy.Id);
@@ -368,9 +368,9 @@ public partial class CopyProductService : ICopyProductService
             }
 
             //quantity change history
-            await _productService.AddStockQuantityHistoryEntryAsync(productCopy, combination.StockQuantity,
-                combination.StockQuantity,
-                message: string.Format(await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.CopyProduct"), product.Id), combinationId: combination.Id);
+            await _productService.AddStockQuantityHistoryEntryAsync(productCopy, combinationCopy.StockQuantity,
+                combinationCopy.StockQuantity,
+                message: string.Format(await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.CopyProduct"), product.Id), combinationId: combinationCopy.Id);
         }
     }
 
@@ -417,12 +417,14 @@ public partial class CopyProductService : ICopyProductService
     protected virtual async Task CopyCrossSellsMappingAsync(Product product, Product productCopy)
     {
         foreach (var csProduct in await _productService.GetCrossSellProductsByProductId1Async(product.Id, true))
+        {
             await _productService.InsertCrossSellProductAsync(
                 new CrossSellProduct
                 {
                     ProductId1 = productCopy.Id,
                     ProductId2 = csProduct.ProductId2
                 });
+        }
     }
 
     /// <summary>
@@ -434,6 +436,7 @@ public partial class CopyProductService : ICopyProductService
     protected virtual async Task CopyRelatedProductsMappingAsync(Product product, Product productCopy)
     {
         foreach (var relatedProduct in await _productService.GetRelatedProductsByProductId1Async(product.Id, true))
+        {
             await _productService.InsertRelatedProductAsync(
                 new RelatedProduct
                 {
@@ -441,6 +444,7 @@ public partial class CopyProductService : ICopyProductService
                     ProductId2 = relatedProduct.ProductId2,
                     DisplayOrder = relatedProduct.DisplayOrder
                 });
+        }
     }
 
     /// <summary>
@@ -523,10 +527,10 @@ public partial class CopyProductService : ICopyProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the identifiers of old and new pictures
     /// </returns>
-    protected virtual async Task<Dictionary<int, int>> CopyProductPicturesAsync(Product product, string newName, bool copyMultimedia, Product productCopy)
+    protected virtual async Task<Dictionary<long, long>> CopyProductPicturesAsync(Product product, string newName, bool copyMultimedia, Product productCopy)
     {
         //variable to store original and new picture identifiers
-        var originalNewPictureIdentifiers = new Dictionary<int, int>();
+        var originalNewPictureIdentifiers = new Dictionary<long, long>();
         if (!copyMultimedia)
             return originalNewPictureIdentifiers;
 
@@ -776,7 +780,9 @@ public partial class CopyProductService : ICopyProductService
             Published = isPublished,
             Deleted = product.Deleted,
             CreatedOnUtc = DateTime.UtcNow,
-            UpdatedOnUtc = DateTime.UtcNow
+            UpdatedOnUtc = DateTime.UtcNow,
+            AgeVerification = product.AgeVerification,
+            MinimumAgeToPurchase = product.MinimumAgeToPurchase
         };
 
         //validate search engine name
@@ -854,16 +860,13 @@ public partial class CopyProductService : ICopyProductService
             await _storeMappingService.InsertStoreMappingAsync(productCopy, id);
 
         //customer role mapping
-        var customerRoleIds = await _aclService.GetCustomerRoleIdsWithAccessAsync(product);
+        var customerRoleIds = await _aclService.GetCustomerRoleIdsWithAccessAsync(product.Id, nameof(Product));
+
         foreach (var id in customerRoleIds)
             await _aclService.InsertAclRecordAsync(productCopy, id);
 
         //tier prices
         await CopyTierPricesAsync(product, productCopy);
-
-        //update "HasTierPrices" and "HasDiscountsApplied" properties
-        await _productService.UpdateHasTierPricesPropertyAsync(productCopy);
-        await _productService.UpdateHasDiscountsAppliedAsync(productCopy);
 
         //associated products
         await CopyAssociatedProductsAsync(product, isPublished, copyMultimedia, copyAssociatedProducts, productCopy);

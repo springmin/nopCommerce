@@ -33,6 +33,7 @@ public partial interface ICustomerService
     /// <param name="phone">Phone; null to load all customers</param>
     /// <param name="zipPostalCode">Phone; null to load all customers</param>
     /// <param name="ipAddress">IP address; null to load all customers</param>
+    /// <param name="isActive">Customer is active; null to load all customers</param>
     /// <param name="pageIndex">Page index</param>
     /// <param name="pageSize">Page size</param>
     /// <param name="getOnlyTotalCount">A value in indicating whether you want to load only total number of records. Set to "true" if you don't want to load data from database</param>
@@ -42,11 +43,11 @@ public partial interface ICustomerService
     /// </returns>
     Task<IPagedList<Customer>> GetAllCustomersAsync(DateTime? createdFromUtc = null, DateTime? createdToUtc = null,
         DateTime? lastActivityFromUtc = null, DateTime? lastActivityToUtc = null,
-        int affiliateId = 0, int vendorId = 0, int[] customerRoleIds = null,
+        long affiliateId = 0, long vendorId = 0, long[] customerRoleIds = null,
         string email = null, string username = null, string firstName = null, string lastName = null,
         int dayOfBirth = 0, int monthOfBirth = 0,
         string company = null, string phone = null, string zipPostalCode = null, string ipAddress = null,
-        int pageIndex = 0, int pageSize = int.MaxValue, bool getOnlyTotalCount = false);
+        bool? isActive = null, int pageIndex = 0, int pageSize = int.MaxValue, bool getOnlyTotalCount = false);
 
     /// <summary>
     /// Gets online customers
@@ -60,7 +61,7 @@ public partial interface ICustomerService
     /// The task result contains the customers
     /// </returns>
     Task<IPagedList<Customer>> GetOnlineCustomersAsync(DateTime lastActivityFromUtc,
-        int[] customerRoleIds, int pageIndex = 0, int pageSize = int.MaxValue);
+        long[] customerRoleIds, int pageIndex = 0, int pageSize = int.MaxValue);
 
     /// <summary>
     /// Gets customers with shopping carts
@@ -78,8 +79,8 @@ public partial interface ICustomerService
     /// The task result contains the customers
     /// </returns>
     Task<IPagedList<Customer>> GetCustomersWithShoppingCartsAsync(ShoppingCartType? shoppingCartType = null,
-        int storeId = 0, int? productId = null,
-        DateTime? createdFromUtc = null, DateTime? createdToUtc = null, int? countryId = null,
+        long storeId = 0, long? productId = null,
+        DateTime? createdFromUtc = null, DateTime? createdToUtc = null, long? countryId = null,
         int pageIndex = 0, int pageSize = int.MaxValue);
 
     /// <summary>
@@ -125,7 +126,7 @@ public partial interface ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains a customer
     /// </returns>
-    Task<Customer> GetCustomerByIdAsync(int customerId);
+    Task<Customer> GetCustomerByIdAsync(long customerId);
 
     /// <summary>
     /// Get customers by identifiers
@@ -135,7 +136,7 @@ public partial interface ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains the customers
     /// </returns>
-    Task<IList<Customer>> GetCustomersByIdsAsync(int[] customerIds);
+    Task<IList<Customer>> GetCustomersByIdsAsync(long[] customerIds);
 
     /// <summary>
     /// Get customers by guids
@@ -188,6 +189,25 @@ public partial interface ICustomerService
     Task<Customer> GetCustomerByUsernameAsync(string username);
 
     /// <summary>
+    /// Get customer by their phone number.
+    /// </summary>
+    /// <param name="phone">The phone number of the customer
+    /// <returns>A task that represents the asynchronous operation
+    /// The task result contains the <see cref="Customer"/> 
+    /// </returns>
+    Task<Customer> GetCustomerByPhoneAsync(string phone);
+
+    /// <summary>
+    /// Determines whether a verified phone number is already associated with a customer other than the specified
+    /// customer.
+    /// </summary>
+    /// <param name="customer">The customer</param>
+    /// <param name="phone">The phone number</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains <see langword="true"/> if a
+    /// different customer with the specified verified phone number exists; otherwise, <see langword="false"/>.</returns>
+    Task<bool> IsAlreadyExistsVerifiedPhoneNumberAsync(Customer customer, string phone);
+
+    /// <summary>
     /// Insert a guest customer
     /// </summary>
     /// <returns>
@@ -221,7 +241,7 @@ public partial interface ICustomerService
     /// <param name="clearShippingMethod">A value indicating whether to clear selected shipping method</param>
     /// <param name="clearPaymentMethod">A value indicating whether to clear selected payment method</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task ResetCheckoutDataAsync(Customer customer, int storeId,
+    Task ResetCheckoutDataAsync(Customer customer, long storeId,
         bool clearCouponCodes = false, bool clearCheckoutAttributes = false,
         bool clearRewardPoints = true, bool clearShippingMethod = true,
         bool clearPaymentMethod = true);
@@ -267,6 +287,13 @@ public partial interface ICustomerService
     /// The task result contains the customer full name
     /// </returns>
     Task<string> GetCustomerFullNameAsync(Customer customer);
+
+    /// <summary>
+    /// Formats the private message text
+    /// </summary>
+    /// <param name="pm">Private message</param>
+    /// <returns>Formatted text</returns>
+    string FormatPrivateMessageText(PrivateMessage pm);
 
     /// <summary>
     /// Formats the customer name
@@ -388,7 +415,7 @@ public partial interface ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains the customer role
     /// </returns>
-    Task<CustomerRole> GetCustomerRoleByIdAsync(int customerRoleId);
+    Task<CustomerRole> GetCustomerRoleByIdAsync(long customerRoleId);
 
     /// <summary>
     /// Gets a customer role
@@ -409,7 +436,7 @@ public partial interface ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains the customer role identifiers
     /// </returns>
-    Task<int[]> GetCustomerRoleIdsAsync(Customer customer, bool showHidden = false);
+    Task<long[]> GetCustomerRoleIdsAsync(Customer customer, bool showHidden = false);
 
     /// <summary>
     /// Gets list of customer roles
@@ -461,17 +488,6 @@ public partial interface ICustomerService
     /// The task result contains the result
     /// </returns>
     Task<bool> IsAdminAsync(Customer customer, bool onlyActiveCustomerRoles = true);
-
-    /// <summary>
-    /// Gets a value indicating whether customer is a forum moderator
-    /// </summary>
-    /// <param name="customer">Customer</param>
-    /// <param name="onlyActiveCustomerRoles">A value indicating whether we should look only in active customer roles</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the result
-    /// </returns>
-    Task<bool> IsForumModeratorAsync(Customer customer, bool onlyActiveCustomerRoles = true);
 
     /// <summary>
     /// Gets a value indicating whether customer is registered
@@ -527,7 +543,7 @@ public partial interface ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of customer passwords
     /// </returns>
-    Task<IList<CustomerPassword>> GetCustomerPasswordsAsync(int? customerId = null,
+    Task<IList<CustomerPassword>> GetCustomerPasswordsAsync(long? customerId = null,
         PasswordFormat? passwordFormat = null, int? passwordsToReturn = null);
 
     /// <summary>
@@ -538,7 +554,7 @@ public partial interface ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains the customer password
     /// </returns>
-    Task<CustomerPassword> GetCurrentPasswordAsync(int customerId);
+    Task<CustomerPassword> GetCurrentPasswordAsync(long customerId);
 
     /// <summary>
     /// Insert a customer password
@@ -581,7 +597,7 @@ public partial interface ICustomerService
     /// <param name="customer">Customer</param>
     /// <returns>
     /// A task that represents the asynchronous operation
-    /// The task result contains the rue if password is expired; otherwise false
+    /// The task result contains true if password is expired; otherwise false
     /// </returns>
     Task<bool> IsPasswordExpiredAsync(Customer customer);
 
@@ -597,7 +613,7 @@ public partial interface ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains the 
     /// </returns>
-    Task<IList<Address>> GetAddressesByCustomerIdAsync(int customerId);
+    Task<IList<Address>> GetAddressesByCustomerIdAsync(long customerId);
 
     /// <summary>
     /// Gets a address mapped to customer
@@ -608,7 +624,7 @@ public partial interface ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    Task<Address> GetCustomerAddressAsync(int customerId, int addressId);
+    Task<Address> GetCustomerAddressAsync(long customerId, long addressId);
 
     /// <summary>
     /// Gets a customer billing address
@@ -645,6 +661,61 @@ public partial interface ICustomerService
     /// <param name="address">Address</param>
     /// <returns>A task that represents the asynchronous operation</returns>
     Task InsertCustomerAddressAsync(Customer customer, Address address);
+
+    #endregion
+
+    #region Private message
+
+    /// <summary>
+    /// Deletes a private message
+    /// </summary>
+    /// <param name="privateMessage">Private message</param>
+    /// <returns>A task that represents the asynchronous operation</returns>
+    Task DeletePrivateMessageAsync(PrivateMessage privateMessage);
+
+    /// <summary>
+    /// Gets a private message
+    /// </summary>
+    /// <param name="privateMessageId">The private message identifier</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation
+    /// The task result contains the private message
+    /// </returns>
+    Task<PrivateMessage> GetPrivateMessageByIdAsync(long privateMessageId);
+
+    /// <summary>
+    /// Gets private messages
+    /// </summary>
+    /// <param name="storeId">The store identifier; pass 0 to load all messages</param>
+    /// <param name="fromCustomerId">The customer identifier who sent the message</param>
+    /// <param name="toCustomerId">The customer identifier who should receive the message</param>
+    /// <param name="isRead">A value indicating whether loaded messages are read. false - to load not read messages only, 1 to load read messages only, null to load all messages</param>
+    /// <param name="isDeletedByAuthor">A value indicating whether loaded messages are deleted by author. false - messages are not deleted by author, null to load all messages</param>
+    /// <param name="isDeletedByRecipient">A value indicating whether loaded messages are deleted by recipient. false - messages are not deleted by recipient, null to load all messages</param>
+    /// <param name="keywords">Keywords</param>
+    /// <param name="pageIndex">Page index</param>
+    /// <param name="pageSize">Page size</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation
+    /// The task result contains the private messages
+    /// </returns>
+    Task<IPagedList<PrivateMessage>> GetAllPrivateMessagesAsync(long storeId, long fromCustomerId,
+        long toCustomerId, bool? isRead, bool? isDeletedByAuthor, bool? isDeletedByRecipient,
+        string keywords, int pageIndex = 0, int pageSize = int.MaxValue);
+
+    /// <summary>
+    /// Inserts a private message
+    /// </summary>
+    /// <param name="privateMessage">Private message</param>
+    /// <returns>A task that represents the asynchronous operation</returns>
+    Task InsertPrivateMessageAsync(PrivateMessage privateMessage);
+
+    /// <summary>
+    /// Updates the private message
+    /// </summary>
+    /// <param name="privateMessage">Private message</param>
+    /// <returns>A task that represents the asynchronous operation</returns>
+    Task UpdatePrivateMessageAsync(PrivateMessage privateMessage);
 
     #endregion
 }

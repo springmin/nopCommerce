@@ -2,6 +2,7 @@
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Logging;
 using Nop.Data;
+using Nop.Services.Helpers;
 
 namespace Nop.Services.Logging;
 
@@ -12,6 +13,7 @@ public partial class CustomerActivityService : ICustomerActivityService
 {
     #region Fields
 
+    protected readonly CustomerSettings _customerSettings;
     protected readonly IRepository<ActivityLog> _activityLogRepository;
     protected readonly IRepository<ActivityLogType> _activityLogTypeRepository;
     protected readonly IWebHelper _webHelper;
@@ -21,11 +23,13 @@ public partial class CustomerActivityService : ICustomerActivityService
 
     #region Ctor
 
-    public CustomerActivityService(IRepository<ActivityLog> activityLogRepository,
+    public CustomerActivityService(CustomerSettings customerSettings,
+        IRepository<ActivityLog> activityLogRepository,
         IRepository<ActivityLogType> activityLogTypeRepository,
         IWebHelper webHelper,
         IWorkContext workContext)
     {
+        _customerSettings = customerSettings;
         _activityLogRepository = activityLogRepository;
         _activityLogTypeRepository = activityLogTypeRepository;
         _webHelper = webHelper;
@@ -73,7 +77,7 @@ public partial class CustomerActivityService : ICustomerActivityService
     /// A task that represents the asynchronous operation
     /// The task result contains the activity log type item
     /// </returns>
-    public virtual async Task<ActivityLogType> GetActivityTypeByIdAsync(int activityLogTypeId)
+    public virtual async Task<ActivityLogType> GetActivityTypeByIdAsync(long activityLogTypeId)
     {
         return await _activityLogTypeRepository.GetByIdAsync(activityLogTypeId, cache => default);
     }
@@ -123,11 +127,63 @@ public partial class CustomerActivityService : ICustomerActivityService
             CustomerId = customer.Id,
             Comment = CommonHelper.EnsureMaximumLength(comment ?? string.Empty, 4000),
             CreatedOnUtc = DateTime.UtcNow,
-            IpAddress = _webHelper.GetCurrentIpAddress()
+            IpAddress = _customerSettings.StoreIpAddresses ? _webHelper.GetCurrentIpAddress() : string.Empty
         };
         await _activityLogRepository.InsertAsync(logItem);
 
         return logItem;
+    }
+
+    /// <summary>
+    /// Inserts the activities log items
+    /// </summary>
+    /// <param name="systemKeyword">System keyword</param>
+    /// <param name="entities">Entities</param>
+    /// <param name="comment">Comment</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation
+    /// The task result contains the activity log items
+    /// </returns>
+    public virtual async Task<IList<ActivityLog>> InsertActivitiesAsync<TEntity>(string systemKeyword, IList<TEntity> entities, Func<TEntity, string> comment)
+    {
+        return await InsertActivitiesAsync(await _workContext.GetCurrentCustomerAsync(), systemKeyword, entities, comment);
+    }
+
+    /// <summary>
+    /// Inserts the activities log items
+    /// </summary>
+    /// <param name="customer">Customer</param>
+    /// <param name="systemKeyword">System keyword</param>
+    /// <param name="entities">Entities</param>
+    /// <param name="comment">Comment</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation
+    /// The task result contains the activity log items
+    /// </returns>
+    public virtual async Task<IList<ActivityLog>> InsertActivitiesAsync<TEntity>(Customer customer, string systemKeyword, IList<TEntity> entities, Func<TEntity, string> comment)
+    {
+        if (customer == null || customer.IsSearchEngineAccount())
+            return null;
+
+        //try to get activity log type by passed system keyword
+        var activityLogType = (await GetAllActivityTypesAsync()).FirstOrDefault(type => type.SystemKeyword.Equals(systemKeyword));
+        if (!activityLogType?.Enabled ?? true)
+            return null;
+
+        var logItems = entities.Select(entity => new ActivityLog
+        {
+            ActivityLogTypeId = activityLogType.Id,
+            EntityId = (entity as BaseEntity)?.Id,
+            EntityName = entity.GetType().Name,
+            CustomerId = customer.Id,
+            Comment = CommonHelper.EnsureMaximumLength(comment(entity) ?? string.Empty, 4000),
+            CreatedOnUtc = DateTime.UtcNow,
+            IpAddress = _customerSettings.StoreIpAddresses ? _webHelper.GetCurrentIpAddress() : string.Empty
+        }).ToList();
+
+        await _activityLogRepository.InsertAsync(logItems);
+
+        return logItems;
     }
 
     /// <summary>
@@ -157,7 +213,7 @@ public partial class CustomerActivityService : ICustomerActivityService
     /// The task result contains the activity log items
     /// </returns>
     public virtual async Task<IPagedList<ActivityLog>> GetAllActivitiesAsync(DateTime? createdOnFrom = null, DateTime? createdOnTo = null,
-        int? customerId = null, int? activityLogTypeId = null, string ipAddress = null, string entityName = null, int? entityId = null,
+        long? customerId = null, long? activityLogTypeId = null, string ipAddress = null, string entityName = null, long? entityId = null,
         int pageIndex = 0, int pageSize = int.MaxValue)
     {
         return await _activityLogRepository.GetAllPagedAsync(query =>
@@ -200,7 +256,7 @@ public partial class CustomerActivityService : ICustomerActivityService
     /// A task that represents the asynchronous operation
     /// The task result contains the activity log item
     /// </returns>
-    public virtual async Task<ActivityLog> GetActivityByIdAsync(int activityLogId)
+    public virtual async Task<ActivityLog> GetActivityByIdAsync(long activityLogId)
     {
         return await _activityLogRepository.GetByIdAsync(activityLogId);
     }

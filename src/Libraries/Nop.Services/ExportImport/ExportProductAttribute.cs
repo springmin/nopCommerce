@@ -3,14 +3,9 @@
 public partial class ExportProductAttribute
 {
     /// <summary>
-    ///  Gets or sets the cell offset
-    /// </summary>
-    public static int ProductAttributeCellOffset { get; } = 2;
-
-    /// <summary>
     /// Gets or sets the attribute identifier
     /// </summary>
-    public int AttributeId { get; set; }
+    public long AttributeId { get; set; }
 
     /// <summary>
     /// Gets or sets the attribute name
@@ -40,32 +35,32 @@ public partial class ExportProductAttribute
     /// <summary>
     /// Gets or sets the attribute control type identifier
     /// </summary>
-    public int AttributeControlTypeId { get; set; }
+    public long AttributeControlTypeId { get; set; }
 
     /// <summary>
     /// Gets or sets the product attribute mapping identifier
     /// </summary>
-    public int AttributeMappingId { get; set; }
+    public long AttributeMappingId { get; set; }
 
     /// <summary>
     /// Gets or sets the attribute value type identifier
     /// </summary>
-    public int AttributeValueTypeId { get; set; }
+    public long AttributeValueTypeId { get; set; }
 
     /// <summary>
     /// Gets or sets the associated product identifier (used only with AttributeValueType.AssociatedToProduct)
     /// </summary>
-    public int AssociatedProductId { get; set; }
+    public long AssociatedProductId { get; set; }
 
     /// <summary>
     /// Gets or sets the identifier
     /// </summary>
-    public int Id { get; set; }
+    public long Id { get; set; }
 
     /// <summary>
     /// Gets or sets the picture ID for image square (used with "Image squares" attribute type)
     /// </summary>
-    public int ImageSquaresPictureId { get; set; }
+    public long ImageSquaresPictureId { get; set; }
 
     /// <summary>
     /// Gets or sets the name

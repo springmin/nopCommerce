@@ -6,7 +6,7 @@ namespace Nop.Services.Catalog;
 /// <summary>
 /// Provides an interface for search plugin manager
 /// </summary>
-public interface ISearchPluginManager : IPluginManager<ISearchProvider>
+public partial interface ISearchPluginManager : IPluginManager<ISearchProvider>
 {
     /// <summary>
     /// Load primary active search provider
@@ -17,7 +17,7 @@ public interface ISearchPluginManager : IPluginManager<ISearchProvider>
     /// A task that represents the asynchronous operation
     /// The task result contains the search provider
     /// </returns>
-    Task<ISearchProvider> LoadPrimaryPluginAsync(Customer customer = null, int storeId = 0);
+    Task<ISearchProvider> LoadPrimaryPluginAsync(Customer customer = null, long storeId = 0);
 
     /// <summary>
     /// Check whether the passed search provider is active
@@ -36,5 +36,5 @@ public interface ISearchPluginManager : IPluginManager<ISearchProvider>
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, int storeId = 0);
+    Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, long storeId = 0);
 }

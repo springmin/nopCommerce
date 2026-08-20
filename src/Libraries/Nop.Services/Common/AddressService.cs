@@ -66,7 +66,7 @@ public partial class AddressService : IAddressService
     /// A task that represents the asynchronous operation
     /// The task result contains the number of addresses
     /// </returns>
-    public virtual async Task<int> GetAddressTotalByCountryIdAsync(int countryId)
+    public virtual async Task<long> GetAddressTotalByCountryIdAsync(long countryId)
     {
         if (countryId == 0)
             return 0;
@@ -86,7 +86,7 @@ public partial class AddressService : IAddressService
     /// A task that represents the asynchronous operation
     /// The task result contains the number of addresses
     /// </returns>
-    public virtual async Task<int> GetAddressTotalByStateProvinceIdAsync(int stateProvinceId)
+    public virtual async Task<long> GetAddressTotalByStateProvinceIdAsync(long stateProvinceId)
     {
         if (stateProvinceId == 0)
             return 0;
@@ -106,7 +106,7 @@ public partial class AddressService : IAddressService
     /// A task that represents the asynchronous operation
     /// The task result contains the address
     /// </returns>
-    public virtual async Task<Address> GetAddressByIdAsync(int addressId)
+    public virtual async Task<Address> GetAddressByIdAsync(long addressId)
     {
         return await _addressRepository.GetByIdAsync(addressId, cache => default, useShortTermCache: true);
     }
@@ -264,8 +264,8 @@ public partial class AddressService : IAddressService
     /// <param name="customAttributes">Custom address attributes (XML format)</param>
     /// <returns>Address</returns>
     public virtual Address FindAddress(List<Address> source, string firstName, string lastName, string phoneNumber, string email,
-        string faxNumber, string company, string address1, string address2, string city, string county, int? stateProvinceId,
-        string zipPostalCode, int? countryId, string customAttributes)
+        string faxNumber, string company, string address1, string address2, string city, string county, long? stateProvinceId,
+        string zipPostalCode, long? countryId, string customAttributes)
     {
         return source.Find(a => ((string.IsNullOrEmpty(a.FirstName) && string.IsNullOrEmpty(firstName)) || a.FirstName == firstName) &&
                                 ((string.IsNullOrEmpty(a.LastName) && string.IsNullOrEmpty(lastName)) || a.LastName == lastName) &&
@@ -324,7 +324,7 @@ public partial class AddressService : IAddressService
     /// A task that represents the asynchronous operation
     /// Address line, array address fields
     /// </returns>      
-    public virtual async Task<(string, KeyValuePair<AddressField, string>[])> FormatAddressAsync(Address address, int languageId = 0, string separator = ", ", bool htmlEncode = false)
+    public virtual async Task<(string, KeyValuePair<AddressField, string>[])> FormatAddressAsync(Address address, long languageId = 0, string separator = ", ", bool htmlEncode = false)
     {
         var fieldsList = new KeyValuePair<AddressField, string>[7];
 
@@ -333,10 +333,6 @@ public partial class AddressService : IAddressService
 
         var format = await _localizationService.GetResourceAsync("Address.LineFormat", languageId, true, "{0}{1}{2}{3}{4}{5}{6}");
         var indexArray = Regex.Matches(format, @"{\d}").Select(x => Convert.ToInt32(Regex.Match(x.Value, @"\d").Value)).ToArray();
-        var country = await _countryService.GetCountryByAddressAsync(address);
-        var countryName = country != null ? await _localizationService.GetLocalizedAsync(country, x => x.Name, languageId) : string.Empty;
-        var stateProvince = await _stateProvinceService.GetStateProvinceByAddressAsync(address);
-        var stateProvinceName = stateProvince != null ? await _localizationService.GetLocalizedAsync(stateProvince, x => x.Name, languageId) : string.Empty;
 
         var indexItem = 0;
         foreach (var item in indexArray)
@@ -344,17 +340,25 @@ public partial class AddressService : IAddressService
             switch ((AddressField)item)
             {
                 case AddressField.Country:
+                    var country = await _countryService.GetCountryByAddressAsync(address);
+                    var countryName = country != null ? await _localizationService.GetLocalizedAsync(country, x => x.Name, languageId) : string.Empty;
+
                     if (_addressSettings.CountryEnabled && !string.IsNullOrWhiteSpace(countryName))
                         fieldsList[indexItem] = new KeyValuePair<AddressField, string>(AddressField.Country, htmlEncode ? WebUtility.HtmlEncode(countryName) : countryName);
                     else
                         fieldsList[indexItem] = new KeyValuePair<AddressField, string>(AddressField.Country, string.Empty);
+
                     break;
 
                 case AddressField.StateProvince:
+                    var stateProvince = await _stateProvinceService.GetStateProvinceByAddressAsync(address);
+                    var stateProvinceName = stateProvince != null ? await _localizationService.GetLocalizedAsync(stateProvince, x => x.Name, languageId) : string.Empty;
+
                     if (_addressSettings.StateProvinceEnabled && !string.IsNullOrWhiteSpace(stateProvinceName))
                         fieldsList[indexItem] = new KeyValuePair<AddressField, string>(AddressField.StateProvince, htmlEncode ? WebUtility.HtmlEncode(stateProvinceName) : stateProvinceName);
                     else
                         fieldsList[indexItem] = new KeyValuePair<AddressField, string>(AddressField.StateProvince, string.Empty);
+
                     break;
 
                 case AddressField.City:
@@ -397,7 +401,7 @@ public partial class AddressService : IAddressService
             indexItem++;
         }
 
-        var formatString = string.Format(format, fieldsList.Select(x => !string.IsNullOrEmpty(x.Value) ? $"{x.Value}{separator}" : x.Value).ToArray())
+        var formatString = string.Join("", fieldsList.Select(x => !string.IsNullOrEmpty(x.Value) ? $"{x.Value}{separator}" : x.Value).ToArray())
             .TrimEnd(separator.ToArray());
 
         return (formatString, fieldsList);

@@ -39,16 +39,16 @@ public partial interface IShipmentService
     /// A task that represents the asynchronous operation
     /// The task result contains the shipments
     /// </returns>
-    Task<IPagedList<Shipment>> GetAllShipmentsAsync(int vendorId = 0, int warehouseId = 0,
-        int shippingCountryId = 0,
-        int shippingStateId = 0,
+    Task<IPagedList<Shipment>> GetAllShipmentsAsync(long vendorId = 0, long warehouseId = 0,
+        long shippingCountryId = 0,
+        long shippingStateId = 0,
         string shippingCounty = null,
         string shippingCity = null,
         string trackingNumber = null,
         bool loadNotShipped = false,
         bool loadNotReadyForPickup = false,
         bool loadNotDelivered = false,
-        int orderId = 0,
+        long orderId = 0,
         DateTime? createdFromUtc = null, DateTime? createdToUtc = null,
         int pageIndex = 0, int pageSize = int.MaxValue);
 
@@ -60,7 +60,7 @@ public partial interface IShipmentService
     /// A task that represents the asynchronous operation
     /// The task result contains the shipments
     /// </returns>
-    Task<IList<Shipment>> GetShipmentsByIdsAsync(int[] shipmentIds);
+    Task<IList<Shipment>> GetShipmentsByIdsAsync(long[] shipmentIds);
 
     /// <summary>
     /// Gets a shipment
@@ -70,7 +70,7 @@ public partial interface IShipmentService
     /// A task that represents the asynchronous operation
     /// The task result contains the shipment
     /// </returns>
-    Task<Shipment> GetShipmentByIdAsync(int shipmentId);
+    Task<Shipment> GetShipmentByIdAsync(long shipmentId);
 
     /// <summary>
     /// Gets a list of order shipments
@@ -83,7 +83,7 @@ public partial interface IShipmentService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    Task<IList<Shipment>> GetShipmentsByOrderIdAsync(int orderId, bool? shipped = null, bool? readyForPickup = null, int vendorId = 0);
+    Task<IList<Shipment>> GetShipmentsByOrderIdAsync(long orderId, bool? shipped = null, bool? readyForPickup = null, long vendorId = 0);
 
     /// <summary>
     /// Inserts a shipment
@@ -107,7 +107,7 @@ public partial interface IShipmentService
     /// A task that represents the asynchronous operation
     /// The task result contains the shipment items
     /// </returns>
-    Task<IList<ShipmentItem>> GetShipmentItemsByShipmentIdAsync(int shipmentId);
+    Task<IList<ShipmentItem>> GetShipmentItemsByShipmentIdAsync(long shipmentId);
 
     /// <summary>
     /// Inserts a shipment item
@@ -138,7 +138,7 @@ public partial interface IShipmentService
     /// A task that represents the asynchronous operation
     /// The task result contains the shipment item
     /// </returns>
-    Task<ShipmentItem> GetShipmentItemByIdAsync(int shipmentItemId);
+    Task<ShipmentItem> GetShipmentItemByIdAsync(long shipmentItemId);
 
     /// <summary>
     /// Get quantity in shipments. For example, get planned quantity to be shipped
@@ -151,7 +151,7 @@ public partial interface IShipmentService
     /// A task that represents the asynchronous operation
     /// The task result contains the quantity
     /// </returns>
-    Task<int> GetQuantityInShipmentsAsync(Product product, int warehouseId,
+    Task<int> GetQuantityInShipmentsAsync(Product product, long warehouseId,
         bool ignoreShipped, bool ignoreDelivered);
 
     /// <summary>

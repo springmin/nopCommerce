@@ -91,7 +91,7 @@ public partial class ProductAttributeParser : IProductAttributeParser
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <param name="productAttributeMappingId">Product attribute mapping identifier</param>
     /// <returns>Collections of pairs of product attribute values and their quantity</returns>
-    protected IList<Tuple<string, string>> ParseValuesWithQuantity(string attributesXml, int productAttributeMappingId)
+    protected virtual IList<Tuple<string, string>> ParseValuesWithQuantity(string attributesXml, long productAttributeMappingId)
     {
         var selectedValues = new List<Tuple<string, string>>();
         if (string.IsNullOrEmpty(attributesXml))
@@ -165,10 +165,7 @@ public partial class ProductAttributeParser : IProductAttributeParser
                 senderEmail = form[formKey];
                 continue;
             }
-            if (formKey.Equals($"giftcard_{product.Id}.Message", StringComparison.InvariantCultureIgnoreCase))
-            {
-                giftCardMessage = form[formKey];
-            }
+            if (formKey.Equals($"giftcard_{product.Id}.Message", StringComparison.InvariantCultureIgnoreCase)) giftCardMessage = form[formKey];
         }
 
         attributesXml = AddGiftCardAttribute(attributesXml, recipientName, recipientEmail, senderName, senderEmail, giftCardMessage);
@@ -298,8 +295,10 @@ public partial class ProductAttributeParser : IProductAttributeParser
                     _ = Guid.TryParse(form[controlId], out var downloadGuid);
                     var download = await _downloadService.GetDownloadByGuidAsync(downloadGuid);
                     if (download != null)
+                    {
                         attributesXml = AddProductAttribute(attributesXml,
                             attribute, download.DownloadGuid.ToString());
+                    }
                 }
                     break;
                 default:
@@ -310,10 +309,8 @@ public partial class ProductAttributeParser : IProductAttributeParser
         foreach (var attribute in productAttributes)
         {
             var conditionMet = await IsConditionMetAsync(attribute, attributesXml);
-            if (conditionMet.HasValue && !conditionMet.Value)
-            {
+            if (conditionMet.HasValue && !conditionMet.Value) 
                 attributesXml = RemoveProductAttribute(attributesXml, attribute);
-            }
         }
         return attributesXml;
     }
@@ -324,7 +321,7 @@ public partial class ProductAttributeParser : IProductAttributeParser
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <param name="attributeValueId">Attribute value id</param>
     /// <returns>Updated result (XML format)</returns>
-    protected virtual string RemoveAttribute(string attributesXml, int attributeValueId)
+    protected virtual string RemoveAttribute(string attributesXml, long attributeValueId)
     {
         var result = string.Empty;
 
@@ -385,9 +382,9 @@ public partial class ProductAttributeParser : IProductAttributeParser
     /// </summary>
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <returns>Selected attribute identifiers</returns>
-    protected virtual IList<int> ParseAttributeIds(string attributesXml)
+    protected virtual IList<long> ParseAttributeIds(string attributesXml)
     {
-        var ids = new List<int>();
+        var ids = new List<long>();
         if (string.IsNullOrEmpty(attributesXml))
             return ids;
 
@@ -399,7 +396,7 @@ public partial class ProductAttributeParser : IProductAttributeParser
             var elements = xmlDoc.SelectNodes(@$"//Attributes/{ChildElementName}");
 
             if (elements == null)
-                return Array.Empty<int>();
+                return Array.Empty<long>();
 
             foreach (XmlNode node in elements)
             {
@@ -457,7 +454,7 @@ public partial class ProductAttributeParser : IProductAttributeParser
     /// A task that represents the asynchronous operation
     /// The task result contains the product attribute values
     /// </returns>
-    public virtual async Task<IList<ProductAttributeValue>> ParseProductAttributeValuesAsync(string attributesXml, int productAttributeMappingId = 0)
+    public virtual async Task<IList<ProductAttributeValue>> ParseProductAttributeValuesAsync(string attributesXml, long productAttributeMappingId = 0)
     {
         var values = new List<ProductAttributeValue>();
         if (string.IsNullOrEmpty(attributesXml))
@@ -507,7 +504,7 @@ public partial class ProductAttributeParser : IProductAttributeParser
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <param name="productAttributeMappingId">Product attribute mapping identifier</param>
     /// <returns>Product attribute values</returns>
-    public virtual IList<string> ParseValues(string attributesXml, int productAttributeMappingId)
+    public virtual IList<string> ParseValues(string attributesXml, long productAttributeMappingId)
     {
         var selectedValues = new List<string>();
         if (string.IsNullOrEmpty(attributesXml))
@@ -752,8 +749,11 @@ public partial class ProductAttributeParser : IProductAttributeParser
         {
             var found = false;
             foreach (var t2 in selectedValues)
+            {
                 if (t1 == t2)
                     found = true;
+            }
+
             if (!found)
                 allFound = false;
         }
@@ -795,7 +795,7 @@ public partial class ProductAttributeParser : IProductAttributeParser
     /// A task that represents the asynchronous operation
     /// The task result contains the attribute combinations in XML format
     /// </returns>
-    public virtual async Task<IList<string>> GenerateAllCombinationsAsync(Product product, bool ignoreNonCombinableAttributes = false, IList<int> allowedAttributeIds = null)
+    public virtual async Task<IList<string>> GenerateAllCombinationsAsync(Product product, bool ignoreNonCombinableAttributes = false, IList<long> allowedAttributeIds = null)
     {
         ArgumentNullException.ThrowIfNull(product);
 
@@ -903,15 +903,17 @@ public partial class ProductAttributeParser : IProductAttributeParser
 
         var customerEnteredPriceConverted = decimal.Zero;
         if (product.CustomerEntersPrice)
+        {
             foreach (var formKey in form.Keys)
             {
                 if (formKey.Equals($"addtocart_{product.Id}.CustomerEnteredPrice", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    if (decimal.TryParse(form[formKey], out var customerEnteredPrice))
+                    if (decimal.TryParse(form[formKey], NumberStyles.Any, CultureInfo.InvariantCulture, out var customerEnteredPrice))
                         customerEnteredPriceConverted = await _currencyService.ConvertToPrimaryStoreCurrencyAsync(customerEnteredPrice, await _workContext.GetWorkingCurrencyAsync());
                     break;
                 }
             }
+        }
 
         return customerEnteredPriceConverted;
     }
@@ -929,11 +931,13 @@ public partial class ProductAttributeParser : IProductAttributeParser
 
         var quantity = 1;
         foreach (var formKey in form.Keys)
+        {
             if (formKey.Equals($"addtocart_{product.Id}.EnteredQuantity", StringComparison.InvariantCultureIgnoreCase))
             {
                 _ = int.TryParse(form[formKey], out quantity);
                 break;
             }
+        }
 
         return quantity;
     }
@@ -957,13 +961,18 @@ public partial class ProductAttributeParser : IProductAttributeParser
         {
             var ctrlStartDate = form[$"rental_start_date_{product.Id}"];
             var ctrlEndDate = form[$"rental_end_date_{product.Id}"];
+
+            var dateFormat = CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ?
+                        CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern :
+                        CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern;
+
             try
             {
                 startDate = DateTime.ParseExact(ctrlStartDate,
-                    CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern,
+                    dateFormat,
                     CultureInfo.InvariantCulture);
                 endDate = DateTime.ParseExact(ctrlEndDate,
-                    CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern,
+                    dateFormat,
                     CultureInfo.InvariantCulture);
             }
             catch
@@ -1011,7 +1020,7 @@ public partial class ProductAttributeParser : IProductAttributeParser
     /// <param name="senderEmail">Sender email</param>
     /// <param name="giftCardMessage">Message</param>
     /// <returns>Attributes</returns>
-    public string AddGiftCardAttribute(string attributesXml, string recipientName,
+    public virtual string AddGiftCardAttribute(string attributesXml, string recipientName,
         string recipientEmail, string senderName, string senderEmail, string giftCardMessage)
     {
         var result = string.Empty;
@@ -1079,7 +1088,7 @@ public partial class ProductAttributeParser : IProductAttributeParser
     /// <param name="senderName">Sender name</param>
     /// <param name="senderEmail">Sender email</param>
     /// <param name="giftCardMessage">Message</param>
-    public void GetGiftCardAttribute(string attributesXml, out string recipientName,
+    public virtual void GetGiftCardAttribute(string attributesXml, out string recipientName,
         out string recipientEmail, out string senderName,
         out string senderEmail, out string giftCardMessage)
     {

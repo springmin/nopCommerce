@@ -24,7 +24,7 @@ public partial interface ICurrencyService
     /// A task that represents the asynchronous operation
     /// The task result contains the currency
     /// </returns>
-    Task<Currency> GetCurrencyByIdAsync(int currencyId);
+    Task<Currency> GetCurrencyByIdAsync(long currencyId);
 
     /// <summary>
     /// Gets a currency by code
@@ -45,7 +45,7 @@ public partial interface ICurrencyService
     /// A task that represents the asynchronous operation
     /// The task result contains the currencies
     /// </returns>
-    Task<IList<Currency>> GetAllCurrenciesAsync(bool showHidden = false, int storeId = 0);
+    Task<IList<Currency>> GetAllCurrenciesAsync(bool showHidden = false, long storeId = 0);
 
     /// <summary>
     /// Inserts a currency

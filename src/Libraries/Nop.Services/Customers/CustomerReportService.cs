@@ -59,15 +59,15 @@ public partial class CustomerReportService : ICustomerReportService
         DateTime? createdToUtc, OrderStatus? os, PaymentStatus? ps, ShippingStatus? ss, OrderByEnum orderBy,
         int pageIndex = 0, int pageSize = 214748364)
     {
-        int? orderStatusId = null;
+        long? orderStatusId = null;
         if (os.HasValue)
             orderStatusId = (int)os.Value;
 
-        int? paymentStatusId = null;
+        long? paymentStatusId = null;
         if (ps.HasValue)
             paymentStatusId = (int)ps.Value;
 
-        int? shippingStatusId = null;
+        long? shippingStatusId = null;
         if (ss.HasValue)
             shippingStatusId = (int)ss.Value;
         var query1 = from c in _customerRepository.Table

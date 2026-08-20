@@ -29,7 +29,7 @@ public partial interface IProductAttributeParser
     /// A task that represents the asynchronous operation
     /// The task result contains the product attribute values
     /// </returns>
-    Task<IList<ProductAttributeValue>> ParseProductAttributeValuesAsync(string attributesXml, int productAttributeMappingId = 0);
+    Task<IList<ProductAttributeValue>> ParseProductAttributeValuesAsync(string attributesXml, long productAttributeMappingId = 0);
 
     /// <summary>
     /// Gets selected product attribute values
@@ -37,7 +37,7 @@ public partial interface IProductAttributeParser
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <param name="productAttributeMappingId">Product attribute mapping identifier</param>
     /// <returns>Product attribute values</returns>
-    IList<string> ParseValues(string attributesXml, int productAttributeMappingId);
+    IList<string> ParseValues(string attributesXml, long productAttributeMappingId);
 
     /// <summary>
     /// Adds an attribute
@@ -104,7 +104,7 @@ public partial interface IProductAttributeParser
     /// A task that represents the asynchronous operation
     /// The task result contains the attribute combinations in XML format
     /// </returns>
-    Task<IList<string>> GenerateAllCombinationsAsync(Product product, bool ignoreNonCombinableAttributes = false, IList<int> allowedAttributeIds = null);
+    Task<IList<string>> GenerateAllCombinationsAsync(Product product, bool ignoreNonCombinableAttributes = false, IList<long> allowedAttributeIds = null);
 
     /// <summary>
     /// Parse a customer entered price of the product

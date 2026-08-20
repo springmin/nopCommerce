@@ -21,7 +21,7 @@ public partial interface IScheduleTaskService
     /// A task that represents the asynchronous operation
     /// The task result contains the schedule task
     /// </returns>
-    Task<ScheduleTask> GetTaskByIdAsync(int taskId);
+    Task<ScheduleTask> GetTaskByIdAsync(long taskId);
 
     /// <summary>
     /// Gets a task by its type

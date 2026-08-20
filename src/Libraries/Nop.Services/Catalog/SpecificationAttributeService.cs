@@ -112,7 +112,7 @@ public partial class SpecificationAttributeService : ISpecificationAttributeServ
     /// A task that represents the asynchronous operation
     /// The task result contains the specification attribute group
     /// </returns>
-    public virtual async Task<SpecificationAttributeGroup> GetSpecificationAttributeGroupByIdAsync(int specificationAttributeGroupId)
+    public virtual async Task<SpecificationAttributeGroup> GetSpecificationAttributeGroupByIdAsync(long specificationAttributeGroupId)
     {
         return await _specificationAttributeGroupRepository.GetByIdAsync(specificationAttributeGroupId, cache => default);
     }
@@ -143,7 +143,7 @@ public partial class SpecificationAttributeService : ISpecificationAttributeServ
     /// A task that represents the asynchronous operation
     /// The task result contains the specification attribute groups
     /// </returns>
-    public virtual async Task<IList<SpecificationAttributeGroup>> GetProductSpecificationAttributeGroupsAsync(int productId)
+    public virtual async Task<IList<SpecificationAttributeGroup>> GetProductSpecificationAttributeGroupsAsync(long productId)
     {
         var productAttributesForGroupQuery =
             from sa in _specificationAttributeRepository.Table
@@ -199,6 +199,25 @@ public partial class SpecificationAttributeService : ISpecificationAttributeServ
     #region Specification attribute
 
     /// <summary>
+    /// Gets all specification attributes
+    /// </summary>
+    /// <param name="pageIndex">Page index</param>
+    /// <param name="pageSize">Page size</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation
+    /// The task result contains the specification attributes
+    /// </returns>
+    public virtual async Task<IPagedList<SpecificationAttribute>> GetAllSpecificationAttributesAsync(int pageIndex = 0, int pageSize = int.MaxValue)
+    {
+        return await _specificationAttributeRepository.GetAllPagedAsync(query =>
+        {
+            return from sa in query
+                   orderby sa.Name
+                   select sa;
+        }, pageIndex, pageSize);
+    }
+
+    /// <summary>
     /// Gets a specification attribute
     /// </summary>
     /// <param name="specificationAttributeId">The specification attribute identifier</param>
@@ -206,7 +225,7 @@ public partial class SpecificationAttributeService : ISpecificationAttributeServ
     /// A task that represents the asynchronous operation
     /// The task result contains the specification attribute
     /// </returns>
-    public virtual async Task<SpecificationAttribute> GetSpecificationAttributeByIdAsync(int specificationAttributeId)
+    public virtual async Task<SpecificationAttribute> GetSpecificationAttributeByIdAsync(long specificationAttributeId)
     {
         return await _specificationAttributeRepository.GetByIdAsync(specificationAttributeId, cache => default);
     }
@@ -219,27 +238,54 @@ public partial class SpecificationAttributeService : ISpecificationAttributeServ
     /// A task that represents the asynchronous operation
     /// The task result contains the specification attributes
     /// </returns>
-    public virtual async Task<IList<SpecificationAttribute>> GetSpecificationAttributeByIdsAsync(int[] specificationAttributeIds)
+    public virtual async Task<IList<SpecificationAttribute>> GetSpecificationAttributeByIdsAsync(long[] specificationAttributeIds)
     {
         return await _specificationAttributeRepository.GetByIdsAsync(specificationAttributeIds);
     }
 
     /// <summary>
-    /// Gets specification attributes
+    /// Gets specification attributes by group identifier
     /// </summary>
+    /// <param name="groupId">The specification attribute group identifier</param>
     /// <param name="pageIndex">Page index</param>
     /// <param name="pageSize">Page size</param>
     /// <returns>
     /// A task that represents the asynchronous operation
     /// The task result contains the specification attributes
     /// </returns>
-    public virtual async Task<IPagedList<SpecificationAttribute>> GetSpecificationAttributesAsync(int pageIndex = 0, int pageSize = int.MaxValue)
+    public virtual async Task<IPagedList<SpecificationAttribute>> GetSpecificationAttributesByGroupIdAsync(
+        long? groupId,
+        int pageIndex = 0,
+        int pageSize = int.MaxValue)
     {
-        var query = from sa in _specificationAttributeRepository.Table
-            orderby sa.DisplayOrder, sa.Id
-            select sa;
+        return await _specificationAttributeRepository.Table
+            .Where(sa => sa.SpecificationAttributeGroupId == groupId)
+            .OrderBy(sa => sa.DisplayOrder).ThenBy(sa => sa.Id)
+            .ToPagedListAsync(pageIndex, pageSize);
+    }
 
-        return await query.ToPagedListAsync(pageIndex, pageSize);
+    /// <summary>
+    /// Gets specification attributes by name
+    /// </summary>
+    /// <param name="name">The specification attribute name</param>
+    /// <param name="pageIndex">Page index</param>
+    /// <param name="pageSize">Page size</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation
+    /// The task result contains the specification attributes
+    /// </returns>
+    public virtual async Task<IPagedList<SpecificationAttribute>> GetSpecificationAttributesByNameAsync(
+        string name,
+        int pageIndex = 0,
+        int pageSize = int.MaxValue)
+    {
+        ArgumentNullException.ThrowIfNullOrEmpty(name);
+
+        return await _specificationAttributeRepository.Table
+            .Where(sa => sa.Name.Contains(name))
+            .OrderBy(sa => sa.DisplayOrder)
+            .ThenBy(sa => sa.Id)
+            .ToPagedListAsync(pageIndex, pageSize);
     }
 
     /// <summary>
@@ -257,25 +303,6 @@ public partial class SpecificationAttributeService : ISpecificationAttributeServ
             select sa;
 
         return await _staticCacheManager.GetAsync(_staticCacheManager.PrepareKeyForDefaultCache(NopCatalogDefaults.SpecificationAttributesWithOptionsCacheKey), async () => await query.ToListAsync());
-    }
-
-    /// <summary>
-    /// Gets specification attributes by group identifier
-    /// </summary>
-    /// <param name="specificationAttributeGroupId">The specification attribute group identifier</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the specification attributes
-    /// </returns>
-    public virtual async Task<IList<SpecificationAttribute>> GetSpecificationAttributesByGroupIdAsync(int? specificationAttributeGroupId = null)
-    {
-        var query = _specificationAttributeRepository.Table;
-        if (!specificationAttributeGroupId.HasValue || specificationAttributeGroupId > 0)
-            query = query.Where(sa => sa.SpecificationAttributeGroupId == specificationAttributeGroupId);
-
-        query = query.OrderBy(sa => sa.DisplayOrder).ThenBy(sa => sa.Id);
-
-        return await query.ToListAsync();
     }
 
     /// <summary>
@@ -333,7 +360,7 @@ public partial class SpecificationAttributeService : ISpecificationAttributeServ
     /// A task that represents the asynchronous operation
     /// The task result contains the specification attribute option
     /// </returns>
-    public virtual async Task<SpecificationAttributeOption> GetSpecificationAttributeOptionByIdAsync(int specificationAttributeOptionId)
+    public virtual async Task<SpecificationAttributeOption> GetSpecificationAttributeOptionByIdAsync(long specificationAttributeOptionId)
     {
         return await _specificationAttributeOptionRepository.GetByIdAsync(specificationAttributeOptionId, cache => default);
     }
@@ -346,7 +373,7 @@ public partial class SpecificationAttributeService : ISpecificationAttributeServ
     /// A task that represents the asynchronous operation
     /// The task result contains the specification attribute options
     /// </returns>
-    public virtual async Task<IList<SpecificationAttributeOption>> GetSpecificationAttributeOptionsByIdsAsync(int[] specificationAttributeOptionIds)
+    public virtual async Task<IList<SpecificationAttributeOption>> GetSpecificationAttributeOptionsByIdsAsync(long[] specificationAttributeOptionIds)
     {
         return await _specificationAttributeOptionRepository.GetByIdsAsync(specificationAttributeOptionIds);
     }
@@ -359,7 +386,7 @@ public partial class SpecificationAttributeService : ISpecificationAttributeServ
     /// A task that represents the asynchronous operation
     /// The task result contains the specification attribute option
     /// </returns>
-    public virtual async Task<IList<SpecificationAttributeOption>> GetSpecificationAttributeOptionsBySpecificationAttributeAsync(int specificationAttributeId)
+    public virtual async Task<IList<SpecificationAttributeOption>> GetSpecificationAttributeOptionsBySpecificationAttributeAsync(long specificationAttributeId)
     {
         var query = from sao in _specificationAttributeOptionRepository.Table
             orderby sao.DisplayOrder, sao.Id
@@ -409,7 +436,7 @@ public partial class SpecificationAttributeService : ISpecificationAttributeServ
     /// A task that represents the asynchronous operation
     /// The task result contains the list of IDs not existing specification attribute options
     /// </returns>
-    public virtual async Task<int[]> GetNotExistingSpecificationAttributeOptionsAsync(int[] attributeOptionIds)
+    public virtual async Task<long[]> GetNotExistingSpecificationAttributeOptionsAsync(long[] attributeOptionIds)
     {
         ArgumentNullException.ThrowIfNull(attributeOptionIds);
 
@@ -429,14 +456,14 @@ public partial class SpecificationAttributeService : ISpecificationAttributeServ
     /// A task that represents the asynchronous operation
     /// The task result contains the specification attribute options
     /// </returns>
-    public virtual async Task<IList<SpecificationAttributeOption>> GetFiltrableSpecificationAttributeOptionsByCategoryIdAsync(int categoryId)
+    public virtual async Task<IList<SpecificationAttributeOption>> GetFiltrableSpecificationAttributeOptionsByCategoryIdAsync(long categoryId)
     {
         if (categoryId <= 0)
             return new List<SpecificationAttributeOption>();
 
         var productsQuery = await GetAvailableProductsQueryAsync();
 
-        IList<int> subCategoryIds = null;
+        IList<long> subCategoryIds = null;
 
         if (_catalogSettings.ShowProductsFromSubcategories)
         {
@@ -478,7 +505,7 @@ public partial class SpecificationAttributeService : ISpecificationAttributeServ
     /// A task that represents the asynchronous operation
     /// The task result contains the specification attribute options
     /// </returns>
-    public virtual async Task<IList<SpecificationAttributeOption>> GetFiltrableSpecificationAttributeOptionsByManufacturerIdAsync(int manufacturerId)
+    public virtual async Task<IList<SpecificationAttributeOption>> GetFiltrableSpecificationAttributeOptionsByManufacturerIdAsync(long manufacturerId)
     {
         if (manufacturerId <= 0)
             return new List<SpecificationAttributeOption>();
@@ -537,8 +564,8 @@ public partial class SpecificationAttributeService : ISpecificationAttributeServ
     /// A task that represents the asynchronous operation
     /// The task result contains the product specification attribute mapping collection
     /// </returns>
-    public virtual async Task<IList<ProductSpecificationAttribute>> GetProductSpecificationAttributesAsync(int productId = 0,
-        int specificationAttributeOptionId = 0, bool? allowFiltering = null, bool? showOnProductPage = null, int? specificationAttributeGroupId = 0)
+    public virtual async Task<IList<ProductSpecificationAttribute>> GetProductSpecificationAttributesAsync(long productId = 0,
+        long specificationAttributeOptionId = 0, bool? allowFiltering = null, bool? showOnProductPage = null, long? specificationAttributeGroupId = 0)
     {
         var allowFilteringCacheStr = allowFiltering.HasValue ? allowFiltering.ToString() : "null";
         var showOnProductPageCacheStr = showOnProductPage.HasValue ? showOnProductPage.ToString() : "null";
@@ -581,7 +608,7 @@ public partial class SpecificationAttributeService : ISpecificationAttributeServ
     /// A task that represents the asynchronous operation
     /// The task result contains the product specification attribute mapping
     /// </returns>
-    public virtual async Task<ProductSpecificationAttribute> GetProductSpecificationAttributeByIdAsync(int productSpecificationAttributeId)
+    public virtual async Task<ProductSpecificationAttribute> GetProductSpecificationAttributeByIdAsync(long productSpecificationAttributeId)
     {
         return await _productSpecificationAttributeRepository.GetByIdAsync(productSpecificationAttributeId);
     }
@@ -615,7 +642,7 @@ public partial class SpecificationAttributeService : ISpecificationAttributeServ
     /// A task that represents the asynchronous operation
     /// The task result contains the count
     /// </returns>
-    public virtual async Task<int> GetProductSpecificationAttributeCountAsync(int productId = 0, int specificationAttributeOptionId = 0)
+    public virtual async Task<int> GetProductSpecificationAttributeCountAsync(long productId = 0, long specificationAttributeOptionId = 0)
     {
         var query = _productSpecificationAttributeRepository.Table;
         if (productId > 0)
@@ -636,7 +663,7 @@ public partial class SpecificationAttributeService : ISpecificationAttributeServ
     /// A task that represents the asynchronous operation
     /// The task result contains the products
     /// </returns>
-    public virtual async Task<IPagedList<Product>> GetProductsBySpecificationAttributeIdAsync(int specificationAttributeId, int pageIndex, int pageSize)
+    public virtual async Task<IPagedList<Product>> GetProductsBySpecificationAttributeIdAsync(long specificationAttributeId, int pageIndex, int pageSize)
     {
         var query = from product in _productRepository.Table
             join psa in _productSpecificationAttributeRepository.Table on product.Id equals psa.ProductId

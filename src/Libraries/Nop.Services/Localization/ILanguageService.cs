@@ -23,17 +23,7 @@ public partial interface ILanguageService
     /// A task that represents the asynchronous operation
     /// The task result contains the languages
     /// </returns>
-    Task<IList<Language>> GetAllLanguagesAsync(bool showHidden = false, int storeId = 0);
-
-    /// <summary>
-    /// Gets all languages
-    /// </summary>
-    /// <param name="storeId">Load records allowed only in a specified store; pass 0 to load all records</param>
-    /// <param name="showHidden">A value indicating whether to show hidden records</param>
-    /// <returns>
-    /// The languages
-    /// </returns>
-    IList<Language> GetAllLanguages(bool showHidden = false, int storeId = 0);
+    Task<IList<Language>> GetAllLanguagesAsync(bool showHidden = false, long storeId = 0);
 
     /// <summary>
     /// Gets a language
@@ -43,7 +33,7 @@ public partial interface ILanguageService
     /// A task that represents the asynchronous operation
     /// The task result contains the language
     /// </returns>
-    Task<Language> GetLanguageByIdAsync(int languageId);
+    Task<Language> GetLanguageByIdAsync(long languageId);
 
     /// <summary>
     /// Inserts a language

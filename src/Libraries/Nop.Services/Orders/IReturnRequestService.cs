@@ -30,7 +30,7 @@ public partial interface IReturnRequestService
     /// A task that represents the asynchronous operation
     /// The task result contains the return request
     /// </returns>
-    Task<ReturnRequest> GetReturnRequestByIdAsync(int returnRequestId);
+    Task<ReturnRequest> GetReturnRequestByIdAsync(long returnRequestId);
 
     /// <summary>
     /// Search return requests
@@ -49,8 +49,8 @@ public partial interface IReturnRequestService
     /// A task that represents the asynchronous operation
     /// The task result contains the return requests
     /// </returns>
-    Task<IPagedList<ReturnRequest>> SearchReturnRequestsAsync(int storeId = 0, int customerId = 0,
-        int orderItemId = 0, string customNumber = "", ReturnRequestStatus? rs = null, DateTime? createdFromUtc = null,
+    Task<IPagedList<ReturnRequest>> SearchReturnRequestsAsync(long storeId = 0, long customerId = 0,
+        long orderItemId = 0, string customNumber = "", ReturnRequestStatus? rs = null, DateTime? createdFromUtc = null,
         DateTime? createdToUtc = null, int pageIndex = 0, int pageSize = int.MaxValue, bool getOnlyTotalCount = false);
 
     /// <summary>
@@ -58,7 +58,7 @@ public partial interface IReturnRequestService
     /// </summary>
     /// <param name="orderId">The order identifier</param>
     /// <returns>The <see cref="Task"/> containing the <see cref="ReturnRequestAvailability"/></returns>
-    Task<ReturnRequestAvailability> GetReturnRequestAvailabilityAsync(int orderId);
+    Task<ReturnRequestAvailability> GetReturnRequestAvailabilityAsync(long orderId);
 
     /// <summary>
     /// Delete a return request action
@@ -84,7 +84,7 @@ public partial interface IReturnRequestService
     /// A task that represents the asynchronous operation
     /// The task result contains the return request action
     /// </returns>
-    Task<ReturnRequestAction> GetReturnRequestActionByIdAsync(int returnRequestActionId);
+    Task<ReturnRequestAction> GetReturnRequestActionByIdAsync(long returnRequestActionId);
 
     /// <summary>
     /// Inserts a return request
@@ -131,7 +131,7 @@ public partial interface IReturnRequestService
     /// A task that represents the asynchronous operation
     /// The task result contains the return request reason
     /// </returns>
-    Task<ReturnRequestReason> GetReturnRequestReasonByIdAsync(int returnRequestReasonId);
+    Task<ReturnRequestReason> GetReturnRequestReasonByIdAsync(long returnRequestReasonId);
 
     /// <summary>
     /// Inserts a return request reason

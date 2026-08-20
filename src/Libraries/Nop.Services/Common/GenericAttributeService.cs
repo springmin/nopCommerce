@@ -54,6 +54,17 @@ public partial class GenericAttributeService : IGenericAttributeService
     }
 
     /// <summary>
+    /// Deletes an attributes
+    /// </summary>
+    /// <param name="key">Key</param>
+    /// <returns>A task that represents the asynchronous operation</returns>
+    public virtual async Task DeleteAttributesAsync<TEntity>(string key)
+    {
+        var keyGroup = typeof(TEntity).Name;
+        await _genericAttributeRepository.DeleteAsync(a => a.Key == key && a.KeyGroup == keyGroup);
+    }
+
+    /// <summary>
     /// Inserts an attribute
     /// </summary>
     /// <param name="attribute">attribute</param>
@@ -90,7 +101,7 @@ public partial class GenericAttributeService : IGenericAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the get attributes
     /// </returns>
-    public virtual async Task<IList<GenericAttribute>> GetAttributesForEntityAsync(int entityId, string keyGroup)
+    public virtual async Task<IList<GenericAttribute>> GetAttributesForEntityAsync(long entityId, string keyGroup)
     {
         var query = from ga in _genericAttributeRepository.Table
             where ga.EntityId == entityId &&
@@ -110,7 +121,7 @@ public partial class GenericAttributeService : IGenericAttributeService
     /// <param name="value">Value</param>
     /// <param name="storeId">Store identifier; pass 0 if this attribute will be available for all stores</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task SaveAttributeAsync<TPropType>(BaseEntity entity, string key, TPropType value, int storeId = 0)
+    public virtual async Task SaveAttributeAsync<TPropType>(BaseEntity entity, string key, TPropType value, long storeId = 0)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -169,7 +180,7 @@ public partial class GenericAttributeService : IGenericAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the attribute
     /// </returns>
-    public virtual async Task<TPropType> GetAttributeAsync<TPropType>(BaseEntity entity, string key, int storeId = 0, TPropType defaultValue = default)
+    public virtual async Task<TPropType> GetAttributeAsync<TPropType>(BaseEntity entity, string key, long storeId = 0, TPropType defaultValue = default)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -207,7 +218,7 @@ public partial class GenericAttributeService : IGenericAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the attribute
     /// </returns>
-    public virtual async Task<TPropType> GetAttributeAsync<TEntity, TPropType>(int entityId, string key, int storeId = 0, TPropType defaultValue = default)
+    public virtual async Task<TPropType> GetAttributeAsync<TEntity, TPropType>(long entityId, string key, long storeId = 0, TPropType defaultValue = default)
         where TEntity : BaseEntity
     {
         var entity = (TEntity)Activator.CreateInstance(typeof(TEntity));

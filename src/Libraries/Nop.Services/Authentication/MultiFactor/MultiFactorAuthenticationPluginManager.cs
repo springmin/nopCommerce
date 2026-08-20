@@ -35,9 +35,9 @@ public partial class MultiFactorAuthenticationPluginManager : PluginManager<IMul
     /// <param name="storeId">Filter by store; pass 0 to load all plugins</param>
     /// <returns>
     /// A task that represents the asynchronous operation
-    /// The task result contains the rue - if active multi-factor authentication methods
+    /// The task result contains true if we have active multi-factor authentication methods
     /// </returns>
-    public virtual async Task<bool> HasActivePluginsAsync(Customer customer = null, int storeId = 0)
+    public virtual async Task<bool> HasActivePluginsAsync(Customer customer = null, long storeId = 0)
     {
         return (await LoadActivePluginsAsync(_multiFactorAuthenticationSettings.ActiveAuthenticationMethodSystemNames, customer, storeId)).Any();
     }
@@ -51,7 +51,7 @@ public partial class MultiFactorAuthenticationPluginManager : PluginManager<IMul
     /// A task that represents the asynchronous operation
     /// The task result contains the list of active multi-factor authentication methods
     /// </returns>
-    public virtual async Task<IList<IMultiFactorAuthenticationMethod>> LoadActivePluginsAsync(Customer customer = null, int storeId = 0)
+    public virtual async Task<IList<IMultiFactorAuthenticationMethod>> LoadActivePluginsAsync(Customer customer = null, long storeId = 0)
     {
         return await LoadActivePluginsAsync(_multiFactorAuthenticationSettings.ActiveAuthenticationMethodSystemNames, customer, storeId);
     }
@@ -76,7 +76,7 @@ public partial class MultiFactorAuthenticationPluginManager : PluginManager<IMul
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public virtual async Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, int storeId = 0)
+    public virtual async Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, long storeId = 0)
     {
         var authenticationMethod = await LoadPluginBySystemNameAsync(systemName, customer, storeId);
         return IsPluginActive(authenticationMethod);

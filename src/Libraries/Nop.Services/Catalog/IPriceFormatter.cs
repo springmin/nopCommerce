@@ -55,7 +55,7 @@ public partial interface IPriceFormatter
     /// The task result contains the price
     /// </returns>
     Task<string> FormatPriceAsync(decimal price, bool showCurrency,
-        string currencyCode, bool showTax, int languageId);
+        string currencyCode, bool showTax, long languageId);
 
     /// <summary>
     /// Formats the order price
@@ -74,7 +74,7 @@ public partial interface IPriceFormatter
     /// </returns>
     Task<string> FormatOrderPriceAsync(decimal price,
         decimal currencyRate, string customerCurrencyCode, bool displayCustomerCurrency,
-        Currency primaryStoreCurrency, int languageId, bool? priceIncludesTax = null, bool? showTax = null);
+        Currency primaryStoreCurrency, long languageId, bool? priceIncludesTax = null, bool? showTax = null);
 
     /// <summary>
     /// Formats the price
@@ -89,7 +89,7 @@ public partial interface IPriceFormatter
     /// The task result contains the price
     /// </returns>
     Task<string> FormatPriceAsync(decimal price, bool showCurrency,
-        string currencyCode, int languageId, bool priceIncludesTax);
+        string currencyCode, long languageId, bool priceIncludesTax);
 
     /// <summary>
     /// Formats the price
@@ -104,7 +104,7 @@ public partial interface IPriceFormatter
     /// The task result contains the price
     /// </returns>
     Task<string> FormatPriceAsync(decimal price, bool showCurrency,
-        Currency targetCurrency, int languageId, bool priceIncludesTax);
+        Currency targetCurrency, long languageId, bool priceIncludesTax);
 
     /// <summary>
     /// Formats the price
@@ -120,7 +120,7 @@ public partial interface IPriceFormatter
     /// The task result contains the price
     /// </returns>
     Task<string> FormatPriceAsync(decimal price, bool showCurrency,
-        Currency targetCurrency, int languageId, bool priceIncludesTax, bool showTax);
+        Currency targetCurrency, long languageId, bool priceIncludesTax, bool showTax);
 
     /// <summary>
     /// Formats the price of rental product (with rental period)
@@ -157,7 +157,7 @@ public partial interface IPriceFormatter
     /// The task result contains the price
     /// </returns>
     Task<string> FormatShippingPriceAsync(decimal price, bool showCurrency,
-        Currency targetCurrency, int languageId, bool priceIncludesTax);
+        Currency targetCurrency, long languageId, bool priceIncludesTax);
 
     /// <summary>
     /// Formats the shipping price
@@ -172,7 +172,7 @@ public partial interface IPriceFormatter
     /// The task result contains the price
     /// </returns>
     Task<string> FormatShippingPriceAsync(decimal price, bool showCurrency,
-        string currencyCode, int languageId, bool priceIncludesTax);
+        string currencyCode, long languageId, bool priceIncludesTax);
 
     /// <summary>
     /// Formats the payment method additional fee
@@ -198,7 +198,7 @@ public partial interface IPriceFormatter
     /// The task result contains the price
     /// </returns>
     Task<string> FormatPaymentMethodAdditionalFeeAsync(decimal price, bool showCurrency,
-        Currency targetCurrency, int languageId, bool priceIncludesTax);
+        Currency targetCurrency, long languageId, bool priceIncludesTax);
 
     /// <summary>
     /// Formats the payment method additional fee
@@ -213,7 +213,7 @@ public partial interface IPriceFormatter
     /// The task result contains the price
     /// </returns>
     Task<string> FormatPaymentMethodAdditionalFeeAsync(decimal price, bool showCurrency,
-        string currencyCode, int languageId, bool priceIncludesTax);
+        string currencyCode, long languageId, bool priceIncludesTax);
 
     /// <summary>
     /// Formats a tax rate
@@ -226,11 +226,10 @@ public partial interface IPriceFormatter
     /// Format base price (PAngV)
     /// </summary>
     /// <param name="product">Product</param>
-    /// <param name="productPrice">Product price (in primary currency). Pass null if you want to use a default produce price</param>
-    /// <param name="totalWeight">Total weight of product (with attribute weight adjustment). Pass null if you want to use a default produce weight</param>
+    /// <param name="basePrice">base price (PAngV)</param>
     /// <returns>
     /// A task that represents the asynchronous operation
     /// The task result contains the base price
     /// </returns>
-    Task<string> FormatBasePriceAsync(Product product, decimal? productPrice, decimal? totalWeight = null);
+    Task<string> FormatBasePriceAsync(Product product, decimal? basePrice);
 }

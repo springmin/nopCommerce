@@ -41,7 +41,7 @@ public partial class PluginManager<TPlugin> : IPluginManager<TPlugin> where TPlu
     /// A task that represents the asynchronous operation
     /// The task result contains the key
     /// </returns>
-    protected virtual async Task<string> GetKeyAsync(Customer customer, int storeId, string systemName = null)
+    protected virtual async Task<string> GetKeyAsync(Customer customer, long storeId, string systemName = null)
     {
         return $"{storeId}-{(customer != null ? string.Join(',', await _customerService.GetCustomerRoleIdsAsync(customer)) : null)}-{systemName}";
     }
@@ -56,7 +56,7 @@ public partial class PluginManager<TPlugin> : IPluginManager<TPlugin> where TPlu
     /// A task that represents the asynchronous operation
     /// The task result contains the plugin
     /// </returns>
-    protected virtual async Task<TPlugin> LoadPrimaryPluginAsync(string systemName, Customer customer = null, int storeId = 0)
+    protected virtual async Task<TPlugin> LoadPrimaryPluginAsync(string systemName, Customer customer = null, long storeId = 0)
     {
         //try to get a plugin by system name or return the first loaded one (it's necessary to have a primary active plugin)
         var plugin = await LoadPluginBySystemNameAsync(systemName, customer, storeId)
@@ -78,7 +78,7 @@ public partial class PluginManager<TPlugin> : IPluginManager<TPlugin> where TPlu
     /// A task that represents the asynchronous operation
     /// The task result contains the list of plugins
     /// </returns>
-    public virtual async Task<IList<TPlugin>> LoadAllPluginsAsync(Customer customer = null, int storeId = 0)
+    public virtual async Task<IList<TPlugin>> LoadAllPluginsAsync(Customer customer = null, long storeId = 0)
     {
         //get plugins and put them into the dictionary to avoid further loading
         var key = await GetKeyAsync(customer, storeId);
@@ -98,7 +98,7 @@ public partial class PluginManager<TPlugin> : IPluginManager<TPlugin> where TPlu
     /// A task that represents the asynchronous operation
     /// The task result contains the plugin
     /// </returns>
-    public virtual async Task<TPlugin> LoadPluginBySystemNameAsync(string systemName, Customer customer = null, int storeId = 0)
+    public virtual async Task<TPlugin> LoadPluginBySystemNameAsync(string systemName, Customer customer = null, long storeId = 0)
     {
         if (string.IsNullOrEmpty(systemName))
             return null;
@@ -130,7 +130,7 @@ public partial class PluginManager<TPlugin> : IPluginManager<TPlugin> where TPlu
     /// A task that represents the asynchronous operation
     /// The task result contains the list of active plugins
     /// </returns>
-    public virtual async Task<IList<TPlugin>> LoadActivePluginsAsync(List<string> systemNames, Customer customer = null, int storeId = 0)
+    public virtual async Task<IList<TPlugin>> LoadActivePluginsAsync(List<string> systemNames, Customer customer = null, long storeId = 0)
     {
         if (systemNames == null)
             return new List<TPlugin>();

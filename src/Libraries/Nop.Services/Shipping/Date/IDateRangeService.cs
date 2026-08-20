@@ -24,7 +24,7 @@ public partial interface IDateRangeService
     /// A task that represents the asynchronous operation
     /// The task result contains the delivery date
     /// </returns>
-    Task<DeliveryDate> GetDeliveryDateByIdAsync(int deliveryDateId);
+    Task<DeliveryDate> GetDeliveryDateByIdAsync(long deliveryDateId);
 
     /// <summary>
     /// Get all delivery dates
@@ -61,7 +61,7 @@ public partial interface IDateRangeService
     /// A task that represents the asynchronous operation
     /// The task result contains the product availability range
     /// </returns>
-    Task<ProductAvailabilityRange> GetProductAvailabilityRangeByIdAsync(int productAvailabilityRangeId);
+    Task<ProductAvailabilityRange> GetProductAvailabilityRangeByIdAsync(long productAvailabilityRangeId);
 
     /// <summary>
     /// Get all product availability ranges

@@ -27,7 +27,7 @@ public partial interface ILocalizationService
     /// A task that represents the asynchronous operation
     /// The task result contains the locale string resource
     /// </returns>
-    Task<LocaleStringResource> GetLocaleStringResourceByIdAsync(int localeStringResourceId);
+    Task<LocaleStringResource> GetLocaleStringResourceByIdAsync(long localeStringResourceId);
 
     /// <summary>
     /// Gets a locale string resource
@@ -39,19 +39,7 @@ public partial interface ILocalizationService
     /// A task that represents the asynchronous operation
     /// The task result contains the locale string resource
     /// </returns>
-    Task<LocaleStringResource> GetLocaleStringResourceByNameAsync(string resourceName, int languageId,
-        bool logIfNotFound = true);
-
-    /// <summary>
-    /// Gets a locale string resource
-    /// </summary>
-    /// <param name="resourceName">A string representing a resource name</param>
-    /// <param name="languageId">Language identifier</param>
-    /// <param name="logIfNotFound">A value indicating whether to log error if locale string resource is not found</param>
-    /// <returns>
-    /// The locale string resource
-    /// </returns>
-    LocaleStringResource GetLocaleStringResourceByName(string resourceName, int languageId,
+    Task<LocaleStringResource> GetLocaleStringResourceByNameAsync(string resourceName, long languageId,
         bool logIfNotFound = true);
 
     /// <summary>
@@ -69,12 +57,6 @@ public partial interface ILocalizationService
     Task UpdateLocaleStringResourceAsync(LocaleStringResource localeStringResource);
 
     /// <summary>
-    /// Updates the locale string resource
-    /// </summary>
-    /// <param name="localeStringResource">Locale string resource</param>
-    void UpdateLocaleStringResource(LocaleStringResource localeStringResource);
-
-    /// <summary>
     /// Gets all locale string resources by language identifier
     /// </summary>
     /// <param name="languageId">Language identifier</param>
@@ -83,7 +65,7 @@ public partial interface ILocalizationService
     /// A task that represents the asynchronous operation
     /// The task result contains the locale string resources
     /// </returns>
-    Task<Dictionary<string, KeyValuePair<int, string>>> GetAllResourceValuesAsync(int languageId, bool? loadPublicLocales);
+    Task<Dictionary<string, KeyValuePair<long, string>>> GetAllResourceValuesAsync(long languageId, bool? loadPublicLocales);
 
     /// <summary>
     /// Gets a resource string based on the specified ResourceKey property.
@@ -107,7 +89,7 @@ public partial interface ILocalizationService
     /// A task that represents the asynchronous operation
     /// The task result contains a string representing the requested resource string.
     /// </returns>
-    Task<string> GetResourceAsync(string resourceKey, int languageId,
+    Task<string> GetResourceAsync(string resourceKey, long languageId,
         bool logIfNotFound = true, string defaultValue = "", bool returnEmptyIfNotFound = false);
 
     /// <summary>
@@ -144,7 +126,7 @@ public partial interface ILocalizationService
     /// The task result contains the localized property
     /// </returns>
     Task<TPropType> GetLocalizedAsync<TEntity, TPropType>(TEntity entity, Expression<Func<TEntity, TPropType>> keySelector,
-        int? languageId = null, bool returnDefaultValue = true, bool ensureTwoPublishedLanguages = true)
+        long? languageId = null, bool returnDefaultValue = true, bool ensureTwoPublishedLanguages = true)
         where TEntity : BaseEntity, ILocalizedEntity;
 
     /// <summary>
@@ -162,7 +144,7 @@ public partial interface ILocalizationService
     /// The task result contains the localized property
     /// </returns>
     Task<string> GetLocalizedSettingAsync<TSettings>(TSettings settings, Expression<Func<TSettings, string>> keySelector,
-        int languageId, int storeId, bool returnDefaultValue = true, bool ensureTwoPublishedLanguages = true)
+        long languageId, long storeId, bool returnDefaultValue = true, bool ensureTwoPublishedLanguages = true)
         where TSettings : ISettings, new();
 
     /// <summary>
@@ -178,7 +160,7 @@ public partial interface ILocalizationService
     /// The task result contains the localized property
     /// </returns>
     Task SaveLocalizedSettingAsync<TSettings>(TSettings settings, Expression<Func<TSettings, string>> keySelector,
-        int languageId, string value) where TSettings : ISettings, new();
+        long languageId, string value) where TSettings : ISettings, new();
 
     /// <summary>
     /// Get localized value of enum
@@ -190,7 +172,7 @@ public partial interface ILocalizationService
     /// A task that represents the asynchronous operation
     /// The task result contains the localized value
     /// </returns>
-    Task<string> GetLocalizedEnumAsync<TEnum>(TEnum enumValue, int? languageId = null) where TEnum : struct;
+    Task<string> GetLocalizedEnumAsync<TEnum>(TEnum enumValue, long? languageId = null) where TEnum : struct;
 
     /// <summary>
     /// Get localized value of enum
@@ -202,7 +184,7 @@ public partial interface ILocalizationService
     /// A task that represents the asynchronous operation
     /// The task result contains the localized value
     /// </returns>
-    Task<string> GetLocalizedPermissionNameAsync(PermissionRecord permissionRecord, int? languageId = null);
+    Task<string> GetLocalizedPermissionNameAsync(PermissionRecord permissionRecord, long? languageId = null);
 
     /// <summary>
     /// Save localized name of a permission
@@ -233,14 +215,7 @@ public partial interface ILocalizationService
     /// <param name="resources">Resource name-value pairs</param>
     /// <param name="languageId">Language identifier; pass null to add the passed resources for all languages</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task AddOrUpdateLocaleResourceAsync(IDictionary<string, string> resources, int? languageId = null);
-
-    /// <summary>
-    /// Add locale resources
-    /// </summary>
-    /// <param name="resources">Resource name-value pairs</param>
-    /// <param name="languageId">Language identifier; pass null to add the passed resources for all languages</param>
-    void AddOrUpdateLocaleResource(IDictionary<string, string> resources, int? languageId = null);
+    Task AddOrUpdateLocaleResourceAsync(IDictionary<string, string> resources, long? languageId = null);
 
     /// <summary>
     /// Delete a locale resource
@@ -255,14 +230,7 @@ public partial interface ILocalizationService
     /// <param name="resourceNames">Resource names</param>
     /// <param name="languageId">Language identifier; pass null to delete the passed resources from all languages</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task DeleteLocaleResourcesAsync(IList<string> resourceNames, int? languageId = null);
-
-    /// <summary>
-    /// Delete locale resources
-    /// </summary>
-    /// <param name="resourceNames">Resource names</param>
-    /// <param name="languageId">Language identifier; pass null to delete the passed resources from all languages</param>
-    void DeleteLocaleResources(IList<string> resourceNames, int? languageId = null);
+    Task DeleteLocaleResourcesAsync(IList<string> resourceNames, long? languageId = null);
 
     /// <summary>
     /// Delete locale resources by the passed name prefix
@@ -270,7 +238,7 @@ public partial interface ILocalizationService
     /// <param name="resourceNamePrefix">Resource name prefix</param>
     /// <param name="languageId">Language identifier; pass null to delete resources by prefix from all languages</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task DeleteLocaleResourcesAsync(string resourceNamePrefix, int? languageId = null);
+    Task DeleteLocaleResourcesAsync(string resourceNamePrefix, long? languageId = null);
 
     /// <summary>
     /// Get localized friendly name of a plugin
@@ -283,7 +251,7 @@ public partial interface ILocalizationService
     /// A task that represents the asynchronous operation
     /// The task result contains the localized value
     /// </returns>
-    Task<string> GetLocalizedFriendlyNameAsync<TPlugin>(TPlugin plugin, int languageId, bool returnDefaultValue = true)
+    Task<string> GetLocalizedFriendlyNameAsync<TPlugin>(TPlugin plugin, long languageId, bool returnDefaultValue = true)
         where TPlugin : IPlugin;
 
     /// <summary>
@@ -294,6 +262,6 @@ public partial interface ILocalizationService
     /// <param name="languageId">Language identifier</param>
     /// <param name="localizedFriendlyName">Localized friendly name</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task SaveLocalizedFriendlyNameAsync<TPlugin>(TPlugin plugin, int languageId, string localizedFriendlyName)
+    Task SaveLocalizedFriendlyNameAsync<TPlugin>(TPlugin plugin, long languageId, string localizedFriendlyName)
         where TPlugin : IPlugin;
 }

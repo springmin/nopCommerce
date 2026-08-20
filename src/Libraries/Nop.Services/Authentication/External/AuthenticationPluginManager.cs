@@ -37,7 +37,7 @@ public partial class AuthenticationPluginManager : PluginManager<IExternalAuthen
     /// A task that represents the asynchronous operation
     /// The task result contains the list of active authentication methods
     /// </returns>
-    public virtual async Task<IList<IExternalAuthenticationMethod>> LoadActivePluginsAsync(Customer customer = null, int storeId = 0)
+    public virtual async Task<IList<IExternalAuthenticationMethod>> LoadActivePluginsAsync(Customer customer = null, long storeId = 0)
     {
         return await LoadActivePluginsAsync(_externalAuthenticationSettings.ActiveAuthenticationMethodSystemNames, customer, storeId);
     }
@@ -62,7 +62,7 @@ public partial class AuthenticationPluginManager : PluginManager<IExternalAuthen
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public virtual async Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, int storeId = 0)
+    public virtual async Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, long storeId = 0)
     {
         var authenticationMethod = await LoadPluginBySystemNameAsync(systemName, customer, storeId);
         return IsPluginActive(authenticationMethod);

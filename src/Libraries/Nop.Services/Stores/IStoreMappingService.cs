@@ -18,7 +18,7 @@ public partial interface IStoreMappingService
     /// A task that represents the asynchronous operation
     /// The task result contains the filtered query
     /// </returns>
-    Task<IQueryable<TEntity>> ApplyStoreMapping<TEntity>(IQueryable<TEntity> query, int storeId) where TEntity : BaseEntity, IStoreMappingSupported;
+    Task<IQueryable<TEntity>> ApplyStoreMapping<TEntity>(IQueryable<TEntity> query, long storeId) where TEntity : BaseEntity, IStoreMappingSupported;
 
     /// <summary>
     /// Deletes a store mapping record
@@ -45,7 +45,7 @@ public partial interface IStoreMappingService
     /// <param name="entity">Entity</param>
     /// <param name="storeId">Store id</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task InsertStoreMappingAsync<TEntity>(TEntity entity, int storeId) where TEntity : BaseEntity, IStoreMappingSupported;
+    Task InsertStoreMappingAsync<TEntity>(TEntity entity, long storeId) where TEntity : BaseEntity, IStoreMappingSupported;
 
     /// <summary>
     /// Find store identifiers with granted access (mapped to the entity)
@@ -56,17 +56,7 @@ public partial interface IStoreMappingService
     /// A task that represents the asynchronous operation
     /// The task result contains the store identifiers
     /// </returns>
-    Task<int[]> GetStoresIdsWithAccessAsync<TEntity>(TEntity entity) where TEntity : BaseEntity, IStoreMappingSupported;
-
-    /// <summary>
-    /// Find store identifiers with granted access (mapped to the entity)
-    /// </summary>
-    /// <typeparam name="TEntity">Type of entity that supports store mapping</typeparam>
-    /// <param name="entity">Entity</param>
-    /// <returns>
-    /// The store identifiers
-    /// </returns>
-    int[] GetStoresIdsWithAccess<TEntity>(TEntity entity) where TEntity : BaseEntity, IStoreMappingSupported;
+    Task<long[]> GetStoresIdsWithAccessAsync<TEntity>(TEntity entity) where TEntity : BaseEntity, IStoreMappingSupported;
 
     /// <summary>
     /// Authorize whether entity could be accessed in the current store (mapped to this store)
@@ -75,7 +65,7 @@ public partial interface IStoreMappingService
     /// <param name="entity">Entity</param>
     /// <returns>
     /// A task that represents the asynchronous operation
-    /// The task result contains the rue - authorized; otherwise, false
+    /// The task result contains true - authorized; otherwise, false
     /// </returns>
     Task<bool> AuthorizeAsync<TEntity>(TEntity entity) where TEntity : BaseEntity, IStoreMappingSupported;
 
@@ -87,18 +77,18 @@ public partial interface IStoreMappingService
     /// <param name="storeId">Store identifier</param>
     /// <returns>
     /// A task that represents the asynchronous operation
-    /// The task result contains the rue - authorized; otherwise, false
+    /// The task result contains true - authorized; otherwise, false
     /// </returns>
-    Task<bool> AuthorizeAsync<TEntity>(TEntity entity, int storeId) where TEntity : BaseEntity, IStoreMappingSupported;
+    Task<bool> AuthorizeAsync<TEntity>(TEntity entity, long storeId) where TEntity : BaseEntity, IStoreMappingSupported;
 
     /// <summary>
-    /// Authorize whether entity could be accessed in a store (mapped to this store)
+    /// Save store mappings for the passed entity
     /// </summary>
     /// <typeparam name="TEntity">Type of entity that supports store mapping</typeparam>
     /// <param name="entity">Entity</param>
-    /// <param name="storeId">Store identifier</param>
+    /// <param name="storeIds">Store identifiers</param>
     /// <returns>
-    /// The rue - authorized; otherwise, false
+    /// A task that represents the asynchronous operation
     /// </returns>
-    bool Authorize<TEntity>(TEntity entity, int storeId) where TEntity : BaseEntity, IStoreMappingSupported;
+    Task SaveStoreMappingsAsync<TEntity>(TEntity entity, IEnumerable<long> storeIds) where TEntity : BaseEntity, IStoreMappingSupported;
 }

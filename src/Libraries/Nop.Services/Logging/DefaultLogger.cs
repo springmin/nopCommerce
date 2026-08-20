@@ -3,6 +3,7 @@ using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Logging;
 using Nop.Data;
+using Nop.Services.Helpers;
 
 namespace Nop.Services.Logging;
 
@@ -14,6 +15,7 @@ public partial class DefaultLogger : ILogger
     #region Fields
 
     protected readonly CommonSettings _commonSettings;
+    protected readonly CustomerSettings _customerSettings;
 
     protected readonly IRepository<Log> _logRepository;
     protected readonly IWebHelper _webHelper;
@@ -23,10 +25,12 @@ public partial class DefaultLogger : ILogger
     #region Ctor
 
     public DefaultLogger(CommonSettings commonSettings,
+        CustomerSettings customerSettings,
         IRepository<Log> logRepository,
         IWebHelper webHelper)
     {
         _commonSettings = commonSettings;
+        _customerSettings = customerSettings;
         _logRepository = logRepository;
         _webHelper = webHelper;
     }
@@ -51,6 +55,29 @@ public partial class DefaultLogger : ILogger
         return _commonSettings
             .IgnoreLogWordlist
             .Any(x => message.Contains(x, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    /// <summary>
+    /// Prepare log item
+    /// </summary>
+    /// <param name="logLevel">Log level</param>
+    /// <param name="shortMessage">The short message</param>
+    /// <param name="fullMessage">The full message</param>
+    /// <param name="customer">The customer to associate log record with</param>
+    /// <returns>Log item</returns>
+    protected virtual Log PrepareLog(LogLevel logLevel, string shortMessage, string fullMessage = "", Customer customer = null)
+    {
+        return new Log
+        {
+            LogLevel = logLevel,
+            ShortMessage = shortMessage,
+            FullMessage = fullMessage,
+            IpAddress = _customerSettings.StoreIpAddresses ? _webHelper.GetCurrentIpAddress() : string.Empty,
+            CustomerId = customer?.Id,
+            PageUrl = _webHelper.GetThisPageUrl(true),
+            ReferrerUrl = _webHelper.GetUrlReferrer(),
+            CreatedOnUtc = DateTime.UtcNow
+        };
     }
 
     #endregion
@@ -153,7 +180,7 @@ public partial class DefaultLogger : ILogger
     /// A task that represents the asynchronous operation
     /// The task result contains the log item
     /// </returns>
-    public virtual async Task<Log> GetLogByIdAsync(int logId)
+    public virtual async Task<Log> GetLogByIdAsync(long logId)
     {
         return await _logRepository.GetByIdAsync(logId);
     }
@@ -166,7 +193,7 @@ public partial class DefaultLogger : ILogger
     /// A task that represents the asynchronous operation
     /// The task result contains the log items
     /// </returns>
-    public virtual async Task<IList<Log>> GetLogByIdsAsync(int[] logIds)
+    public virtual async Task<IList<Log>> GetLogByIdsAsync(long[] logIds)
     {
         return await _logRepository.GetByIdsAsync(logIds);
     }
@@ -180,62 +207,14 @@ public partial class DefaultLogger : ILogger
     /// <param name="customer">The customer to associate log record with</param>
     /// <returns>
     /// A task that represents the asynchronous operation
-    /// The task result contains a log item
     /// </returns>
-    public virtual async Task<Log> InsertLogAsync(LogLevel logLevel, string shortMessage, string fullMessage = "", Customer customer = null)
+    public virtual async Task InsertLogAsync(LogLevel logLevel, string shortMessage, string fullMessage = "", Customer customer = null)
     {
         //check ignore word/phrase list?
         if (IgnoreLog(shortMessage) || IgnoreLog(fullMessage))
-            return null;
+            return;
 
-        var log = new Log
-        {
-            LogLevel = logLevel,
-            ShortMessage = shortMessage,
-            FullMessage = fullMessage,
-            IpAddress = _webHelper.GetCurrentIpAddress(),
-            CustomerId = customer?.Id,
-            PageUrl = _webHelper.GetThisPageUrl(true),
-            ReferrerUrl = _webHelper.GetUrlReferrer(),
-            CreatedOnUtc = DateTime.UtcNow
-        };
-
-        await _logRepository.InsertAsync(log, false);
-
-        return log;
-    }
-
-    /// <summary>
-    /// Inserts a log item
-    /// </summary>
-    /// <param name="logLevel">Log level</param>
-    /// <param name="shortMessage">The short message</param>
-    /// <param name="fullMessage">The full message</param>
-    /// <param name="customer">The customer to associate log record with</param>
-    /// <returns>
-    /// Log item
-    /// </returns>
-    public virtual Log InsertLog(LogLevel logLevel, string shortMessage, string fullMessage = "", Customer customer = null)
-    {
-        //check ignore word/phrase list?
-        if (IgnoreLog(shortMessage) || IgnoreLog(fullMessage))
-            return null;
-
-        var log = new Log
-        {
-            LogLevel = logLevel,
-            ShortMessage = shortMessage,
-            FullMessage = fullMessage,
-            IpAddress = _webHelper.GetCurrentIpAddress(),
-            CustomerId = customer?.Id,
-            PageUrl = _webHelper.GetThisPageUrl(true),
-            ReferrerUrl = _webHelper.GetUrlReferrer(),
-            CreatedOnUtc = DateTime.UtcNow
-        };
-
-        _logRepository.Insert(log, false);
-
-        return log;
+        await _logRepository.InsertAsync(PrepareLog(logLevel, shortMessage, fullMessage, customer), false);
     }
 
     /// <summary>
@@ -248,27 +227,11 @@ public partial class DefaultLogger : ILogger
     public virtual async Task InformationAsync(string message, Exception exception = null, Customer customer = null)
     {
         //don't log thread abort exception
-        if (exception is System.Threading.ThreadAbortException)
+        if (exception is ThreadAbortException)
             return;
 
         if (IsEnabled(LogLevel.Information))
             await InsertLogAsync(LogLevel.Information, message, exception?.ToString() ?? string.Empty, customer);
-    }
-
-    /// <summary>
-    /// Information
-    /// </summary>
-    /// <param name="message">Message</param>
-    /// <param name="exception">Exception</param>
-    /// <param name="customer">Customer</param>
-    public virtual void Information(string message, Exception exception = null, Customer customer = null)
-    {
-        //don't log thread abort exception
-        if (exception is System.Threading.ThreadAbortException)
-            return;
-
-        if (IsEnabled(LogLevel.Information))
-            InsertLog(LogLevel.Information, message, exception?.ToString() ?? string.Empty, customer);
     }
 
     /// <summary>
@@ -281,27 +244,11 @@ public partial class DefaultLogger : ILogger
     public virtual async Task WarningAsync(string message, Exception exception = null, Customer customer = null)
     {
         //don't log thread abort exception
-        if (exception is System.Threading.ThreadAbortException)
+        if (exception is ThreadAbortException)
             return;
 
         if (IsEnabled(LogLevel.Warning))
             await InsertLogAsync(LogLevel.Warning, message, exception?.ToString() ?? string.Empty, customer);
-    }
-
-    /// <summary>
-    /// Warning
-    /// </summary>
-    /// <param name="message">Message</param>
-    /// <param name="exception">Exception</param>
-    /// <param name="customer">Customer</param>
-    public virtual void Warning(string message, Exception exception = null, Customer customer = null)
-    {
-        //don't log thread abort exception
-        if (exception is System.Threading.ThreadAbortException)
-            return;
-
-        if (IsEnabled(LogLevel.Warning))
-            InsertLog(LogLevel.Warning, message, exception?.ToString() ?? string.Empty, customer);
     }
 
     /// <summary>
@@ -314,27 +261,11 @@ public partial class DefaultLogger : ILogger
     public virtual async Task ErrorAsync(string message, Exception exception = null, Customer customer = null)
     {
         //don't log thread abort exception
-        if (exception is System.Threading.ThreadAbortException)
+        if (exception is ThreadAbortException)
             return;
 
         if (IsEnabled(LogLevel.Error))
             await InsertLogAsync(LogLevel.Error, message, exception?.ToString() ?? string.Empty, customer);
-    }
-
-    /// <summary>
-    /// Error
-    /// </summary>
-    /// <param name="message">Message</param>
-    /// <param name="exception">Exception</param>
-    /// <param name="customer">Customer</param>
-    public virtual void Error(string message, Exception exception = null, Customer customer = null)
-    {
-        //don't log thread abort exception
-        if (exception is System.Threading.ThreadAbortException)
-            return;
-
-        if (IsEnabled(LogLevel.Error))
-            InsertLog(LogLevel.Error, message, exception?.ToString() ?? string.Empty, customer);
     }
 
     #endregion

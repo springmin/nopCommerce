@@ -80,7 +80,7 @@ public partial class ManufacturerService : IManufacturerService
 
         var mappings = _discountManufacturerMappingRepository.Table.Where(dcm => dcm.DiscountId == discount.Id);
 
-        await _discountManufacturerMappingRepository.DeleteAsync(mappings.ToList());
+        await _discountManufacturerMappingRepository.DeleteAsync(await mappings.ToListAsync());
     }
 
     /// <summary>
@@ -121,7 +121,7 @@ public partial class ManufacturerService : IManufacturerService
     /// The task result contains the manufacturers
     /// </returns>
     public virtual async Task<IPagedList<Manufacturer>> GetAllManufacturersAsync(string manufacturerName = "",
-        int storeId = 0,
+        long storeId = 0,
         int pageIndex = 0,
         int pageSize = int.MaxValue,
         bool showHidden = false,
@@ -165,7 +165,7 @@ public partial class ManufacturerService : IManufacturerService
     /// A task that represents the asynchronous operation
     /// The task result contains the manufacturer identifiers
     /// </returns>
-    public virtual async Task<IList<int>> GetAppliedManufacturerIdsAsync(Discount discount, Customer customer)
+    public virtual async Task<IList<long>> GetAppliedManufacturerIdsAsync(Discount discount, Customer customer)
     {
         ArgumentNullException.ThrowIfNull(discount);
 
@@ -190,7 +190,7 @@ public partial class ManufacturerService : IManufacturerService
     /// A task that represents the asynchronous operation
     /// The task result contains the manufacturer
     /// </returns>
-    public virtual async Task<Manufacturer> GetManufacturerByIdAsync(int manufacturerId)
+    public virtual async Task<Manufacturer> GetManufacturerByIdAsync(long manufacturerId)
     {
         return await _manufacturerRepository.GetByIdAsync(manufacturerId, cache => default);
     }
@@ -206,16 +206,18 @@ public partial class ManufacturerService : IManufacturerService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of manufacturers
     /// </returns>
-    public virtual async Task<IPagedList<Manufacturer>> GetManufacturersWithAppliedDiscountAsync(int? discountId = null,
+    public virtual async Task<IPagedList<Manufacturer>> GetManufacturersWithAppliedDiscountAsync(long? discountId = null,
         bool showHidden = false, int pageIndex = 0, int pageSize = int.MaxValue)
     {
         var manufacturers = _manufacturerRepository.Table;
 
         if (discountId.HasValue)
+        {
             manufacturers = from manufacturer in manufacturers
                 join dmm in _discountManufacturerMappingRepository.Table on manufacturer.Id equals dmm.EntityId
                 where dmm.DiscountId == discountId.Value
                 select manufacturer;
+        }
 
         if (!showHidden)
             manufacturers = manufacturers.Where(manufacturer => !manufacturer.Deleted);
@@ -233,7 +235,7 @@ public partial class ManufacturerService : IManufacturerService
     /// A task that represents the asynchronous operation
     /// The task result contains the manufacturers
     /// </returns>
-    public virtual async Task<IList<Manufacturer>> GetManufacturersByCategoryIdAsync(int categoryId)
+    public virtual async Task<IList<Manufacturer>> GetManufacturersByCategoryIdAsync(long categoryId)
     {
         if (categoryId <= 0)
             return new List<Manufacturer>();
@@ -301,7 +303,7 @@ public partial class ManufacturerService : IManufacturerService
     /// A task that represents the asynchronous operation
     /// The task result contains the manufacturers
     /// </returns>
-    public virtual async Task<IList<Manufacturer>> GetManufacturersByIdsAsync(int[] manufacturerIds)
+    public virtual async Task<IList<Manufacturer>> GetManufacturersByIdsAsync(long[] manufacturerIds)
     {
         return await _manufacturerRepository.GetByIdsAsync(manufacturerIds, includeDeleted: false);
     }
@@ -337,6 +339,16 @@ public partial class ManufacturerService : IManufacturerService
     }
 
     /// <summary>
+    /// Deletes a list of product manufacturer mapping
+    /// </summary>
+    /// <param name="productManufacturers">Product manufacturer mappings</param>
+    /// <returns>A task that represents the asynchronous operation</returns>
+    public virtual async Task DeleteProductManufacturersAsync(IList<ProductManufacturer> productManufacturers)
+    {
+        await _productManufacturerRepository.DeleteAsync(productManufacturers);
+    }
+
+    /// <summary>
     /// Gets product manufacturer collection
     /// </summary>
     /// <param name="manufacturerId">Manufacturer identifier</param>
@@ -347,7 +359,7 @@ public partial class ManufacturerService : IManufacturerService
     /// A task that represents the asynchronous operation
     /// The task result contains the product manufacturer collection
     /// </returns>
-    public virtual async Task<IPagedList<ProductManufacturer>> GetProductManufacturersByManufacturerIdAsync(int manufacturerId,
+    public virtual async Task<IPagedList<ProductManufacturer>> GetProductManufacturersByManufacturerIdAsync(long manufacturerId,
         int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false)
     {
         if (manufacturerId == 0)
@@ -386,7 +398,7 @@ public partial class ManufacturerService : IManufacturerService
     /// A task that represents the asynchronous operation
     /// The task result contains the product manufacturer mapping collection
     /// </returns>
-    public virtual async Task<IList<ProductManufacturer>> GetProductManufacturersByProductIdAsync(int productId,
+    public virtual async Task<IList<ProductManufacturer>> GetProductManufacturersByProductIdAsync(long productId,
         bool showHidden = false)
     {
         if (productId == 0)
@@ -418,7 +430,7 @@ public partial class ManufacturerService : IManufacturerService
             query = query.Where(pm => manufacturersQuery.Any(m => m.Id == pm.ManufacturerId));
         }
 
-        return await _staticCacheManager.GetAsync(key, query.ToList);
+        return await _staticCacheManager.GetAsync(key, async () => await query.ToListAsync());
     }
 
     /// <summary>
@@ -429,7 +441,7 @@ public partial class ManufacturerService : IManufacturerService
     /// A task that represents the asynchronous operation
     /// The task result contains the product manufacturer mapping
     /// </returns>
-    public virtual async Task<ProductManufacturer> GetProductManufacturerByIdAsync(int productManufacturerId)
+    public virtual async Task<ProductManufacturer> GetProductManufacturerByIdAsync(long productManufacturerId)
     {
         return await _productManufacturerRepository.GetByIdAsync(productManufacturerId, cache => default);
     }
@@ -462,7 +474,7 @@ public partial class ManufacturerService : IManufacturerService
     /// A task that represents the asynchronous operation
     /// The task result contains the manufacturer IDs for products
     /// </returns>
-    public virtual async Task<IDictionary<int, int[]>> GetProductManufacturerIdsAsync(int[] productIds)
+    public virtual async Task<IDictionary<long, long[]>> GetProductManufacturerIdsAsync(long[] productIds)
     {
         var query = _productManufacturerRepository.Table;
 
@@ -488,7 +500,7 @@ public partial class ManufacturerService : IManufacturerService
         var query = _manufacturerRepository.Table;//.Where(m => !m.Deleted);
         var queryFilter = manufacturerIdsNames.Distinct().ToArray();
         //filtering by name
-        var filter = query.Select(m => m.Name).Where(m => queryFilter.Contains(m)).ToList();
+        var filter = await query.Select(m => m.Name).Where(m => queryFilter.Contains(m)).ToListAsync();
         queryFilter = queryFilter.Except(filter).ToArray();
 
         //if some names not found
@@ -510,13 +522,9 @@ public partial class ManufacturerService : IManufacturerService
     /// <param name="productId">Product identifier</param>
     /// <param name="manufacturerId">Manufacturer identifier</param>
     /// <returns>A ProductManufacturer that has the specified values; otherwise null</returns>
-    public virtual ProductManufacturer FindProductManufacturer(IList<ProductManufacturer> source, int productId, int manufacturerId)
+    public virtual ProductManufacturer FindProductManufacturer(IList<ProductManufacturer> source, long productId, long manufacturerId)
     {
-        foreach (var productManufacturer in source)
-            if (productManufacturer.ProductId == productId && productManufacturer.ManufacturerId == manufacturerId)
-                return productManufacturer;
-
-        return null;
+        return source.FirstOrDefault(pm => pm.ProductId == productId && pm.ManufacturerId == manufacturerId);
     }
 
     /// <summary>
@@ -528,7 +536,7 @@ public partial class ManufacturerService : IManufacturerService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public async Task<DiscountManufacturerMapping> GetDiscountAppliedToManufacturerAsync(int manufacturerId, int discountId)
+    public virtual async Task<DiscountManufacturerMapping> GetDiscountAppliedToManufacturerAsync(long manufacturerId, long discountId)
     {
         return await _discountManufacturerMappingRepository.Table
             .FirstOrDefaultAsync(dcm => dcm.EntityId == manufacturerId && dcm.DiscountId == discountId);
@@ -539,7 +547,7 @@ public partial class ManufacturerService : IManufacturerService
     /// </summary>
     /// <param name="discountManufacturerMapping">Discount-manufacturer mapping</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public async Task InsertDiscountManufacturerMappingAsync(DiscountManufacturerMapping discountManufacturerMapping)
+    public virtual async Task InsertDiscountManufacturerMappingAsync(DiscountManufacturerMapping discountManufacturerMapping)
     {
         await _discountManufacturerMappingRepository.InsertAsync(discountManufacturerMapping);
     }
@@ -549,7 +557,7 @@ public partial class ManufacturerService : IManufacturerService
     /// </summary>
     /// <param name="discountManufacturerMapping">Discount-manufacturer mapping</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public async Task DeleteDiscountManufacturerMappingAsync(DiscountManufacturerMapping discountManufacturerMapping)
+    public virtual async Task DeleteDiscountManufacturerMappingAsync(DiscountManufacturerMapping discountManufacturerMapping)
     {
         await _discountManufacturerMappingRepository.DeleteAsync(discountManufacturerMapping);
     }

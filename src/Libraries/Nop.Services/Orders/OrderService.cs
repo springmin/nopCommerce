@@ -117,7 +117,7 @@ public partial class OrderService : IOrderService
     /// A task that represents the asynchronous operation
     /// The task result contains the order
     /// </returns>
-    public virtual async Task<Order> GetOrderByIdAsync(int orderId)
+    public virtual async Task<Order> GetOrderByIdAsync(long orderId)
     {
         return await _orderRepository.GetByIdAsync(orderId, cache => default, useShortTermCache: true);
     }
@@ -147,7 +147,7 @@ public partial class OrderService : IOrderService
     /// A task that represents the asynchronous operation
     /// The task result contains the order
     /// </returns>
-    public virtual async Task<Order> GetOrderByOrderItemAsync(int orderItemId)
+    public virtual async Task<Order> GetOrderByOrderItemAsync(long orderItemId)
     {
         if (orderItemId == 0)
             return null;
@@ -166,7 +166,7 @@ public partial class OrderService : IOrderService
     /// A task that represents the asynchronous operation
     /// The task result contains the order
     /// </returns>
-    public virtual async Task<IList<Order>> GetOrdersByIdsAsync(int[] orderIds)
+    public virtual async Task<IList<Order>> GetOrdersByIdsAsync(long[] orderIds)
     {
         return await _orderRepository.GetByIdsAsync(orderIds, includeDeleted: false);
     }
@@ -250,12 +250,12 @@ public partial class OrderService : IOrderService
     /// A task that represents the asynchronous operation
     /// The task result contains the orders
     /// </returns>
-    public virtual async Task<IPagedList<Order>> SearchOrdersAsync(int storeId = 0,
-        int vendorId = 0, int customerId = 0,
-        int productId = 0, int affiliateId = 0, int warehouseId = 0,
-        int billingCountryId = 0, string paymentMethodSystemName = null,
+    public virtual async Task<IPagedList<Order>> SearchOrdersAsync(long storeId = 0,
+        long vendorId = 0, long customerId = 0,
+        long productId = 0, long affiliateId = 0, long warehouseId = 0,
+        long billingCountryId = 0, string paymentMethodSystemName = null,
         DateTime? createdFromUtc = null, DateTime? createdToUtc = null,
-        List<int> osIds = null, List<int> psIds = null, List<int> ssIds = null,
+        List<long> osIds = null, List<long> psIds = null, List<long> ssIds = null,
         string billingPhone = null, string billingEmail = null, string billingLastName = "",
         string orderNotes = null, int pageIndex = 0, int pageSize = int.MaxValue, bool getOnlyTotalCount = false)
     {
@@ -499,7 +499,7 @@ public partial class OrderService : IOrderService
     /// A task that represents the asynchronous operation
     /// The task result contains the order item
     /// </returns>
-    public virtual async Task<OrderItem> GetOrderItemByIdAsync(int orderItemId)
+    public virtual async Task<OrderItem> GetOrderItemByIdAsync(long orderItemId)
     {
         return await _orderItemRepository.GetByIdAsync(orderItemId, cache => default, useShortTermCache: true);
     }
@@ -512,7 +512,7 @@ public partial class OrderService : IOrderService
     /// A task that represents the asynchronous operation
     /// The task result contains the product
     /// </returns>
-    public virtual async Task<Product> GetProductByOrderItemIdAsync(int orderItemId)
+    public virtual async Task<Product> GetProductByOrderItemIdAsync(long orderItemId)
     {
         if (orderItemId == 0)
             return null;
@@ -534,7 +534,7 @@ public partial class OrderService : IOrderService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public virtual async Task<IList<OrderItem>> GetOrderItemsAsync(int orderId, bool? isNotReturnable = null, bool? isShipEnabled = null, int vendorId = 0)
+    public virtual async Task<IList<OrderItem>> GetOrderItemsAsync(long orderId, bool? isNotReturnable = null, bool? isShipEnabled = null, long vendorId = 0)
     {
         if (orderId == 0)
             return new List<OrderItem>();
@@ -577,7 +577,7 @@ public partial class OrderService : IOrderService
     /// A task that represents the asynchronous operation
     /// The task result contains the order items
     /// </returns>
-    public virtual async Task<IList<OrderItem>> GetDownloadableOrderItemsAsync(int customerId)
+    public virtual async Task<IList<OrderItem>> GetDownloadableOrderItemsAsync(long customerId)
     {
         if (customerId == 0)
             throw new ArgumentOutOfRangeException(nameof(customerId));
@@ -626,9 +626,7 @@ public partial class OrderService : IOrderService
             var si = (await _shipmentService.GetShipmentItemsByShipmentIdAsync(shipment.Id))
                 .FirstOrDefault(x => x.OrderItemId == orderItem.Id);
             if (si != null)
-            {
                 totalInShipments += si.Quantity;
-            }
         }
 
         return totalInShipments;
@@ -692,9 +690,7 @@ public partial class OrderService : IOrderService
                     if (product.DownloadExpirationDays.HasValue)
                     {
                         if (order.PaidDateUtc.Value.AddDays(product.DownloadExpirationDays.Value) > DateTime.UtcNow)
-                        {
                             return true;
-                        }
                     }
                     else
                     {
@@ -710,9 +706,7 @@ public partial class OrderService : IOrderService
                     if (product.DownloadExpirationDays.HasValue)
                     {
                         if (order.CreatedOnUtc.AddDays(product.DownloadExpirationDays.Value) > DateTime.UtcNow)
-                        {
                             return true;
-                        }
                     }
                     else
                     {
@@ -778,7 +772,7 @@ public partial class OrderService : IOrderService
     /// A task that represents the asynchronous operation
     /// The task result contains the order note
     /// </returns>
-    public virtual async Task<OrderNote> GetOrderNoteByIdAsync(int orderNoteId)
+    public virtual async Task<OrderNote> GetOrderNoteByIdAsync(long orderNoteId)
     {
         return await _orderNoteRepository.GetByIdAsync(orderNoteId);
     }
@@ -792,7 +786,7 @@ public partial class OrderService : IOrderService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public virtual async Task<IList<OrderNote>> GetOrderNotesByOrderIdAsync(int orderId, bool? displayToCustomer = null)
+    public virtual async Task<IList<OrderNote>> GetOrderNotesByOrderIdAsync(long orderId, bool? displayToCustomer = null)
     {
         if (orderId == 0)
             return new List<OrderNote>();
@@ -800,9 +794,7 @@ public partial class OrderService : IOrderService
         var query = _orderNoteRepository.Table.Where(on => on.OrderId == orderId);
 
         if (displayToCustomer.HasValue)
-        {
             query = query.Where(on => on.DisplayToCustomer == displayToCustomer);
-        }
 
         return await query.ToListAsync();
     }
@@ -831,7 +823,7 @@ public partial class OrderService : IOrderService
         if (string.IsNullOrEmpty(text))
             return string.Empty;
 
-        text = _htmlFormatter.FormatText(text, false, true, false, false, false, false);
+        text = _htmlFormatter.FormatText(text);
 
         return text;
     }
@@ -868,7 +860,7 @@ public partial class OrderService : IOrderService
     /// A task that represents the asynchronous operation
     /// The task result contains the recurring payment
     /// </returns>
-    public virtual async Task<RecurringPayment> GetRecurringPaymentByIdAsync(int recurringPaymentId)
+    public virtual async Task<RecurringPayment> GetRecurringPaymentByIdAsync(long recurringPaymentId)
     {
         return await _recurringPaymentRepository.GetByIdAsync(recurringPaymentId, cache => default);
     }
@@ -907,11 +899,11 @@ public partial class OrderService : IOrderService
     /// A task that represents the asynchronous operation
     /// The task result contains the recurring payments
     /// </returns>
-    public virtual async Task<IPagedList<RecurringPayment>> SearchRecurringPaymentsAsync(int storeId = 0,
-        int customerId = 0, int initialOrderId = 0, OrderStatus? initialOrderStatus = null,
+    public virtual async Task<IPagedList<RecurringPayment>> SearchRecurringPaymentsAsync(long storeId = 0,
+        long customerId = 0, long initialOrderId = 0, OrderStatus? initialOrderStatus = null,
         int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false)
     {
-        int? initialOrderStatusId = null;
+        long? initialOrderStatusId = null;
         if (initialOrderStatus.HasValue)
             initialOrderStatusId = (int)initialOrderStatus.Value;
 

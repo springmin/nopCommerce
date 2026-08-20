@@ -27,13 +27,14 @@ public partial interface IProductAttributeService
     /// <summary>
     /// Gets all product attributes
     /// </summary>
+    /// <param name="name">Filter by name</param>
     /// <param name="pageIndex">Page index</param>
     /// <param name="pageSize">Page size</param>
     /// <returns>
     /// A task that represents the asynchronous operation
     /// The task result contains the product attributes
     /// </returns>
-    Task<IPagedList<ProductAttribute>> GetAllProductAttributesAsync(int pageIndex = 0, int pageSize = int.MaxValue);
+    Task<IPagedList<ProductAttribute>> GetAllProductAttributesAsync(string name = null, int pageIndex = 0, int pageSize = int.MaxValue);
 
     /// <summary>
     /// Gets a product attribute 
@@ -43,7 +44,7 @@ public partial interface IProductAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the product attribute 
     /// </returns>
-    Task<ProductAttribute> GetProductAttributeByIdAsync(int productAttributeId);
+    Task<ProductAttribute> GetProductAttributeByIdAsync(long productAttributeId);
 
     /// <summary>
     /// Gets product attributes 
@@ -53,7 +54,7 @@ public partial interface IProductAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the product attributes
     /// </returns>
-    Task<IList<ProductAttribute>> GetProductAttributeByIdsAsync(int[] productAttributeIds);
+    Task<IList<ProductAttribute>> GetProductAttributeByIdsAsync(long[] productAttributeIds);
 
     /// <summary>
     /// Inserts a product attribute
@@ -77,7 +78,7 @@ public partial interface IProductAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of IDs not existing attributes
     /// </returns>
-    Task<int[]> GetNotExistingAttributesAsync(int[] attributeId);
+    Task<long[]> GetNotExistingAttributesAsync(long[] attributeId);
 
     #endregion
 
@@ -98,7 +99,7 @@ public partial interface IProductAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the product attribute mapping collection
     /// </returns>
-    Task<IList<ProductAttributeMapping>> GetProductAttributeMappingsByProductIdAsync(int productId);
+    Task<IList<ProductAttributeMapping>> GetProductAttributeMappingsByProductIdAsync(long productId);
 
     /// <summary>
     /// Gets a product attribute mapping
@@ -108,7 +109,7 @@ public partial interface IProductAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the product attribute mapping
     /// </returns>
-    Task<ProductAttributeMapping> GetProductAttributeMappingByIdAsync(int productAttributeMappingId);
+    Task<ProductAttributeMapping> GetProductAttributeMappingByIdAsync(long productAttributeMappingId);
 
     /// <summary>
     /// Inserts a product attribute mapping
@@ -143,7 +144,7 @@ public partial interface IProductAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the product attribute values
     /// </returns>
-    Task<IList<ProductAttributeValue>> GetProductAttributeValuesAsync(int productAttributeMappingId);
+    Task<IList<ProductAttributeValue>> GetProductAttributeValuesAsync(long productAttributeMappingId);
 
     /// <summary>
     /// Gets a product attribute value
@@ -153,7 +154,7 @@ public partial interface IProductAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the product attribute value
     /// </returns>
-    Task<ProductAttributeValue> GetProductAttributeValueByIdAsync(int productAttributeValueId);
+    Task<ProductAttributeValue> GetProductAttributeValueByIdAsync(long productAttributeValueId);
 
     /// <summary>
     /// Inserts a product attribute value
@@ -174,11 +175,11 @@ public partial interface IProductAttributeService
     #region Product attribute value pictures
 
     /// <summary>
-    /// Deletes a product attribute value picture
+    /// Deletes a list of product attribute value picture
     /// </summary>
-    /// <param name="value">Product attribute value picture</param>
+    /// <param name="value">Product attribute value pictures</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task DeleteProductAttributeValuePictureAsync(ProductAttributeValuePicture valuePicture);
+    Task DeleteProductAttributeValuePicturesAsync(IList<ProductAttributeValuePicture> valuePictures);
 
     /// <summary>
     /// Inserts a product attribute value picture
@@ -202,7 +203,7 @@ public partial interface IProductAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the product attribute value pictures
     /// </returns>
-    Task<IList<ProductAttributeValuePicture>> GetProductAttributeValuePicturesAsync(int valueId);
+    Task<IList<ProductAttributeValuePicture>> GetProductAttributeValuePicturesAsync(long valueId);
 
     /// <summary>
     /// Returns a ProductAttributeValuePicture that has the specified values
@@ -211,7 +212,7 @@ public partial interface IProductAttributeService
     /// <param name="valueId">Product attribute value identifier</param>
     /// <param name="pictureId">Picture identifier</param>
     /// <returns>A ProductAttributeValuePicture that has the specified values; otherwise null</returns>
-    ProductAttributeValuePicture FindProductAttributeValuePicture(IList<ProductAttributeValuePicture> source, int valueId, int pictureId);
+    ProductAttributeValuePicture FindProductAttributeValuePicture(IList<ProductAttributeValuePicture> source, long valueId, long pictureId);
 
     #endregion
 
@@ -232,7 +233,7 @@ public partial interface IProductAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the product attribute mapping collection
     /// </returns>
-    Task<IList<PredefinedProductAttributeValue>> GetPredefinedProductAttributeValuesAsync(int productAttributeId);
+    Task<IList<PredefinedProductAttributeValue>> GetPredefinedProductAttributeValuesAsync(long productAttributeId);
 
     /// <summary>
     /// Gets a predefined product attribute value
@@ -242,7 +243,7 @@ public partial interface IProductAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the predefined product attribute value
     /// </returns>
-    Task<PredefinedProductAttributeValue> GetPredefinedProductAttributeValueByIdAsync(int id);
+    Task<PredefinedProductAttributeValue> GetPredefinedProductAttributeValueByIdAsync(long id);
 
     /// <summary>
     /// Inserts a predefined product attribute value
@@ -277,7 +278,7 @@ public partial interface IProductAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the product attribute combinations
     /// </returns>
-    Task<IList<ProductAttributeCombination>> GetAllProductAttributeCombinationsAsync(int productId);
+    Task<IList<ProductAttributeCombination>> GetAllProductAttributeCombinationsAsync(long productId);
 
     /// <summary>
     /// Gets a product attribute combination
@@ -287,7 +288,7 @@ public partial interface IProductAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the product attribute combination
     /// </returns>
-    Task<ProductAttributeCombination> GetProductAttributeCombinationByIdAsync(int productAttributeCombinationId);
+    Task<ProductAttributeCombination> GetProductAttributeCombinationByIdAsync(long productAttributeCombinationId);
 
     /// <summary>
     /// Gets a product attribute combination by SKU
@@ -346,7 +347,7 @@ public partial interface IProductAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the product attribute combination pictures
     /// </returns>
-    Task<IList<ProductAttributeCombinationPicture>> GetProductAttributeCombinationPicturesAsync(int combinationId);
+    Task<IList<ProductAttributeCombinationPicture>> GetProductAttributeCombinationPicturesAsync(long combinationId);
 
     /// <summary>
     /// Returns a ProductAttributeCombinationPicture that has the specified values
@@ -355,7 +356,7 @@ public partial interface IProductAttributeService
     /// <param name="combinationId">Product attribute combination identifier</param>
     /// <param name="pictureId">Picture identifier</param>
     /// <returns>A ProductAttributeCombinationPicture that has the specified values; otherwise null</returns>
-    ProductAttributeCombinationPicture FindProductAttributeCombinationPicture(IList<ProductAttributeCombinationPicture> source, int combinationId, int pictureId);
+    ProductAttributeCombinationPicture FindProductAttributeCombinationPicture(IList<ProductAttributeCombinationPicture> source, long combinationId, long pictureId);
 
     #endregion
 }

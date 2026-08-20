@@ -16,7 +16,7 @@ public partial interface IAffiliateService
     /// A task that represents the asynchronous operation
     /// The task result contains the affiliate
     /// </returns>
-    Task<Affiliate> GetAffiliateByIdAsync(int affiliateId);
+    Task<Affiliate> GetAffiliateByIdAsync(long affiliateId);
 
     /// <summary>
     /// Gets an affiliate by friendly URL name

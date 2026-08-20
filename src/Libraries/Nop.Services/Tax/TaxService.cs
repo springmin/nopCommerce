@@ -10,6 +10,7 @@ using Nop.Core.Events;
 using Nop.Services.Common;
 using Nop.Services.Customers;
 using Nop.Services.Directory;
+using Nop.Services.Helpers;
 using Nop.Services.Logging;
 using Nop.Services.Tax.Events;
 
@@ -136,7 +137,7 @@ public partial class TaxService : ITaxService
     /// A task that represents the asynchronous operation
     /// The task result contains the package for tax calculation
     /// </returns>
-    protected virtual async Task<TaxRateRequest> PrepareTaxRateRequestAsync(Product product, int taxCategoryId, Customer customer, decimal price)
+    protected virtual async Task<TaxRateRequest> PrepareTaxRateRequestAsync(Product product, long taxCategoryId, Customer customer, decimal price)
     {
         ArgumentNullException.ThrowIfNull(customer);
 
@@ -176,7 +177,7 @@ public partial class TaxService : ITaxService
             if (_taxSettings.AutomaticallyDetectCountry)
             {
                 var ipAddress = _webHelper.GetCurrentIpAddress();
-                var countryIsoCode = _geoLookupService.LookupCountryIsoCode(ipAddress);
+                var countryIsoCode = await _geoLookupService.LookupCountryIsoCodeAsync(ipAddress);
                 var country = await _countryService.GetCountryByTwoLetterIsoCodeAsync(countryIsoCode);
 
                 if (country != null)
@@ -233,7 +234,7 @@ public partial class TaxService : ITaxService
     /// A task that represents the asynchronous operation
     /// The task result contains the calculated tax rate. A value indicating whether a request is taxable
     /// </returns>
-    protected virtual async Task<(decimal taxRate, bool isTaxable)> GetTaxRateAsync(Product product, int taxCategoryId,
+    protected virtual async Task<(decimal taxRate, bool isTaxable)> GetTaxRateAsync(Product product, long taxCategoryId,
         Customer customer, decimal price)
     {
         var taxRate = decimal.Zero;
@@ -273,8 +274,10 @@ public partial class TaxService : ITaxService
             taxRate = taxRateResult.TaxRate;
         }
         else if (_taxSettings.LogErrors)
+        {
             foreach (var error in taxRateResult.Errors)
                 await _logger.ErrorAsync($"{activeTaxProvider.PluginDescriptor.FriendlyName} - {error}", null, customer);
+        }
 
         return (taxRate, isTaxable);
     }
@@ -442,7 +445,7 @@ public partial class TaxService : ITaxService
     /// A task that represents the asynchronous operation
     /// The task result contains the price. Tax rate
     /// </returns>
-    public virtual async Task<(decimal price, decimal taxRate)> GetProductPriceAsync(Product product, int taxCategoryId,
+    public virtual async Task<(decimal price, decimal taxRate)> GetProductPriceAsync(Product product, long taxCategoryId,
         decimal price, bool includingTax, Customer customer,
         bool priceIncludesTax)
     {
@@ -483,9 +486,7 @@ public partial class TaxService : ITaxService
                 //we should calculate price WITH tax
                 //do it only when price is taxable
                 if (isTaxable)
-                {
                     price = CalculatePrice(price, taxRate, true);
-                }
             }
         }
 
@@ -566,9 +567,7 @@ public partial class TaxService : ITaxService
         var taxRate = decimal.Zero;
 
         if (!_taxSettings.ShippingIsTaxable)
-        {
             return (price, taxRate);
-        }
 
         var taxClassId = _taxSettings.ShippingTaxClassId;
         var priceIncludesTax = _taxSettings.ShippingPriceIncludesTax;
@@ -611,9 +610,7 @@ public partial class TaxService : ITaxService
         var taxRate = decimal.Zero;
 
         if (!_taxSettings.PaymentMethodAdditionalFeeIsTaxable)
-        {
             return (price, taxRate);
-        }
 
         var taxClassId = _taxSettings.PaymentMethodAdditionalFeeTaxClassId;
         var priceIncludesTax = _taxSettings.PaymentMethodAdditionalFeeIncludesTax;
@@ -756,9 +753,7 @@ public partial class TaxService : ITaxService
         if (taxTotalResult != null && !taxTotalResult.Success && _taxSettings.LogErrors)
         {
             foreach (var error in taxTotalResult.Errors)
-            {
                 await _logger.ErrorAsync($"{activeTaxProvider.PluginDescriptor.FriendlyName} - {error}", null, customer);
-            }
         }
 
         return taxTotalResult;

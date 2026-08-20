@@ -25,7 +25,7 @@ public partial interface IBlogService
     /// A task that represents the asynchronous operation
     /// The task result contains the blog post
     /// </returns>
-    Task<BlogPost> GetBlogPostByIdAsync(int blogPostId);
+    Task<BlogPost> GetBlogPostByIdAsync(long blogPostId);
 
     /// <summary>
     /// Gets all blog posts
@@ -42,7 +42,7 @@ public partial interface IBlogService
     /// A task that represents the asynchronous operation
     /// The task result contains the blog posts
     /// </returns>
-    Task<IPagedList<BlogPost>> GetAllBlogPostsAsync(int storeId = 0, int languageId = 0,
+    Task<IPagedList<BlogPost>> GetAllBlogPostsAsync(long storeId = 0, long languageId = 0,
         DateTime? dateFrom = null, DateTime? dateTo = null,
         int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false, string title = null);
 
@@ -59,8 +59,8 @@ public partial interface IBlogService
     /// A task that represents the asynchronous operation
     /// The task result contains the blog posts
     /// </returns>
-    Task<IPagedList<BlogPost>> GetAllBlogPostsByTagAsync(int storeId = 0,
-        int languageId = 0, string tag = "",
+    Task<IPagedList<BlogPost>> GetAllBlogPostsByTagAsync(long storeId = 0,
+        long languageId = 0, string tag = "",
         int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false);
 
     /// <summary>
@@ -73,7 +73,7 @@ public partial interface IBlogService
     /// A task that represents the asynchronous operation
     /// The task result contains the blog post tags
     /// </returns>
-    Task<IList<BlogPostTag>> GetAllBlogPostTagsAsync(int storeId, int languageId, bool showHidden = false);
+    Task<IList<BlogPostTag>> GetAllBlogPostTagsAsync(long storeId, long languageId, bool showHidden = false);
 
     /// <summary>
     /// Inserts a blog post
@@ -137,7 +137,7 @@ public partial interface IBlogService
     /// A task that represents the asynchronous operation
     /// The task result contains the comments
     /// </returns>
-    Task<IList<BlogComment>> GetAllCommentsAsync(int customerId = 0, int storeId = 0, int? blogPostId = null,
+    Task<IList<BlogComment>> GetAllCommentsAsync(long customerId = 0, long storeId = 0, long? blogPostId = null,
         bool? approved = null, DateTime? fromUtc = null, DateTime? toUtc = null, string commentText = null);
 
     /// <summary>
@@ -148,7 +148,7 @@ public partial interface IBlogService
     /// A task that represents the asynchronous operation
     /// The task result contains the blog comment
     /// </returns>
-    Task<BlogComment> GetBlogCommentByIdAsync(int blogCommentId);
+    Task<BlogComment> GetBlogCommentByIdAsync(long blogCommentId);
 
     /// <summary>
     /// Get blog comments by identifiers
@@ -158,7 +158,7 @@ public partial interface IBlogService
     /// A task that represents the asynchronous operation
     /// The task result contains the blog comments
     /// </returns>
-    Task<IList<BlogComment>> GetBlogCommentsByIdsAsync(int[] commentIds);
+    Task<IList<BlogComment>> GetBlogCommentsByIdsAsync(long[] commentIds);
 
     /// <summary>
     /// Get the count of blog comments
@@ -170,7 +170,7 @@ public partial interface IBlogService
     /// A task that represents the asynchronous operation
     /// The task result contains the number of blog comments
     /// </returns>
-    Task<int> GetBlogCommentsCountAsync(BlogPost blogPost, int storeId = 0, bool? isApproved = null);
+    Task<int> GetBlogCommentsCountAsync(BlogPost blogPost, long storeId = 0, bool? isApproved = null);
 
     /// <summary>
     /// Deletes a blog comment

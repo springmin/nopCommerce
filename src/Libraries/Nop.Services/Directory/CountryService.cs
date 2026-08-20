@@ -62,7 +62,7 @@ public partial class CountryService : ICountryService
     /// A task that represents the asynchronous operation
     /// The task result contains the countries
     /// </returns>
-    public virtual async Task<IList<Country>> GetAllCountriesAsync(int languageId = 0, bool showHidden = false)
+    public virtual async Task<IList<Country>> GetAllCountriesAsync(long languageId = 0, bool showHidden = false)
     {
         var store = await _storeContext.GetCurrentStoreAsync();
         var key = _staticCacheManager.PrepareKeyForDefaultCache(NopDirectoryDefaults.CountriesAllCacheKey, languageId,
@@ -89,7 +89,7 @@ public partial class CountryService : ICountryService
                 countries = await countries
                     .ToAsyncEnumerable()
                     .OrderBy(c => c.DisplayOrder)
-                    .ThenByAwait(async c => await _localizationService.GetLocalizedAsync(c, x => x.Name, languageId))
+                    .ThenBy(async (c, _) => await _localizationService.GetLocalizedAsync(c, x => x.Name, languageId))
                     .ToListAsync();
             }
 
@@ -106,7 +106,7 @@ public partial class CountryService : ICountryService
     /// A task that represents the asynchronous operation
     /// The task result contains the countries
     /// </returns>
-    public virtual async Task<IList<Country>> GetAllCountriesForBillingAsync(int languageId = 0, bool showHidden = false)
+    public virtual async Task<IList<Country>> GetAllCountriesForBillingAsync(long languageId = 0, bool showHidden = false)
     {
         return (await GetAllCountriesAsync(languageId, showHidden)).Where(c => c.AllowsBilling).ToList();
     }
@@ -120,7 +120,7 @@ public partial class CountryService : ICountryService
     /// A task that represents the asynchronous operation
     /// The task result contains the countries
     /// </returns>
-    public virtual async Task<IList<Country>> GetAllCountriesForShippingAsync(int languageId = 0, bool showHidden = false)
+    public virtual async Task<IList<Country>> GetAllCountriesForShippingAsync(long languageId = 0, bool showHidden = false)
     {
         return (await GetAllCountriesAsync(languageId, showHidden)).Where(c => c.AllowsShipping).ToList();
     }
@@ -146,7 +146,7 @@ public partial class CountryService : ICountryService
     /// A task that represents the asynchronous operation
     /// The task result contains the country
     /// </returns>
-    public virtual async Task<Country> GetCountryByIdAsync(int countryId)
+    public virtual async Task<Country> GetCountryByIdAsync(long countryId)
     {
         return await _countryRepository.GetByIdAsync(countryId, cache => default);
     }
@@ -159,7 +159,7 @@ public partial class CountryService : ICountryService
     /// A task that represents the asynchronous operation
     /// The task result contains the countries
     /// </returns>
-    public virtual async Task<IList<Country>> GetCountriesByIdsAsync(int[] countryIds)
+    public virtual async Task<IList<Country>> GetCountriesByIdsAsync(long[] countryIds)
     {
         return await _countryRepository.GetByIdsAsync(countryIds);
     }

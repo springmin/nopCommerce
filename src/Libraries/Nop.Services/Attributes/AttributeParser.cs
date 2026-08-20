@@ -73,9 +73,9 @@ public partial class AttributeParser<TAttribute, TAttributeValue> : IAttributePa
     /// </summary>
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <returns>Selected attribute identifiers</returns>
-    public virtual IEnumerable<int> ParseAttributeIds(string attributesXml)
+    public virtual IEnumerable<long> ParseAttributeIds(string attributesXml)
     {
-        var ids = new List<int>();
+        var ids = new List<long>();
         if (string.IsNullOrEmpty(attributesXml))
             return ids;
 
@@ -87,7 +87,7 @@ public partial class AttributeParser<TAttribute, TAttributeValue> : IAttributePa
             var nodes = xmlDoc.SelectNodes(@$"//Attributes/{_attributeName}");
 
             if (nodes == null)
-                return Enumerable.Empty<int>();
+                return Enumerable.Empty<long>();
 
             foreach (XmlNode node in nodes)
             {
@@ -139,7 +139,7 @@ public partial class AttributeParser<TAttribute, TAttributeValue> : IAttributePa
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <param name="attributeId">Attribute identifier</param>
     /// <returns>Updated result (XML format)</returns>
-    public virtual string RemoveAttribute(string attributesXml, int attributeId)
+    public virtual string RemoveAttribute(string attributesXml, long attributeId)
     {
         var result = string.Empty;
 
@@ -201,7 +201,7 @@ public partial class AttributeParser<TAttribute, TAttributeValue> : IAttributePa
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <param name="attributeId">Attribute identifier</param>
     /// <returns>Attribute value</returns>
-    public virtual IList<string> ParseValues(string attributesXml, int attributeId)
+    public virtual IList<string> ParseValues(string attributesXml, long attributeId)
     {
         var selectedAddressAttributeValues = new List<string>();
         if (string.IsNullOrEmpty(attributesXml))
@@ -325,6 +325,7 @@ public partial class AttributeParser<TAttribute, TAttributeValue> : IAttributePa
             var nodeList1 = xmlDoc.SelectNodes(@$"//Attributes/{_attributeName}");
 
             if (nodeList1 != null)
+            {
                 foreach (XmlNode node1 in nodeList1)
                 {
                     if (node1.Attributes?["ID"] == null)
@@ -340,6 +341,7 @@ public partial class AttributeParser<TAttribute, TAttributeValue> : IAttributePa
                     attributeElement = (XmlElement)node1;
                     break;
                 }
+            }
 
             //create new one if not found
             if (attributeElement == null)
@@ -491,15 +493,12 @@ public partial class AttributeParser<TAttribute, TAttributeValue> : IAttributePa
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public async Task<bool?> IsConditionMetAsync(string conditionAttributeXml, string selectedAttributesXml)
+    public virtual async Task<bool?> IsConditionMetAsync(string conditionAttributeXml, string selectedAttributesXml)
     {
-        if (string.IsNullOrEmpty(conditionAttributeXml))
-            return null;
-
         if (string.IsNullOrEmpty(conditionAttributeXml))
             //no condition
             return null;
-
+        
         //load an attribute this one depends on
         var dependOnAttribute = (await ParseAttributesAsync(conditionAttributeXml)).FirstOrDefault();
         if (dependOnAttribute == null)
@@ -522,8 +521,11 @@ public partial class AttributeParser<TAttribute, TAttributeValue> : IAttributePa
         {
             var found = false;
             foreach (var t2 in selectedValues)
+            {
                 if (t1 == t2)
                     found = true;
+            }
+
             if (!found)
                 allFound = false;
         }

@@ -58,8 +58,8 @@ public partial class BackInStockSubscriptionService : IBackInStockSubscriptionSe
     /// A task that represents the asynchronous operation
     /// The task result contains the subscriptions
     /// </returns>
-    public virtual async Task<IPagedList<BackInStockSubscription>> GetAllSubscriptionsByCustomerIdAsync(int customerId,
-        int storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
+    public virtual async Task<IPagedList<BackInStockSubscription>> GetAllSubscriptionsByCustomerIdAsync(long customerId,
+        long storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
     {
         return await _backInStockSubscriptionRepository.GetAllPagedAsync(query =>
         {
@@ -92,7 +92,7 @@ public partial class BackInStockSubscriptionService : IBackInStockSubscriptionSe
     /// A task that represents the asynchronous operation
     /// The task result contains the subscriptions
     /// </returns>
-    public virtual async Task<BackInStockSubscription> FindSubscriptionAsync(int customerId, int productId, int storeId)
+    public virtual async Task<BackInStockSubscription> FindSubscriptionAsync(long customerId, long productId, long storeId)
     {
         var query = from biss in _backInStockSubscriptionRepository.Table
             orderby biss.CreatedOnUtc descending
@@ -114,7 +114,7 @@ public partial class BackInStockSubscriptionService : IBackInStockSubscriptionSe
     /// A task that represents the asynchronous operation
     /// The task result contains the subscription
     /// </returns>
-    public virtual async Task<BackInStockSubscription> GetSubscriptionByIdAsync(int subscriptionId)
+    public virtual async Task<BackInStockSubscription> GetSubscriptionByIdAsync(long subscriptionId)
     {
         return await _backInStockSubscriptionRepository.GetByIdAsync(subscriptionId, cache => default, useShortTermCache: true);
     }
@@ -166,8 +166,8 @@ public partial class BackInStockSubscriptionService : IBackInStockSubscriptionSe
     /// A task that represents the asynchronous operation
     /// The task result contains the subscriptions
     /// </returns>
-    public virtual async Task<IPagedList<BackInStockSubscription>> GetAllSubscriptionsByProductIdAsync(int productId,
-        int storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
+    public virtual async Task<IPagedList<BackInStockSubscription>> GetAllSubscriptionsByProductIdAsync(long productId,
+        long storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
     {
         return await _backInStockSubscriptionRepository.GetAllPagedAsync(query =>
         {

@@ -23,6 +23,13 @@ public partial interface IGenericAttributeService
     Task DeleteAttributesAsync(IList<GenericAttribute> attributes);
 
     /// <summary>
+    /// Deletes an attributes
+    /// </summary>
+    /// <param name="key">Key</param>
+    /// <returns>A task that represents the asynchronous operation</returns>
+    Task DeleteAttributesAsync<TEntity>(string key);
+
+    /// <summary>
     /// Inserts an attribute
     /// </summary>
     /// <param name="attribute">attribute</param>
@@ -45,7 +52,7 @@ public partial interface IGenericAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the get attributes
     /// </returns>
-    Task<IList<GenericAttribute>> GetAttributesForEntityAsync(int entityId, string keyGroup);
+    Task<IList<GenericAttribute>> GetAttributesForEntityAsync(long entityId, string keyGroup);
 
     /// <summary>
     /// Save attribute value
@@ -56,7 +63,7 @@ public partial interface IGenericAttributeService
     /// <param name="value">Value</param>
     /// <param name="storeId">Store identifier; pass 0 if this attribute will be available for all stores</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task SaveAttributeAsync<TPropType>(BaseEntity entity, string key, TPropType value, int storeId = 0);
+    Task SaveAttributeAsync<TPropType>(BaseEntity entity, string key, TPropType value, long storeId = 0);
 
     /// <summary>
     /// Get an attribute of an entity
@@ -70,7 +77,7 @@ public partial interface IGenericAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the attribute
     /// </returns>
-    Task<TPropType> GetAttributeAsync<TPropType>(BaseEntity entity, string key, int storeId = 0, TPropType defaultValue = default);
+    Task<TPropType> GetAttributeAsync<TPropType>(BaseEntity entity, string key, long storeId = 0, TPropType defaultValue = default);
 
     /// <summary>
     /// Get an attribute of an entity
@@ -85,6 +92,6 @@ public partial interface IGenericAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the attribute
     /// </returns>
-    Task<TPropType> GetAttributeAsync<TEntity, TPropType>(int entityId, string key, int storeId = 0, TPropType defaultValue = default)
+    Task<TPropType> GetAttributeAsync<TEntity, TPropType>(long entityId, string key, long storeId = 0, TPropType defaultValue = default)
         where TEntity : BaseEntity;
 }

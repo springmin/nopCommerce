@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Http;
 using Nop.Core.Security;
+using Nop.Services.Helpers;
 
 namespace Nop.Services.Catalog;
 
@@ -45,29 +45,29 @@ public partial class CompareProductsService : ICompareProductsService
     /// Get a list of identifier of compared products
     /// </summary>
     /// <returns>List of identifier</returns>
-    protected virtual List<int> GetComparedProductIds()
+    protected virtual List<long> GetComparedProductIds()
     {
         var httpContext = _httpContextAccessor.HttpContext;
         if (httpContext?.Request == null)
-            return new List<int>();
+            return new List<long>();
 
         //try to get cookie
         var cookieName = $"{NopCookieDefaults.Prefix}{NopCookieDefaults.ComparedProductsCookie}";
         if (!httpContext.Request.Cookies.TryGetValue(cookieName, out var productIdsCookie) || string.IsNullOrEmpty(productIdsCookie))
-            return new List<int>();
+            return new List<long>();
 
         //get array of string product identifiers from cookie
         var productIds = productIdsCookie.Split(_separator, StringSplitOptions.RemoveEmptyEntries);
 
         //return list of int product identifiers
-        return productIds.Select(int.Parse).Distinct().ToList();
+        return productIds.Select(long.Parse).Distinct().ToList();
     }
 
     /// <summary>
     /// Add cookie value for the compared products
     /// </summary>
     /// <param name="comparedProductIds">Collection of compared products identifiers</param>
-    protected virtual void AddCompareProductsCookie(IEnumerable<int> comparedProductIds)
+    protected virtual void AddCompareProductsCookie(IEnumerable<long> comparedProductIds)
     {
         //delete current cookie if exists
         var cookieName = $"{NopCookieDefaults.Prefix}{NopCookieDefaults.ComparedProductsCookie}";
@@ -128,7 +128,7 @@ public partial class CompareProductsService : ICompareProductsService
     /// </summary>
     /// <param name="productId">Product identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual Task RemoveProductFromCompareListAsync(int productId)
+    public virtual Task RemoveProductFromCompareListAsync(long productId)
     {
         if (_httpContextAccessor.HttpContext?.Response == null)
             return Task.CompletedTask;
@@ -154,7 +154,7 @@ public partial class CompareProductsService : ICompareProductsService
     /// </summary>
     /// <param name="productId">Product identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual Task AddProductToCompareListAsync(int productId)
+    public virtual Task AddProductToCompareListAsync(long productId)
     {
         if (_httpContextAccessor.HttpContext?.Response == null)
             return Task.CompletedTask;

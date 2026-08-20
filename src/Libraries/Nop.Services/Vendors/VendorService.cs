@@ -49,7 +49,7 @@ public partial class VendorService : IVendorService
     /// A task that represents the asynchronous operation
     /// The task result contains the vendor
     /// </returns>
-    public virtual async Task<Vendor> GetVendorByIdAsync(int vendorId)
+    public virtual async Task<Vendor> GetVendorByIdAsync(long vendorId)
     {
         return await _vendorRepository.GetByIdAsync(vendorId, cache => default);
     }
@@ -62,7 +62,7 @@ public partial class VendorService : IVendorService
     /// A task that represents the asynchronous operation
     /// The task result contains the vendor
     /// </returns>
-    public virtual async Task<Vendor> GetVendorByProductIdAsync(int productId)
+    public virtual async Task<Vendor> GetVendorByProductIdAsync(long productId)
     {
         if (productId == 0)
             return null;
@@ -81,7 +81,7 @@ public partial class VendorService : IVendorService
     /// A task that represents the asynchronous operation
     /// The task result contains the vendors
     /// </returns>
-    public virtual async Task<IList<Vendor>> GetVendorsByProductIdsAsync(int[] productIds)
+    public virtual async Task<IList<Vendor>> GetVendorsByProductIdsAsync(long[] productIds)
     {
         ArgumentNullException.ThrowIfNull(productIds);
 
@@ -99,7 +99,7 @@ public partial class VendorService : IVendorService
     /// A task that represents the asynchronous operation
     /// The task result contains the vendors
     /// </returns>
-    public virtual async Task<IList<Vendor>> GetVendorsByCustomerIdsAsync(int[] customerIds)
+    public virtual async Task<IList<Vendor>> GetVendorsByCustomerIdsAsync(long[] customerIds)
     {
         ArgumentNullException.ThrowIfNull(customerIds);
 
@@ -181,7 +181,7 @@ public partial class VendorService : IVendorService
     /// A task that represents the asynchronous operation
     /// The task result contains the vendor note
     /// </returns>
-    public virtual async Task<VendorNote> GetVendorNoteByIdAsync(int vendorNoteId)
+    public virtual async Task<VendorNote> GetVendorNoteByIdAsync(long vendorNoteId)
     {
         return await _vendorNoteRepository.GetByIdAsync(vendorNoteId, cache => default);
     }
@@ -196,7 +196,7 @@ public partial class VendorService : IVendorService
     /// A task that represents the asynchronous operation
     /// The task result contains the vendor notes
     /// </returns>
-    public virtual async Task<IPagedList<VendorNote>> GetVendorNotesByVendorAsync(int vendorId, int pageIndex = 0, int pageSize = int.MaxValue)
+    public virtual async Task<IPagedList<VendorNote>> GetVendorNotesByVendorAsync(long vendorId, int pageIndex = 0, int pageSize = int.MaxValue)
     {
         var query = _vendorNoteRepository.Table.Where(vn => vn.VendorId == vendorId);
 
@@ -239,7 +239,7 @@ public partial class VendorService : IVendorService
         if (string.IsNullOrEmpty(text))
             return string.Empty;
 
-        text = _htmlFormatter.FormatText(text, false, true, false, false, false, false);
+        text = _htmlFormatter.FormatText(text);
 
         return text;
     }

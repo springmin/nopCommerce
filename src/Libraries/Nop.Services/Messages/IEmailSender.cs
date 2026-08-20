@@ -31,5 +31,5 @@ public partial interface IEmailSender
         string replyToAddress = null, string replyToName = null,
         IEnumerable<string> bcc = null, IEnumerable<string> cc = null,
         string attachmentFilePath = null, string attachmentFileName = null,
-        int attachedDownloadId = 0, IDictionary<string, string> headers = null);
+        long attachedDownloadId = 0, IDictionary<string, string> headers = null);
 }

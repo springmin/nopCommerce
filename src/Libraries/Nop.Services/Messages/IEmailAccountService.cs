@@ -36,7 +36,7 @@ public partial interface IEmailAccountService
     /// A task that represents the asynchronous operation
     /// The task result contains the email account
     /// </returns>
-    Task<EmailAccount> GetEmailAccountByIdAsync(int emailAccountId);
+    Task<EmailAccount> GetEmailAccountByIdAsync(long emailAccountId);
 
     /// <summary>
     /// Gets all email accounts

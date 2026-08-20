@@ -92,27 +92,27 @@ public partial class OrderReportService : IOrderReportService
     /// <param name="showHidden">A value indicating whether to show hidden records</param>
     /// <returns>Result query</returns>
     protected virtual IQueryable<OrderItem> SearchOrderItems(
-        int categoryId = 0,
-        int manufacturerId = 0,
-        int storeId = 0,
-        int vendorId = 0,
+        long categoryId = 0,
+        long manufacturerId = 0,
+        long storeId = 0,
+        long vendorId = 0,
         DateTime? createdFromUtc = null,
         DateTime? createdToUtc = null,
         OrderStatus? os = null,
         PaymentStatus? ps = null,
         ShippingStatus? ss = null,
-        int billingCountryId = 0,
+        long billingCountryId = 0,
         bool showHidden = false)
     {
-        int? orderStatusId = null;
+        long? orderStatusId = null;
         if (os.HasValue)
             orderStatusId = (int)os.Value;
 
-        int? paymentStatusId = null;
+        long? paymentStatusId = null;
         if (ps.HasValue)
             paymentStatusId = (int)ps.Value;
 
-        int? shippingStatusId = null;
+        long? shippingStatusId = null;
         if (ss.HasValue)
             shippingStatusId = (int)ss.Value;
 
@@ -174,18 +174,18 @@ public partial class OrderReportService : IOrderReportService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public virtual async Task<IList<OrderByCountryReportLine>> GetCountryReportAsync(int storeId, OrderStatus? os,
+    public virtual async Task<IList<OrderByCountryReportLine>> GetCountryReportAsync(long storeId, OrderStatus? os,
         PaymentStatus? ps, ShippingStatus? ss, DateTime? startTimeUtc, DateTime? endTimeUtc)
     {
-        int? orderStatusId = null;
+        long? orderStatusId = null;
         if (os.HasValue)
             orderStatusId = (int)os.Value;
 
-        int? paymentStatusId = null;
+        long? paymentStatusId = null;
         if (ps.HasValue)
             paymentStatusId = (int)ps.Value;
 
-        int? shippingStatusId = null;
+        long? shippingStatusId = null;
         if (ss.HasValue)
             shippingStatusId = (int)ss.Value;
 
@@ -249,10 +249,10 @@ public partial class OrderReportService : IOrderReportService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public virtual async Task<OrderAverageReportLine> GetOrderAverageReportLineAsync(int storeId = 0,
-        int vendorId = 0, int productId = 0, int warehouseId = 0, int billingCountryId = 0,
-        int orderId = 0, string paymentMethodSystemName = null,
-        List<int> osIds = null, List<int> psIds = null, List<int> ssIds = null,
+    public virtual async Task<OrderAverageReportLine> GetOrderAverageReportLineAsync(long storeId = 0,
+        long vendorId = 0, long productId = 0, long warehouseId = 0, long billingCountryId = 0,
+        long orderId = 0, string paymentMethodSystemName = null,
+        List<long> osIds = null, List<long> psIds = null, List<long> ssIds = null,
         DateTime? startTimeUtc = null, DateTime? endTimeUtc = null,
         string billingPhone = null, string billingEmail = null, string billingLastName = "", string orderNotes = null)
     {
@@ -339,7 +339,7 @@ public partial class OrderReportService : IOrderReportService
                 where n.Note.Contains(orderNotes)
                 select o;
 
-            query.Distinct();
+            query = query.Distinct();
         }
 
         var item = await (from oq in query
@@ -384,13 +384,13 @@ public partial class OrderReportService : IOrderReportService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public virtual async Task<OrderAverageReportLineSummary> OrderAverageReportAsync(int storeId, OrderStatus os)
+    public virtual async Task<OrderAverageReportLineSummary> OrderAverageReportAsync(long storeId, OrderStatus os)
     {
         var item = new OrderAverageReportLineSummary
         {
             OrderStatus = os
         };
-        var orderStatuses = new List<int> { (int)os };
+        var orderStatuses = new List<long> { (long)os };
 
         var nowDt = await _dateTimeHelper.ConvertToUserTimeAsync(DateTime.Now);
         var timeZone = await _dateTimeHelper.GetCurrentTimeZoneAsync();
@@ -462,16 +462,16 @@ public partial class OrderReportService : IOrderReportService
     /// The task result contains the result
     /// </returns>
     public virtual async Task<IPagedList<SalesSummaryReportLine>> SalesSummaryReportAsync(
-        int categoryId = 0,
-        int productId = 0,
-        int manufacturerId = 0,
-        int storeId = 0,
-        int vendorId = 0,
+        long categoryId = 0,
+        long productId = 0,
+        long manufacturerId = 0,
+        long storeId = 0,
+        long vendorId = 0,
         DateTime? createdFromUtc = null,
         DateTime? createdToUtc = null,
-        List<int> osIds = null,
-        List<int> psIds = null,
-        int billingCountryId = 0,
+        List<long> osIds = null,
+        List<long> psIds = null,
+        long billingCountryId = 0,
         GroupByOptions groupBy = GroupByOptions.Day,
         int pageIndex = 0,
         int pageSize = int.MaxValue)
@@ -684,16 +684,16 @@ public partial class OrderReportService : IOrderReportService
     /// The task result contains the result
     /// </returns>
     public virtual async Task<IPagedList<BestsellersReportLine>> BestSellersReportAsync(
-        int categoryId = 0,
-        int manufacturerId = 0,
-        int storeId = 0,
-        int vendorId = 0,
+        long categoryId = 0,
+        long manufacturerId = 0,
+        long storeId = 0,
+        long vendorId = 0,
         DateTime? createdFromUtc = null,
         DateTime? createdToUtc = null,
         OrderStatus? os = null,
         PaymentStatus? ps = null,
         ShippingStatus? ss = null,
-        int billingCountryId = 0,
+        long billingCountryId = 0,
         OrderByEnum orderBy = OrderByEnum.OrderByQuantity,
         int pageIndex = 0,
         int pageSize = int.MaxValue,
@@ -753,16 +753,16 @@ public partial class OrderReportService : IOrderReportService
     /// The task result contains the result
     /// </returns>
     public virtual async Task<decimal> BestSellersReportTotalAmountAsync(
-        int categoryId = 0,
-        int manufacturerId = 0,
-        int storeId = 0,
-        int vendorId = 0,
+        long categoryId = 0,
+        long manufacturerId = 0,
+        long storeId = 0,
+        long vendorId = 0,
         DateTime? createdFromUtc = null,
         DateTime? createdToUtc = null,
         OrderStatus? os = null,
         PaymentStatus? ps = null,
         ShippingStatus? ss = null,
-        int billingCountryId = 0,
+        long billingCountryId = 0,
         bool showHidden = false)
     {
         return await SearchOrderItems(categoryId, manufacturerId, storeId, vendorId, createdFromUtc, createdToUtc, os, ps, ss, billingCountryId, showHidden: showHidden)
@@ -781,7 +781,7 @@ public partial class OrderReportService : IOrderReportService
     /// A task that represents the asynchronous operation
     /// The task result contains the products
     /// </returns>
-    public virtual async Task<int[]> GetAlsoPurchasedProductsIdsAsync(int storeId, int productId,
+    public virtual async Task<long[]> GetAlsoPurchasedProductsIdsAsync(long storeId, long productId,
         int recordsToReturn = 5, bool visibleIndividuallyOnly = true, bool showHidden = false)
     {
         if (productId == 0)
@@ -818,7 +818,7 @@ public partial class OrderReportService : IOrderReportService
 
         var report = await query3.ToListAsync();
 
-        var ids = new List<int>();
+        var ids = new List<long>();
         foreach (var reportLine in report)
             ids.Add(reportLine.ProductId);
 
@@ -841,8 +841,8 @@ public partial class OrderReportService : IOrderReportService
     /// A task that represents the asynchronous operation
     /// The task result contains the products
     /// </returns>
-    public virtual async Task<IPagedList<Product>> ProductsNeverSoldAsync(int vendorId = 0, int storeId = 0,
-        int categoryId = 0, int manufacturerId = 0,
+    public virtual async Task<IPagedList<Product>> ProductsNeverSoldAsync(long vendorId = 0, long storeId = 0,
+        long categoryId = 0, long manufacturerId = 0,
         DateTime? createdFromUtc = null, DateTime? createdToUtc = null,
         int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false)
     {
@@ -854,7 +854,7 @@ public partial class OrderReportService : IOrderReportService
             where (!createdFromUtc.HasValue || createdFromUtc.Value <= o.CreatedOnUtc) &&
                   (!createdToUtc.HasValue || createdToUtc.Value >= o.CreatedOnUtc) &&
                   !o.Deleted
-            select new { ProductId = oi.ProductId };
+            select new { oi.ProductId };
 
         var query =
             from p in _productRepository.Table
@@ -920,9 +920,9 @@ public partial class OrderReportService : IOrderReportService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public virtual async Task<decimal> ProfitReportAsync(int storeId = 0, int vendorId = 0, int productId = 0,
-        int warehouseId = 0, int billingCountryId = 0, int orderId = 0, string paymentMethodSystemName = null,
-        List<int> osIds = null, List<int> psIds = null, List<int> ssIds = null,
+    public virtual async Task<decimal> ProfitReportAsync(long storeId = 0, long vendorId = 0, long productId = 0,
+        long warehouseId = 0, long billingCountryId = 0, long orderId = 0, string paymentMethodSystemName = null,
+        List<long> osIds = null, List<long> psIds = null, List<long> ssIds = null,
         DateTime? startTimeUtc = null, DateTime? endTimeUtc = null,
         string billingPhone = null, string billingEmail = null, string billingLastName = "", string orderNotes = null)
     {

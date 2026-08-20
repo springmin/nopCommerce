@@ -56,7 +56,7 @@ public partial class ReviewTypeService : IReviewTypeService
     /// A task that represents the asynchronous operation
     /// The task result contains the review type
     /// </returns>
-    public virtual async Task<ReviewType> GetReviewTypeByIdAsync(int reviewTypeId)
+    public virtual async Task<ReviewType> GetReviewTypeByIdAsync(long reviewTypeId)
     {
         return await _reviewTypeRepository.GetByIdAsync(reviewTypeId, cache => default);
     }
@@ -103,10 +103,10 @@ public partial class ReviewTypeService : IReviewTypeService
     /// A task that represents the asynchronous operation
     /// The task result contains the product review and review type mapping collection
     /// </returns>
-    public async Task<IList<ProductReviewReviewTypeMapping>> GetProductReviewReviewTypeMappingsByProductReviewIdAsync(
-        int productReviewId)
+    public virtual async Task<IList<ProductReviewReviewTypeMapping>> GetProductReviewReviewTypeMappingsByProductReviewIdAsync(
+        long productReviewId)
     {
-        var key = _staticCacheManager.PrepareKeyForDefaultCache(NopCatalogDefaults.ProductReviewTypeMappingByReviewTypeCacheKey, productReviewId);
+        var key = _staticCacheManager.PrepareKeyForDefaultCache(NopCatalogDefaults.ProductReviewTypeMappingByReviewIdCacheKey, productReviewId);
 
         var query = from pam in _productReviewReviewTypeMappingRepository.Table
             orderby pam.Id
