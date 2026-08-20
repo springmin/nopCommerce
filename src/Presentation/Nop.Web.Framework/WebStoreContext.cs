@@ -23,7 +23,7 @@ public partial class WebStoreContext : IStoreContext
     protected readonly IStoreService _storeService;
 
     protected Store _cachedStore;
-    protected int? _cachedActiveStoreScopeConfiguration;
+    protected long? _cachedActiveStoreScopeConfiguration;
 
     #endregion
 
@@ -72,34 +72,10 @@ public partial class WebStoreContext : IStoreContext
     }
 
     /// <summary>
-    /// Gets the current store
-    /// </summary>
-    public virtual Store GetCurrentStore()
-    {
-        if (_cachedStore != null)
-            return _cachedStore;
-
-        //try to determine the current store by HOST header
-        string host = _httpContextAccessor.HttpContext?.Request.Headers[HeaderNames.Host];
-
-        //we cannot call async methods here. otherwise, an application can hang. so it's a workaround to avoid that
-        var allStores = _storeRepository.GetAll(query =>
-        {
-            return from s in query orderby s.DisplayOrder, s.Id select s;
-        }, _ => default, includeDeleted: false);
-
-        var store = allStores.FirstOrDefault(s => _storeService.ContainsHostValue(s, host)) ?? allStores.FirstOrDefault();
-
-        _cachedStore = store ?? throw new Exception("No store could be loaded");
-
-        return _cachedStore;
-    }
-
-    /// <summary>
     /// Gets active store scope configuration
     /// </summary>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task<int> GetActiveStoreScopeConfigurationAsync()
+    public virtual async Task<long> GetActiveStoreScopeConfigurationAsync()
     {
         if (_cachedActiveStoreScopeConfiguration.HasValue)
             return _cachedActiveStoreScopeConfiguration.Value;
@@ -112,7 +88,7 @@ public partial class WebStoreContext : IStoreContext
 
             //try to get store identifier from attributes
             var storeId = await _genericAttributeService
-                .GetAttributeAsync<int>(currentCustomer, NopCustomerDefaults.AdminAreaStoreScopeConfigurationAttribute);
+                .GetAttributeAsync<long>(currentCustomer, NopCustomerDefaults.AdminAreaStoreScopeConfigurationAttribute);
 
             _cachedActiveStoreScopeConfiguration = (await _storeService.GetStoreByIdAsync(storeId))?.Id ?? 0;
         }

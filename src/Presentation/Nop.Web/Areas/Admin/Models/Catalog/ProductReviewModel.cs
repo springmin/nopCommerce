@@ -24,13 +24,13 @@ public partial record ProductReviewModel : BaseNopEntityModel
     public bool ShowStoreName { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.ProductReviews.Fields.Product")]
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.ProductReviews.Fields.Product")]
     public string ProductName { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.ProductReviews.Fields.Customer")]
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.ProductReviews.Fields.Customer")]
     public string CustomerInfo { get; set; }

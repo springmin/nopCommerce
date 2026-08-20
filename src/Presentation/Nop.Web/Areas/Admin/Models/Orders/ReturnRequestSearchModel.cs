@@ -33,7 +33,7 @@ public partial record ReturnRequestSearchModel : BaseSearchModel
     public string CustomNumber { get; set; }
 
     [NopResourceDisplayName("Admin.ReturnRequests.SearchReturnRequestStatus")]
-    public int ReturnRequestStatusId { get; set; }
+    public long ReturnRequestStatusId { get; set; }
 
     public IList<SelectListItem> ReturnRequestStatusList { get; set; }
 

@@ -15,23 +15,23 @@ public partial record ProductAttributeValueModel : BaseNopEntityModel, ILocalize
     {
         ProductPictureModels = new List<ProductPictureModel>();
         Locales = new List<ProductAttributeValueLocalizedModel>();
-        PictureIds = new List<int>();
+        PictureIds = new List<long>();
     }
 
     #endregion
 
     #region Properties
 
-    public int ProductAttributeMappingId { get; set; }
+    public long ProductAttributeMappingId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.AttributeValueType")]
-    public int AttributeValueTypeId { get; set; }
+    public long AttributeValueTypeId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.AttributeValueType")]
     public string AttributeValueTypeName { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.AssociatedProduct")]
-    public int AssociatedProductId { get; set; }
+    public long AssociatedProductId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.AssociatedProduct")]
     public string AssociatedProductName { get; set; }
@@ -46,7 +46,7 @@ public partial record ProductAttributeValueModel : BaseNopEntityModel, ILocalize
 
     [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.ImageSquaresPicture")]
     [UIHint("Picture")]
-    public int ImageSquaresPictureId { get; set; }
+    public long ImageSquaresPictureId { get; set; }
 
     public bool DisplayImageSquaresPicture { get; set; }
 
@@ -83,7 +83,7 @@ public partial record ProductAttributeValueModel : BaseNopEntityModel, ILocalize
     public int DisplayOrder { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.Pictures")]
-    public IList<int> PictureIds { get; set; }
+    public IList<long> PictureIds { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.Picture")]
     public string PictureThumbnailUrl { get; set; }
@@ -97,7 +97,7 @@ public partial record ProductAttributeValueModel : BaseNopEntityModel, ILocalize
 
 public partial record ProductAttributeValueLocalizedModel : ILocalizedLocaleModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.Name")]
     public string Name { get; set; }

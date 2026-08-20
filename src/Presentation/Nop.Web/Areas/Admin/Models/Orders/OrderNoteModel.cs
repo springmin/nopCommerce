@@ -10,7 +10,7 @@ public partial record OrderNoteModel : BaseNopEntityModel
 {
     #region Properties
 
-    public int OrderId { get; set; }
+    public long OrderId { get; set; }
 
     [NopResourceDisplayName("Admin.Orders.OrderNotes.Fields.DisplayToCustomer")]
     public bool DisplayToCustomer { get; set; }
@@ -19,7 +19,7 @@ public partial record OrderNoteModel : BaseNopEntityModel
     public string Note { get; set; }
 
     [NopResourceDisplayName("Admin.Orders.OrderNotes.Fields.Download")]
-    public int DownloadId { get; set; }
+    public long DownloadId { get; set; }
 
     [NopResourceDisplayName("Admin.Orders.OrderNotes.Fields.Download")]
     public Guid DownloadGuid { get; set; }

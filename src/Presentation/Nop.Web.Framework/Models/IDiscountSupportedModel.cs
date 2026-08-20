@@ -12,7 +12,7 @@ public partial interface IDiscountSupportedModel
     /// <summary>
     /// Gets or sets identifiers of the selected discounts
     /// </summary>
-    IList<int> SelectedDiscountIds { get; set; }
+    IList<long> SelectedDiscountIds { get; set; }
 
     /// <summary>
     /// Gets or sets items for the all available discounts

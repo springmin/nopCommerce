@@ -10,7 +10,7 @@ public partial record ProductReviewReviewTypeMappingModel : BaseNopEntityModel
 {
     #region Properties
 
-    public int ProductReviewId { get; set; }
+    public long ProductReviewId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.ProductReviewsExt.Fields.Name")]
     public string Name { get; set; }

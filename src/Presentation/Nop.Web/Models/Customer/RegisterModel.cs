@@ -16,6 +16,7 @@ public partial record RegisterModel : BaseNopModel
         AvailableStates = new List<SelectListItem>();
         CustomerAttributes = new List<CustomerAttributeModel>();
         GdprConsents = new List<GdprConsentModel>();
+        NewsLetterSubscriptions = new List<NewsLetterSubscriptionModel>();
     }
 
     [DataType(DataType.EmailAddress)]
@@ -105,13 +106,13 @@ public partial record RegisterModel : BaseNopModel
     public bool CountryEnabled { get; set; }
     public bool CountryRequired { get; set; }
     [NopResourceDisplayName("Account.Fields.Country")]
-    public int CountryId { get; set; }
+    public long CountryId { get; set; }
     public IList<SelectListItem> AvailableCountries { get; set; }
         
     public bool StateProvinceEnabled { get; set; }
     public bool StateProvinceRequired { get; set; }
     [NopResourceDisplayName("Account.Fields.StateProvince")]
-    public int StateProvinceId { get; set; }
+    public long StateProvinceId { get; set; }
     public IList<SelectListItem> AvailableStates { get; set; }
 
     public bool PhoneEnabled { get; set; }
@@ -120,6 +121,8 @@ public partial record RegisterModel : BaseNopModel
     [NopResourceDisplayName("Account.Fields.Phone")]
     public string Phone { get; set; }
 
+    public bool LoginByPhoneEnabled { get; set; }
+
     public bool FaxEnabled { get; set; }
     public bool FaxRequired { get; set; }
     [DataType(DataType.PhoneNumber)]
@@ -127,8 +130,8 @@ public partial record RegisterModel : BaseNopModel
     public string Fax { get; set; }
 
     public bool NewsletterEnabled { get; set; }
-    [NopResourceDisplayName("Account.Fields.Newsletter")]
-    public bool Newsletter { get; set; }
+
+    public IList<NewsLetterSubscriptionModel> NewsLetterSubscriptions { get; set; }
 
     public bool AcceptPrivacyPolicyEnabled { get; set; }
     public bool AcceptPrivacyPolicyPopup { get; set; }
@@ -143,6 +146,7 @@ public partial record RegisterModel : BaseNopModel
     [NopResourceDisplayName("Account.Fields.VatNumber")]
     public string VatNumber { get; set; }
     public bool DisplayVatNumber { get; set; }
+    public bool VatNumberRequired { get; set; }
 
     public bool HoneypotEnabled { get; set; }
     public bool DisplayCaptcha { get; set; }

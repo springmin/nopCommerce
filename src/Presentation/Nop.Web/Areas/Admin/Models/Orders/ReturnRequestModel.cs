@@ -13,18 +13,18 @@ public partial record ReturnRequestModel : BaseNopEntityModel
     [NopResourceDisplayName("Admin.ReturnRequests.Fields.CustomNumber")]
     public string CustomNumber { get; set; }
 
-    public int OrderId { get; set; }
+    public long OrderId { get; set; }
 
     [NopResourceDisplayName("Admin.ReturnRequests.Fields.CustomOrderNumber")]
     public string CustomOrderNumber { get; set; }
 
     [NopResourceDisplayName("Admin.ReturnRequests.Fields.Customer")]
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     [NopResourceDisplayName("Admin.ReturnRequests.Fields.Customer")]
     public string CustomerInfo { get; set; }
 
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     [NopResourceDisplayName("Admin.ReturnRequests.Fields.Product")]
     public string ProductName { get; set; }
@@ -53,7 +53,7 @@ public partial record ReturnRequestModel : BaseNopEntityModel
     public string StaffNotes { get; set; }
 
     [NopResourceDisplayName("Admin.ReturnRequests.Fields.Status")]
-    public int ReturnRequestStatusId { get; set; }
+    public long ReturnRequestStatusId { get; set; }
 
     [NopResourceDisplayName("Admin.ReturnRequests.Fields.Status")]
     public string ReturnRequestStatusStr { get; set; }

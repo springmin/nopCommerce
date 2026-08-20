@@ -10,7 +10,7 @@ public partial record SecuritySettingsModel : BaseNopModel, ISettingsModel
 {
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.GeneralCommon.EncryptionKey")]
     public string EncryptionKey { get; set; }

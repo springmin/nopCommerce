@@ -9,7 +9,7 @@ public partial record VendorAttributeValueSearchModel : BaseSearchModel
 {
     #region Properties
 
-    public int VendorAttributeId { get; set; }
+    public long VendorAttributeId { get; set; }
 
     #endregion
 }

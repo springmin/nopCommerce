@@ -27,7 +27,7 @@ public partial record AddressAttributeModel : BaseNopEntityModel, ILocalizedMode
     public bool IsRequired { get; set; }
 
     [NopResourceDisplayName("Admin.Address.AddressAttributes.Fields.AttributeControlType")]
-    public int AttributeControlTypeId { get; set; }
+    public long AttributeControlTypeId { get; set; }
 
     [NopResourceDisplayName("Admin.Address.AddressAttributes.Fields.AttributeControlType")]
     public string AttributeControlTypeName { get; set; }
@@ -44,7 +44,7 @@ public partial record AddressAttributeModel : BaseNopEntityModel, ILocalizedMode
 
 public partial record AddressAttributeLocalizedModel : ILocalizedLocaleModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Address.AddressAttributes.Fields.Name")]
     public string Name { get; set; }

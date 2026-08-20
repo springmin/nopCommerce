@@ -9,7 +9,7 @@ public partial record ProductReviewReviewTypeMappingSearchModel : BaseSearchMode
 {
     #region Properties
 
-    public int ProductReviewId { get; set; }
+    public long ProductReviewId { get; set; }
 
     public bool IsAnyReviewTypes { get; set; }
 

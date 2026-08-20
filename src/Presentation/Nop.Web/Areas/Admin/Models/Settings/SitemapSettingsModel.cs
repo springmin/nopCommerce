@@ -8,7 +8,7 @@ namespace Nop.Web.Areas.Admin.Models.Settings;
 /// </summary>
 public partial record SitemapSettingsModel : BaseNopModel, ISettingsModel
 {
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.GeneralCommon.SitemapEnabled")]
     public bool SitemapEnabled { get; set; }
@@ -25,10 +25,6 @@ public partial record SitemapSettingsModel : BaseNopModel, ISettingsModel
     [NopResourceDisplayName("Admin.Configuration.Settings.GeneralCommon.SitemapIncludeManufacturers")]
     public bool SitemapIncludeManufacturers { get; set; }
     public bool SitemapIncludeManufacturers_OverrideForStore { get; set; }
-
-    [NopResourceDisplayName("Admin.Configuration.Settings.GeneralCommon.SitemapIncludeNews")]
-    public bool SitemapIncludeNews { get; set; }
-    public bool SitemapIncludeNews_OverrideForStore { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.GeneralCommon.SitemapIncludeProducts")]
     public bool SitemapIncludeProducts { get; set; }

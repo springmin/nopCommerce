@@ -10,9 +10,9 @@ public partial record SpecificationAttributeProductModel : BaseNopEntityModel
 {
     #region Properties
 
-    public int SpecificationAttributeId { get; set; }
+    public long SpecificationAttributeId { get; set; }
 
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Attributes.SpecificationAttributes.SpecificationAttribute.UsedByProducts.Product")]
     public string ProductName { get; set; }

@@ -17,16 +17,16 @@ public partial record CustomerDownloadableProductsModel : BaseNopModel
     {
         public Guid OrderItemGuid { get; set; }
 
-        public int OrderId { get; set; }
+        public long OrderId { get; set; }
         public string CustomOrderNumber { get; set; }
 
-        public int ProductId { get; set; }
+        public long ProductId { get; set; }
         public string ProductName { get; set; }
         public string ProductSeName { get; set; }
         public string ProductAttributes { get; set; }
 
-        public int DownloadId { get; set; }
-        public int LicenseId { get; set; }
+        public long DownloadId { get; set; }
+        public long LicenseId { get; set; }
 
         public DateTime CreatedOn { get; set; }
     }

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Web.Framework.Models;
+using Nop.Web.Framework.Models.Translation;
 using Nop.Web.Framework.Mvc.ModelBinding;
 
 namespace Nop.Web.Areas.Admin.Models.Catalog;
@@ -8,7 +9,7 @@ namespace Nop.Web.Areas.Admin.Models.Catalog;
 /// <summary>
 /// Represents a product attribute mapping model
 /// </summary>
-public partial record ProductAttributeMappingModel : BaseNopEntityModel, ILocalizedModel<ProductAttributeMappingLocalizedModel>
+public partial record ProductAttributeMappingModel : BaseNopEntityModel, ITranslationSupportedModel, ILocalizedModel<ProductAttributeMappingLocalizedModel>
 {
     #region Ctor
 
@@ -24,10 +25,10 @@ public partial record ProductAttributeMappingModel : BaseNopEntityModel, ILocali
 
     #region Properties
 
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Fields.Attribute")]
-    public int ProductAttributeId { get; set; }
+    public long ProductAttributeId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Fields.Attribute")]
     public string ProductAttribute { get; set; }
@@ -41,7 +42,7 @@ public partial record ProductAttributeMappingModel : BaseNopEntityModel, ILocali
     public bool IsRequired { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Fields.AttributeControlType")]
-    public int AttributeControlTypeId { get; set; }
+    public long AttributeControlTypeId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Fields.AttributeControlType")]
     public string AttributeControlType { get; set; }
@@ -82,12 +83,14 @@ public partial record ProductAttributeMappingModel : BaseNopEntityModel, ILocali
 
     public ProductAttributeValueSearchModel ProductAttributeValueSearchModel { get; set; }
 
+    public bool PreTranslationAvailable { get; set; }
+
     #endregion
 }
 
 public partial record ProductAttributeMappingLocalizedModel : ILocalizedLocaleModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Fields.TextPrompt")]
     public string TextPrompt { get; set; }

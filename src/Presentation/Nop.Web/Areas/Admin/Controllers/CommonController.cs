@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
 using Nop.Core.Caching;
+using Nop.Core.Domain.Common;
 using Nop.Core.Http.Extensions;
 using Nop.Core.Infrastructure;
 using Nop.Data;
@@ -8,6 +9,7 @@ using Nop.Services.Common;
 using Nop.Services.Customers;
 using Nop.Services.Helpers;
 using Nop.Services.Localization;
+using Nop.Services.Media;
 using Nop.Services.Messages;
 using Nop.Services.Orders;
 using Nop.Services.Security;
@@ -16,6 +18,7 @@ using Nop.Web.Areas.Admin.Factories;
 using Nop.Web.Areas.Admin.Models.Common;
 using Nop.Web.Framework;
 using Nop.Web.Framework.Controllers;
+using Nop.Web.Framework.Mvc.Filters;
 
 namespace Nop.Web.Areas.Admin.Controllers;
 
@@ -42,6 +45,7 @@ public partial class CommonController : BaseAdminController
     protected readonly IQueuedEmailService _queuedEmailService;
     protected readonly IShoppingCartService _shoppingCartService;
     protected readonly IStaticCacheManager _staticCacheManager;
+    protected readonly IThumbService _thumbService;
     protected readonly IUrlRecordService _urlRecordService;
     protected readonly IWebHelper _webHelper;
     protected readonly IWorkContext _workContext;
@@ -63,6 +67,7 @@ public partial class CommonController : BaseAdminController
         IQueuedEmailService queuedEmailService,
         IShoppingCartService shoppingCartService,
         IStaticCacheManager staticCacheManager,
+        IThumbService thumbService,
         IUrlRecordService urlRecordService,
         IWebHelper webHelper,
         IWorkContext workContext)
@@ -80,6 +85,7 @@ public partial class CommonController : BaseAdminController
         _queuedEmailService = queuedEmailService;
         _shoppingCartService = shoppingCartService;
         _staticCacheManager = staticCacheManager;
+        _thumbService = thumbService;
         _urlRecordService = urlRecordService;
         _webHelper = webHelper;
         _workContext = workContext;
@@ -89,33 +95,27 @@ public partial class CommonController : BaseAdminController
 
     #region Methods
 
+    [CheckPermission(StandardPermission.System.MANAGE_MAINTENANCE)]
     public virtual async Task<IActionResult> SystemInfo()
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageMaintenance))
-            return AccessDeniedView();
-
         //prepare model
         var model = await _commonModelFactory.PrepareSystemInfoModelAsync(new SystemInfoModel());
 
         return View(model);
     }
 
+    [CheckPermission(StandardPermission.System.MANAGE_MAINTENANCE)]
     public virtual async Task<IActionResult> Warnings()
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageMaintenance))
-            return AccessDeniedView();
-
         //prepare model
         var model = await _commonModelFactory.PrepareSystemWarningModelsAsync();
 
         return View(model);
     }
 
+    [CheckPermission(StandardPermission.System.MANAGE_MAINTENANCE)]
     public virtual async Task<IActionResult> Maintenance()
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageMaintenance))
-            return AccessDeniedView();
-
         //prepare model
         var model = await _commonModelFactory.PrepareMaintenanceModelAsync(new MaintenanceModel());
 
@@ -124,11 +124,9 @@ public partial class CommonController : BaseAdminController
 
     [HttpPost, ActionName("Maintenance")]
     [FormValueRequired("delete-guests")]
+    [CheckPermission(StandardPermission.System.MANAGE_MAINTENANCE)]
     public virtual async Task<IActionResult> MaintenanceDeleteGuests(MaintenanceModel model)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageMaintenance))
-            return AccessDeniedView();
-
         var startDateValue = model.DeleteGuests.StartDate == null ? null
             : (DateTime?)_dateTimeHelper.ConvertToUtcTime(model.DeleteGuests.StartDate.Value, await _dateTimeHelper.GetCurrentTimeZoneAsync());
 
@@ -141,12 +139,28 @@ public partial class CommonController : BaseAdminController
     }
 
     [HttpPost, ActionName("Maintenance")]
+    [FormValueRequired("delete-thumb-files")]
+    [CheckPermission(StandardPermission.System.MANAGE_MAINTENANCE)]
+    public virtual async Task<IActionResult> MaintenanceDeleteThumbFiles(MaintenanceModel model)
+    {
+        if (!model.DeleteThumbsFiles.IsDeleteThumbsSupported || _thumbService is not ThumbService thumbService) 
+            return await Maintenance();
+
+        await thumbService.DeleteAllThumbsAsync();
+        await _staticCacheManager.ClearAsync();
+
+        _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.System.Maintenance.DeleteThumbFiles.Deleted"));
+
+        //prepare model
+        model = await _commonModelFactory.PrepareMaintenanceModelAsync(model);
+        return View(model);
+    }
+
+    [HttpPost, ActionName("Maintenance")]
     [FormValueRequired("delete-abondoned-carts")]
+    [CheckPermission(StandardPermission.System.MANAGE_MAINTENANCE)]
     public virtual async Task<IActionResult> MaintenanceDeleteAbandonedCarts(MaintenanceModel model)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageMaintenance))
-            return AccessDeniedView();
-
         var olderThanDateValue = _dateTimeHelper.ConvertToUtcTime(model.DeleteAbandonedCarts.OlderThan, await _dateTimeHelper.GetCurrentTimeZoneAsync());
 
         model.DeleteAbandonedCarts.NumberOfDeletedItems = await _shoppingCartService.DeleteExpiredShoppingCartItemsAsync(olderThanDateValue);
@@ -155,11 +169,9 @@ public partial class CommonController : BaseAdminController
 
     [HttpPost, ActionName("Maintenance")]
     [FormValueRequired("delete-exported-files")]
+    [CheckPermission(StandardPermission.System.MANAGE_MAINTENANCE)]
     public virtual async Task<IActionResult> MaintenanceDeleteFiles(MaintenanceModel model)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageMaintenance))
-            return AccessDeniedView();
-
         var startDateValue = model.DeleteExportedFiles.StartDate == null ? null
             : (DateTime?)_dateTimeHelper.ConvertToUtcTime(model.DeleteExportedFiles.StartDate.Value, await _dateTimeHelper.GetCurrentTimeZoneAsync());
 
@@ -196,11 +208,9 @@ public partial class CommonController : BaseAdminController
 
     [HttpPost, ActionName("Maintenance")]
     [FormValueRequired("delete-minification-files")]
+    [CheckPermission(StandardPermission.System.MANAGE_MAINTENANCE)]
     public virtual async Task<IActionResult> MaintenanceDeleteMinificationFiles(MaintenanceModel model)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageMaintenance))
-            return AccessDeniedView();
-
         model.DeleteMinificationFiles.NumberOfDeletedFiles = 0;
 
         foreach (var fullPath in _fileProvider.GetFiles(_fileProvider.GetAbsolutePath("bundles")))
@@ -226,11 +236,9 @@ public partial class CommonController : BaseAdminController
     }
 
     [HttpPost]
+    [CheckPermission(StandardPermission.System.MANAGE_MAINTENANCE)]
     public virtual async Task<IActionResult> BackupFiles(BackupFileSearchModel searchModel)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageMaintenance))
-            return await AccessDeniedDataTablesJson();
-
         //prepare model
         var model = await _commonModelFactory.PrepareBackupFileListModelAsync(searchModel);
 
@@ -239,11 +247,9 @@ public partial class CommonController : BaseAdminController
 
     [HttpPost, ActionName("Maintenance")]
     [FormValueRequired("backup-database")]
+    [CheckPermission(StandardPermission.System.MANAGE_MAINTENANCE)]
     public virtual async Task<IActionResult> BackupDatabase(MaintenanceModel model)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageMaintenance))
-            return AccessDeniedView();
-
         try
         {
             await _dataProvider.BackupDatabaseAsync(_maintenanceService.CreateNewBackupFilePath());
@@ -262,11 +268,9 @@ public partial class CommonController : BaseAdminController
 
     [HttpPost, ActionName("Maintenance")]
     [FormValueRequired("re-index")]
+    [CheckPermission(StandardPermission.System.MANAGE_MAINTENANCE)]
     public virtual async Task<IActionResult> ReIndexTables(MaintenanceModel model)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageMaintenance))
-            return AccessDeniedView();
-
         try
         {
             await _dataProvider.ReIndexTablesAsync();
@@ -277,25 +281,71 @@ public partial class CommonController : BaseAdminController
             await _notificationService.ErrorNotificationAsync(exc);
         }
 
+        //prepare model
+        model = await _commonModelFactory.PrepareMaintenanceModelAsync(model);
+
+        return View(model);
+    }
+
+    [HttpPost, ActionName("Maintenance")]
+    [FormValueRequired("shrink-database")]
+    [CheckPermission(StandardPermission.System.MANAGE_MAINTENANCE)]
+    public virtual async Task<IActionResult> ShrinkDatabase(MaintenanceModel model)
+    {
+        try
+        {
+            await _dataProvider.ShrinkDatabaseAsync();
+            _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.System.Maintenance.ShrinkDatabase.Complete"));
+        }
+        catch (Exception exc)
+        {
+            await _notificationService.ErrorNotificationAsync(exc);
+        }
+
+        //prepare model
+        model = await _commonModelFactory.PrepareMaintenanceModelAsync(model);
+
+        return View(model);
+    }
+
+    [HttpPost, ActionName("Maintenance")]
+    [FormValueRequired("clear-search-history")]
+    [CheckPermission(StandardPermission.System.MANAGE_MAINTENANCE)]
+    public virtual async Task<IActionResult> ClearSearchHistoryData(MaintenanceModel model)
+    {
+        try
+        {
+            model.ClearSearchHistory.NumberOfDeletedItems = await _dataProvider.TruncateAsync<SearchTerm>();
+            _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.System.Maintenance.ClearSearchHistory.Complete"));
+        }
+        catch (Exception exc)
+        {
+            await _notificationService.ErrorNotificationAsync(exc);
+        }
+
+        //prepare model
+        model = await _commonModelFactory.PrepareMaintenanceModelAsync(model);
+
         return View(model);
     }
 
     [HttpPost, ActionName("Maintenance")]
     [FormValueRequired("backupFileName", "action")]
+    [CheckPermission(StandardPermission.System.MANAGE_MAINTENANCE)]
     public virtual async Task<IActionResult> BackupAction(MaintenanceModel model)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageMaintenance))
-            return AccessDeniedView();
-
         var action = await Request.GetFormValueAsync("action");
-
-        var fileName = await Request.GetFormValueAsync("backupFileName");
-        fileName = _fileProvider.GetFileName(_fileProvider.GetAbsolutePath(fileName));
-
-        var backupPath = _maintenanceService.GetBackupPath(fileName);
 
         try
         {
+            var fileName = await Request.GetFormValueAsync("backupFileName");
+            fileName = _fileProvider.GetFileName(_fileProvider.GetAbsolutePath(fileName));
+
+            var backupPath = _maintenanceService.GetBackupPath(fileName);
+
+            if (!_fileProvider.FileExists(backupPath) || _maintenanceService.GetAllBackupFiles().All(f => f != backupPath))
+                throw new FileNotFoundException($"Backup file not found: {fileName}");
+
             switch (action)
             {
                 case "delete-backup":
@@ -303,13 +353,14 @@ public partial class CommonController : BaseAdminController
                     _fileProvider.DeleteFile(backupPath);
                     _notificationService.SuccessNotification(string.Format(await _localizationService.GetResourceAsync("Admin.System.Maintenance.BackupDatabase.BackupDeleted"), fileName));
                 }
-                    break;
+                break;
+
                 case "restore-backup":
                 {
                     await _dataProvider.RestoreDatabaseAsync(backupPath);
                     _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.System.Maintenance.BackupDatabase.DatabaseRestored"));
                 }
-                    break;
+                break;
             }
         }
         catch (Exception exc)
@@ -325,11 +376,9 @@ public partial class CommonController : BaseAdminController
 
     [HttpPost, ActionName("Maintenance")]
     [FormValueRequired("delete-already-sent-queued-emails")]
+    [CheckPermission(StandardPermission.System.MANAGE_MAINTENANCE)]
     public virtual async Task<IActionResult> MaintenanceDeleteAlreadySentQueuedEmails(MaintenanceModel model)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageMaintenance))
-            return AccessDeniedView();
-
         var startDateValue = model.DeleteAlreadySentQueuedEmails.StartDate == null ? null
             : (DateTime?)_dateTimeHelper.ConvertToUtcTime(model.DeleteAlreadySentQueuedEmails.StartDate.Value, await _dateTimeHelper.GetCurrentTimeZoneAsync());
 
@@ -341,7 +390,7 @@ public partial class CommonController : BaseAdminController
         return View(model);
     }
 
-    public virtual async Task<IActionResult> SetLanguage(int langid, string returnUrl = "")
+    public virtual async Task<IActionResult> SetLanguage(long langid, string returnUrl = "")
     {
         var language = await _languageService.GetLanguageByIdAsync(langid);
         if (language != null)
@@ -359,11 +408,9 @@ public partial class CommonController : BaseAdminController
     }
 
     [HttpPost]
+    [CheckPermission(StandardPermission.System.MANAGE_MAINTENANCE)]
     public virtual async Task<IActionResult> ClearCache(string returnUrl = "")
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageMaintenance))
-            return AccessDeniedView();
-
         await _staticCacheManager.ClearAsync();
 
         //home page
@@ -378,11 +425,9 @@ public partial class CommonController : BaseAdminController
     }
 
     [HttpPost]
-    public virtual async Task<IActionResult> RestartApplication(string returnUrl = "")
+    [CheckPermission(StandardPermission.System.MANAGE_MAINTENANCE)]
+    public virtual IActionResult RestartApplication(string returnUrl = "")
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageMaintenance))
-            return AccessDeniedView();
-
         //home page
         if (string.IsNullOrEmpty(returnUrl))
             returnUrl = Url.Action("Index", "Home", new { area = AreaNames.ADMIN });
@@ -394,26 +439,23 @@ public partial class CommonController : BaseAdminController
         return View("RestartApplication", returnUrl);
     }
 
-    public virtual async Task<IActionResult> RestartApplication()
+    [CheckPermission(new[]
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageMaintenance) &&
-            !await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManagePlugins) &&
-            !await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageSettings))
-        {
-            return AccessDeniedView();
-        }
-
+        StandardPermission.Configuration.MANAGE_SETTINGS, 
+        StandardPermission.Configuration.MANAGE_PLUGINS,
+        StandardPermission.System.MANAGE_MAINTENANCE
+    })]
+    public virtual IActionResult RestartApplication()
+    {
         //restart application
         _webHelper.RestartAppDomain();
 
         return new EmptyResult();
     }
 
+    [CheckPermission(StandardPermission.System.MANAGE_MAINTENANCE)]
     public virtual async Task<IActionResult> SeNames()
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageMaintenance))
-            return AccessDeniedView();
-
         //prepare model
         var model = await _commonModelFactory.PrepareUrlRecordSearchModelAsync(new UrlRecordSearchModel());
 
@@ -421,11 +463,9 @@ public partial class CommonController : BaseAdminController
     }
 
     [HttpPost]
+    [CheckPermission(StandardPermission.System.MANAGE_MAINTENANCE)]
     public virtual async Task<IActionResult> SeNames(UrlRecordSearchModel searchModel)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageMaintenance))
-            return await AccessDeniedDataTablesJson();
-
         //prepare model
         var model = await _commonModelFactory.PrepareUrlRecordListModelAsync(searchModel);
 
@@ -433,11 +473,9 @@ public partial class CommonController : BaseAdminController
     }
 
     [HttpPost]
-    public virtual async Task<IActionResult> DeleteSelectedSeNames(ICollection<int> selectedIds)
+    [CheckPermission(StandardPermission.System.MANAGE_MAINTENANCE)]
+    public virtual async Task<IActionResult> DeleteSelectedSeNames(ICollection<long> selectedIds)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageMaintenance))
-            return AccessDeniedView();
-
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();
 
@@ -447,11 +485,9 @@ public partial class CommonController : BaseAdminController
     }
 
     [HttpPost]
+    [CheckPermission(StandardPermission.Catalog.PRODUCTS_VIEW)]
     public virtual async Task<IActionResult> PopularSearchTermsReport(PopularSearchTermSearchModel searchModel)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
-            return await AccessDeniedDataTablesJson();
-
         //prepare model
         var model = await _commonModelFactory.PreparePopularSearchTermListModelAsync(searchModel);
 

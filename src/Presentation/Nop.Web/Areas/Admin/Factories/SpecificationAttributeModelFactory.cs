@@ -88,12 +88,12 @@ public partial class SpecificationAttributeModelFactory : ISpecificationAttribut
     /// <summary>
     /// Prepare specification attribute group search model
     /// </summary>
-    /// <param name="searchModel">Specification attribute group search model</param>
+    /// <param name="searchModel">Specification attribute search model</param>
     /// <returns>
     /// A task that represents the asynchronous operation
-    /// The task result contains the specification attribute group search model
+    /// The task result contains the specification attribute search model
     /// </returns>
-    public virtual Task<SpecificationAttributeGroupSearchModel> PrepareSpecificationAttributeGroupSearchModelAsync(SpecificationAttributeGroupSearchModel searchModel)
+    public virtual Task<SpecificationAttributeSearchModel> PrepareSpecificationAttributeSearchModelAsync(SpecificationAttributeSearchModel searchModel)
     {
         ArgumentNullException.ThrowIfNull(searchModel);
 
@@ -106,12 +106,12 @@ public partial class SpecificationAttributeModelFactory : ISpecificationAttribut
     /// <summary>
     /// Prepare paged specification attribute group list model
     /// </summary>
-    /// <param name="searchModel">Specification attribute group search model</param>
+    /// <param name="searchModel">Specification attribute search model</param>
     /// <returns>
     /// A task that represents the asynchronous operation
     /// The task result contains the specification attribute group list model
     /// </returns>
-    public virtual async Task<SpecificationAttributeGroupListModel> PrepareSpecificationAttributeGroupListModelAsync(SpecificationAttributeGroupSearchModel searchModel)
+    public virtual async Task<SpecificationAttributeGroupListModel> PrepareSpecificationAttributeGroupListModelAsync(SpecificationAttributeSearchModel searchModel)
     {
         ArgumentNullException.ThrowIfNull(searchModel);
 
@@ -151,7 +151,7 @@ public partial class SpecificationAttributeModelFactory : ISpecificationAttribut
     public virtual async Task<SpecificationAttributeGroupModel> PrepareSpecificationAttributeGroupModelAsync(SpecificationAttributeGroupModel model,
         SpecificationAttributeGroup specificationAttributeGroup, bool excludeProperties = false)
     {
-        Func<SpecificationAttributeGroupLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<SpecificationAttributeGroupLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (specificationAttributeGroup != null)
         {
@@ -181,12 +181,15 @@ public partial class SpecificationAttributeModelFactory : ISpecificationAttribut
     /// A task that represents the asynchronous operation
     /// The task result contains the specification attribute list model
     /// </returns>
-    public virtual async Task<SpecificationAttributeListModel> PrepareSpecificationAttributeListModelAsync(SpecificationAttributeSearchModel searchModel, SpecificationAttributeGroup group)
+    public virtual async Task<SpecificationAttributeListModel> PrepareSpecificationAttributeListModelAsync(SpecificationAttributeSearchModel searchModel, SpecificationAttributeGroup group = null)
     {
         ArgumentNullException.ThrowIfNull(searchModel);
 
         //get specification attributes
-        var specificationAttributes = (await _specificationAttributeService.GetSpecificationAttributesByGroupIdAsync(group?.Id)).ToPagedList(searchModel);
+
+        var specificationAttributes = string.IsNullOrEmpty(searchModel.AttributeName) ?  
+            await _specificationAttributeService.GetSpecificationAttributesByGroupIdAsync(group?.Id, pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize) :
+            await _specificationAttributeService.GetSpecificationAttributesByNameAsync(searchModel.AttributeName, pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
 
         //prepare list model
         var model = new SpecificationAttributeListModel().PrepareToGrid(searchModel, specificationAttributes, () =>
@@ -211,7 +214,7 @@ public partial class SpecificationAttributeModelFactory : ISpecificationAttribut
     public virtual async Task<SpecificationAttributeModel> PrepareSpecificationAttributeModelAsync(SpecificationAttributeModel model,
         SpecificationAttribute specificationAttribute, bool excludeProperties = false)
     {
-        Func<SpecificationAttributeLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<SpecificationAttributeLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (specificationAttribute != null)
         {
@@ -227,6 +230,8 @@ public partial class SpecificationAttributeModelFactory : ISpecificationAttribut
             {
                 locale.Name = await _localizationService.GetLocalizedAsync(specificationAttribute, entity => entity.Name, languageId, false, false);
             };
+
+            await _baseAdminModelFactory.PreparePreTranslationSupportModelAsync(model);
         }
 
         //prepare localized models
@@ -297,7 +302,7 @@ public partial class SpecificationAttributeModelFactory : ISpecificationAttribut
     {
         ArgumentNullException.ThrowIfNull(specificationAttribute);
 
-        Func<SpecificationAttributeOptionLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<SpecificationAttributeOptionLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (specificationAttributeOption != null)
         {

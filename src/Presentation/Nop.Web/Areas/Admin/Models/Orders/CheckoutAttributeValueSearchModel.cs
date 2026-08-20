@@ -9,7 +9,7 @@ public partial record CheckoutAttributeValueSearchModel : BaseSearchModel
 {
     #region Properties
 
-    public int CheckoutAttributeId { get; set; }
+    public long CheckoutAttributeId { get; set; }
 
     #endregion
 }

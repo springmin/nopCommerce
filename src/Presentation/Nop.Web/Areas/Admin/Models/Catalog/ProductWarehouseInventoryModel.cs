@@ -11,7 +11,7 @@ public partial record ProductWarehouseInventoryModel : BaseNopModel
     #region Properties
 
     [NopResourceDisplayName("Admin.Catalog.Products.ProductWarehouseInventory.Fields.Warehouse")]
-    public int WarehouseId { get; set; }
+    public long WarehouseId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.ProductWarehouseInventory.Fields.Warehouse")]
     public string WarehouseName { get; set; }

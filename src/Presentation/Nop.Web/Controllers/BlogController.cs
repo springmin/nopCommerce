@@ -4,14 +4,15 @@ using Nop.Core.Domain.Blogs;
 using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Security;
 using Nop.Core.Events;
+using Nop.Core.Http;
 using Nop.Core.Rss;
 using Nop.Services.Blogs;
 using Nop.Services.Customers;
+using Nop.Services.Helpers;
 using Nop.Services.Localization;
 using Nop.Services.Logging;
 using Nop.Services.Messages;
 using Nop.Services.Security;
-using Nop.Services.Seo;
 using Nop.Services.Stores;
 using Nop.Web.Factories;
 using Nop.Web.Framework;
@@ -39,7 +40,6 @@ public partial class BlogController : BasePublicController
     protected readonly IPermissionService _permissionService;
     protected readonly IStoreContext _storeContext;
     protected readonly IStoreMappingService _storeMappingService;
-    protected readonly IUrlRecordService _urlRecordService;
     protected readonly IWebHelper _webHelper;
     protected readonly IWorkContext _workContext;
     protected readonly IWorkflowMessageService _workflowMessageService;
@@ -61,7 +61,6 @@ public partial class BlogController : BasePublicController
         IPermissionService permissionService,
         IStoreContext storeContext,
         IStoreMappingService storeMappingService,
-        IUrlRecordService urlRecordService,
         IWebHelper webHelper,
         IWorkContext workContext,
         IWorkflowMessageService workflowMessageService,
@@ -79,7 +78,6 @@ public partial class BlogController : BasePublicController
         _permissionService = permissionService;
         _storeContext = storeContext;
         _storeMappingService = storeMappingService;
-        _urlRecordService = urlRecordService;
         _webHelper = webHelper;
         _workContext = workContext;
         _workflowMessageService = workflowMessageService;
@@ -93,7 +91,7 @@ public partial class BlogController : BasePublicController
     public virtual async Task<IActionResult> List(BlogPagingFilteringModel command)
     {
         if (!_blogSettings.Enabled)
-            return RedirectToRoute("Homepage");
+            return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
 
         var model = await _blogModelFactory.PrepareBlogPostListModelAsync(command);
         return View("List", model);
@@ -102,7 +100,7 @@ public partial class BlogController : BasePublicController
     public virtual async Task<IActionResult> BlogByTag(BlogPagingFilteringModel command)
     {
         if (!_blogSettings.Enabled)
-            return RedirectToRoute("Homepage");
+            return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
 
         var model = await _blogModelFactory.PrepareBlogPostListModelAsync(command);
         return View("List", model);
@@ -111,14 +109,14 @@ public partial class BlogController : BasePublicController
     public virtual async Task<IActionResult> BlogByMonth(BlogPagingFilteringModel command)
     {
         if (!_blogSettings.Enabled)
-            return RedirectToRoute("Homepage");
+            return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
 
         var model = await _blogModelFactory.PrepareBlogPostListModelAsync(command);
         return View("List", model);
     }
 
     [CheckLanguageSeoCode(ignore: true)]
-    public virtual async Task<IActionResult> ListRss(int languageId)
+    public virtual async Task<IActionResult> ListRss(long languageId)
     {
         var store = await _storeContext.GetCurrentStoreAsync();
         var feed = new RssFeed(
@@ -134,18 +132,17 @@ public partial class BlogController : BasePublicController
         var blogPosts = await _blogService.GetAllBlogPostsAsync(store.Id, languageId);
         foreach (var blogPost in blogPosts)
         {
-            var seName = await _urlRecordService.GetSeNameAsync(blogPost, blogPost.LanguageId, ensureTwoPublishedLanguages: false);
-            var blogPostUrl = await _nopUrlHelper.RouteGenericUrlAsync<BlogPost>(new { SeName = seName }, _webHelper.GetCurrentRequestProtocol());
+            var blogPostUrl = await _nopUrlHelper.RouteGenericUrlAsync(blogPost, _webHelper.GetCurrentRequestProtocol(), languageId: blogPost.LanguageId, ensureTwoPublishedLanguages: false);
             items.Add(new RssItem(blogPost.Title, blogPost.Body, new Uri(blogPostUrl), $"urn:store:{store.Id}:blog:post:{blogPost.Id}", blogPost.CreatedOnUtc));
         }
         feed.Items = items;
         return new RssActionResult(feed, _webHelper.GetThisPageUrl(false));
     }
 
-    public virtual async Task<IActionResult> BlogPost(int blogPostId)
+    public virtual async Task<IActionResult> BlogPost(long blogPostId)
     {
         if (!_blogSettings.Enabled)
-            return RedirectToRoute("Homepage");
+            return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
 
         var blogPost = await _blogService.GetBlogPostByIdAsync(blogPostId);
         if (blogPost == null)
@@ -158,7 +155,7 @@ public partial class BlogController : BasePublicController
             !await _storeMappingService.AuthorizeAsync(blogPost);
         //Check whether the current user has a "Manage blog" permission (usually a store owner)
         //We should allows him (her) to use "Preview" functionality
-        var hasAdminAccess = await _permissionService.AuthorizeAsync(StandardPermissionProvider.AccessAdminPanel) && await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageBlog);
+        var hasAdminAccess = await _permissionService.AuthorizeAsync(StandardPermission.Security.ACCESS_ADMIN_PANEL) && await _permissionService.AuthorizeAsync(StandardPermission.ContentManagement.BLOG_VIEW);
         if (notAvailable && !hasAdminAccess)
             return InvokeHttp404();
 
@@ -174,26 +171,22 @@ public partial class BlogController : BasePublicController
 
     [HttpPost]
     [ValidateCaptcha]
-    public virtual async Task<IActionResult> BlogCommentAdd(int blogPostId, BlogPostModel model, bool captchaValid)
+    public virtual async Task<IActionResult> BlogCommentAdd(long blogPostId, BlogPostModel model, bool captchaValid)
     {
         if (!_blogSettings.Enabled)
-            return RedirectToRoute("Homepage");
+            return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
 
         var blogPost = await _blogService.GetBlogPostByIdAsync(blogPostId);
         if (blogPost == null || !blogPost.AllowComments)
-            return RedirectToRoute("Homepage");
+            return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
 
         var customer = await _workContext.GetCurrentCustomerAsync();
         if (await _customerService.IsGuestAsync(customer) && !_blogSettings.AllowNotRegisteredUsersToLeaveComments)
-        {
             ModelState.AddModelError("", await _localizationService.GetResourceAsync("Blog.Comments.OnlyRegisteredUsersLeaveComments"));
-        }
 
         //validate CAPTCHA
         if (_captchaSettings.Enabled && _captchaSettings.ShowOnBlogCommentPage && !captchaValid)
-        {
             ModelState.AddModelError("", await _localizationService.GetResourceAsync("Common.WrongCaptchaMessage"));
-        }
 
         if (ModelState.IsValid)
         {
@@ -228,8 +221,7 @@ public partial class BlogController : BasePublicController
                 ? await _localizationService.GetResourceAsync("Blog.Comments.SuccessfullyAdded")
                 : await _localizationService.GetResourceAsync("Blog.Comments.SeeAfterApproving");
 
-            var seName = await _urlRecordService.GetSeNameAsync(blogPost, blogPost.LanguageId, ensureTwoPublishedLanguages: false);
-            var blogPostUrl = await _nopUrlHelper.RouteGenericUrlAsync<BlogPost>(new { SeName = seName });
+            var blogPostUrl = await _nopUrlHelper.RouteGenericUrlAsync(blogPost, languageId: blogPost.LanguageId, ensureTwoPublishedLanguages: false);
             return LocalRedirect(blogPostUrl);
         }
 

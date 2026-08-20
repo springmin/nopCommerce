@@ -14,8 +14,9 @@ public partial record CustomerSearchModel : BaseSearchModel, IAclSupportedModel
 
     public CustomerSearchModel()
     {
-        SelectedCustomerRoleIds = new List<int>();
+        SelectedCustomerRoleIds = new List<long>();
         AvailableCustomerRoles = new List<SelectListItem>();
+        AvailableActiveValues = new List<SelectListItem>();
     }
 
     #endregion
@@ -23,7 +24,7 @@ public partial record CustomerSearchModel : BaseSearchModel, IAclSupportedModel
     #region Properties
 
     [NopResourceDisplayName("Admin.Customers.Customers.List.CustomerRoles")]
-    public IList<int> SelectedCustomerRoleIds { get; set; }
+    public IList<long> SelectedCustomerRoleIds { get; set; }
 
     public IList<SelectListItem> AvailableCustomerRoles { get; set; }
 
@@ -87,7 +88,11 @@ public partial record CustomerSearchModel : BaseSearchModel, IAclSupportedModel
     [NopResourceDisplayName("Admin.Customers.Customers.List.SearchIpAddress")]
     public string SearchIpAddress { get; set; }
 
-    public bool AvatarEnabled { get; internal set; }
+    public bool AvatarEnabled { get; set; }
+
+    [NopResourceDisplayName("Admin.Customers.Customers.List.SearchIsActive")]
+    public bool? SearchIsActive { get; set; } = true;
+    public IList<SelectListItem> AvailableActiveValues { get; set; }
 
     #endregion
 }

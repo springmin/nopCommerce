@@ -128,7 +128,7 @@ public partial class AddressAttributeModelFactory : IAddressAttributeModelFactor
     public virtual async Task<AddressAttributeModel> PrepareAddressAttributeModelAsync(AddressAttributeModel model,
         AddressAttribute addressAttribute, bool excludeProperties = false)
     {
-        Func<AddressAttributeLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<AddressAttributeLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (addressAttribute != null)
         {
@@ -197,7 +197,7 @@ public partial class AddressAttributeModelFactory : IAddressAttributeModelFactor
     {
         ArgumentNullException.ThrowIfNull(addressAttribute);
 
-        Func<AddressAttributeValueLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<AddressAttributeValueLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (addressAttributeValue != null)
         {
@@ -275,8 +275,10 @@ public partial class AddressAttributeModelFactory : IAddressAttributeModelFactor
                         var selectedValues = await _addressAttributeParser.ParseAttributeValuesAsync(selectedAddressAttributes);
                         foreach (var attributeValue in selectedValues)
                         foreach (var item in attributeModel.Values)
+                        {
                             if (attributeValue.Id == item.Id)
                                 item.IsPreSelected = true;
+                        }
                     }
                 }
                     break;

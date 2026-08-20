@@ -12,17 +12,17 @@ public partial record SubmitReturnRequestModel : BaseNopModel
         AvailableReturnActions = new List<ReturnRequestActionModel>();
     }
 
-    public int OrderId { get; set; }
+    public long OrderId { get; set; }
     public string CustomOrderNumber { get; set; }
 
     public IList<OrderItemModel> Items { get; set; }
 
     [NopResourceDisplayName("ReturnRequests.ReturnReason")]
-    public int ReturnRequestReasonId { get; set; }
+    public long ReturnRequestReasonId { get; set; }
     public IList<ReturnRequestReasonModel> AvailableReturnReasons { get; set; }
 
     [NopResourceDisplayName("ReturnRequests.ReturnAction")]
-    public int ReturnRequestActionId { get; set; }
+    public long ReturnRequestActionId { get; set; }
     public IList<ReturnRequestActionModel> AvailableReturnActions { get; set; }
 
     [NopResourceDisplayName("ReturnRequests.Comments")]
@@ -34,11 +34,20 @@ public partial record SubmitReturnRequestModel : BaseNopModel
 
     public string Result { get; set; }
 
+    public bool ReturnReasonsEnabled { get; set; }
+    public bool ReturnActionsEnabled { get; set; }
+
+    public string WithdrawalToken { get; set; }
+
+    public string ReturnRequestPageTitle { get; set; }
+    public string ReturnRequestTitle { get; set; }
+    public string ReturnRequestSubmitText { get; set; }
+
     #region Nested classes
 
     public partial record OrderItemModel : BaseNopEntityModel
     {
-        public int ProductId { get; set; }
+        public long ProductId { get; set; }
 
         public string ProductName { get; set; }
 

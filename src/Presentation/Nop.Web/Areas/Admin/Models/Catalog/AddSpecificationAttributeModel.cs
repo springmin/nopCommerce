@@ -27,16 +27,16 @@ public partial record AddSpecificationAttributeModel : BaseNopEntityModel, ILoca
 
     #region Properties
 
-    public int SpecificationId { get; set; }
+    public long SpecificationId { get; set; }
 
-    public int AttributeTypeId { get; set; }
+    public long AttributeTypeId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.SpecificationAttributes.Fields.AttributeType")]
     public string AttributeTypeName { get; set; }
 
-    public int AttributeId { get; set; }
+    public long AttributeId { get; set; }
 
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     public IList<SelectListItem> AvailableAttributes { get; set; }
 
@@ -59,7 +59,7 @@ public partial record AddSpecificationAttributeModel : BaseNopEntityModel, ILoca
     public int DisplayOrder { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.SpecificationAttributes.Fields.SpecificationAttributeOption")]
-    public int SpecificationAttributeOptionId { get; set; }
+    public long SpecificationAttributeOptionId { get; set; }
 
     public IList<SelectListItem> AvailableOptions { get; set; }
 

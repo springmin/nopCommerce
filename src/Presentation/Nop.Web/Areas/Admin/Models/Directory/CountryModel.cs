@@ -14,7 +14,7 @@ public partial record CountryModel : BaseNopEntityModel, ILocalizedModel<Country
     public CountryModel()
     {
         Locales = new List<CountryLocalizedModel>();
-        SelectedStoreIds = new List<int>();
+        SelectedStoreIds = new List<long>();
         AvailableStores = new List<SelectListItem>();
         StateProvinceSearchModel = new StateProvinceSearchModel();
     }
@@ -57,7 +57,7 @@ public partial record CountryModel : BaseNopEntityModel, ILocalizedModel<Country
 
     //store mapping
     [NopResourceDisplayName("Admin.Configuration.Countries.Fields.LimitedToStores")]
-    public IList<int> SelectedStoreIds { get; set; }
+    public IList<long> SelectedStoreIds { get; set; }
     public IList<SelectListItem> AvailableStores { get; set; }
 
     public StateProvinceSearchModel StateProvinceSearchModel { get; set; }
@@ -67,7 +67,7 @@ public partial record CountryModel : BaseNopEntityModel, ILocalizedModel<Country
 
 public partial record CountryLocalizedModel : ILocalizedLocaleModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Countries.Fields.Name")]
     public string Name { get; set; }

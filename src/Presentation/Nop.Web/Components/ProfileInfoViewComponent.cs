@@ -16,12 +16,12 @@ public partial class ProfileInfoViewComponent : NopViewComponent
         _profileModelFactory = profileModelFactory;
     }
 
-    public async Task<IViewComponentResult> InvokeAsync(int customerProfileId)
+    public async Task<IViewComponentResult> InvokeAsync(long customerProfileId)
     {
         var customer = await _customerService.GetCustomerByIdAsync(customerProfileId);
         ArgumentNullException.ThrowIfNull(customer);
 
         var model = await _profileModelFactory.PrepareProfileInfoModelAsync(customer);
-        return View(model);
+        return await ViewAsync(model);
     }
 }

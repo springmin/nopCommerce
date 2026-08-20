@@ -10,7 +10,7 @@ public partial record ProductEditorSettingsModel : BaseNopModel, ISettingsModel
 {
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.ProductType")]
     public bool ProductType { get; set; }
@@ -143,10 +143,7 @@ public partial record ProductEditorSettingsModel : BaseNopModel, ISettingsModel
 
     [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.AllowAddingOnlyExistingAttributeCombinations")]
     public bool AllowAddingOnlyExistingAttributeCombinations { get; set; }
-
-    [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.DisplayAttributeCombinationImagesOnly")]
-    public bool DisplayAttributeCombinationImagesOnly { get; set; }
-
+    
     [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.NotReturnable")]
     public bool NotReturnable { get; set; }
 
@@ -174,6 +171,9 @@ public partial record ProductEditorSettingsModel : BaseNopModel, ISettingsModel
     [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.CrossSellsProducts")]
     public bool CrossSellsProducts { get; set; }
 
+    [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.FilterLevelValuesProducts")]
+    public bool FilterLevelValuesProducts { get; set; }
+
     [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.Seo")]
     public bool Seo { get; set; }
 
@@ -191,6 +191,9 @@ public partial record ProductEditorSettingsModel : BaseNopModel, ISettingsModel
 
     [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.StockQuantityHistory")]
     public bool StockQuantityHistory { get; set; }
+
+    [NopResourceDisplayName("Admin.Configuration.Settings.ProductEditor.AgeVerification")]
+    public bool AgeVerification { get; set; }
 
     #endregion
 }

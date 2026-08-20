@@ -19,15 +19,16 @@ public partial record CustomerModel : BaseNopEntityModel, IAclSupportedModel
         SendEmail = new SendEmailModel() { SendImmediately = true };
         SendPm = new SendPmModel();
 
-        SelectedCustomerRoleIds = new List<int>();
+        SelectedCustomerRoleIds = new List<long>();
         AvailableCustomerRoles = new List<SelectListItem>();
+
+        SelectedPriceListIds = new List<long>();
+        AvailablePriceLists = new List<SelectListItem>();
 
         AvailableCountries = new List<SelectListItem>();
         AvailableStates = new List<SelectListItem>();
         AvailableVendors = new List<SelectListItem>();
         CustomerAttributes = new List<CustomerAttributeModel>();
-        AvailableNewsletterSubscriptionStores = new List<SelectListItem>();
-        SelectedNewsletterSubscriptionStoreIds = new List<int>();
         AddRewardPoints = new AddRewardPointsToCustomerModel();
         CustomerRewardPointsSearchModel = new CustomerRewardPointsSearchModel();
         CustomerAddressSearchModel = new CustomerAddressSearchModel();
@@ -56,7 +57,7 @@ public partial record CustomerModel : BaseNopEntityModel, IAclSupportedModel
     public string Password { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.Customers.Fields.Vendor")]
-    public int VendorId { get; set; }
+    public long VendorId { get; set; }
 
     public IList<SelectListItem> AvailableVendors { get; set; }
 
@@ -118,14 +119,14 @@ public partial record CustomerModel : BaseNopEntityModel, IAclSupportedModel
     public bool CountryEnabled { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.Customers.Fields.Country")]
-    public int CountryId { get; set; }
+    public long CountryId { get; set; }
 
     public IList<SelectListItem> AvailableCountries { get; set; }
 
     public bool StateProvinceEnabled { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.Customers.Fields.StateProvince")]
-    public int StateProvinceId { get; set; }
+    public long StateProvinceId { get; set; }
 
     public IList<SelectListItem> AvailableStates { get; set; }
 
@@ -134,6 +135,9 @@ public partial record CustomerModel : BaseNopEntityModel, IAclSupportedModel
     [DataType(DataType.PhoneNumber)]
     [NopResourceDisplayName("Admin.Customers.Customers.Fields.Phone")]
     public string Phone { get; set; }
+
+    [NopResourceDisplayName("Admin.Customers.Customers.Fields.PhoneSmsVerified")]
+    public bool PhoneSmsVerified { get; set; }
 
     public bool FaxEnabled { get; set; }
 
@@ -156,7 +160,7 @@ public partial record CustomerModel : BaseNopEntityModel, IAclSupportedModel
     public bool Active { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.Customers.Fields.Affiliate")]
-    public int AffiliateId { get; set; }
+    public long AffiliateId { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.Customers.Fields.Affiliate")]
     public string AffiliateName { get; set; }
@@ -197,21 +201,23 @@ public partial record CustomerModel : BaseNopEntityModel, IAclSupportedModel
     [NopResourceDisplayName("Admin.Customers.Customers.Fields.CustomerRoles")]
     public string CustomerRoleNames { get; set; }
 
+    public IList<SelectListItem> AvailableCustomerRoles { get; set; }
+
+    [NopResourceDisplayName("Admin.Customers.Customers.Fields.CustomerRoles")]
+    public IList<long> SelectedCustomerRoleIds { get; set; }
+
+    //price lists
+    public IList<SelectListItem> AvailablePriceLists { get; set; }
+
+    [NopResourceDisplayName("Admin.Customers.Customers.Fields.PriceLists")]
+    public IList<long> SelectedPriceListIds { get; set; }
+
     //binding with multi-factor authentication provider
     [NopResourceDisplayName("Admin.Customers.Customers.Fields.MultiFactorAuthenticationProvider")]
     public string MultiFactorAuthenticationProvider { get; set; }
 
-    public IList<SelectListItem> AvailableCustomerRoles { get; set; }
-
-    [NopResourceDisplayName("Admin.Customers.Customers.Fields.CustomerRoles")]
-    public IList<int> SelectedCustomerRoleIds { get; set; }
-
-    //newsletter subscriptions (per store)
-    [NopResourceDisplayName("Admin.Customers.Customers.Fields.Newsletter")]
-    public IList<SelectListItem> AvailableNewsletterSubscriptionStores { get; set; }
-
-    [NopResourceDisplayName("Admin.Customers.Customers.Fields.Newsletter")]
-    public IList<int> SelectedNewsletterSubscriptionStoreIds { get; set; }
+    [NopResourceDisplayName("Admin.Customers.Customers.Fields.MustChangePassword")]
+    public bool MustChangePassword { get; set; }    
 
     //reward points history
     public bool DisplayRewardPointsHistory { get; set; }
@@ -238,7 +244,7 @@ public partial record CustomerModel : BaseNopEntityModel, IAclSupportedModel
     //GDPR enabled
     public bool GdprEnabled { get; set; }
 
-    public string AvatarUrl { get; internal set; }
+    public string AvatarUrl { get; set; }
 
     public CustomerAddressSearchModel CustomerAddressSearchModel { get; set; }
 

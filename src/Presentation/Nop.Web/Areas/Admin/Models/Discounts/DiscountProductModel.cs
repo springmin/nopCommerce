@@ -9,9 +9,11 @@ public partial record DiscountProductModel : BaseNopEntityModel
 {
     #region Properties
 
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     public string ProductName { get; set; }
+
+    public long VendorId { get; set; }
 
     #endregion
 }

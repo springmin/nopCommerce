@@ -10,7 +10,7 @@ public partial record ProductVideoModel : BaseNopEntityModel
 {
     #region Properties
 
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Multimedia.Videos.Fields.VideoUrl")]
     public string VideoUrl { get; set; }

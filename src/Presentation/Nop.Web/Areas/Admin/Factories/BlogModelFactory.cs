@@ -80,7 +80,7 @@ public partial class BlogModelFactory : IBlogModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the blog content model
     /// </returns>
-    public virtual async Task<BlogContentModel> PrepareBlogContentModelAsync(BlogContentModel blogContentModel, int? filterByBlogPostId)
+    public virtual async Task<BlogContentModel> PrepareBlogContentModelAsync(BlogContentModel blogContentModel, long? filterByBlogPostId)
     {
         ArgumentNullException.ThrowIfNull(blogContentModel);
 
@@ -242,7 +242,7 @@ public partial class BlogModelFactory : IBlogModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the blog comment list model
     /// </returns>
-    public virtual async Task<BlogCommentListModel> PrepareBlogCommentListModelAsync(BlogCommentSearchModel searchModel, int? blogPostId)
+    public virtual async Task<BlogCommentListModel> PrepareBlogCommentListModelAsync(BlogCommentSearchModel searchModel, long? blogPostId)
     {
         ArgumentNullException.ThrowIfNull(searchModel);
 
@@ -283,7 +283,7 @@ public partial class BlogModelFactory : IBlogModelFactory
                 }
                 //fill in additional values (not existing in the entity)
                 commentModel.CreatedOn = await _dateTimeHelper.ConvertToUserTimeAsync(blogComment.CreatedOnUtc, DateTimeKind.Utc);
-                commentModel.Comment = _htmlFormatter.FormatText(blogComment.CommentText, false, true, false, false, false, false);
+                commentModel.Comment = _htmlFormatter.FormatText(blogComment.CommentText);
                 commentModel.StoreName = storeNames.TryGetValue(blogComment.StoreId, out var value) ? value : "Deleted";
 
                 return commentModel;

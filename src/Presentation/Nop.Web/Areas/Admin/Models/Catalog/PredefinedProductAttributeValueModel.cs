@@ -19,7 +19,7 @@ public partial record PredefinedProductAttributeValueModel : BaseNopEntityModel,
 
     #region Properties
 
-    public int ProductAttributeId { get; set; }
+    public long ProductAttributeId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Attributes.ProductAttributes.PredefinedValues.Fields.Name")]
     public string Name { get; set; }
@@ -57,7 +57,7 @@ public partial record PredefinedProductAttributeValueModel : BaseNopEntityModel,
 
 public partial record PredefinedProductAttributeValueLocalizedModel : ILocalizedLocaleModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Attributes.ProductAttributes.PredefinedValues.Fields.Name")]
     public string Name { get; set; }

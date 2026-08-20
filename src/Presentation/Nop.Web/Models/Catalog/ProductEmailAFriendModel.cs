@@ -6,7 +6,7 @@ namespace Nop.Web.Models.Catalog;
 
 public partial record ProductEmailAFriendModel : BaseNopModel
 {
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     public string ProductName { get; set; }
 

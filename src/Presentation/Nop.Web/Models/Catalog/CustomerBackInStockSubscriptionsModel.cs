@@ -17,7 +17,7 @@ public partial record CustomerBackInStockSubscriptionsModel : BaseNopModel
 
     public partial record BackInStockSubscriptionModel : BaseNopEntityModel
     {
-        public int ProductId { get; set; }
+        public long ProductId { get; set; }
         public string ProductName { get; set; }
         public string SeName { get; set; }
     }

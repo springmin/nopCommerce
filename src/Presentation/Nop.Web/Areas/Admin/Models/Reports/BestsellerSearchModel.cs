@@ -36,25 +36,25 @@ public partial record BestsellerSearchModel : BaseSearchModel
     public DateTime? EndDate { get; set; }
 
     [NopResourceDisplayName("Admin.Reports.Sales.Bestsellers.Store")]
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 
     [NopResourceDisplayName("Admin.Reports.Sales.Bestsellers.OrderStatus")]
-    public int OrderStatusId { get; set; }
+    public long OrderStatusId { get; set; }
 
     [NopResourceDisplayName("Admin.Reports.Sales.Bestsellers.PaymentStatus")]
-    public int PaymentStatusId { get; set; }
+    public long PaymentStatusId { get; set; }
 
     [NopResourceDisplayName("Admin.Reports.Sales.Bestsellers.Category")]
-    public int CategoryId { get; set; }
+    public long CategoryId { get; set; }
 
     [NopResourceDisplayName("Admin.Reports.Sales.Bestsellers.Manufacturer")]
-    public int ManufacturerId { get; set; }
+    public long ManufacturerId { get; set; }
 
     [NopResourceDisplayName("Admin.Reports.Sales.Bestsellers.BillingCountry")]
-    public int BillingCountryId { get; set; }
+    public long BillingCountryId { get; set; }
 
     [NopResourceDisplayName("Admin.Reports.Sales.Bestsellers.Vendor")]
-    public int VendorId { get; set; }
+    public long VendorId { get; set; }
 
     public IList<SelectListItem> AvailableStores { get; set; }
 

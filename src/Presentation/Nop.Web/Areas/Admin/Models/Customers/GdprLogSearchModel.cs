@@ -26,7 +26,7 @@ public partial record GdprLogSearchModel : BaseSearchModel
     public string SearchEmail { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.GdprLog.List.SearchRequestType")]
-    public int SearchRequestTypeId { get; set; }
+    public long SearchRequestTypeId { get; set; }
 
     public IList<SelectListItem> AvailableRequestTypes { get; set; }
 

@@ -10,7 +10,7 @@ public partial record CustomerAssociatedExternalAuthRecordsSearchModel : BaseSea
 {
     #region Properties
 
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.Customers.AssociatedExternalAuth")]
     public IList<CustomerAssociatedExternalAuthModel> AssociatedExternalAuthRecords { get; set; } = new List<CustomerAssociatedExternalAuthModel>();

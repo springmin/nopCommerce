@@ -9,7 +9,7 @@ public partial record AddressAttributeValueSearchModel : BaseSearchModel
 {
     #region Properties
 
-    public int AddressAttributeId { get; set; }
+    public long AddressAttributeId { get; set; }
 
     #endregion
 }

@@ -23,7 +23,7 @@ public partial record LogModel : BaseNopEntityModel
     public string IpAddress { get; set; }
 
     [NopResourceDisplayName("Admin.System.Log.Fields.Customer")]
-    public int? CustomerId { get; set; }
+    public long? CustomerId { get; set; }
 
     [NopResourceDisplayName("Admin.System.Log.Fields.Customer")]
     public string CustomerEmail { get; set; }

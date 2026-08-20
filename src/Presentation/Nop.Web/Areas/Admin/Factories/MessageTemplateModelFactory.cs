@@ -89,6 +89,11 @@ public partial class MessageTemplateModelFactory : IMessageTemplateModelFactory
 
         searchModel.HideStoresList = _catalogSettings.IgnoreStoreLimitations || searchModel.AvailableStores.SelectionIsNotPossible();
 
+        //prepare available email accounts
+        await _baseAdminModelFactory.PrepareEmailAccountsAsync(searchModel.AvailableEmailAccounts,
+            defaultItemText: await _localizationService.GetResourceAsync("Admin.ContentManagement.MessageTemplates.List.SearchEmailAccount.All"));
+        searchModel.HideEmailAccount = searchModel.AvailableEmailAccounts.SelectionIsNotPossible();
+
         //prepare page parameters
         searchModel.SetGridPageSize();
 
@@ -111,7 +116,7 @@ public partial class MessageTemplateModelFactory : IMessageTemplateModelFactory
 
         //get message templates
         var messageTemplates = (await _messageTemplateService
-            .GetAllMessageTemplatesAsync(searchModel.SearchStoreId, searchModel.SearchKeywords, isActive)).ToPagedList(searchModel);
+            .GetAllMessageTemplatesAsync(searchModel.SearchStoreId, searchModel.SearchKeywords, isActive, searchModel.EmailAccountId)).ToPagedList(searchModel);
 
         //prepare store names (to avoid loading for each message template)
         var stores = (await _storeService.GetAllStoresAsync()).Select(store => new { store.Id, store.Name }).ToList();
@@ -158,7 +163,7 @@ public partial class MessageTemplateModelFactory : IMessageTemplateModelFactory
     public virtual async Task<MessageTemplateModel> PrepareMessageTemplateModelAsync(MessageTemplateModel model,
         MessageTemplate messageTemplate, bool excludeProperties = false)
     {
-        Func<MessageTemplateLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<MessageTemplateLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (messageTemplate != null)
         {
@@ -179,17 +184,14 @@ public partial class MessageTemplateModelFactory : IMessageTemplateModelFactory
 
                 //PrepareEmailAccounts only gets available accounts, we need to set the item as selected manually
                 if (locale.AvailableEmailAccounts?.FirstOrDefault(x => x.Value == locale.EmailAccountId.ToString()) is SelectListItem emailAccountListItem)
-                {
                     emailAccountListItem.Selected = true;
-                }
-
             };
         }
 
         model.SendImmediately = !model.DelayBeforeSend.HasValue;
         model.HasAttachedDownload = model.AttachedDownloadId > 0;
 
-        var allowedTokens = string.Join(", ", await _messageTokenProvider.GetListOfAllowedTokensAsync(_messageTokenProvider.GetTokenGroups(messageTemplate)));
+        var allowedTokens = string.Join(", ", await _messageTokenProvider.GetListOfAllowedTokensAsync(messageTemplate));
         model.AllowedTokens = $"{allowedTokens}{Environment.NewLine}{Environment.NewLine}" +
                               $"{await _localizationService.GetResourceAsync("Admin.ContentManagement.MessageTemplates.Tokens.ConditionalStatement")}{Environment.NewLine}";
 
@@ -217,7 +219,7 @@ public partial class MessageTemplateModelFactory : IMessageTemplateModelFactory
     /// The task result contains the st message template model
     /// </returns>
     public virtual async Task<TestMessageTemplateModel> PrepareTestMessageTemplateModelAsync(TestMessageTemplateModel model,
-        MessageTemplate messageTemplate, int languageId)
+        MessageTemplate messageTemplate, long languageId)
     {
         ArgumentNullException.ThrowIfNull(model);
 

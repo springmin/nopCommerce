@@ -19,7 +19,7 @@ public partial record StoreScopeConfigurationModel : BaseNopModel
 
     #region Properties
 
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 
     public IList<StoreModel> Stores { get; set; }
 

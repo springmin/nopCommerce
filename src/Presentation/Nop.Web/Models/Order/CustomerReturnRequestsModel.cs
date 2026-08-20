@@ -11,13 +11,16 @@ public partial record CustomerReturnRequestsModel : BaseNopModel
 
     public IList<ReturnRequestModel> Items { get; set; }
 
+    public string ReturnRequestsTitle { get; set; }
+    public string ReturnRequestTitlePattern { get; set; }
+
     #region Nested classes
 
     public partial record ReturnRequestModel : BaseNopEntityModel
     {
         public string CustomNumber { get; set; }
         public string ReturnRequestStatus { get; set; }
-        public int ProductId { get; set; }
+        public long ProductId { get; set; }
         public string ProductName { get; set; }
         public string ProductSeName { get; set; }
         public int Quantity { get; set; }

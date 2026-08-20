@@ -38,12 +38,12 @@ public partial record ShipmentSearchModel : BaseSearchModel
     public IList<SelectListItem> AvailableCountries { get; set; }
 
     [NopResourceDisplayName("Admin.Orders.Shipments.List.Country")]
-    public int CountryId { get; set; }
+    public long CountryId { get; set; }
 
     public IList<SelectListItem> AvailableStates { get; set; }
 
     [NopResourceDisplayName("Admin.Orders.Shipments.List.StateProvince")]
-    public int StateProvinceId { get; set; }
+    public long StateProvinceId { get; set; }
 
     [NopResourceDisplayName("Admin.Orders.Shipments.List.County")]
     public string County { get; set; }
@@ -61,7 +61,7 @@ public partial record ShipmentSearchModel : BaseSearchModel
     public bool LoadNotDelivered { get; set; }
 
     [NopResourceDisplayName("Admin.Orders.Shipments.List.Warehouse")]
-    public int WarehouseId { get; set; }
+    public long WarehouseId { get; set; }
 
     public IList<SelectListItem> AvailableWarehouses { get; set; }
 

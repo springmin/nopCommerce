@@ -9,7 +9,7 @@ public partial record DiscountCategoryModel : BaseNopEntityModel
 {
     #region Properties
 
-    public int CategoryId { get; set; }
+    public long CategoryId { get; set; }
 
     public string CategoryName { get; set; }
 

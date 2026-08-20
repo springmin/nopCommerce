@@ -10,12 +10,12 @@ public partial record RecurringPaymentHistoryModel : BaseNopEntityModel
 {
     #region Properties
 
-    public int OrderId { get; set; }
+    public long OrderId { get; set; }
 
     [NopResourceDisplayName("Admin.RecurringPayments.History.CustomOrderNumber")]
     public string CustomOrderNumber { get; set; }
 
-    public int RecurringPaymentId { get; set; }
+    public long RecurringPaymentId { get; set; }
 
     [NopResourceDisplayName("Admin.RecurringPayments.History.OrderStatus")]
     public string OrderStatus { get; set; }

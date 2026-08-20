@@ -32,7 +32,7 @@ public partial record DeliveryDateModel : BaseNopEntityModel, ILocalizedModel<De
 
 public partial record DeliveryDateLocalizedModel : ILocalizedLocaleModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Shipping.DeliveryDates.Fields.Name")]
     public string Name { get; set; }

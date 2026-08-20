@@ -18,7 +18,7 @@ public partial record OrderShipmentSearchModel : BaseSearchModel
 
     #region Properties
 
-    public int OrderId { get; set; }
+    public long OrderId { get; set; }
 
     public ShipmentItemSearchModel ShipmentItemSearchModel { get; set; }
 

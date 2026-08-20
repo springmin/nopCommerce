@@ -15,7 +15,7 @@ public partial record ActivityLogModel : BaseNopEntityModel
     public string ActivityLogTypeName { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.ActivityLog.Fields.Customer")]
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.ActivityLog.Fields.CustomerEmail")]
     [DataType(DataType.EmailAddress)]

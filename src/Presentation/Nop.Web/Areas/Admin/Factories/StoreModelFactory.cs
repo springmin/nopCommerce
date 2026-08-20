@@ -94,7 +94,7 @@ public partial class StoreModelFactory : IStoreModelFactory
     /// </returns>
     public virtual async Task<StoreModel> PrepareStoreModelAsync(StoreModel model, Store store, bool excludeProperties = false)
     {
-        Func<StoreLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<StoreLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (store != null)
         {

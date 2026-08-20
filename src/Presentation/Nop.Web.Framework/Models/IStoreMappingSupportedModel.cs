@@ -12,7 +12,7 @@ public partial interface IStoreMappingSupportedModel
     /// <summary>
     /// Gets or sets identifiers of the selected stores
     /// </summary>
-    IList<int> SelectedStoreIds { get; set; }
+    IList<long> SelectedStoreIds { get; set; }
 
     /// <summary>
     /// Gets or sets items for the all available stores

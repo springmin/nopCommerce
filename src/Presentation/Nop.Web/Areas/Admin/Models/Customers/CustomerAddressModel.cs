@@ -19,7 +19,7 @@ public partial record CustomerAddressModel : BaseNopModel
 
     #region Properties
 
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     public AddressModel Address { get; set; }
 

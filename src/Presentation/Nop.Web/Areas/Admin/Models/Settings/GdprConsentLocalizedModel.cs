@@ -8,7 +8,7 @@ namespace Nop.Web.Areas.Admin.Models.Settings;
 /// </summary>
 public partial record GdprConsentLocalizedModel : ILocalizedLocaleModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Gdpr.Consent.Message")]
     public string Message { get; set; }

@@ -10,7 +10,7 @@ public partial record CustomerProductReviewModel : BaseNopModel
     {
         AdditionalProductReviewList = new List<ProductReviewReviewTypeMappingModel>();
     }
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
     public string ProductName { get; set; }
     public string ProductSeName { get; set; }
     public string Title { get; set; }

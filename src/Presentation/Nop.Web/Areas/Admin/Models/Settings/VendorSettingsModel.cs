@@ -20,7 +20,7 @@ public partial record VendorSettingsModel : BaseNopModel, ISettingsModel
 
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Vendor.VendorsBlockItemsToDisplay")]
     public int VendorsBlockItemsToDisplay { get; set; }
@@ -65,6 +65,10 @@ public partial record VendorSettingsModel : BaseNopModel, ISettingsModel
     [NopResourceDisplayName("Admin.Configuration.Settings.Vendor.ShowVendorOnOrderDetailsPage")]
     public bool ShowVendorOnOrderDetailsPage { get; set; }
     public bool ShowVendorOnOrderDetailsPage_OverrideForStore { get; set; }
+
+    [NopResourceDisplayName("Admin.Configuration.Settings.Vendor.AllowVendorsToUpload3dObjects")]
+    public bool AllowVendorsToUpload3dObjects { get; set; }
+    public bool AllowVendorsToUpload3dObjects_OverrideForStore { get; set; }
 
     public VendorAttributeSearchModel VendorAttributeSearchModel { get; set; }
 

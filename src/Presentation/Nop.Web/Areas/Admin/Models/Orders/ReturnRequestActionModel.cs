@@ -32,7 +32,7 @@ public partial record ReturnRequestActionModel : BaseNopEntityModel, ILocalizedM
 
 public partial record ReturnRequestActionLocalizedModel : ILocalizedLocaleModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Order.ReturnRequestActions.Name")]
     public string Name { get; set; }

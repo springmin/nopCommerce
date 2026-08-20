@@ -45,21 +45,23 @@ public partial class CountryModelFactory : ICountryModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the list of identifiers and names of states and provinces
     /// </returns>
-    public virtual async Task<IList<StateProvinceModel>> GetStatesByCountryIdAsync(string countryId, bool addSelectStateItem)
+    public virtual async Task<IList<StateProvinceModel>> GetStatesByCountryIdAsync(long countryId, bool addSelectStateItem)
     {
-        ArgumentException.ThrowIfNullOrEmpty(countryId);
-
-        var country = await _countryService.GetCountryByIdAsync(Convert.ToInt32(countryId));
-        var states = (await _stateProvinceService
-                .GetStateProvincesByCountryIdAsync(country?.Id ?? 0, (await _workContext.GetWorkingLanguageAsync()).Id))
-            .ToList();
+        var country = await _countryService.GetCountryByIdAsync(countryId);
+        var states =
+            (await _stateProvinceService.GetStateProvincesByCountryIdAsync(country?.Id ?? 0,
+                (await _workContext.GetWorkingLanguageAsync()).Id)).ToList();
+        
         var result = new List<StateProvinceModel>();
+        
         foreach (var state in states)
+        {
             result.Add(new StateProvinceModel
             {
                 id = state.Id,
                 name = await _localizationService.GetLocalizedAsync(state, x => x.Name)
             });
+        }
 
         if (country == null)
         {
@@ -85,8 +87,8 @@ public partial class CountryModelFactory : ICountryModelFactory
         {
             //some country is selected
             if (!result.Any())
-            {
                 //country does not have states
+            {
                 result.Insert(0, new StateProvinceModel
                 {
                     id = 0,

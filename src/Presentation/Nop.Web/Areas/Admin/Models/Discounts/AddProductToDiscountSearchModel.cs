@@ -28,19 +28,21 @@ public partial record AddProductToDiscountSearchModel : BaseSearchModel
     public string SearchProductName { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.List.SearchCategory")]
-    public int SearchCategoryId { get; set; }
+    public long SearchCategoryId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.List.SearchManufacturer")]
-    public int SearchManufacturerId { get; set; }
+    public long SearchManufacturerId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.List.SearchStore")]
-    public int SearchStoreId { get; set; }
+    public long SearchStoreId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.List.SearchVendor")]
-    public int SearchVendorId { get; set; }
+    public long SearchVendorId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.List.SearchProductType")]
-    public int SearchProductTypeId { get; set; }
+    public long SearchProductTypeId { get; set; }
+
+    public bool IsLoggedInAsVendor { get; set; }
 
     public IList<SelectListItem> AvailableCategories { get; set; }
 

@@ -128,7 +128,7 @@ public partial class CountryModelFactory : ICountryModelFactory
     /// </returns>
     public virtual async Task<CountryModel> PrepareCountryModelAsync(CountryModel model, Country country, bool excludeProperties = false)
     {
-        Func<CountryLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<CountryLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (country != null)
         {
@@ -209,7 +209,7 @@ public partial class CountryModelFactory : ICountryModelFactory
     public virtual async Task<StateProvinceModel> PrepareStateProvinceModelAsync(StateProvinceModel model,
         Country country, StateProvince state, bool excludeProperties = false)
     {
-        Func<StateProvinceLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<StateProvinceLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (state != null)
         {

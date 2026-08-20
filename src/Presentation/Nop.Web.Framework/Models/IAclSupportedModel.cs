@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Nop.Web.Framework.Mvc.ModelBinding;
 
 namespace Nop.Web.Framework.Models;
 
@@ -12,7 +13,8 @@ public partial interface IAclSupportedModel
     /// <summary>
     /// Gets or sets identifiers of the selected customer roles
     /// </summary>
-    IList<int> SelectedCustomerRoleIds { get; set; }
+    [NopResourceDisplayName("Admin.IAclSupportedModel.Fields.AclCustomerRoles")]
+    IList<long> SelectedCustomerRoleIds { get; set; }
 
     /// <summary>
     /// Gets or sets items for the all available customer roles

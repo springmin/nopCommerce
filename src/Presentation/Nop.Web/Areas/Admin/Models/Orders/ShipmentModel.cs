@@ -21,9 +21,9 @@ public partial record ShipmentModel : BaseNopEntityModel
     #region Properties
 
     [NopResourceDisplayName("Admin.Orders.Shipments.ID")]
-    public override int Id { get; set; }
+    public long Id { get; set; }
 
-    public int OrderId { get; set; }
+    public long OrderId { get; set; }
 
     [NopResourceDisplayName("Admin.Orders.Shipments.PickupInStore")]
     public bool PickupInStore { get; set; }

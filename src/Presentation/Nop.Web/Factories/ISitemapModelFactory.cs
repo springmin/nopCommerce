@@ -1,4 +1,6 @@
-﻿using Nop.Web.Models.Sitemap;
+﻿using Nop.Core;
+using Nop.Core.Domain.Seo;
+using Nop.Web.Models.Sitemap;
 
 namespace Nop.Web.Factories;
 
@@ -27,21 +29,33 @@ public partial interface ISitemapModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the sitemap model with sitemap.xml as string
     /// </returns>
-    Task<SitemapXmlModel> PrepareSitemapXmlModelAsync(int id = 0);
+    Task<SitemapXmlModel> PrepareSitemapXmlModelAsync(long id = 0);
 
     /// <summary>
-    /// Prepare localized sitemap URL model
+    /// Return localized URLs
     /// </summary>
     /// <param name="routeName">Route name</param>
-    /// <param name="getRouteParamsAwait">Lambda for route params object</param>
     /// <param name="dateTimeUpdatedOn">A time when URL was updated last time</param>
-    /// <param name="updateFreq">How often to update url</param>
+    /// <param name="updateFreq">How often to update URL</param>
     /// <returns>
     /// A task that represents the asynchronous operation
-    /// The task result contains the sitemap URL model
+    /// The task result contains the localized URLs
     /// </returns>
     Task<SitemapUrlModel> PrepareLocalizedSitemapUrlAsync(string routeName,
-        Func<int?, Task<object>> getRouteParamsAwait = null,
-        DateTime? dateTimeUpdatedOn = null,
-        UpdateFrequency updateFreq = UpdateFrequency.Weekly);
+        DateTime? dateTimeUpdatedOn = null, UpdateFrequency updateFreq = UpdateFrequency.Weekly);
+
+    /// <summary>
+    /// Return localized sitemap URL models
+    /// </summary>
+    /// <param name="entity">An entity which supports slug</param>
+    /// <param name="dateTimeUpdatedOn">A time when URL was updated last time</param>
+    /// <param name="updateFreq">How often to update URL</param>
+    /// <param name="languageId">Language id; pass when URL for this entity should be used in one language</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation
+    /// The task result contains the localized sitemap URL models
+    /// </returns>
+    Task<SitemapUrlModel> PrepareLocalizedSitemapUrlAsync<TEntity>(TEntity entity,
+        DateTime? dateTimeUpdatedOn = null, UpdateFrequency updateFreq = UpdateFrequency.Weekly, long? languageId = null)
+        where TEntity : BaseEntity, ISlugSupported;
 }

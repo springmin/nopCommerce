@@ -10,7 +10,7 @@ public partial record NeverSoldReportModel : BaseNopModel
 {
     #region Properties
 
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     [NopResourceDisplayName("Admin.Reports.Sales.NeverSold.Fields.Name")]
     public string ProductName { get; set; }

@@ -190,7 +190,7 @@ public partial class CheckoutAttributeModelFactory : ICheckoutAttributeModelFact
     public virtual async Task<CheckoutAttributeModel> PrepareCheckoutAttributeModelAsync(CheckoutAttributeModel model,
         CheckoutAttribute checkoutAttribute, bool excludeProperties = false)
     {
-        Func<CheckoutAttributeLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<CheckoutAttributeLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (checkoutAttribute != null)
         {
@@ -289,7 +289,7 @@ public partial class CheckoutAttributeModelFactory : ICheckoutAttributeModelFact
     {
         ArgumentNullException.ThrowIfNull(checkoutAttribute);
 
-        Func<CheckoutAttributeValueLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<CheckoutAttributeValueLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (checkoutAttributeValue != null)
         {

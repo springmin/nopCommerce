@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
 using Nop.Core.Domain.Customers;
+using Nop.Core.Http;
 using Nop.Services.Catalog;
 using Nop.Services.Localization;
 using Nop.Services.Media;
@@ -35,7 +36,7 @@ public partial class DownloadController : BasePublicController
 
     //ignore SEO friendly URLs checks
     [CheckLanguageSeoCode(ignore: true)]
-    public virtual async Task<IActionResult> Sample(int productId)
+    public virtual async Task<IActionResult> Sample(long productId)
     {
         var product = await _productService.GetProductByIdAsync(productId);
         if (product == null)
@@ -91,7 +92,7 @@ public partial class DownloadController : BasePublicController
             return Content("Download is not available any more.");
 
         if (product.HasUserAgreement && !agree)
-            return RedirectToRoute("DownloadUserAgreement", new { orderItemId = orderItemId });
+            return RedirectToRoute(NopRouteNames.Standard.DOWNLOAD_USER_AGREEMENT, new { orderItemId = orderItemId });
 
 
         if (!product.UnlimitedDownloads && orderItem.DownloadCount >= product.MaxNumberOfDownloads)
@@ -162,6 +163,8 @@ public partial class DownloadController : BasePublicController
         return new FileContentResult(download.DownloadBinary, contentType) { FileDownloadName = fileName + download.Extension };
     }
 
+    //ignore SEO friendly URLs checks
+    [CheckLanguageSeoCode(ignore: true)]
     public virtual async Task<IActionResult> GetFileUpload(Guid downloadId)
     {
         var download = await _downloadService.GetDownloadByGuidAsync(downloadId);
@@ -185,7 +188,7 @@ public partial class DownloadController : BasePublicController
 
     //ignore SEO friendly URLs checks
     [CheckLanguageSeoCode(ignore: true)]
-    public virtual async Task<IActionResult> GetOrderNoteFile(int orderNoteId)
+    public virtual async Task<IActionResult> GetOrderNoteFile(long orderNoteId)
     {
         var orderNote = await _orderService.GetOrderNoteByIdAsync(orderNoteId);
         if (orderNote == null)

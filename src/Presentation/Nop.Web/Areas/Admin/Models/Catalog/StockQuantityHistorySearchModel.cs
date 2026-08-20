@@ -20,10 +20,10 @@ public partial record StockQuantityHistorySearchModel : BaseSearchModel
 
     #region Properties
 
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.List.SearchWarehouse")]
-    public int WarehouseId { get; set; }
+    public long WarehouseId { get; set; }
 
     public IList<SelectListItem> AvailableWarehouses { get; set; }
 

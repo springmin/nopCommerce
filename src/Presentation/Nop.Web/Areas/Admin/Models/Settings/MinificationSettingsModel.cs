@@ -10,7 +10,7 @@ public partial record MinificationSettingsModel : BaseNopModel, ISettingsModel
 {
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.GeneralCommon.EnableHtmlMinification")]
     public bool EnableHtmlMinification { get; set; }

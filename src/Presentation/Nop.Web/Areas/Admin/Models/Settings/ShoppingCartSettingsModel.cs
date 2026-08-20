@@ -10,7 +10,7 @@ public partial record ShoppingCartSettingsModel : BaseNopModel, ISettingsModel
 {
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.ShoppingCart.DisplayCartAfterAddingProduct")]
     public bool DisplayCartAfterAddingProduct { get; set; }
@@ -27,6 +27,14 @@ public partial record ShoppingCartSettingsModel : BaseNopModel, ISettingsModel
     [NopResourceDisplayName("Admin.Configuration.Settings.ShoppingCart.MaximumWishlistItems")]
     public int MaximumWishlistItems { get; set; }
     public bool MaximumWishlistItems_OverrideForStore { get; set; }
+
+    [NopResourceDisplayName("Admin.Configuration.Settings.ShoppingCart.AllowMultipleWishlist")]
+    public bool AllowMultipleWishlist { get; set; }
+    public bool AllowMultipleWishlist_OverrideForStore { get; set; }
+
+    [NopResourceDisplayName("Admin.Configuration.Settings.ShoppingCart.MaximumNumberOfCustomWishlist")]
+    public int MaximumNumberOfCustomWishlist { get; set; }
+    public bool MaximumNumberOfCustomWishlist_OverrideForStore { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.ShoppingCart.AllowOutOfStockItemsToBeAddedToWishlist")]
     public bool AllowOutOfStockItemsToBeAddedToWishlist { get; set; }

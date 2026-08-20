@@ -19,7 +19,7 @@ public partial record CheckoutAttributeValueModel : BaseNopEntityModel, ILocaliz
 
     #region Properties
 
-    public int AttributeId { get; set; }
+    public long AttributeId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Attributes.CheckoutAttributes.Values.Fields.Name")]
     public string Name { get; set; }
@@ -49,7 +49,7 @@ public partial record CheckoutAttributeValueModel : BaseNopEntityModel, ILocaliz
 
 public partial record CheckoutAttributeValueLocalizedModel : ILocalizedLocaleModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Attributes.CheckoutAttributes.Values.Fields.Name")]
     public string Name { get; set; }

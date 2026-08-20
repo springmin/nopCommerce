@@ -92,7 +92,7 @@ public partial class ReviewTypeModelFactory : IReviewTypeModelFactory
     public virtual async Task<ReviewTypeModel> PrepareReviewTypeModelAsync(ReviewTypeModel model,
         ReviewType reviewType, bool excludeProperties = false)
     {
-        Func<ReviewTypeLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<ReviewTypeLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (reviewType != null)
         {

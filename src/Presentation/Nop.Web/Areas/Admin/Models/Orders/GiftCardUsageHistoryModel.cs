@@ -13,7 +13,7 @@ public partial record GiftCardUsageHistoryModel : BaseNopEntityModel
     [NopResourceDisplayName("Admin.GiftCards.History.UsedValue")]
     public string UsedValue { get; set; }
 
-    public int OrderId { get; set; }
+    public long OrderId { get; set; }
 
     [NopResourceDisplayName("Admin.GiftCards.History.CreatedOn")]
     public DateTime CreatedOn { get; set; }

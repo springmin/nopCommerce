@@ -32,15 +32,15 @@ public partial record AddressModel : BaseNopEntityModel
 
     public bool CountryEnabled { get; set; }
     [NopResourceDisplayName("Address.Fields.Country")]
-    public int? CountryId { get; set; }
+    public long? CountryId { get; set; }
     [NopResourceDisplayName("Address.Fields.Country")]
     public string CountryName { get; set; }
 
-    public int? DefaultCountryId { get; set; }
+    public long? DefaultCountryId { get; set; }
 
     public bool StateProvinceEnabled { get; set; }
     [NopResourceDisplayName("Address.Fields.StateProvince")]
-    public int? StateProvinceId { get; set; }
+    public long? StateProvinceId { get; set; }
     [NopResourceDisplayName("Address.Fields.StateProvince")]
     public string StateProvinceName { get; set; }
 
@@ -89,4 +89,25 @@ public partial record AddressModel : BaseNopEntityModel
     public string FormattedCustomAddressAttributes { get; set; }
     public IList<AddressAttributeModel> CustomAddressAttributes { get; set; }
 
+    public Address ToEntity(Address destination = null)
+    {
+        destination ??= new Address();
+        
+        destination.Id = Id;
+        destination.FirstName = FirstName;
+        destination.LastName = LastName;
+        destination.Email = Email;
+        destination.Company = Company;
+        destination.CountryId = CountryId == 0 ? null : CountryId;
+        destination.StateProvinceId = StateProvinceId == 0 ? null : StateProvinceId;
+        destination.County = County;
+        destination.City = City;
+        destination.Address1 = Address1;
+        destination.Address2 = Address2;
+        destination.ZipPostalCode = ZipPostalCode;
+        destination.PhoneNumber = PhoneNumber;
+        destination.FaxNumber = FaxNumber;
+
+        return destination;
+    }
 }

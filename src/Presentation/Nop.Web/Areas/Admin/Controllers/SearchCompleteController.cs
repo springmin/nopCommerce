@@ -33,7 +33,7 @@ public partial class SearchCompleteController : BaseAdminController
 
     public virtual async Task<IActionResult> SearchAutoComplete(string term)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.AccessAdminPanel))
+        if (!await _permissionService.AuthorizeAsync(StandardPermission.Security.ACCESS_ADMIN_PANEL))
             return Content(string.Empty);
 
         const int searchTermMinimumLength = 3;
@@ -42,11 +42,9 @@ public partial class SearchCompleteController : BaseAdminController
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
-        var vendorId = 0;
+        long vendorId = 0;
         if (currentVendor != null)
-        {
             vendorId = currentVendor.Id;
-        }
 
         //products
         const int productNumber = 15;

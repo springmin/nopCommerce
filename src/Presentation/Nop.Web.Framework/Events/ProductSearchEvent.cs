@@ -16,17 +16,17 @@ public partial class ProductSearchEvent
     /// <summary>
     /// Category identifiers
     /// </summary>
-    public IList<int> CategoryIds { get; set; }
+    public IList<long> CategoryIds { get; set; }
     /// <summary>
     /// Manufacturer identifier
     /// </summary>
-    public int ManufacturerId { get; set; }
+    public long ManufacturerId { get; set; }
     /// <summary>
     /// Language identifier
     /// </summary>
-    public int WorkingLanguageId { get; set; }
+    public long WorkingLanguageId { get; set; }
     /// <summary>
     /// Vendor identifier
     /// </summary>
-    public int VendorId { get; set; }
+    public long VendorId { get; set; }
 }

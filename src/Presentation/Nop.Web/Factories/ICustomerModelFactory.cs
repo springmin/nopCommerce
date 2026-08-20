@@ -67,7 +67,18 @@ public partial interface ICustomerModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the register result model
     /// </returns>
-    Task<RegisterResultModel> PrepareRegisterResultModelAsync(int resultId, string returnUrl);
+    Task<RegisterResultModel> PrepareRegisterResultModelAsync(long resultId, string returnUrl);
+
+    /// <summary>
+    /// Prepare the phone verification model
+    /// </summary>
+    /// <param name="typeId">Value of phone verification flow enum</param>
+    /// <param name="returnUrl">URL to redirect</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation
+    /// The task result contains the phone verification model
+    /// </returns>
+    Task<PhoneVerificationModel> PreparePhoneVerificationModelAsync(long typeId, string returnUrl);
 
     /// <summary>
     /// Prepare the customer navigation model
@@ -77,7 +88,7 @@ public partial interface ICustomerModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the customer navigation model
     /// </returns>
-    Task<CustomerNavigationModel> PrepareCustomerNavigationModelAsync(int selectedTabId = 0);
+    Task<CustomerNavigationModel> PrepareCustomerNavigationModelAsync(long selectedTabId = 0);
 
     /// <summary>
     /// Prepare the customer address list model
@@ -111,11 +122,12 @@ public partial interface ICustomerModelFactory
     /// <summary>
     /// Prepare the change password model
     /// </summary>
+    /// <param name="customer">Customer</param>
     /// <returns>
     /// A task that represents the asynchronous operation
     /// The task result contains the change password model
     /// </returns>
-    Task<ChangePasswordModel> PrepareChangePasswordModelAsync();
+    Task<ChangePasswordModel> PrepareChangePasswordModelAsync(Customer customer);
 
     /// <summary>
     /// Prepare the customer avatar model

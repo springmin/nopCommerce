@@ -17,14 +17,14 @@ public partial record ProductAttributeCombinationModel : BaseNopEntityModel
         ProductAttributes = new List<ProductAttributeModel>();
         ProductPictureModels = new List<ProductPictureModel>();
         Warnings = new List<string>();
-        PictureIds = new List<int>();
+        PictureIds = new List<long>();
     }
 
     #endregion
 
     #region Properties
 
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.AttributeCombinations.Fields.Attributes")]
     public string AttributesXml { get; set; }
@@ -52,7 +52,7 @@ public partial record ProductAttributeCombinationModel : BaseNopEntityModel
     public int NotifyAdminForQuantityBelow { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.AttributeCombinations.Fields.Pictures")]
-    public IList<int> PictureIds { get; set; }
+    public IList<long> PictureIds { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.AttributeCombinations.Fields.MinStockQuantity")]
     public int MinStockQuantity { get; set; }
@@ -76,7 +76,7 @@ public partial record ProductAttributeCombinationModel : BaseNopEntityModel
             Values = new List<ProductAttributeValueModel>();
         }
 
-        public int ProductAttributeId { get; set; }
+        public long ProductAttributeId { get; set; }
 
         public string Name { get; set; }
 

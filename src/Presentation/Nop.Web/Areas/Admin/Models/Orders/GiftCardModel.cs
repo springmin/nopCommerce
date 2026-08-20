@@ -21,10 +21,10 @@ public partial record GiftCardModel : BaseNopEntityModel
     #region Properties
 
     [NopResourceDisplayName("Admin.GiftCards.Fields.GiftCardType")]
-    public int GiftCardTypeId { get; set; }
+    public long GiftCardTypeId { get; set; }
 
     [NopResourceDisplayName("Admin.GiftCards.Fields.OrderId")]
-    public int? PurchasedWithOrderId { get; set; }
+    public long? PurchasedWithOrderId { get; set; }
 
     [NopResourceDisplayName("Admin.GiftCards.Fields.CustomOrderNumber")]
     public string PurchasedWithOrderNumber { get; set; }

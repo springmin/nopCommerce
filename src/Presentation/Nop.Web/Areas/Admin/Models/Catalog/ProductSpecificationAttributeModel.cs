@@ -9,11 +9,11 @@ public partial record ProductSpecificationAttributeModel : BaseNopEntityModel
 {
     #region Properties
 
-    public int AttributeTypeId { get; set; }
+    public long AttributeTypeId { get; set; }
 
     public string AttributeTypeName { get; set; }
 
-    public int AttributeId { get; set; }
+    public long AttributeId { get; set; }
 
     public string AttributeName { get; set; }
 
@@ -25,7 +25,7 @@ public partial record ProductSpecificationAttributeModel : BaseNopEntityModel
 
     public int DisplayOrder { get; set; }
 
-    public int SpecificationAttributeOptionId { get; set; }
+    public long SpecificationAttributeOptionId { get; set; }
 
     #endregion
 }

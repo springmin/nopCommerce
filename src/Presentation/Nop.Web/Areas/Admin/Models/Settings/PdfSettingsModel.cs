@@ -11,7 +11,7 @@ public partial record PdfSettingsModel : BaseNopModel, ISettingsModel
 {
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.GeneralCommon.PdfLetterPageSizeEnabled")]
     public bool LetterPageSizeEnabled { get; set; }
@@ -19,7 +19,7 @@ public partial record PdfSettingsModel : BaseNopModel, ISettingsModel
 
     [NopResourceDisplayName("Admin.Configuration.Settings.GeneralCommon.PdfLogo")]
     [UIHint("Picture")]
-    public int LogoPictureId { get; set; }
+    public long LogoPictureId { get; set; }
     public bool LogoPictureId_OverrideForStore { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.GeneralCommon.DisablePdfInvoicesForPendingOrders")]

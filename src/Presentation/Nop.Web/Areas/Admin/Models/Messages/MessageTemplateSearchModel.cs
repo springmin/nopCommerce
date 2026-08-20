@@ -15,6 +15,7 @@ public partial record MessageTemplateSearchModel : BaseSearchModel
     {
         AvailableStores = new List<SelectListItem>();
         AvailableActiveOptions = new List<SelectListItem>();
+        AvailableEmailAccounts = new List<SelectListItem>();
     }
 
     #endregion
@@ -25,16 +26,22 @@ public partial record MessageTemplateSearchModel : BaseSearchModel
     public string SearchKeywords { get; set; }
 
     [NopResourceDisplayName("Admin.ContentManagement.MessageTemplates.List.SearchStore")]
-    public int SearchStoreId { get; set; }
+    public long SearchStoreId { get; set; }
 
     [NopResourceDisplayName("Admin.ContentManagement.MessageTemplates.List.IsActive")]
-    public int IsActiveId { get; set; }
+    public long IsActiveId { get; set; }
 
+    [NopResourceDisplayName("Admin.ContentManagement.MessageTemplates.List.SearchEmailAccount")]
+    public long EmailAccountId { get; set; }
+  
     public IList<SelectListItem> AvailableStores { get; set; }
 
     public IList<SelectListItem> AvailableActiveOptions { get; set; }
 
+    public IList<SelectListItem> AvailableEmailAccounts { get; set; }
+
     public bool HideStoresList { get; set; }
+    public bool HideEmailAccount { get; set; }
 
     #endregion
 }

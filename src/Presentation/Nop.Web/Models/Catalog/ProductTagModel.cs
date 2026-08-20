@@ -8,5 +8,5 @@ public partial record ProductTagModel : BaseNopEntityModel
 
     public string SeName { get; set; }
 
-    public int ProductCount { get; set; }
+    public long ProductCount { get; set; }
 }

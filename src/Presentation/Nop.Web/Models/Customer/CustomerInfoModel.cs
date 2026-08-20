@@ -16,6 +16,7 @@ public partial record CustomerInfoModel : BaseNopModel
         AssociatedExternalAuthRecords = new List<AssociatedExternalAuthModel>();
         CustomerAttributes = new List<CustomerAttributeModel>();
         GdprConsents = new List<GdprConsentModel>();
+        NewsLetterSubscriptions = new List<NewsLetterSubscriptionModel>();
     }
 
     [DataType(DataType.EmailAddress)]
@@ -92,13 +93,13 @@ public partial record CustomerInfoModel : BaseNopModel
     public bool CountryEnabled { get; set; }
     public bool CountryRequired { get; set; }
     [NopResourceDisplayName("Account.Fields.Country")]
-    public int CountryId { get; set; }
+    public long CountryId { get; set; }
     public IList<SelectListItem> AvailableCountries { get; set; }
 
     public bool StateProvinceEnabled { get; set; }
     public bool StateProvinceRequired { get; set; }
     [NopResourceDisplayName("Account.Fields.StateProvince")]
-    public int StateProvinceId { get; set; }
+    public long StateProvinceId { get; set; }
     public IList<SelectListItem> AvailableStates { get; set; }
 
     public bool PhoneEnabled { get; set; }
@@ -106,6 +107,8 @@ public partial record CustomerInfoModel : BaseNopModel
     [DataType(DataType.PhoneNumber)]
     [NopResourceDisplayName("Account.Fields.Phone")]
     public string Phone { get; set; }
+    public bool LoginByPhoneEnabled { get; set; }
+    public bool PhoneSmsVerified { get; set; }
 
     public bool FaxEnabled { get; set; }
     public bool FaxRequired { get; set; }
@@ -114,13 +117,8 @@ public partial record CustomerInfoModel : BaseNopModel
     public string Fax { get; set; }
 
     public bool NewsletterEnabled { get; set; }
-    [NopResourceDisplayName("Account.Fields.Newsletter")]
-    public bool Newsletter { get; set; }
 
-    //preferences
-    public bool SignatureEnabled { get; set; }
-    [NopResourceDisplayName("Account.Fields.Signature")]
-    public string Signature { get; set; }
+    public IList<NewsLetterSubscriptionModel> NewsLetterSubscriptions { get; set; }
 
     //time zone
     [NopResourceDisplayName("Account.Fields.TimeZone")]
@@ -133,6 +131,7 @@ public partial record CustomerInfoModel : BaseNopModel
     public string VatNumber { get; set; }
     public string VatNumberStatusNote { get; set; }
     public bool DisplayVatNumber { get; set; }
+    public bool VatNumberRequired { get; set; }
 
     //external authentication
     [NopResourceDisplayName("Account.AssociatedExternalAuth")]

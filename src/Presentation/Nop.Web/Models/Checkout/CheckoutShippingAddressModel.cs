@@ -17,7 +17,7 @@ public partial record CheckoutShippingAddressModel : BaseNopModel
     public AddressModel ShippingNewAddress { get; set; }
     public bool NewAddressPreselected { get; set; }
 
-    public int SelectedBillingAddress { get; set; }
+    public long SelectedBillingAddress { get; set; }
 
     public bool DisplayPickupInStore { get; set; }
     public CheckoutPickupPointsModel PickupPointsModel { get; set; }

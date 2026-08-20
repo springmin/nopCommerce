@@ -30,7 +30,7 @@ public partial record SettingModel : BaseNopEntityModel
     public string Store { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.AllSettings.Fields.Store")]
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
     public IList<SelectListItem> AvailableStores { get; set; }
 
     #endregion

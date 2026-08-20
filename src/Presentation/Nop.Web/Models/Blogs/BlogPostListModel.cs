@@ -10,7 +10,7 @@ public partial record BlogPostListModel : BaseNopModel
         BlogPosts = new List<BlogPostModel>();
     }
 
-    public int WorkingLanguageId { get; set; }
+    public long WorkingLanguageId { get; set; }
     public BlogPagingFilteringModel PagingFilteringContext { get; set; }
     public IList<BlogPostModel> BlogPosts { get; set; }
 }

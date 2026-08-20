@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Web.Framework.Models;
+using Nop.Web.Framework.Models.ArtificialIntelligence;
 using Nop.Web.Framework.Mvc.ModelBinding;
 
 namespace Nop.Web.Areas.Admin.Models.Blogs;
@@ -8,14 +9,14 @@ namespace Nop.Web.Areas.Admin.Models.Blogs;
 /// <summary>
 /// Represents a blog post model
 /// </summary>
-public partial record BlogPostModel : BaseNopEntityModel, IStoreMappingSupportedModel
+public partial record BlogPostModel : BaseNopEntityModel, IStoreMappingSupportedModel, IMetaTagsSupportedModel
 {
     #region Ctor
 
     public BlogPostModel()
     {
         AvailableLanguages = new List<SelectListItem>();
-        SelectedStoreIds = new List<int>();
+        SelectedStoreIds = new List<long>();
         AvailableStores = new List<SelectListItem>();
     }
 
@@ -24,7 +25,7 @@ public partial record BlogPostModel : BaseNopEntityModel, IStoreMappingSupported
     #region Properties
 
     [NopResourceDisplayName("Admin.ContentManagement.Blog.BlogPosts.Fields.Language")]
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.ContentManagement.Blog.BlogPosts.Fields.IncludeInSitemap")]
     public bool IncludeInSitemap { get; set; }
@@ -80,7 +81,7 @@ public partial record BlogPostModel : BaseNopEntityModel, IStoreMappingSupported
 
     //store mapping
     [NopResourceDisplayName("Admin.ContentManagement.Blog.BlogPosts.Fields.LimitedToStores")]
-    public IList<int> SelectedStoreIds { get; set; }
+    public IList<long> SelectedStoreIds { get; set; }
     public IList<SelectListItem> AvailableStores { get; set; }
 
     #endregion

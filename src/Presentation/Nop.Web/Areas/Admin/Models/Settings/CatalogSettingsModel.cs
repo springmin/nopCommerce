@@ -17,13 +17,15 @@ public partial record CatalogSettingsModel : BaseNopModel, ISettingsModel
         AvailableViewModes = new List<SelectListItem>();
         SortOptionSearchModel = new SortOptionSearchModel();
         ReviewTypeSearchModel = new ReviewTypeSearchModel();
+        ArtificialIntelligenceSettingsModel = new ArtificialIntelligenceSettingsModel();
+        GpsrSettingsModel = new GpsrSettingsModel();
     }
 
     #endregion
 
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.AllowViewUnpublishedProductPage")]
     public bool AllowViewUnpublishedProductPage { get; set; }
@@ -186,6 +188,10 @@ public partial record CatalogSettingsModel : BaseNopModel, ISettingsModel
     public bool SearchPageAllowCustomersToSelectPageSize { get; set; }
     public bool SearchPageAllowCustomersToSelectPageSize_OverrideForStore { get; set; }
 
+    [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.ShowSearchBoxCategories")]
+    public bool ShowSearchBoxCategories { get; set; }
+    public bool ShowSearchBoxCategories_OverrideForStore { get; set; }
+
     [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.SearchPagePageSizeOptions")]
     public string SearchPagePageSizeOptions { get; set; }
     public bool SearchPagePageSizeOptions_OverrideForStore { get; set; }
@@ -314,6 +320,10 @@ public partial record CatalogSettingsModel : BaseNopModel, ISettingsModel
     public bool ExportImportProductSpecificationAttributes { get; set; }
     public bool ExportImportProductSpecificationAttributes_OverrideForStore { get; set; }
 
+    [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.ExportImportTierPrices")]
+    public bool ExportImportTierPrices { get; set; }
+    public bool ExportImportTierPrices_OverrideForStore { get; set; }
+
     [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.ExportImportProductCategoryBreadcrumb")]
     public bool ExportImportProductCategoryBreadcrumb { get; set; }
     public bool ExportImportProductCategoryBreadcrumb_OverrideForStore { get; set; }
@@ -341,6 +351,10 @@ public partial record CatalogSettingsModel : BaseNopModel, ISettingsModel
     [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.ExportImportProductUseLimitedToStores")]
     public bool ExportImportProductUseLimitedToStores { get; set; }
     public bool ExportImportProductUseLimitedToStores_OverrideForStore { get; set; }
+
+    [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.ExportImportCategoryUseLimitedToStores")]
+    public bool ExportImportCategoryUseLimitedToStores { get; set; }
+    public bool ExportImportCategoryUseLimitedToStores_OverrideForStore { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.IgnoreDiscounts")]
     public bool IgnoreDiscounts { get; set; }
@@ -405,9 +419,25 @@ public partial record CatalogSettingsModel : BaseNopModel, ISettingsModel
     public bool DisplayAllPicturesOnCatalogPages_OverrideForStore { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.ProductUrlStructureType")]
-    public int ProductUrlStructureTypeId { get; set; }
+    public long ProductUrlStructureTypeId { get; set; }
     public bool ProductUrlStructureTypeId_OverrideForStore { get; set; }
     public SelectList ProductUrlStructureTypes { get; set; }
+
+    [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.ShowSearchTermHistory")]
+    public bool ShowSearchTermHistory { get; set; }
+    public bool ShowSearchTermHistory_OverrideForStore { get; set; }
+
+    [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.NumberOfSearchTermHistoryItems")]
+    public int NumberOfSearchTermHistoryItems { get; set; }
+    public bool NumberOfSearchTermHistoryItems_OverrideForStore { get; set; }
+
+    public ArtificialIntelligenceSettingsModel ArtificialIntelligenceSettingsModel { get; set; }
+    public GpsrSettingsModel GpsrSettingsModel { get; set; }
+
+    [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.PriceListStrategy")]
+    public int PriceListStrategy { get; set; }
+    public bool PriceListStrategy_OverrideForStore { get; set; }
+    public SelectList PriceListStrategyValues { get; set; }
 
     #endregion
 }

@@ -11,15 +11,15 @@ public partial record AddProductToCategoryModel : BaseNopModel
 
     public AddProductToCategoryModel()
     {
-        SelectedProductIds = new List<int>();
+        SelectedProductIds = new List<long>();
     }
     #endregion
 
     #region Properties
 
-    public int CategoryId { get; set; }
+    public long CategoryId { get; set; }
 
-    public IList<int> SelectedProductIds { get; set; }
+    public IList<long> SelectedProductIds { get; set; }
 
     #endregion
 }

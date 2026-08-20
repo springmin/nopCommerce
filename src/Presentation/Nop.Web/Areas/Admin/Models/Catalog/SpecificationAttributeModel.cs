@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Web.Framework.Models;
+using Nop.Web.Framework.Models.Translation;
 using Nop.Web.Framework.Mvc.ModelBinding;
 
 namespace Nop.Web.Areas.Admin.Models.Catalog;
@@ -7,7 +8,7 @@ namespace Nop.Web.Areas.Admin.Models.Catalog;
 /// <summary>
 /// Represents a specification attribute model
 /// </summary>
-public partial record SpecificationAttributeModel : BaseNopEntityModel, ILocalizedModel<SpecificationAttributeLocalizedModel>
+public partial record SpecificationAttributeModel : BaseNopEntityModel, ITranslationSupportedModel, ILocalizedModel<SpecificationAttributeLocalizedModel>
 {
     #region Ctor
 
@@ -30,7 +31,7 @@ public partial record SpecificationAttributeModel : BaseNopEntityModel, ILocaliz
     public int DisplayOrder { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Attributes.SpecificationAttributes.SpecificationAttribute.Fields.SpecificationAttributeGroup")]
-    public int? SpecificationAttributeGroupId { get; set; }
+    public long? SpecificationAttributeGroupId { get; set; }
 
     public IList<SelectListItem> AvailableGroups { get; set; }
 
@@ -39,6 +40,8 @@ public partial record SpecificationAttributeModel : BaseNopEntityModel, ILocaliz
     public SpecificationAttributeOptionSearchModel SpecificationAttributeOptionSearchModel { get; set; }
 
     public SpecificationAttributeProductSearchModel SpecificationAttributeProductSearchModel { get; set; }
+
+    public bool PreTranslationAvailable { get; set; }
 
     #endregion
 }

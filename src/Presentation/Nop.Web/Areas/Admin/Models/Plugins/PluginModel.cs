@@ -15,9 +15,9 @@ public partial record PluginModel : BaseNopModel, IAclSupportedModel, ILocalized
     {
         Locales = new List<PluginLocalizedModel>();
 
-        SelectedStoreIds = new List<int>();
+        SelectedStoreIds = new List<long>();
         AvailableStores = new List<SelectListItem>();
-        SelectedCustomerRoleIds = new List<int>();
+        SelectedCustomerRoleIds = new List<long>();
         AvailableCustomerRoles = new List<SelectListItem>();
     }
 
@@ -61,15 +61,13 @@ public partial record PluginModel : BaseNopModel, IAclSupportedModel, ILocalized
 
     public IList<PluginLocalizedModel> Locales { get; set; }
 
-    //ACL (customer roles)
-    [NopResourceDisplayName("Admin.Configuration.Plugins.Fields.AclCustomerRoles")]
-    public IList<int> SelectedCustomerRoleIds { get; set; }
+    public IList<long> SelectedCustomerRoleIds { get; set; }
 
     public IList<SelectListItem> AvailableCustomerRoles { get; set; }
 
     //store mapping
     [NopResourceDisplayName("Admin.Configuration.Plugins.Fields.LimitedToStores")]
-    public IList<int> SelectedStoreIds { get; set; }
+    public IList<long> SelectedStoreIds { get; set; }
 
     public IList<SelectListItem> AvailableStores { get; set; }
 
@@ -80,7 +78,7 @@ public partial record PluginModel : BaseNopModel, IAclSupportedModel, ILocalized
 
 public partial record PluginLocalizedModel : ILocalizedLocaleModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Plugins.Fields.FriendlyName")]
     public string FriendlyName { get; set; }

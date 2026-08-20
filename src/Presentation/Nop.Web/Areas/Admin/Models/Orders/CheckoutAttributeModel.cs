@@ -19,7 +19,7 @@ public partial record CheckoutAttributeModel : BaseNopEntityModel,
         Locales = new List<CheckoutAttributeLocalizedModel>();
         AvailableTaxCategories = new List<SelectListItem>();
         ConditionModel = new ConditionModel();
-        SelectedStoreIds = new List<int>();
+        SelectedStoreIds = new List<long>();
         AvailableStores = new List<SelectListItem>();
         CheckoutAttributeValueSearchModel = new CheckoutAttributeValueSearchModel();
     }
@@ -44,11 +44,11 @@ public partial record CheckoutAttributeModel : BaseNopEntityModel,
     public bool IsTaxExempt { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Attributes.CheckoutAttributes.Fields.TaxCategory")]
-    public int TaxCategoryId { get; set; }
+    public long TaxCategoryId { get; set; }
     public IList<SelectListItem> AvailableTaxCategories { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Attributes.CheckoutAttributes.Fields.AttributeControlType")]
-    public int AttributeControlTypeId { get; set; }
+    public long AttributeControlTypeId { get; set; }
     [NopResourceDisplayName("Admin.Catalog.Attributes.CheckoutAttributes.Fields.AttributeControlType")]
     public string AttributeControlTypeName { get; set; }
 
@@ -81,7 +81,7 @@ public partial record CheckoutAttributeModel : BaseNopEntityModel,
 
     //store mapping
     [NopResourceDisplayName("Admin.Catalog.Attributes.CheckoutAttributes.Fields.LimitedToStores")]
-    public IList<int> SelectedStoreIds { get; set; }
+    public IList<long> SelectedStoreIds { get; set; }
     public IList<SelectListItem> AvailableStores { get; set; }
 
     public CheckoutAttributeValueSearchModel CheckoutAttributeValueSearchModel { get; set; }
@@ -100,7 +100,7 @@ public partial record ConditionModel : BaseNopEntityModel
     public bool EnableCondition { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Attributes.CheckoutAttributes.Condition.Attributes")]
-    public int SelectedAttributeId { get; set; }
+    public long SelectedAttributeId { get; set; }
 
     public IList<AttributeConditionModel> ConditionAttributes { get; set; }
 }
@@ -118,7 +118,7 @@ public partial record AttributeConditionModel : BaseNopEntityModel
 
 public partial record CheckoutAttributeLocalizedModel : ILocalizedLocaleModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Attributes.CheckoutAttributes.Fields.Name")]
     public string Name { get; set; }

@@ -10,7 +10,7 @@ public partial record ShoppingCartItemSearchModel : BaseSearchModel
 {
     #region Properties
 
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     public ShoppingCartType ShoppingCartType { get; set; }
 
@@ -18,11 +18,11 @@ public partial record ShoppingCartItemSearchModel : BaseSearchModel
 
     public DateTime? EndDate { get; set; }
 
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
-    public int BillingCountryId { get; set; }
+    public long BillingCountryId { get; set; }
 
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 
     #endregion
 }

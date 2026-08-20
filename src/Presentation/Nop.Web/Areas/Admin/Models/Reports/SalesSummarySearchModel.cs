@@ -17,8 +17,8 @@ public partial record SalesSummarySearchModel : BaseSearchModel
         AvailableCategories = new List<SelectListItem>();
         AvailableManufacturers = new List<SelectListItem>();
         AvailableCountries = new List<SelectListItem>();
-        OrderStatusIds = new List<int>();
-        PaymentStatusIds = new List<int>();
+        OrderStatusIds = new List<long>();
+        PaymentStatusIds = new List<long>();
         GroupByOptions = new List<SelectListItem>();
         AvailableVendors = new List<SelectListItem>();
     }
@@ -36,31 +36,31 @@ public partial record SalesSummarySearchModel : BaseSearchModel
     public DateTime? EndDate { get; set; }
 
     [NopResourceDisplayName("Admin.Reports.SalesSummary.Store")]
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 
     [NopResourceDisplayName("Admin.Reports.SalesSummary.OrderStatus")]
-    public IList<int> OrderStatusIds { get; set; }
+    public IList<long> OrderStatusIds { get; set; }
 
     [NopResourceDisplayName("Admin.Reports.SalesSummary.PaymentStatus")]
-    public IList<int> PaymentStatusIds { get; set; }
+    public IList<long> PaymentStatusIds { get; set; }
 
     [NopResourceDisplayName("Admin.Reports.SalesSummary.Category")]
-    public int CategoryId { get; set; }
+    public long CategoryId { get; set; }
 
     [NopResourceDisplayName("Admin.Reports.SalesSummary.Manufacturer")]
-    public int ManufacturerId { get; set; }
+    public long ManufacturerId { get; set; }
 
     [NopResourceDisplayName("Admin.Reports.SalesSummary.BillingCountry")]
-    public int BillingCountryId { get; set; }
+    public long BillingCountryId { get; set; }
 
     [NopResourceDisplayName("Admin.Reports.SalesSummary.Product")]
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     [NopResourceDisplayName("Admin.Reports.SalesSummary.GroupBy")]
-    public int SearchGroupId { get; set; }
+    public long SearchGroupId { get; set; }
 
     [NopResourceDisplayName("Admin.Reports.SalesSummary.Vendor")]
-    public int VendorId { get; set; }
+    public long VendorId { get; set; }
 
     public IList<SelectListItem> AvailableStores { get; set; }
 

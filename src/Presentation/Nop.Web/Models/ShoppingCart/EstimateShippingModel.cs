@@ -15,8 +15,8 @@ public partial record EstimateShippingModel : BaseNopModel
 
     public bool Enabled { get; set; }
 
-    public int? CountryId { get; set; }
-    public int? StateProvinceId { get; set; }
+    public long? CountryId { get; set; }
+    public long? StateProvinceId { get; set; }
     public string ZipPostalCode { get; set; }
     public bool UseCity { get; set; }
     public string City { get; set; }

@@ -11,11 +11,11 @@ public partial record ProductPictureModel : BaseNopEntityModel
 {
     #region Properties
 
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     [UIHint("MultiPicture")]
     [NopResourceDisplayName("Admin.Catalog.Products.Multimedia.Pictures.Fields.Picture")]
-    public int PictureId { get; set; }
+    public long PictureId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Multimedia.Pictures.Fields.Picture")]
     public string PictureUrl { get; set; }

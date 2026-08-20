@@ -19,7 +19,7 @@ public partial record GdprSettingsModel : BaseNopModel, ISettingsModel
 
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Gdpr.GdprEnabled")]
     public bool GdprEnabled { get; set; }
@@ -30,8 +30,8 @@ public partial record GdprSettingsModel : BaseNopModel, ISettingsModel
     public bool LogPrivacyPolicyConsent_OverrideForStore { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Gdpr.LogNewsletterConsent")]
-    public bool LogNewsletterConsent { get; set; }
-    public bool LogNewsletterConsent_OverrideForStore { get; set; }
+    public bool LogNewsLetterConsent { get; set; }
+    public bool LogNewsLetterConsent_OverrideForStore { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Gdpr.LogUserProfileChanges")]
     public bool LogUserProfileChanges { get; set; }

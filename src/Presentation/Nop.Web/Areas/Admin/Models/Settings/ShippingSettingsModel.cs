@@ -21,7 +21,7 @@ public partial record ShippingSettingsModel : BaseNopModel, ISettingsModel
 
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Shipping.ShipToSameAddress")]
     public bool ShipToSameAddress { get; set; }
@@ -90,6 +90,14 @@ public partial record ShippingSettingsModel : BaseNopModel, ISettingsModel
     [NopResourceDisplayName("Admin.Configuration.Settings.Shipping.BypassShippingMethodSelectionIfOnlyOne")]
     public bool BypassShippingMethodSelectionIfOnlyOne { get; set; }
     public bool BypassShippingMethodSelectionIfOnlyOne_OverrideForStore { get; set; }
+
+    [NopResourceDisplayName("Admin.Configuration.Settings.Shipping.AllowCustomerToChooseDeliveryDate")]
+    public bool AllowCustomerToChooseDeliveryDate { get; set; }
+    public bool AllowCustomerToChooseDeliveryDate_OverrideForStore { get; set; }
+
+    [NopResourceDisplayName("Admin.Configuration.Settings.Shipping.DeliveryDateRangeDays")]
+    public int DeliveryDateRangeDays { get; set; }
+    public bool DeliveryDateRangeDays_OverrideForStore { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Shipping.ConsiderAssociatedProductsDimensions")]
     public bool ConsiderAssociatedProductsDimensions { get; set; }

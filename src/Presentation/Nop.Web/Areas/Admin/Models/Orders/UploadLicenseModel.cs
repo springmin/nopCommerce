@@ -10,12 +10,12 @@ public partial record UploadLicenseModel : BaseNopModel
 {
     #region Properties
 
-    public int OrderId { get; set; }
+    public long OrderId { get; set; }
 
-    public int OrderItemId { get; set; }
+    public long OrderItemId { get; set; }
 
     [UIHint("Download")]
-    public int LicenseDownloadId { get; set; }
+    public long LicenseDownloadId { get; set; }
 
     #endregion
 }

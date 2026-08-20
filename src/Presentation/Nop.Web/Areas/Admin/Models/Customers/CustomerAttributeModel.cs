@@ -27,7 +27,7 @@ public partial record CustomerAttributeModel : BaseNopEntityModel, ILocalizedMod
     public bool IsRequired { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.CustomerAttributes.Fields.AttributeControlType")]
-    public int AttributeControlTypeId { get; set; }
+    public long AttributeControlTypeId { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.CustomerAttributes.Fields.AttributeControlType")]
     public string AttributeControlTypeName { get; set; }
@@ -44,7 +44,7 @@ public partial record CustomerAttributeModel : BaseNopEntityModel, ILocalizedMod
 
 public partial record CustomerAttributeLocalizedModel : ILocalizedLocaleModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.CustomerAttributes.Fields.Name")]
     public string Name { get; set; }

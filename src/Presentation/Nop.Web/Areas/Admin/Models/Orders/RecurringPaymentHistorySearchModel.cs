@@ -9,7 +9,7 @@ public partial record RecurringPaymentHistorySearchModel : BaseSearchModel
 {
     #region Properties
 
-    public int RecurringPaymentId { get; set; }
+    public long RecurringPaymentId { get; set; }
 
     #endregion
 }

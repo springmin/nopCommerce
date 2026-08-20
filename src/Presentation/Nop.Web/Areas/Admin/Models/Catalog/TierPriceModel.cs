@@ -22,17 +22,17 @@ public partial record TierPriceModel : BaseNopEntityModel
 
     #region Properties
 
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.TierPrices.Fields.CustomerRole")]
-    public int CustomerRoleId { get; set; }
+    public long CustomerRoleId { get; set; }
 
     public IList<SelectListItem> AvailableCustomerRoles { get; set; }
 
     public string CustomerRole { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.TierPrices.Fields.Store")]
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 
     public IList<SelectListItem> AvailableStores { get; set; }
 
@@ -44,6 +44,9 @@ public partial record TierPriceModel : BaseNopEntityModel
     [NopResourceDisplayName("Admin.Catalog.Products.TierPrices.Fields.Price")]
     public decimal Price { get; set; }
 
+    [NopResourceDisplayName("Admin.Catalog.Products.TierPrices.Fields.Price")]
+    public string FormattedPrice { get; set; }
+
     [NopResourceDisplayName("Admin.Catalog.Products.TierPrices.Fields.StartDateTimeUtc")]
     [UIHint("DateTimeNullable")]
     public DateTime? StartDateTimeUtc { get; set; }
@@ -51,6 +54,8 @@ public partial record TierPriceModel : BaseNopEntityModel
     [NopResourceDisplayName("Admin.Catalog.Products.TierPrices.Fields.EndDateTimeUtc")]
     [UIHint("DateTimeNullable")]
     public DateTime? EndDateTimeUtc { get; set; }
+
+    public string PrimaryStoreCurrencyCode { get; set; }
 
     #endregion
 }

@@ -15,7 +15,7 @@ public partial record LanguageModel : BaseNopEntityModel, IStoreMappingSupported
     {
         AvailableCurrencies = new List<SelectListItem>();
         AvailableFlagImages = new List<SelectListItem>();
-        SelectedStoreIds = new List<int>();
+        SelectedStoreIds = new List<long>();
         AvailableStores = new List<SelectListItem>();
         LocaleResourceSearchModel = new LocaleResourceSearchModel();
     }
@@ -42,7 +42,7 @@ public partial record LanguageModel : BaseNopEntityModel, IStoreMappingSupported
 
     //default currency
     [NopResourceDisplayName("Admin.Configuration.Languages.Fields.DefaultCurrency")]
-    public int DefaultCurrencyId { get; set; }
+    public long DefaultCurrencyId { get; set; }
 
     public IList<SelectListItem> AvailableCurrencies { get; set; }
 
@@ -54,7 +54,7 @@ public partial record LanguageModel : BaseNopEntityModel, IStoreMappingSupported
 
     //store mapping
     [NopResourceDisplayName("Admin.Configuration.Languages.Fields.LimitedToStores")]
-    public IList<int> SelectedStoreIds { get; set; }
+    public IList<long> SelectedStoreIds { get; set; }
 
     public IList<SelectListItem> AvailableFlagImages { get; set; }
 

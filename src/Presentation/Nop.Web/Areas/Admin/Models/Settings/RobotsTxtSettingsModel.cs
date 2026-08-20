@@ -7,11 +7,11 @@ namespace Nop.Web.Areas.Admin.Models.Settings;
 /// <summary>
 /// Represents the robots.txt settings model
 /// </summary>
-public partial record RobotsTxtSettingsModel : BaseNopModel
+public partial record RobotsTxtSettingsModel : BaseNopModel, ISettingsModel
 {
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.GeneralCommon.RobotsDisallowPaths")]
     public string DisallowPaths { get; set; }
@@ -22,7 +22,7 @@ public partial record RobotsTxtSettingsModel : BaseNopModel
     public bool LocalizableDisallowPaths_OverrideForStore { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.GeneralCommon.RobotsDisallowLanguages")]
-    public IList<int> DisallowLanguages { get; set; }
+    public IList<long> DisallowLanguages { get; set; }
     public bool DisallowLanguages_OverrideForStore { get; set; }
     public IList<SelectListItem> AvailableLanguages { get; set; }
 

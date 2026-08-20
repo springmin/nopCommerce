@@ -11,5 +11,7 @@ public partial record CurrencySelectorModel : BaseNopModel
 
     public IList<CurrencyModel> AvailableCurrencies { get; set; }
 
-    public int CurrentCurrencyId { get; set; }
+    public long CurrentCurrencyId { get; set; }
+
+    public bool DisplayCurrencySymbol { get; set; }
 }

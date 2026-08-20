@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Web.Framework.Models;
+using Nop.Web.Framework.Models.ArtificialIntelligence;
+using Nop.Web.Framework.Models.Translation;
 using Nop.Web.Framework.Mvc.ModelBinding;
 
 namespace Nop.Web.Areas.Admin.Models.Catalog;
@@ -9,27 +11,26 @@ namespace Nop.Web.Areas.Admin.Models.Catalog;
 /// Represents a category model
 /// </summary>
 public partial record CategoryModel : BaseNopEntityModel, IAclSupportedModel, IDiscountSupportedModel,
-    ILocalizedModel<CategoryLocalizedModel>, IStoreMappingSupportedModel
+    ITranslationSupportedModel, ILocalizedModel<CategoryLocalizedModel>, IStoreMappingSupportedModel,
+    IMetaTagsSupportedModel
 {
     #region Ctor
 
     public CategoryModel()
     {
-        if (PageSize < 1)
-        {
+        if (PageSize < 1) 
             PageSize = 5;
-        }
 
         Locales = new List<CategoryLocalizedModel>();
         AvailableCategoryTemplates = new List<SelectListItem>();
         AvailableCategories = new List<SelectListItem>();
         AvailableDiscounts = new List<SelectListItem>();
-        SelectedDiscountIds = new List<int>();
+        SelectedDiscountIds = new List<long>();
 
-        SelectedCustomerRoleIds = new List<int>();
+        SelectedCustomerRoleIds = new List<long>();
         AvailableCustomerRoles = new List<SelectListItem>();
 
-        SelectedStoreIds = new List<int>();
+        SelectedStoreIds = new List<long>();
         AvailableStores = new List<SelectListItem>();
 
         CategoryProductSearchModel = new CategoryProductSearchModel();
@@ -46,7 +47,8 @@ public partial record CategoryModel : BaseNopEntityModel, IAclSupportedModel, ID
     public string Description { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Categories.Fields.CategoryTemplate")]
-    public int CategoryTemplateId { get; set; }
+    public long CategoryTemplateId { get; set; }
+
     public IList<SelectListItem> AvailableCategoryTemplates { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Categories.Fields.MetaKeywords")]
@@ -62,11 +64,11 @@ public partial record CategoryModel : BaseNopEntityModel, IAclSupportedModel, ID
     public string SeName { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Categories.Fields.Parent")]
-    public int ParentCategoryId { get; set; }
+    public long ParentCategoryId { get; set; }
 
     [UIHint("Picture")]
     [NopResourceDisplayName("Admin.Catalog.Categories.Fields.Picture")]
-    public int PictureId { get; set; }
+    public long PictureId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Categories.Fields.PageSize")]
     public int PageSize { get; set; }
@@ -92,9 +94,6 @@ public partial record CategoryModel : BaseNopEntityModel, IAclSupportedModel, ID
     [NopResourceDisplayName("Admin.Catalog.Categories.Fields.ShowOnHomepage")]
     public bool ShowOnHomepage { get; set; }
 
-    [NopResourceDisplayName("Admin.Catalog.Categories.Fields.IncludeInTopMenu")]
-    public bool IncludeInTopMenu { get; set; }
-
     [NopResourceDisplayName("Admin.Catalog.Categories.Fields.Published")]
     public bool Published { get; set; }
 
@@ -104,37 +103,42 @@ public partial record CategoryModel : BaseNopEntityModel, IAclSupportedModel, ID
     [NopResourceDisplayName("Admin.Catalog.Categories.Fields.DisplayOrder")]
     public int DisplayOrder { get; set; }
 
+    [NopResourceDisplayName("Admin.Catalog.Categories.Fields.RestrictFromVendors")]
+    public bool RestrictFromVendors { get; set; }
+
     public IList<CategoryLocalizedModel> Locales { get; set; }
 
     public string Breadcrumb { get; set; }
 
-    //ACL (customer roles)
-    [NopResourceDisplayName("Admin.Catalog.Categories.Fields.AclCustomerRoles")]
-    public IList<int> SelectedCustomerRoleIds { get; set; }
+    public IList<long> SelectedCustomerRoleIds { get; set; }
     public IList<SelectListItem> AvailableCustomerRoles { get; set; }
 
     //store mapping
     [NopResourceDisplayName("Admin.Catalog.Categories.Fields.LimitedToStores")]
-    public IList<int> SelectedStoreIds { get; set; }
+    public IList<long> SelectedStoreIds { get; set; }
+
     public IList<SelectListItem> AvailableStores { get; set; }
 
     public IList<SelectListItem> AvailableCategories { get; set; }
 
     //discounts
     [NopResourceDisplayName("Admin.Catalog.Categories.Fields.Discounts")]
-    public IList<int> SelectedDiscountIds { get; set; }
+    public IList<long> SelectedDiscountIds { get; set; }
+
     public IList<SelectListItem> AvailableDiscounts { get; set; }
 
     public CategoryProductSearchModel CategoryProductSearchModel { get; set; }
 
     public string PrimaryStoreCurrencyCode { get; set; }
 
+    public bool PreTranslationAvailable { get; set; }
+
     #endregion
 }
 
-public partial record CategoryLocalizedModel : ILocalizedLocaleModel
+public partial record CategoryLocalizedModel : ILocalizedLocaleModel, IMetaTagsSupportedModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Categories.Fields.Name")]
     public string Name { get; set; }

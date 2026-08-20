@@ -42,7 +42,7 @@ public partial class ProductsAlsoPurchasedViewComponent : NopViewComponent
         _storeMappingService = storeMappingService;
     }
 
-    public async Task<IViewComponentResult> InvokeAsync(int productId, int? productThumbPictureSize)
+    public async Task<IViewComponentResult> InvokeAsync(long productId, int? productThumbPictureSize)
     {
         if (!_catalogSettings.ProductsAlsoPurchasedEnabled)
             return Content("");
@@ -64,6 +64,6 @@ public partial class ProductsAlsoPurchasedViewComponent : NopViewComponent
             return Content("");
 
         var model = (await _productModelFactory.PrepareProductOverviewModelsAsync(products, true, true, productThumbPictureSize)).ToList();
-        return View(model);
+        return await ViewAsync(model);
     }
 }

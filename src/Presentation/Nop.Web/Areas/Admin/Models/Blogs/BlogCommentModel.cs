@@ -11,13 +11,13 @@ public partial record BlogCommentModel : BaseNopEntityModel
     #region Properties
 
     [NopResourceDisplayName("Admin.ContentManagement.Blog.Comments.Fields.BlogPost")]
-    public int BlogPostId { get; set; }
+    public long BlogPostId { get; set; }
 
     [NopResourceDisplayName("Admin.ContentManagement.Blog.Comments.Fields.BlogPost")]
     public string BlogPostTitle { get; set; }
 
     [NopResourceDisplayName("Admin.ContentManagement.Blog.Comments.Fields.Customer")]
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     [NopResourceDisplayName("Admin.ContentManagement.Blog.Comments.Fields.Customer")]
     public string CustomerInfo { get; set; }
@@ -29,7 +29,7 @@ public partial record BlogCommentModel : BaseNopEntityModel
     public bool IsApproved { get; set; }
 
     [NopResourceDisplayName("Admin.ContentManagement.Blog.Comments.Fields.StoreName")]
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
     public string StoreName { get; set; }
 
     [NopResourceDisplayName("Admin.ContentManagement.Blog.Comments.Fields.CreatedOn")]

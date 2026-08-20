@@ -5,7 +5,7 @@ namespace Nop.Web.Models.Catalog;
 
 public partial record ProductReviewOverviewModel : BaseNopModel
 {
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     public int RatingSum { get; set; }
 
@@ -14,6 +14,7 @@ public partial record ProductReviewOverviewModel : BaseNopModel
     public bool AllowCustomerReviews { get; set; }
 
     public bool CanAddNewReview { get; set; }
+    public bool CanCurrentCustomerLeaveReview { get; set; }
 }
 
 public partial record ProductReviewsModel : BaseNopModel
@@ -26,7 +27,7 @@ public partial record ProductReviewsModel : BaseNopModel
         AddAdditionalProductReviewList = new List<AddProductReviewReviewTypeMappingModel>();
     }
 
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     public IList<ProductReviewModel> Items { get; set; }
 
@@ -59,7 +60,7 @@ public partial record ProductReviewModel : BaseNopEntityModel
         AdditionalProductReviewList = new List<ProductReviewReviewTypeMappingModel>();
     }
 
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     public string CustomerAvatarUrl { get; set; }
 
@@ -77,6 +78,8 @@ public partial record ProductReviewModel : BaseNopEntityModel
 
     public string WrittenOnStr { get; set; }
 
+    public DateTime WrittenOn { get; set; }
+
     public ProductReviewHelpfulnessModel Helpfulness { get; set; }
 
     public IList<ProductReviewReviewTypeMappingModel> AdditionalProductReviewList { get; set; }
@@ -84,7 +87,7 @@ public partial record ProductReviewModel : BaseNopEntityModel
 
 public partial record ProductReviewHelpfulnessModel : BaseNopModel
 {
-    public int ProductReviewId { get; set; }
+    public long ProductReviewId { get; set; }
 
     public int HelpfulYesTotal { get; set; }
 
@@ -111,9 +114,9 @@ public partial record AddProductReviewModel : BaseNopModel
 
 public partial record AddProductReviewReviewTypeMappingModel : BaseNopEntityModel
 {
-    public int ProductReviewId { get; set; }
+    public long ProductReviewId { get; set; }
 
-    public int ReviewTypeId { get; set; }
+    public long ReviewTypeId { get; set; }
 
     public int Rating { get; set; }
 
@@ -128,9 +131,9 @@ public partial record AddProductReviewReviewTypeMappingModel : BaseNopEntityMode
 
 public partial record ProductReviewReviewTypeMappingModel : BaseNopEntityModel
 {
-    public int ProductReviewId { get; set; }
+    public long ProductReviewId { get; set; }
 
-    public int ReviewTypeId { get; set; }
+    public long ReviewTypeId { get; set; }
 
     public int Rating { get; set; }
 

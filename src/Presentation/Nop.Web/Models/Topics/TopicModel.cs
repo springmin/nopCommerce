@@ -1,8 +1,9 @@
 ﻿using Nop.Web.Framework.Models;
+using Nop.Web.Framework.Models.ArtificialIntelligence;
 
 namespace Nop.Web.Models.Topics;
 
-public partial record TopicModel : BaseNopEntityModel
+public partial record TopicModel : BaseNopEntityModel, IMetaTagsSupportedModel
 {
     public string SystemName { get; set; }
 
@@ -22,5 +23,5 @@ public partial record TopicModel : BaseNopEntityModel
 
     public string SeName { get; set; }
 
-    public int TopicTemplateId { get; set; }
+    public long TopicTemplateId { get; set; }
 }

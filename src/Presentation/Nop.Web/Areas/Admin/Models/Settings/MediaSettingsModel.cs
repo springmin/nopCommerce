@@ -11,7 +11,7 @@ public partial record MediaSettingsModel : BaseNopModel, ISettingsModel
 {
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Media.PicturesStoredIntoDatabase")]
     public bool PicturesStoredIntoDatabase { get; set; }
@@ -38,7 +38,7 @@ public partial record MediaSettingsModel : BaseNopModel, ISettingsModel
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Media.ProductDefaultImage")]
     [UIHint("Picture")]
-    public int ProductDefaultImageId { get; set; }
+    public long ProductDefaultImageId { get; set; }
     public bool ProductDefaultImageId_OverrideForStore { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Media.CategoryThumbPictureSize")]
@@ -85,9 +85,32 @@ public partial record MediaSettingsModel : BaseNopModel, ISettingsModel
     public bool DefaultPictureZoomEnabled { get; set; }
     public bool DefaultPictureZoomEnabled_OverrideForStore { get; set; }
 
-    [NopResourceDisplayName("Admin.Configuration.Settings.Media.AllowSVGUploads")]
-    public bool AllowSVGUploads { get; set; }
-    public bool AllowSVGUploads_OverrideForStore { get; set; }
+    [NopResourceDisplayName("Admin.Configuration.Settings.Media.AllowSvgUploads")]
+    public bool AllowSvgUploads { get; set; }
+    public bool AllowSvgUploads_OverrideForStore { get; set; }
+
+    [NopResourceDisplayName("Admin.Configuration.Settings.Media.PicturePath")]
+    public string PicturePath { get; set; }
+
+    [NopResourceDisplayName("Admin.Configuration.Settings.Media.Object3dCameraControlEnabled")]
+    public bool Object3dCameraControlEnabled { get; set; }
+    public bool Object3dCameraControlEnabled_OverrideForStore { get; set; }
+
+    [NopResourceDisplayName("Admin.Configuration.Settings.Media.Object3dZoomEnabled")]
+    public bool Object3dZoomEnabled { get; set; }
+    public bool Object3dZoomEnabled_OverrideForStore { get; set; }
+
+    [NopResourceDisplayName("Admin.Configuration.Settings.Media.Object3dAutoRotateEnabled")]
+    public bool Object3dAutoRotateEnabled { get; set; }
+    public bool Object3dAutoRotateEnabled_OverrideForStore { get; set; }
+
+    [NopResourceDisplayName("Admin.Configuration.Settings.Media.Object3dLazyLoadingEnabled")]
+    public bool Object3dLazyLoadingEnabled { get; set; }
+    public bool Object3dLazyLoadingEnabled_OverrideForStore { get; set; }
+
+    [NopResourceDisplayName("Admin.Configuration.Settings.Media.Object3dUploadSizeLimit")]
+    public int Object3dUploadSizeLimit { get; set; }
+    public bool Object3dUploadSizeLimit_OverrideForStore { get; set; }
 
     #endregion
 }

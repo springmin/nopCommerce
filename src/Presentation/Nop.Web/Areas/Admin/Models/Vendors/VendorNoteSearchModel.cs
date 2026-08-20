@@ -9,7 +9,7 @@ public partial record VendorNoteSearchModel : BaseSearchModel
 {
     #region Properties
 
-    public int VendorId { get; set; }
+    public long VendorId { get; set; }
 
     #endregion
 }

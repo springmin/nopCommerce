@@ -9,7 +9,7 @@ public partial record DiscountUsageHistorySearchModel : BaseSearchModel
 {
     #region Properties
 
-    public int DiscountId { get; set; }
+    public long DiscountId { get; set; }
 
     #endregion
 }

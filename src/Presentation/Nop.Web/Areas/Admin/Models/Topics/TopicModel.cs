@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Web.Framework.Models;
+using Nop.Web.Framework.Models.ArtificialIntelligence;
 using Nop.Web.Framework.Mvc.ModelBinding;
 
 namespace Nop.Web.Areas.Admin.Models.Topics;
@@ -7,7 +9,7 @@ namespace Nop.Web.Areas.Admin.Models.Topics;
 /// <summary>
 /// Represents a topic model
 /// </summary>
-public partial record TopicModel : BaseNopEntityModel, IAclSupportedModel, ILocalizedModel<TopicLocalizedModel>, IStoreMappingSupportedModel
+public partial record TopicModel : BaseNopEntityModel, IAclSupportedModel, ILocalizedModel<TopicLocalizedModel>, IStoreMappingSupportedModel, IMetaTagsSupportedModel
 {
     #region Ctor
 
@@ -16,10 +18,10 @@ public partial record TopicModel : BaseNopEntityModel, IAclSupportedModel, ILoca
         AvailableTopicTemplates = new List<SelectListItem>();
         Locales = new List<TopicLocalizedModel>();
 
-        SelectedCustomerRoleIds = new List<int>();
+        SelectedCustomerRoleIds = new List<long>();
         AvailableCustomerRoles = new List<SelectListItem>();
 
-        SelectedStoreIds = new List<int>();
+        SelectedStoreIds = new List<long>();
         AvailableStores = new List<SelectListItem>();
     }
 
@@ -32,18 +34,6 @@ public partial record TopicModel : BaseNopEntityModel, IAclSupportedModel, ILoca
 
     [NopResourceDisplayName("Admin.ContentManagement.Topics.Fields.IncludeInSitemap")]
     public bool IncludeInSitemap { get; set; }
-
-    [NopResourceDisplayName("Admin.ContentManagement.Topics.Fields.IncludeInTopMenu")]
-    public bool IncludeInTopMenu { get; set; }
-
-    [NopResourceDisplayName("Admin.ContentManagement.Topics.Fields.IncludeInFooterColumn1")]
-    public bool IncludeInFooterColumn1 { get; set; }
-
-    [NopResourceDisplayName("Admin.ContentManagement.Topics.Fields.IncludeInFooterColumn2")]
-    public bool IncludeInFooterColumn2 { get; set; }
-
-    [NopResourceDisplayName("Admin.ContentManagement.Topics.Fields.IncludeInFooterColumn3")]
-    public bool IncludeInFooterColumn3 { get; set; }
 
     [NopResourceDisplayName("Admin.ContentManagement.Topics.Fields.DisplayOrder")]
     public int DisplayOrder { get; set; }
@@ -70,7 +60,7 @@ public partial record TopicModel : BaseNopEntityModel, IAclSupportedModel, ILoca
     public bool Published { get; set; }
 
     [NopResourceDisplayName("Admin.ContentManagement.Topics.Fields.TopicTemplate")]
-    public int TopicTemplateId { get; set; }
+    public long TopicTemplateId { get; set; }
 
     public IList<SelectListItem> AvailableTopicTemplates { get; set; }
 
@@ -90,24 +80,31 @@ public partial record TopicModel : BaseNopEntityModel, IAclSupportedModel, ILoca
 
     //store mapping
     [NopResourceDisplayName("Admin.ContentManagement.Topics.Fields.LimitedToStores")]
-    public IList<int> SelectedStoreIds { get; set; }
+    public IList<long> SelectedStoreIds { get; set; }
 
     public IList<SelectListItem> AvailableStores { get; set; }
 
     //ACL (customer roles)
-    [NopResourceDisplayName("Admin.ContentManagement.Topics.Fields.AclCustomerRoles")]
-    public IList<int> SelectedCustomerRoleIds { get; set; }
+    public IList<long> SelectedCustomerRoleIds { get; set; }
 
     public IList<SelectListItem> AvailableCustomerRoles { get; set; }
 
     public string TopicName { get; set; }
 
+    [NopResourceDisplayName("Admin.ContentManagement.Topics.Fields.AvailableStartDateTime")]
+    [UIHint("DateTimeNullable")]
+    public DateTime? AvailableStartDateTimeUtc { get; set; }
+
+    [NopResourceDisplayName("Admin.ContentManagement.Topics.Fields.AvailableEndDateTime")]
+    [UIHint("DateTimeNullable")]
+    public DateTime? AvailableEndDateTimeUtc { get; set; }
+
     #endregion
 }
 
-public partial record TopicLocalizedModel : ILocalizedLocaleModel
+public partial record TopicLocalizedModel : ILocalizedLocaleModel, IMetaTagsSupportedModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.ContentManagement.Topics.Fields.Title")]
     public string Title { get; set; }

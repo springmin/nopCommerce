@@ -21,7 +21,7 @@ public partial record BlogCommentSearchModel : BaseSearchModel
 
     #region Properties
 
-    public int? BlogPostId { get; set; }
+    public long? BlogPostId { get; set; }
 
     [NopResourceDisplayName("Admin.ContentManagement.Blog.Comments.List.CreatedOnFrom")]
     [UIHint("DateNullable")]
@@ -35,7 +35,7 @@ public partial record BlogCommentSearchModel : BaseSearchModel
     public string SearchText { get; set; }
 
     [NopResourceDisplayName("Admin.ContentManagement.Blog.Comments.List.SearchApproved")]
-    public int SearchApprovedId { get; set; }
+    public long SearchApprovedId { get; set; }
 
     public IList<SelectListItem> AvailableApprovedOptions { get; set; }
 

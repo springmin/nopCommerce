@@ -11,15 +11,15 @@ public partial record AddRelatedProductModel : BaseNopModel
 
     public AddRelatedProductModel()
     {
-        SelectedProductIds = new List<int>();
+        SelectedProductIds = new List<long>();
     }
     #endregion
 
     #region Properties
 
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
-    public IList<int> SelectedProductIds { get; set; }
+    public IList<long> SelectedProductIds { get; set; }
 
     #endregion
 }

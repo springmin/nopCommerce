@@ -125,7 +125,7 @@ public partial class VendorAttributeModelFactory : IVendorAttributeModelFactory
     public virtual async Task<VendorAttributeModel> PrepareVendorAttributeModelAsync(VendorAttributeModel model,
         VendorAttribute vendorAttribute, bool excludeProperties = false)
     {
-        Func<VendorAttributeLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<VendorAttributeLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (vendorAttribute != null)
         {
@@ -194,7 +194,7 @@ public partial class VendorAttributeModelFactory : IVendorAttributeModelFactory
     {
         ArgumentNullException.ThrowIfNull(vendorAttribute);
 
-        Func<VendorAttributeValueLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<VendorAttributeValueLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (vendorAttributeValue != null)
         {

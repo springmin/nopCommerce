@@ -21,7 +21,7 @@ public partial record LowStockProductSearchModel : BaseSearchModel
     #region Properties
 
     [NopResourceDisplayName("Admin.Reports.LowStock.SearchPublished")]
-    public int SearchPublishedId { get; set; }
+    public long SearchPublishedId { get; set; }
     public IList<SelectListItem> AvailablePublishedOptions { get; set; }
 
     #endregion

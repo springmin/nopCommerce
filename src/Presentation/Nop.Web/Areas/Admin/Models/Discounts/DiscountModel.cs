@@ -20,6 +20,7 @@ public partial record DiscountModel : BaseNopEntityModel
         DiscountProductSearchModel = new DiscountProductSearchModel();
         DiscountCategorySearchModel = new DiscountCategorySearchModel();
         DiscountManufacturerSearchModel = new DiscountManufacturerSearchModel();
+        AvailableVendors = new List<SelectListItem>();
     }
 
     #endregion
@@ -33,7 +34,7 @@ public partial record DiscountModel : BaseNopEntityModel
     public string AdminComment { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.Discounts.Fields.DiscountType")]
-    public int DiscountTypeId { get; set; }
+    public long DiscountTypeId { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.Discounts.Fields.DiscountType")]
     public string DiscountTypeName { get; set; }
@@ -81,7 +82,7 @@ public partial record DiscountModel : BaseNopEntityModel
     public bool IsCumulative { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.Discounts.Fields.DiscountLimitation")]
-    public int DiscountLimitationId { get; set; }
+    public long DiscountLimitationId { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.Discounts.Fields.LimitationTimes")]
     public int LimitationTimes { get; set; }
@@ -93,6 +94,10 @@ public partial record DiscountModel : BaseNopEntityModel
     [NopResourceDisplayName("Admin.Promotions.Discounts.Fields.AppliedToSubCategories")]
     public bool AppliedToSubCategories { get; set; }
 
+    [NopResourceDisplayName("Admin.Promotions.Discounts.Fields.Vendor")]
+    public long? VendorId { get; set; }
+    public IList<SelectListItem> AvailableVendors { get; set; }
+
     [NopResourceDisplayName("Admin.Promotions.Discounts.Requirements.DiscountRequirementType")]
     public string AddDiscountRequirement { get; set; }
 
@@ -102,9 +107,11 @@ public partial record DiscountModel : BaseNopEntityModel
     public string GroupName { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.Discounts.Requirements.RequirementGroup")]
-    public int RequirementGroupId { get; set; }
+    public long RequirementGroupId { get; set; }
 
     public IList<SelectListItem> AvailableRequirementGroups { get; set; }
+
+    public bool IsLoggedInAsVendor { get; set; }
 
     public DiscountUsageHistorySearchModel DiscountUsageHistorySearchModel { get; set; }
 

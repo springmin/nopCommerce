@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Web.Framework.Models;
+using Nop.Web.Framework.Models.ArtificialIntelligence;
+using Nop.Web.Framework.Models.Translation;
 using Nop.Web.Framework.Mvc.ModelBinding;
 
 namespace Nop.Web.Areas.Admin.Models.Catalog;
@@ -9,26 +11,26 @@ namespace Nop.Web.Areas.Admin.Models.Catalog;
 /// Represents a manufacturer model
 /// </summary>
 public partial record ManufacturerModel : BaseNopEntityModel, IAclSupportedModel, IDiscountSupportedModel,
-    ILocalizedModel<ManufacturerLocalizedModel>, IStoreMappingSupportedModel
+    ITranslationSupportedModel, ILocalizedModel<ManufacturerLocalizedModel>, IStoreMappingSupportedModel,
+    IMetaTagsSupportedModel
 {
     #region Ctor
 
     public ManufacturerModel()
     {
-        if (PageSize < 1)
-        {
+        if (PageSize < 1) 
             PageSize = 5;
-        }
+
         Locales = new List<ManufacturerLocalizedModel>();
         AvailableManufacturerTemplates = new List<SelectListItem>();
 
         AvailableDiscounts = new List<SelectListItem>();
-        SelectedDiscountIds = new List<int>();
+        SelectedDiscountIds = new List<long>();
 
-        SelectedCustomerRoleIds = new List<int>();
+        SelectedCustomerRoleIds = new List<long>();
         AvailableCustomerRoles = new List<SelectListItem>();
 
-        SelectedStoreIds = new List<int>();
+        SelectedStoreIds = new List<long>();
         AvailableStores = new List<SelectListItem>();
 
         ManufacturerProductSearchModel = new ManufacturerProductSearchModel();
@@ -45,7 +47,7 @@ public partial record ManufacturerModel : BaseNopEntityModel, IAclSupportedModel
     public string Description { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Manufacturers.Fields.ManufacturerTemplate")]
-    public int ManufacturerTemplateId { get; set; }
+    public long ManufacturerTemplateId { get; set; }
 
     public IList<SelectListItem> AvailableManufacturerTemplates { get; set; }
 
@@ -63,7 +65,7 @@ public partial record ManufacturerModel : BaseNopEntityModel, IAclSupportedModel
 
     [UIHint("Picture")]
     [NopResourceDisplayName("Admin.Catalog.Manufacturers.Fields.Picture")]
-    public int PictureId { get; set; }
+    public long PictureId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Manufacturers.Fields.PageSize")]
     public int PageSize { get; set; }
@@ -97,31 +99,48 @@ public partial record ManufacturerModel : BaseNopEntityModel, IAclSupportedModel
 
     public IList<ManufacturerLocalizedModel> Locales { get; set; }
 
-    //ACL (customer roles)
-    [NopResourceDisplayName("Admin.Catalog.Manufacturers.Fields.AclCustomerRoles")]
-    public IList<int> SelectedCustomerRoleIds { get; set; }
+    public IList<long> SelectedCustomerRoleIds { get; set; }
     public IList<SelectListItem> AvailableCustomerRoles { get; set; }
 
     //store mapping
     [NopResourceDisplayName("Admin.Catalog.Manufacturers.Fields.LimitedToStores")]
-    public IList<int> SelectedStoreIds { get; set; }
+    public IList<long> SelectedStoreIds { get; set; }
+
     public IList<SelectListItem> AvailableStores { get; set; }
 
     //discounts
     [NopResourceDisplayName("Admin.Catalog.Manufacturers.Fields.Discounts")]
-    public IList<int> SelectedDiscountIds { get; set; }
+    public IList<long> SelectedDiscountIds { get; set; }
+
     public IList<SelectListItem> AvailableDiscounts { get; set; }
 
     public ManufacturerProductSearchModel ManufacturerProductSearchModel { get; set; }
 
     public string PrimaryStoreCurrencyCode { get; set; }
 
+    public bool PreTranslationAvailable { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Manufacturers.Fields.PhysicalAddress")]
+    public string PhysicalAddress { get; set; }
+    
+    [NopResourceDisplayName("Admin.Catalog.Manufacturers.Fields.ElectronicAddress")]
+    public string ElectronicAddress { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Manufacturers.Fields.ResponsiblePerson")]
+    public string ResponsiblePerson { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Manufacturers.Fields.ResponsiblePersonPhysicalAddress")]
+    public string ResponsiblePersonPhysicalAddress { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Manufacturers.Fields.ResponsiblePersonElectronicAddress")]
+    public string ResponsiblePersonElectronicAddress { get; set; }
+
     #endregion
 }
 
-public partial record ManufacturerLocalizedModel : ILocalizedLocaleModel
+public partial record ManufacturerLocalizedModel : ILocalizedLocaleModel, IMetaTagsSupportedModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Manufacturers.Fields.Name")]
     public string Name { get; set; }

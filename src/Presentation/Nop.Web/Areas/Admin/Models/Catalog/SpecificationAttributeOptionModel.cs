@@ -19,7 +19,7 @@ public partial record SpecificationAttributeOptionModel : BaseNopEntityModel, IL
 
     #region Properties
 
-    public int SpecificationAttributeId { get; set; }
+    public long SpecificationAttributeId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Attributes.SpecificationAttributes.SpecificationAttribute.Options.Fields.Name")]
     public string Name { get; set; }
@@ -43,7 +43,7 @@ public partial record SpecificationAttributeOptionModel : BaseNopEntityModel, IL
 
 public partial record SpecificationAttributeOptionLocalizedModel : ILocalizedLocaleModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Attributes.SpecificationAttributes.SpecificationAttribute.Options.Fields.Name")]
     public string Name { get; set; }

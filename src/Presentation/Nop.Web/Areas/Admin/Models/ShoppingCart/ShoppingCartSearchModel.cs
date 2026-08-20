@@ -37,13 +37,13 @@ public partial record ShoppingCartSearchModel : BaseSearchModel
     public DateTime? EndDate { get; set; }
 
     [NopResourceDisplayName("Admin.ShoppingCartType.Product")]
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     [NopResourceDisplayName("Admin.ShoppingCartType.BillingCountry")]
-    public int BillingCountryId { get; set; }
+    public long BillingCountryId { get; set; }
 
     [NopResourceDisplayName("Admin.ShoppingCartType.Store")]
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 
     public IList<SelectListItem> AvailableShoppingCartTypes { get; set; }
 

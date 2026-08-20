@@ -16,7 +16,9 @@ public partial record CampaignModel : BaseNopEntityModel
     {
         AvailableStores = new List<SelectListItem>();
         AvailableCustomerRoles = new List<SelectListItem>();
+        AvailableNewsLetterSubscriptionTypes = new List<SelectListItem>();
         AvailableEmailAccounts = new List<SelectListItem>();
+        CopyCampaignModel = new CopyCampaignModel();
     }
 
     #endregion
@@ -33,12 +35,16 @@ public partial record CampaignModel : BaseNopEntityModel
     public string Body { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.Campaigns.Fields.Store")]
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
     public IList<SelectListItem> AvailableStores { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.Campaigns.Fields.CustomerRole")]
-    public int CustomerRoleId { get; set; }
+    public long CustomerRoleId { get; set; }
     public IList<SelectListItem> AvailableCustomerRoles { get; set; }
+
+    [NopResourceDisplayName("Admin.Promotions.Campaigns.Fields.NewsLetterSubscriptionType")]
+    public long NewsLetterSubscriptionTypeId { get; set; }
+    public IList<SelectListItem> AvailableNewsLetterSubscriptionTypes { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.Campaigns.Fields.CreatedOn")]
     public DateTime CreatedOn { get; set; }
@@ -51,12 +57,14 @@ public partial record CampaignModel : BaseNopEntityModel
     public string AllowedTokens { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.Campaigns.Fields.EmailAccount")]
-    public int EmailAccountId { get; set; }
+    public long EmailAccountId { get; set; }
     public IList<SelectListItem> AvailableEmailAccounts { get; set; }
 
     [DataType(DataType.EmailAddress)]
     [NopResourceDisplayName("Admin.Promotions.Campaigns.Fields.TestEmail")]
     public string TestEmail { get; set; }
+
+    public CopyCampaignModel CopyCampaignModel { get; set; }
 
     #endregion
 }

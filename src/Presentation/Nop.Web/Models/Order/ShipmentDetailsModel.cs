@@ -26,7 +26,7 @@ public partial record ShipmentDetailsModel : BaseNopEntityModel
     public partial record ShipmentItemModel : BaseNopEntityModel
     {
         public string Sku { get; set; }
-        public int ProductId { get; set; }
+        public long ProductId { get; set; }
         public string ProductName { get; set; }
         public string ProductSeName { get; set; }
         public string AttributeInfo { get; set; }

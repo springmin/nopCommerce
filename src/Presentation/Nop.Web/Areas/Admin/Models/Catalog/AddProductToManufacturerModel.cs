@@ -11,15 +11,15 @@ public partial record AddProductToManufacturerModel : BaseNopModel
 
     public AddProductToManufacturerModel()
     {
-        SelectedProductIds = new List<int>();
+        SelectedProductIds = new List<long>();
     }
     #endregion
 
     #region Properties
 
-    public int ManufacturerId { get; set; }
+    public long ManufacturerId { get; set; }
 
-    public IList<int> SelectedProductIds { get; set; }
+    public IList<long> SelectedProductIds { get; set; }
 
     #endregion
 }
