@@ -173,8 +173,8 @@ public abstract partial class BaseDataProvider
     /// <param name="fieldSelector">A field selector to apply a transform to a hash value</param>
     /// <typeparam name="TEntity">Entity type</typeparam>
     /// <returns>Dictionary</returns>
-    public virtual async Task<IDictionary<int, string>> GetFieldHashesAsync<TEntity>(Expression<Func<TEntity, bool>> predicate,
-        Expression<Func<TEntity, int>> keySelector,
+    public virtual async Task<IDictionary<long, string>> GetFieldHashesAsync<TEntity>(Expression<Func<TEntity, bool>> predicate,
+        Expression<Func<TEntity, long>> keySelector,
         Expression<Func<TEntity, object>> fieldSelector) where TEntity : BaseEntity
     {
         if (keySelector.Body is not MemberExpression { Member: PropertyInfo keyPropInfo })
@@ -187,7 +187,7 @@ public abstract partial class BaseDataProvider
             .Where(predicate)
             .Select(x => new
             {
-                Id = Sql.Property<int>(x, keyPropInfo.Name),
+                Id = Sql.Property<long>(x, keyPropInfo.Name),
                 Hash = SqlSha2(Sql.Property<object>(x, propInfo.Name))
             });
 
@@ -243,7 +243,7 @@ public abstract partial class BaseDataProvider
             return entity;
         }
 
-        entity.Id = await dataContext.InsertWithInt32IdentityAsync(entity);
+        entity.Id = await dataContext.InsertWithInt64IdentityAsync(entity);
         return entity;
     }
 
@@ -266,7 +266,7 @@ public abstract partial class BaseDataProvider
             return entity;
         }
 
-        entity.Id = dataContext.InsertWithInt32Identity(entity);
+        entity.Id = dataContext.InsertWithInt64Identity(entity);
         return entity;
     }
 

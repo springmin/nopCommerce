@@ -1,6 +1,5 @@
 ﻿using FluentMigrator.Builders.Create.Table;
 using Nop.Core.Domain.Catalog;
-using Nop.Core.Domain.Media;
 using Nop.Data.Extensions;
 
 namespace Nop.Data.Mapping.Builders.Catalog;
@@ -19,8 +18,8 @@ public partial class ProductAttributeValuePictureBuilder : NopEntityBuilder<Prod
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(ProductAttributeValuePicture.ProductAttributeValueId)).AsInt32().ForeignKey<ProductAttributeValue>()
-            .WithColumn(nameof(ProductAttributeValuePicture.PictureId)).AsInt32();
+            .WithColumn(nameof(ProductAttributeValuePicture.ProductAttributeValueId)).AsInt64().ForeignKey<ProductAttributeValue>()
+            .WithColumn(nameof(ProductAttributeValuePicture.PictureId)).AsInt64();
     }
 
     #endregion

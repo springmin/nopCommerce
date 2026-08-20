@@ -17,5 +17,5 @@ public partial interface IEntityIdGenerator
     /// Generates the next identifier
     /// </summary>
     /// <returns>The generated identifier</returns>
-    int NextId();
+    long NextId();
 }

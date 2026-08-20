@@ -68,7 +68,7 @@ public partial class SqliteNopDataProvider : BaseDataProvider, INopDataProvider
                 return entity;
             }
 
-            entity.Id = DataContext.InsertWithInt32Identity(entity);
+            entity.Id = DataContext.InsertWithInt64Identity(entity);
             return entity;
         }
     }
@@ -220,16 +220,16 @@ public partial class SqliteNopDataProvider : BaseDataProvider, INopDataProvider
     /// </summary>
     /// <typeparam name="TEntity">Entity</typeparam>
     /// <returns>Integer identity; null if cannot get the result</returns>
-    public Task<int?> GetTableIdentAsync<TEntity>() where TEntity : BaseEntity
+    public Task<long?> GetTableIdentAsync<TEntity>() where TEntity : BaseEntity
     {
         using (new ReaderWriteLockDisposable(_locker, ReaderWriteLockType.Read))
         {
             var tableName = DataContext.GetTable<TEntity>().TableName;
 
-            var result = DataContext.Query<int?>($"select seq from sqlite_sequence where name = \"{tableName}\"")
+            var result = DataContext.Query<long?>($"select seq from sqlite_sequence where name = \"{tableName}\"")
                 .FirstOrDefault();
 
-            return Task.FromResult<int?>(result ?? 1);
+            return Task.FromResult<long?>(result ?? 1);
         }
     }
 
@@ -329,7 +329,7 @@ public partial class SqliteNopDataProvider : BaseDataProvider, INopDataProvider
     /// </summary>
     /// <typeparam name="TEntity">Entity</typeparam>
     /// <param name="ident">Identity value</param>
-    public Task SetTableIdentAsync<TEntity>(int ident) where TEntity : BaseEntity
+    public Task SetTableIdentAsync<TEntity>(long ident) where TEntity : BaseEntity
     {
         using (new ReaderWriteLockDisposable(_locker))
         {

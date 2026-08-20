@@ -19,8 +19,8 @@ public partial class DiscountRequirementBuilder : NopEntityBuilder<DiscountRequi
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(DiscountRequirement.DiscountId)).AsInt32().ForeignKey<Discount>()
-            .WithColumn(nameof(DiscountRequirement.ParentId)).AsInt32().Nullable().ForeignKey<DiscountRequirement>(onDelete: Rule.None);
+            .WithColumn(nameof(DiscountRequirement.DiscountId)).AsInt64().ForeignKey<Discount>()
+            .WithColumn(nameof(DiscountRequirement.ParentId)).AsInt64().Nullable().ForeignKey<DiscountRequirement>(onDelete: Rule.None);
     }
 
     #endregion

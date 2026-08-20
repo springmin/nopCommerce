@@ -10,7 +10,7 @@ public partial class PredefinedProductAttributeValue : BaseEntity, ILocalizedEnt
     /// <summary>
     /// Gets or sets the product attribute identifier
     /// </summary>
-    public int ProductAttributeId { get; set; }
+    public long ProductAttributeId { get; set; }
 
     /// <summary>
     /// Gets or sets the product attribute name

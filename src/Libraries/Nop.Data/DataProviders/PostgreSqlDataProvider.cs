@@ -223,16 +223,16 @@ public partial class PostgreSqlDataProvider : BaseDataProvider, INopDataProvider
     /// A task that represents the asynchronous operation
     /// The task result contains the integer identity; null if cannot get the result
     /// </returns>
-    public virtual Task<int?> GetTableIdentAsync<TEntity>() where TEntity : BaseEntity
+    public virtual Task<long?> GetTableIdentAsync<TEntity>() where TEntity : BaseEntity
     {
         using var currentConnection = CreateDataConnection();
 
         var seqName = GetSequenceName<TEntity>(currentConnection);
 
-        var result = currentConnection.Query<int>($"SELECT COALESCE(last_value + CASE WHEN is_called THEN 1 ELSE 0 END, 1) as Value FROM {seqName};")
+        var result = currentConnection.Query<long>($"SELECT COALESCE(last_value + CASE WHEN is_called THEN 1 ELSE 0 END, 1) as Value FROM {seqName};")
             .FirstOrDefault();
 
-        return Task.FromResult<int?>(result);
+        return Task.FromResult<long?>(result);
     }
 
     /// <summary>
@@ -241,7 +241,7 @@ public partial class PostgreSqlDataProvider : BaseDataProvider, INopDataProvider
     /// <typeparam name="TEntity">Entity type</typeparam>
     /// <param name="ident">Identity value</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task SetTableIdentAsync<TEntity>(int ident) where TEntity : BaseEntity
+    public virtual async Task SetTableIdentAsync<TEntity>(long ident) where TEntity : BaseEntity
     {
         var currentIdent = await GetTableIdentAsync<TEntity>();
         if (!currentIdent.HasValue || ident <= currentIdent.Value)
@@ -284,9 +284,9 @@ public partial class PostgreSqlDataProvider : BaseDataProvider, INopDataProvider
 
         try
         {
-            entity.Id = dataContext.InsertWithInt32Identity(entity);
+            entity.Id = dataContext.InsertWithInt64Identity(entity);
         }
-        // Ignore when we try insert foreign entity via InsertWithInt32IdentityAsync method
+        // Ignore when we try insert foreign entity via InsertWithInt64IdentityAsync method
         catch (LinqToDBException ex) when (ex.Message.StartsWith("Identity field must be defined for"))
         {
             dataContext.Insert(entity);
@@ -319,9 +319,9 @@ public partial class PostgreSqlDataProvider : BaseDataProvider, INopDataProvider
 
         try
         {
-            entity.Id = await dataContext.InsertWithInt32IdentityAsync(entity);
+            entity.Id = await dataContext.InsertWithInt64IdentityAsync(entity);
         }
-        // Ignore when we try insert foreign entity via InsertWithInt32IdentityAsync method
+        // Ignore when we try insert foreign entity via InsertWithInt64IdentityAsync method
         catch (LinqToDBException ex) when (ex.Message.StartsWith("Identity field must be defined for"))
         {
             await dataContext.InsertAsync(entity);

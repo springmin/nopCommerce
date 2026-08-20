@@ -9,7 +9,7 @@ public partial class BestsellersReportLine
     /// <summary>
     /// Gets or sets the product identifier
     /// </summary>
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     /// <summary>
     /// Gets or sets the product name
@@ -20,6 +20,11 @@ public partial class BestsellersReportLine
     /// Gets or sets the total amount
     /// </summary>
     public decimal TotalAmount { get; set; }
+
+    /// <summary>
+    /// Gets or sets the total amount string
+    /// </summary>
+    public string TotalAmountStr { get; set; }
 
     /// <summary>
     /// Gets or sets the total quantity

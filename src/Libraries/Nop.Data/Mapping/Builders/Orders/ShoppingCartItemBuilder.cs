@@ -20,8 +20,9 @@ public partial class ShoppingCartItemBuilder : NopEntityBuilder<ShoppingCartItem
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(ShoppingCartItem.CustomerId)).AsInt32().ForeignKey<Customer>()
-            .WithColumn(nameof(ShoppingCartItem.ProductId)).AsInt32().ForeignKey<Product>();
+            .WithColumn(nameof(ShoppingCartItem.CustomerId)).AsInt64().ForeignKey<Customer>()
+            .WithColumn(nameof(ShoppingCartItem.ProductId)).AsInt64().ForeignKey<Product>()
+            .WithColumn(nameof(ShoppingCartItem.CustomWishlistId)).AsInt64().Nullable().ForeignKey<CustomWishlist>();
     }
 
     #endregion

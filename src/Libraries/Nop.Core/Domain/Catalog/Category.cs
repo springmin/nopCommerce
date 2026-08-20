@@ -10,7 +10,7 @@ namespace Nop.Core.Domain.Catalog;
 /// <summary>
 /// Represents a category
 /// </summary>
-public partial class Category : BaseEntity, ILocalizedEntity, ISlugSupported, IAclSupported, IStoreMappingSupported, IDiscountSupported<DiscountCategoryMapping>, ISoftDeletedEntity
+public partial class Category : BaseEntity, ILocalizedEntity, ISlugSupported, IAclSupported, IStoreMappingSupported, IDiscountSupported<DiscountCategoryMapping>, ISoftDeletedEntity, IMetaTagsSupported
 {
     /// <summary>
     /// Gets or sets the name
@@ -25,7 +25,7 @@ public partial class Category : BaseEntity, ILocalizedEntity, ISlugSupported, IA
     /// <summary>
     /// Gets or sets a value of used category template identifier
     /// </summary>
-    public int CategoryTemplateId { get; set; }
+    public long CategoryTemplateId { get; set; }
 
     /// <summary>
     /// Gets or sets the meta keywords
@@ -45,12 +45,12 @@ public partial class Category : BaseEntity, ILocalizedEntity, ISlugSupported, IA
     /// <summary>
     /// Gets or sets the parent category identifier
     /// </summary>
-    public int ParentCategoryId { get; set; }
+    public long ParentCategoryId { get; set; }
 
     /// <summary>
     /// Gets or sets the picture identifier
     /// </summary>
-    public int PictureId { get; set; }
+    public long PictureId { get; set; }
 
     /// <summary>
     /// Gets or sets the page size
@@ -71,11 +71,6 @@ public partial class Category : BaseEntity, ILocalizedEntity, ISlugSupported, IA
     /// Gets or sets a value indicating whether to show the category on home page
     /// </summary>
     public bool ShowOnHomepage { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether to include this category in the top menu
-    /// </summary>
-    public bool IncludeInTopMenu { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the entity is subject to ACL
@@ -131,4 +126,9 @@ public partial class Category : BaseEntity, ILocalizedEntity, ISlugSupported, IA
     /// Gets or sets a value indicating whether the price range should be entered manually
     /// </summary>
     public bool ManuallyPriceRange { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the vendor cannot add products to the category
+    /// </summary>
+    public bool RestrictFromVendors { get; set; }
 }

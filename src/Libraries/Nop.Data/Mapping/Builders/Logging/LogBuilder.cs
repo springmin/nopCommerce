@@ -21,7 +21,7 @@ public partial class LogBuilder : NopEntityBuilder<Log>
         table
             .WithColumn(nameof(Log.ShortMessage)).AsString(int.MaxValue).NotNullable()
             .WithColumn(nameof(Log.IpAddress)).AsString(100).Nullable()
-            .WithColumn(nameof(Log.CustomerId)).AsInt32().Nullable().ForeignKey<Customer>();
+            .WithColumn(nameof(Log.CustomerId)).AsInt64().Nullable().ForeignKey<Customer>();
     }
 
     #endregion

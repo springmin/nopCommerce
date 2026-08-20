@@ -9,13 +9,9 @@ namespace Nop.Core.Infrastructure;
 /// id generator: identifiers are pre-assigned before insert.
 /// </summary>
 /// <remarks>
-/// yitter generates 64-bit snowflake ids. nopCommerce entities use Int32 ids, so the
-/// generated id must fit into Int32. With the default options the timestamp component
-/// quickly exceeds Int32; to use this generator either:
-///   - set <see cref="IdGeneratorOptions.BaseTime"/> close to the current time so the
-///     timestamp component stays small, or
-///   - migrate nopCommerce entity ids to Int64 (not yet implemented).
-/// When an id exceeds Int32.MaxValue a NopException is thrown.
+/// yitter generates 64-bit snowflake ids; nopCommerce entities now use Int64 ids, so
+/// the full range is available. To keep ids exact in JavaScript (safe integer range
+/// 2^53), WorkerIdBitLength + SeqBitLength must be <= 11 (validated in the ctor).
 /// </remarks>
 public partial class YitterIdGenerator : IEntityIdGenerator
 {
@@ -62,18 +58,11 @@ public partial class YitterIdGenerator : IEntityIdGenerator
     /// Generates the next identifier
     /// </summary>
     /// <returns>The generated identifier</returns>
-    public int NextId()
+    public long NextId()
     {
         lock (_locker)
         {
-            var id = YitIdHelper.NextId();
-
-            if (id > int.MaxValue)
-                throw new NopException(
-                    $"The generated id ({id}) exceeds the Int32 range supported by nopCommerce entities. " +
-                    "Set IdGeneratorOptions.BaseTime close to the current time or migrate entity ids to Int64.");
-
-            return (int)id;
+            return YitIdHelper.NextId();
         }
     }
 

@@ -18,8 +18,8 @@ public partial class GiftCardUsageHistoryBuilder : NopEntityBuilder<GiftCardUsag
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(GiftCardUsageHistory.GiftCardId)).AsInt32().ForeignKey<GiftCard>()
-            .WithColumn(nameof(GiftCardUsageHistory.UsedWithOrderId)).AsInt32().ForeignKey<Order>();
+            .WithColumn(nameof(GiftCardUsageHistory.GiftCardId)).AsInt64().ForeignKey<GiftCard>()
+            .WithColumn(nameof(GiftCardUsageHistory.UsedWithOrderId)).AsInt64().ForeignKey<Order>();
     }
 
     #endregion

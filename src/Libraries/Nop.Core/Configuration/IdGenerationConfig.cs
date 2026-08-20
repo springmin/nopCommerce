@@ -50,12 +50,19 @@ public partial class IdGenerationConfig : IConfig, ISettings
     /// <summary>
     /// Gets or sets the identifier generation mode
     /// </summary>
-    public int IdGenerationMode { get; set; } = (int)Nop.Core.Configuration.IdGenerationMode.Database;
+    public long IdGenerationMode { get; set; } = (int)Nop.Core.Configuration.IdGenerationMode.Database;
 
     /// <summary>
     /// Gets or sets the yitter worker id (0-65535)
     /// </summary>
-    public int YitterWorkerId { get; set; }
+    public long YitterWorkerId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the yitter worker id bit length. WorkerIdBitLength + SeqBitLength
+    /// must be <= 11 so generated ids stay within the JavaScript safe integer range
+    /// (2^53) - validated in <see cref="YitterIdGenerator"/>.
+    /// </summary>
+    public long YitterWorkerIdBitLength { get; set; } = 6;
 
     /// <summary>
     /// Gets or sets the yitter sequence bit length (default 12)
@@ -63,9 +70,8 @@ public partial class IdGenerationConfig : IConfig, ISettings
     public int YitterSeqBitLength { get; set; } = 12;
 
     /// <summary>
-    /// Gets or sets the yitter base time (ISO-8601 string). yitter generates 64-bit ids;
-    /// nopCommerce entities use Int32 ids, so keep the base time close to the current
-    /// time to keep generated ids inside Int32. Leave empty for the yitter default.
+    /// Gets or sets the yitter base time (ISO-8601 string). Leave empty for the yitter
+    /// default. With the default 41-bit millisecond timestamp the id space lasts ~69 years.
     /// </summary>
     public string YitterBaseTime { get; set; } = string.Empty;
 
@@ -73,7 +79,7 @@ public partial class IdGenerationConfig : IConfig, ISettings
     /// Gets or sets the tinyid segment size (how many ids are fetched from the
     /// database in one round-trip, default 10000)
     /// </summary>
-    public int TinyidStep { get; set; } = 10000;
+    public long TinyidStep { get; set; } = 10000;
 
     /// <summary>
     /// Gets or sets the tinyid initial id (the first generated id = start + 1,

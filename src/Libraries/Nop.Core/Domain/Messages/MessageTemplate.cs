@@ -41,12 +41,12 @@ public partial class MessageTemplate : BaseEntity, ILocalizedEntity, IStoreMappi
     /// <summary>
     /// Gets or sets the period of message delay 
     /// </summary>
-    public int DelayPeriodId { get; set; }
+    public long DelayPeriodId { get; set; }
 
     /// <summary>
     /// Gets or sets the download identifier of attached file
     /// </summary>
-    public int AttachedDownloadId { get; set; }
+    public long AttachedDownloadId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether direct reply is allowed
@@ -56,7 +56,7 @@ public partial class MessageTemplate : BaseEntity, ILocalizedEntity, IStoreMappi
     /// <summary>
     /// Gets or sets the used email account identifier
     /// </summary>
-    public int EmailAccountId { get; set; }
+    public long EmailAccountId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the entity is limited/restricted to certain stores

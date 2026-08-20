@@ -16,7 +16,7 @@ public partial class RecurringPayment : BaseEntity, ISoftDeletedEntity
     /// <summary>
     /// Gets or sets the cycle period identifier
     /// </summary>
-    public int CyclePeriodId { get; set; }
+    public long CyclePeriodId { get; set; }
 
     /// <summary>
     /// Gets or sets the total cycles
@@ -46,7 +46,7 @@ public partial class RecurringPayment : BaseEntity, ISoftDeletedEntity
     /// <summary>
     /// Gets or sets the initial order identifier
     /// </summary>
-    public int InitialOrderId { get; set; }
+    public long InitialOrderId { get; set; }
 
     /// <summary>
     /// Gets or sets the date and time of payment creation

@@ -107,14 +107,14 @@ public partial class OracleNopDataProvider : BaseDataProvider, INopDataProvider
     /// A task that represents the asynchronous operation
     /// The task result contains the integer identity; null if cannot get the result
     /// </returns>
-    public virtual Task<int?> GetTableIdentAsync<TEntity>() where TEntity : BaseEntity
+    public virtual Task<long?> GetTableIdentAsync<TEntity>() where TEntity : BaseEntity
     {
         using var currentConnection = CreateDataConnection();
         var tableName = NopMappingSchema.GetEntityDescriptor(typeof(TEntity)).EntityName;
 
         //Oracle 12c+ identity columns have an implicit sequence; USER_TAB_IDENTITY_COLS
         //maps table -> sequence and USER_SEQUENCES exposes its current value
-        var result = currentConnection.Query<int?>(
+        var result = currentConnection.Query<long?>(
                 $@"SELECT s.LAST_NUMBER FROM USER_SEQUENCES s
                    JOIN USER_TAB_IDENTITY_COLS i ON s.SEQUENCE_NAME = i.SEQUENCE_NAME
                    WHERE UPPER(i.TABLE_NAME) = UPPER('{tableName}')")
@@ -129,7 +129,7 @@ public partial class OracleNopDataProvider : BaseDataProvider, INopDataProvider
     /// <typeparam name="TEntity">Entity type</typeparam>
     /// <param name="ident">Identity value</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task SetTableIdentAsync<TEntity>(int ident) where TEntity : BaseEntity
+    public virtual async Task SetTableIdentAsync<TEntity>(long ident) where TEntity : BaseEntity
     {
         var currentIdent = await GetTableIdentAsync<TEntity>();
         if (!currentIdent.HasValue || ident <= currentIdent.Value)

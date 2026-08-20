@@ -8,10 +8,10 @@ public partial class ProductAttributeCombinationPicture : BaseEntity
     /// <summary>
     /// Gets or sets the product attribute combination id
     /// </summary>
-    public int ProductAttributeCombinationId { get; set; }
+    public long ProductAttributeCombinationId { get; set; }
 
     /// <summary>
     /// Gets or sets the identifier of picture associated with this combination
     /// </summary>
-    public int PictureId { get; set; }
+    public long PictureId { get; set; }
 }

@@ -7,7 +7,7 @@ namespace Nop.Core.Domain.Vendors;
 /// <summary>
 /// Represents a vendor
 /// </summary>
-public partial class Vendor : BaseEntity, ILocalizedEntity, ISlugSupported, ISoftDeletedEntity
+public partial class Vendor : BaseEntity, ILocalizedEntity, ISlugSupported, ISoftDeletedEntity, IMetaTagsSupported
 {
     /// <summary>
     /// Gets or sets the name
@@ -27,12 +27,12 @@ public partial class Vendor : BaseEntity, ILocalizedEntity, ISlugSupported, ISof
     /// <summary>
     /// Gets or sets the picture identifier
     /// </summary>
-    public int PictureId { get; set; }
+    public long PictureId { get; set; }
 
     /// <summary>
     /// Gets or sets the address identifier
     /// </summary>
-    public int AddressId { get; set; }
+    public long AddressId { get; set; }
 
     /// <summary>
     /// Gets or sets the admin comment
@@ -103,4 +103,9 @@ public partial class Vendor : BaseEntity, ILocalizedEntity, ISlugSupported, ISof
     /// Gets or sets a value indicating whether the price range should be entered manually
     /// </summary>
     public bool ManuallyPriceRange { get; set; }
+
+    /// <summary>
+    /// Gets or sets the customer identifier
+    /// </summary>
+    public long? PmCustomerId { get; set; }
 }

@@ -22,11 +22,12 @@ public partial class OrderBuilder : NopEntityBuilder<Order>
     {
         table
             .WithColumn(nameof(Order.CustomOrderNumber)).AsString(int.MaxValue).NotNullable()
-            .WithColumn(nameof(Order.BillingAddressId)).AsInt32().ForeignKey<Address>(onDelete: Rule.None)
-            .WithColumn(nameof(Order.CustomerId)).AsInt32().ForeignKey<Customer>(onDelete: Rule.None)
-            .WithColumn(nameof(Order.PickupAddressId)).AsInt32().Nullable().ForeignKey<Address>(onDelete: Rule.None)
-            .WithColumn(nameof(Order.ShippingAddressId)).AsInt32().Nullable().ForeignKey<Address>(onDelete: Rule.None)
-            .WithColumn(nameof(Order.CustomerIp)).AsString(100).Nullable();
+            .WithColumn(nameof(Order.BillingAddressId)).AsInt64().ForeignKey<Address>(onDelete: Rule.None)
+            .WithColumn(nameof(Order.CustomerId)).AsInt64().ForeignKey<Customer>(onDelete: Rule.None)
+            .WithColumn(nameof(Order.PickupAddressId)).AsInt64().Nullable().ForeignKey<Address>(onDelete: Rule.None)
+            .WithColumn(nameof(Order.ShippingAddressId)).AsInt64().Nullable().ForeignKey<Address>(onDelete: Rule.None)
+            .WithColumn(nameof(Order.CustomerIp)).AsString(100).Nullable()
+            .WithColumn(nameof(Order.OrderGuid)).AsGuid().Unique("AK_Order_OrderGuid");
     }
 
     #endregion

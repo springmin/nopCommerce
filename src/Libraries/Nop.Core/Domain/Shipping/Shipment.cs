@@ -8,7 +8,7 @@ public partial class Shipment : BaseEntity
     /// <summary>
     /// Gets or sets the order identifier
     /// </summary>
-    public int OrderId { get; set; }
+    public long OrderId { get; set; }
 
     /// <summary>
     /// Gets or sets the tracking number of this shipment

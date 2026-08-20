@@ -8,7 +8,7 @@ public partial class OrderNote : BaseEntity
     /// <summary>
     /// Gets or sets the order identifier
     /// </summary>
-    public int OrderId { get; set; }
+    public long OrderId { get; set; }
 
     /// <summary>
     /// Gets or sets the note
@@ -18,7 +18,7 @@ public partial class OrderNote : BaseEntity
     /// <summary>
     /// Gets or sets the attached file (download) identifier
     /// </summary>
-    public int DownloadId { get; set; }
+    public long DownloadId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether a customer can see a note

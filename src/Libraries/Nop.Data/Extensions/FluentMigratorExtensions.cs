@@ -280,7 +280,7 @@ public static class FluentMigratorExtensions
             var pk = new ColumnDefinition
             {
                 Name = nameof(BaseEntity.Id),
-                Type = DbType.Int32,
+                Type = DbType.Int64,
                 //when the configured id strategy pre-assigns ids (e.g. Yitter),
                 //the id column must not be auto-increment
                 IsIdentity = !IsPreGeneratedIdMode(),

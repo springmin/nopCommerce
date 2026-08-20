@@ -8,7 +8,7 @@ public partial class VendorNote : BaseEntity
     /// <summary>
     /// Gets or sets the vendor identifier
     /// </summary>
-    public int VendorId { get; set; }
+    public long VendorId { get; set; }
 
     /// <summary>
     /// Gets or sets the note

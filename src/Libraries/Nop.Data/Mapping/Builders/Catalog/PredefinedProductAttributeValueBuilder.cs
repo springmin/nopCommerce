@@ -19,7 +19,7 @@ public partial class PredefinedProductAttributeValueBuilder : NopEntityBuilder<P
     {
         table
             .WithColumn(nameof(PredefinedProductAttributeValue.Name)).AsString(400).NotNullable()
-            .WithColumn(nameof(PredefinedProductAttributeValue.ProductAttributeId)).AsInt32().ForeignKey<ProductAttribute>();
+            .WithColumn(nameof(PredefinedProductAttributeValue.ProductAttributeId)).AsInt64().ForeignKey<ProductAttribute>();
     }
 
     #endregion

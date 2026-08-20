@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Nop.Core.Domain.Catalog;
 
@@ -11,7 +10,7 @@ public partial class ProductAttributeCombination : BaseEntity
     /// <summary>
     /// Gets or sets the product identifier
     /// </summary>
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     /// <summary>
     /// Gets or sets the attributes
@@ -65,5 +64,5 @@ public partial class ProductAttributeCombination : BaseEntity
     [EditorBrowsable(EditorBrowsableState.Never)]
     [Browsable(false)]
     [Obsolete("The field is not used since 4.70 and is left only for the update process use the ProductAttributeCombinationPicture instead")]
-    public int? PictureId { get; set; }
+    public long? PictureId { get; set; }
 }

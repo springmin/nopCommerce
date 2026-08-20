@@ -17,7 +17,7 @@ public partial class ExternalAuthenticationRecordBuilder : NopEntityBuilder<Exte
     /// <param name="table">Create table expression builder</param>
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
-        table.WithColumn(nameof(ExternalAuthenticationRecord.CustomerId)).AsInt32().ForeignKey<Customer>();
+        table.WithColumn(nameof(ExternalAuthenticationRecord.CustomerId)).AsInt64().ForeignKey<Customer>();
     }
 
     #endregion

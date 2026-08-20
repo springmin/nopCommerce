@@ -10,17 +10,17 @@ namespace Nop.Core.Domain.Catalog;
 /// <summary>
 /// Represents a product
 /// </summary>
-public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAclSupported, IStoreMappingSupported, IDiscountSupported<DiscountProductMapping>, ISoftDeletedEntity
+public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAclSupported, IStoreMappingSupported, IDiscountSupported<DiscountProductMapping>, ISoftDeletedEntity, IMetaTagsSupported
 {
     /// <summary>
     /// Gets or sets the product type identifier
     /// </summary>
-    public int ProductTypeId { get; set; }
+    public long ProductTypeId { get; set; }
 
     /// <summary>
     /// Gets or sets the parent product identifier. It's used to identify associated products (only with "grouped" products)
     /// </summary>
-    public int ParentGroupedProductId { get; set; }
+    public long ParentGroupedProductId { get; set; }
 
     /// <summary>
     /// Gets or sets the values indicating whether this product is visible in catalog or search results.
@@ -52,12 +52,12 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// <summary>
     /// Gets or sets a value of used product template identifier
     /// </summary>
-    public int ProductTemplateId { get; set; }
+    public long ProductTemplateId { get; set; }
 
     /// <summary>
     /// Gets or sets a vendor identifier
     /// </summary>
-    public int VendorId { get; set; }
+    public long VendorId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether to show the product on home page
@@ -137,7 +137,7 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// <summary>
     /// Gets or sets the gift card type identifier
     /// </summary>
-    public int GiftCardTypeId { get; set; }
+    public long GiftCardTypeId { get; set; }
 
     /// <summary>
     /// Gets or sets gift card amount that can be used after purchase. If not specified, then product price will be used.
@@ -167,7 +167,7 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// <summary>
     /// Gets or sets the download identifier
     /// </summary>
-    public int DownloadId { get; set; }
+    public long DownloadId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether this downloadable product can be downloaded unlimited number of times
@@ -187,7 +187,7 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// <summary>
     /// Gets or sets the download activation type
     /// </summary>
-    public int DownloadActivationTypeId { get; set; }
+    public long DownloadActivationTypeId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the product has a sample download file
@@ -197,7 +197,7 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// <summary>
     /// Gets or sets the sample download identifier
     /// </summary>
-    public int SampleDownloadId { get; set; }
+    public long SampleDownloadId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the product has user agreement
@@ -222,7 +222,7 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// <summary>
     /// Gets or sets the cycle period
     /// </summary>
-    public int RecurringCyclePeriodId { get; set; }
+    public long RecurringCyclePeriodId { get; set; }
 
     /// <summary>
     /// Gets or sets the total cycles
@@ -242,7 +242,7 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// <summary>
     /// Gets or sets the rental period (price for this period)
     /// </summary>
-    public int RentalPricePeriodId { get; set; }
+    public long RentalPricePeriodId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the entity is ship enabled
@@ -267,7 +267,7 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// <summary>
     /// Gets or sets a delivery date identifier
     /// </summary>
-    public int DeliveryDateId { get; set; }
+    public long DeliveryDateId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the product is marked as tax exempt
@@ -277,17 +277,17 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// <summary>
     /// Gets or sets the tax category identifier
     /// </summary>
-    public int TaxCategoryId { get; set; }        
+    public long TaxCategoryId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating how to manage inventory
     /// </summary>
-    public int ManageInventoryMethodId { get; set; }
+    public long ManageInventoryMethodId { get; set; }
 
     /// <summary>
     /// Gets or sets a product availability range identifier
     /// </summary>
-    public int ProductAvailabilityRangeId { get; set; }
+    public long ProductAvailabilityRangeId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether multiple warehouses are used for this product
@@ -297,7 +297,7 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// <summary>
     /// Gets or sets a warehouse identifier
     /// </summary>
-    public int WarehouseId { get; set; }
+    public long WarehouseId { get; set; }
 
     /// <summary>
     /// Gets or sets the stock quantity
@@ -322,7 +322,7 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// <summary>
     /// Gets or sets the low stock activity identifier
     /// </summary>
-    public int LowStockActivityId { get; set; }
+    public long LowStockActivityId { get; set; }
 
     /// <summary>
     /// Gets or sets the quantity when admin should be notified
@@ -332,7 +332,7 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// <summary>
     /// Gets or sets a value backorder mode identifier
     /// </summary>
-    public int BackorderModeId { get; set; }
+    public long BackorderModeId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether to back in stock subscriptions are allowed
@@ -438,7 +438,7 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// <summary>
     /// Gets or sets a unit of product for PAngV (MeasureWeight entity)
     /// </summary>
-    public int BasepriceUnitId { get; set; }
+    public long BasepriceUnitId { get; set; }
 
     /// <summary>
     /// Gets or sets a reference amount for PAngV
@@ -448,7 +448,7 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// <summary>
     /// Gets or sets a reference unit for PAngV (MeasureWeight entity)
     /// </summary>
-    public int BasepriceBaseUnitId { get; set; }
+    public long BasepriceBaseUnitId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether this product is marked as new
@@ -464,24 +464,6 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// Gets or sets the end date and time of the new product (set product as "New" to date). Leave empty to ignore this property
     /// </summary>
     public DateTime? MarkAsNewEndDateTimeUtc { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether this product has tier prices configured
-    /// <remarks>The same as if we run TierPrices.Count > 0
-    /// We use this property for performance optimization:
-    /// if this property is set to false, then we do not need to load tier prices navigation property
-    /// </remarks>
-    /// </summary>
-    public bool HasTierPrices { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether this product has discounts applied
-    /// <remarks>The same as if we run AppliedDiscounts.Count > 0
-    /// We use this property for performance optimization:
-    /// if this property is set to false, then we do not need to load Applied Discounts navigation property
-    /// </remarks>
-    /// </summary>
-    public bool HasDiscountsApplied { get; set; }
 
     /// <summary>
     /// Gets or sets the weight
@@ -539,6 +521,16 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// Gets or sets the date and time of product update
     /// </summary>
     public DateTime UpdatedOnUtc { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether <see cref="MinimumAgeToPurchase"/> should be specified
+    /// </summary>
+    public bool AgeVerification { get; set; }
+
+    /// <summary>
+    /// Gets or sets the minimum age to purchase
+    /// </summary>
+    public int MinimumAgeToPurchase { get; set; }
 
     /// <summary>
     /// Gets or sets the product type

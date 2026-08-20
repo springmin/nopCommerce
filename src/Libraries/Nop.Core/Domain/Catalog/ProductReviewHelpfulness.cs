@@ -8,7 +8,7 @@ public partial class ProductReviewHelpfulness : BaseEntity
     /// <summary>
     /// Gets or sets the product review identifier
     /// </summary>
-    public int ProductReviewId { get; set; }
+    public long ProductReviewId { get; set; }
 
     /// <summary>
     /// A value indicating whether a review a helpful
@@ -18,5 +18,5 @@ public partial class ProductReviewHelpfulness : BaseEntity
     /// <summary>
     /// Gets or sets the customer identifier
     /// </summary>
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 }

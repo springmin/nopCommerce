@@ -3,7 +3,7 @@
 /// <summary>
 /// Search term record (for statistics)
 /// </summary>
-public partial class SearchTerm : BaseEntity
+public partial class SearchTerm : BaseEntity, ISoftDeletedEntity
 {
     /// <summary>
     /// Gets or sets the keyword
@@ -13,10 +13,20 @@ public partial class SearchTerm : BaseEntity
     /// <summary>
     /// Gets or sets the store identifier
     /// </summary>
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 
     /// <summary>
-    /// Gets or sets search count
+    /// Gets or sets the customer identifier
     /// </summary>
-    public int Count { get; set; }
+    public long CustomerId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the date and time of instance creation
+    /// </summary>
+    public DateTime CreatedOnUtc { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the entity has been deleted
+    /// </summary>
+    public bool Deleted { get; set; }
 }

@@ -19,8 +19,8 @@ public partial class TierPriceBuilder : NopEntityBuilder<TierPrice>
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(TierPrice.CustomerRoleId)).AsInt32().Nullable().ForeignKey<CustomerRole>()
-            .WithColumn(nameof(TierPrice.ProductId)).AsInt32().ForeignKey<Product>();
+            .WithColumn(nameof(TierPrice.CustomerRoleId)).AsInt64().Nullable().ForeignKey<CustomerRole>()
+            .WithColumn(nameof(TierPrice.ProductId)).AsInt64().ForeignKey<Product>();
     }
 
     #endregion

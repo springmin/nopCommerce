@@ -108,7 +108,7 @@ public partial class ShippingSettings : ISettings
     /// <summary>
     /// Gets or sets shipping origin address
     /// </summary>
-    public int ShippingOriginAddressId { get; set; }
+    public long ShippingOriginAddressId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether we should return valid options if there are any (no matter of the errors returned by other shipping rate computation methods).
@@ -119,6 +119,16 @@ public partial class ShippingSettings : ISettings
     /// Gets or sets a value indicating whether we should bypass 'select shipping method' page if we have only one shipping method
     /// </summary>
     public bool BypassShippingMethodSelectionIfOnlyOne { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether customers can choose delivery date
+    /// </summary>
+    public bool AllowCustomerToChooseDeliveryDate { get; set; }
+
+    /// <summary>
+    /// Gets or sets the number of days available for delivery date selection
+    /// </summary>
+    public int DeliveryDateRangeDays { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether dimensions are calculated based on cube root of volume

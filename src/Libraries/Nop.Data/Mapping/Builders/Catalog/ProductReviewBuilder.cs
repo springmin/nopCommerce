@@ -20,9 +20,9 @@ public partial class ProductReviewBuilder : NopEntityBuilder<ProductReview>
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(ProductReview.CustomerId)).AsInt32().ForeignKey<Customer>()
-            .WithColumn(nameof(ProductReview.ProductId)).AsInt32().ForeignKey<Product>()
-            .WithColumn(nameof(ProductReview.StoreId)).AsInt32().ForeignKey<Store>();
+            .WithColumn(nameof(ProductReview.CustomerId)).AsInt64().ForeignKey<Customer>()
+            .WithColumn(nameof(ProductReview.ProductId)).AsInt64().ForeignKey<Product>()
+            .WithColumn(nameof(ProductReview.StoreId)).AsInt64().ForeignKey<Store>();
     }
 
     #endregion

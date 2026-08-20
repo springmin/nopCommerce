@@ -19,7 +19,7 @@ public partial class OrderNoteBuilder : NopEntityBuilder<OrderNote>
     {
         table
             .WithColumn(nameof(OrderNote.Note)).AsString(int.MaxValue).NotNullable()
-            .WithColumn(nameof(OrderNote.OrderId)).AsInt32().ForeignKey<Order>();
+            .WithColumn(nameof(OrderNote.OrderId)).AsInt64().ForeignKey<Order>();
     }
 
     #endregion

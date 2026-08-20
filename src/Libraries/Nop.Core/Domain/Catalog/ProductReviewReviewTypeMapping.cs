@@ -10,12 +10,12 @@ public partial class ProductReviewReviewTypeMapping : BaseEntity, ILocalizedEnti
     /// <summary>
     /// Gets or sets the product review identifier
     /// </summary>
-    public int ProductReviewId { get; set; }
+    public long ProductReviewId { get; set; }
 
     /// <summary>
     /// Gets or sets the review type identifier
     /// </summary>
-    public int ReviewTypeId { get; set; }
+    public long ReviewTypeId { get; set; }
 
     /// <summary>
     /// Gets or sets the rating

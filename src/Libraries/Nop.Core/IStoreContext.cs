@@ -5,7 +5,7 @@ namespace Nop.Core;
 /// <summary>
 /// Store context
 /// </summary>
-public interface IStoreContext
+public partial interface IStoreContext
 {
     /// <summary>
     /// Gets the current store
@@ -14,13 +14,8 @@ public interface IStoreContext
     Task<Store> GetCurrentStoreAsync();
 
     /// <summary>
-    /// Gets the current store
-    /// </summary>
-    Store GetCurrentStore();
-
-    /// <summary>
     /// Gets active store scope configuration
     /// </summary>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task<int> GetActiveStoreScopeConfigurationAsync();
+    Task<long> GetActiveStoreScopeConfigurationAsync();
 }

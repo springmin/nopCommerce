@@ -13,5 +13,5 @@ public partial class PictureBinary : BaseEntity
     /// <summary>
     /// Gets or sets the picture identifier
     /// </summary>
-    public int PictureId { get; set; }
+    public long PictureId { get; set; }
 }

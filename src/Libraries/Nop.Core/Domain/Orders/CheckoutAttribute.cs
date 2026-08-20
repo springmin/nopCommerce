@@ -26,7 +26,7 @@ public partial class CheckoutAttribute : BaseAttribute, IStoreMappingSupported
     /// <summary>
     /// Gets or sets the tax category identifier
     /// </summary>
-    public int TaxCategoryId { get; set; }
+    public long TaxCategoryId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the entity is limited/restricted to certain stores

@@ -21,7 +21,7 @@ public abstract partial class BaseAttribute : BaseEntity, ILocalizedEntity
     /// <summary>
     /// Gets or sets the attribute control type identifier
     /// </summary>
-    public int AttributeControlTypeId { get; set; }
+    public long AttributeControlTypeId { get; set; }
 
     /// <summary>
     /// Gets or sets the display order

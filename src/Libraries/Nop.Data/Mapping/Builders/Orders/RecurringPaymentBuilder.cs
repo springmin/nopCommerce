@@ -18,7 +18,7 @@ public partial class RecurringPaymentBuilder : NopEntityBuilder<RecurringPayment
     /// <param name="table">Create table expression builder</param>
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
-        table.WithColumn(nameof(RecurringPayment.InitialOrderId)).AsInt32().ForeignKey<Order>(onDelete: Rule.None);
+        table.WithColumn(nameof(RecurringPayment.InitialOrderId)).AsInt64().ForeignKey<Order>(onDelete: Rule.None);
     }
 
     #endregion

@@ -18,7 +18,7 @@ public partial class StockQuantityHistoryBuilder : NopEntityBuilder<StockQuantit
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(StockQuantityHistory.ProductId)).AsInt32().ForeignKey<Product>();
+            .WithColumn(nameof(StockQuantityHistory.ProductId)).AsInt64().ForeignKey<Product>();
     }
 
     #endregion

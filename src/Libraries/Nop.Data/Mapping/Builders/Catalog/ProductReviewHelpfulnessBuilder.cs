@@ -18,7 +18,7 @@ public partial class ProductReviewHelpfulnessBuilder : NopEntityBuilder<ProductR
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(ProductReviewHelpfulness.ProductReviewId)).AsInt32().ForeignKey<ProductReview>();
+            .WithColumn(nameof(ProductReviewHelpfulness.ProductReviewId)).AsInt64().ForeignKey<ProductReview>();
     }
 
     #endregion

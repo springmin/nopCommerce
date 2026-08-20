@@ -48,11 +48,11 @@ public partial class CustomerRole : BaseEntity
     /// <summary>
     /// Gets or sets identifier of the default tax display type (used only with "OverrideTaxDisplayType" enabled)
     /// </summary>
-    public int DefaultTaxDisplayTypeId { get; set; }
+    public long DefaultTaxDisplayTypeId { get; set; }
 
     /// <summary>
     /// Gets or sets a product identifier that is required by this customer role. 
     /// A customer is added to this customer role once a specified product is purchased.
     /// </summary>
-    public int PurchasedWithProductId { get; set; }
+    public long PurchasedWithProductId { get; set; }
 }

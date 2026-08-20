@@ -18,5 +18,5 @@ public partial class Warehouse : BaseEntity
     /// <summary>
     /// Gets or sets the address identifier of the warehouse
     /// </summary>
-    public int AddressId { get; set; }
+    public long AddressId { get; set; }
 }

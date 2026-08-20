@@ -23,12 +23,17 @@ public partial class Campaign : BaseEntity
     /// <summary>
     /// Gets or sets the store identifier  which subscribers it will be sent to; set 0 for all newsletter subscribers
     /// </summary>
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 
     /// <summary>
     /// Gets or sets the customer role identifier  which subscribers it will be sent to; set 0 for all newsletter subscribers
     /// </summary>
-    public int CustomerRoleId { get; set; }
+    public long CustomerRoleId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the newsletter subscription type identifier  which subscribers it will be sent to; set 0 for all newsletter subscribers
+    /// </summary>
+    public long NewsLetterSubscriptionTypeId { get; set; }
 
     /// <summary>
     /// Gets or sets the date and time of instance creation

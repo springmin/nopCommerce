@@ -28,12 +28,12 @@ public partial class Address : BaseEntity
     /// <summary>
     /// Gets or sets the country identifier
     /// </summary>
-    public int? CountryId { get; set; }
+    public long? CountryId { get; set; }
 
     /// <summary>
     /// Gets or sets the state/province identifier
     /// </summary>
-    public int? StateProvinceId { get; set; }
+    public long? StateProvinceId { get; set; }
 
     /// <summary>
     /// Gets or sets the county

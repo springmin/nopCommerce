@@ -10,7 +10,7 @@ public partial class StateProvince : BaseEntity, ILocalizedEntity
     /// <summary>
     /// Gets or sets the country identifier
     /// </summary>
-    public int CountryId { get; set; }
+    public long CountryId { get; set; }
 
     /// <summary>
     /// Gets or sets the name

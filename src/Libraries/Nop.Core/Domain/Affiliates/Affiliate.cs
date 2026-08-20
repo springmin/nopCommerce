@@ -10,7 +10,7 @@ public partial class Affiliate : BaseEntity, ISoftDeletedEntity
     /// <summary>
     /// Gets or sets the address identifier
     /// </summary>
-    public int AddressId { get; set; }
+    public long AddressId { get; set; }
 
     /// <summary>
     /// Gets or sets the admin comment

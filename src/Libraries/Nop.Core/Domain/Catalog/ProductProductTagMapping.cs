@@ -8,10 +8,10 @@ public partial class ProductProductTagMapping : BaseEntity
     /// <summary>
     /// Gets or sets the product identifier
     /// </summary>
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     /// <summary>
     /// Gets or sets the product tag identifier
     /// </summary>
-    public int ProductTagId { get; set; }
+    public long ProductTagId { get; set; }
 }

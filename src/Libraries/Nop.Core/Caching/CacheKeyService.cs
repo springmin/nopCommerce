@@ -43,7 +43,7 @@ public abstract partial class CacheKeyService : ICacheKeyService
     /// </summary>
     /// <param name="ids">Collection of identifiers</param>
     /// <returns>String hash value</returns>
-    protected virtual string CreateIdsHash(IEnumerable<int> ids)
+    protected virtual string CreateIdsHash(IEnumerable<long> ids)
     {
         var identifiers = ids.ToList();
 
@@ -64,7 +64,7 @@ public abstract partial class CacheKeyService : ICacheKeyService
         return parameter switch
         {
             null => "null",
-            IEnumerable<int> ids => CreateIdsHash(ids),
+            IEnumerable<long> ids => CreateIdsHash(ids),
             IEnumerable<BaseEntity> entities => CreateIdsHash(entities.Select(entity => entity.Id)),
             BaseEntity entity => entity.Id,
             decimal param => param.ToString(CultureInfo.InvariantCulture),
@@ -101,7 +101,7 @@ public abstract partial class CacheKeyService : ICacheKeyService
 
         return key;
     }
-        
+
     #endregion
 
     #region Properties

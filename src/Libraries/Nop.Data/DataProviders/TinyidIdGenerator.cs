@@ -65,21 +65,14 @@ public partial class TinyidIdGenerator : IEntityIdGenerator
     /// Generates the next identifier
     /// </summary>
     /// <returns>The generated identifier</returns>
-    public int NextId()
+    public long NextId()
     {
         lock (_locker)
         {
             if (_currentId >= _segmentEnd)
                 FetchSegment();
 
-            var id = ++_currentId;
-            if (id > int.MaxValue)
-                throw new NopException(
-                    $"Tinyid generated id ({id}) exceeds the Int32 range supported by nopCommerce entities. " +
-                    "All ids are allocated from the nop_tiny_id_info segment table; once Int32 is exhausted " +
-                    "the segment start must be raised (or ids migrated to Int64).");
-
-            return (int)id;
+            return ++_currentId;
         }
     }
 

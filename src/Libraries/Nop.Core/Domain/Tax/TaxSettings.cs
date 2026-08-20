@@ -30,7 +30,7 @@ public partial class TaxSettings : ISettings
     /// <summary>
     /// Gets or sets default address used for tax calculation
     /// </summary>
-    public int DefaultTaxAddressId { get; set; }
+    public long DefaultTaxAddressId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether to display tax suffix
@@ -75,7 +75,7 @@ public partial class TaxSettings : ISettings
     /// <summary>
     /// Gets or sets a default tax category identifier for products
     /// </summary>
-    public int DefaultTaxCategoryId { get; set; }
+    public long DefaultTaxCategoryId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether shipping price is taxable
@@ -90,7 +90,7 @@ public partial class TaxSettings : ISettings
     /// <summary>
     /// Gets or sets a value indicating the shipping tax class identifier
     /// </summary>
-    public int ShippingTaxClassId { get; set; }
+    public long ShippingTaxClassId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether payment method additional fee is taxable
@@ -105,12 +105,17 @@ public partial class TaxSettings : ISettings
     /// <summary>
     /// Gets or sets a value indicating the payment method additional fee tax class identifier
     /// </summary>
-    public int PaymentMethodAdditionalFeeTaxClassId { get; set; }
+    public long PaymentMethodAdditionalFeeTaxClassId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether EU VAT (Europe Union Value Added Tax) is enabled
     /// </summary>
     public bool EuVatEnabled { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether EU VAT (Europe Union Value Added Tax) is required
+    /// </summary>
+    public bool EuVatRequired { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether EU VAT (Europe Union Value Added Tax) for guest customers is enabled
@@ -120,7 +125,7 @@ public partial class TaxSettings : ISettings
     /// <summary>
     /// Gets or sets a shop country identifier
     /// </summary>
-    public int EuVatShopCountryId { get; set; }
+    public long EuVatShopCountryId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether this store will exempt eligible VAT-registered customers from VAT
@@ -146,4 +151,19 @@ public partial class TaxSettings : ISettings
     /// Gets or sets a value indicating whether to log tax providers errors
     /// </summary>
     public bool LogErrors { get; set; }
+
+    /// <summary>
+    /// Gets or sets the HMRC API URL
+    /// </summary>
+    public string HmrcApiUrl { get; set; }
+
+    /// <summary>
+    /// Gets or sets the HMRC API client id
+    /// </summary>
+    public string HmrcClientId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the HMRC API client secret
+    /// </summary>
+    public string HmrcClientSecret { get; set; }
 }

@@ -1,4 +1,5 @@
 ﻿using Nop.Core.Configuration;
+using Nop.Core.Domain.PriceLists;
 
 namespace Nop.Core.Domain.Catalog;
 
@@ -9,9 +10,14 @@ public partial class CatalogSettings : ISettings
 {
     public CatalogSettings()
     {
-        ProductSortingEnumDisabled = new List<int>();
-        ProductSortingEnumDisplayOrder = new Dictionary<int, int>();
+        ProductSortingEnumDisabled = new List<long>();
+        ProductSortingEnumDisplayOrder = new Dictionary<long, int>();
     }
+
+    /// <summary>
+    /// Gets or sets a price list strategy
+    /// </summary>
+    public PriceListStrategy PriceListStrategy { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating details pages of unpublished product details pages could be open (for SEO optimization)
@@ -240,6 +246,16 @@ public partial class CatalogSettings : ISettings
     public int ProductSearchTermMinimumLength { get; set; }
 
     /// <summary>
+    /// Gets or sets a value indicating whether to display the search term history in the autocomplete list of the search box
+    /// </summary>
+    public bool ShowSearchTermHistory { get; set; }
+
+    /// <summary>
+    /// Gets or sets the maximum number of search term history items to display
+    /// </summary>
+    public int NumberOfSearchTermHistoryItems { get; set; }
+
+    /// <summary>
     /// Gets or sets a value indicating whether to show bestsellers on home page
     /// </summary>
     public bool ShowBestsellersOnHomepage { get; set; }
@@ -248,6 +264,11 @@ public partial class CatalogSettings : ISettings
     /// Gets or sets a number of bestsellers on home page
     /// </summary>
     public int NumberOfBestsellersOnHomepage { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the category dropdown is displayed with the search box
+    /// </summary>
+    public bool ShowSearchBoxCategories { get; set; }
 
     /// <summary>
     /// Gets or sets a number of products per page on the search products page
@@ -452,12 +473,12 @@ public partial class CatalogSettings : ISettings
     /// <summary>
     /// Gets or sets a list of disabled values of ProductSortingEnum
     /// </summary>
-    public List<int> ProductSortingEnumDisabled { get; set; }
+    public List<long> ProductSortingEnumDisabled { get; set; }
 
     /// <summary>
     /// Gets or sets a display order of ProductSortingEnum values 
     /// </summary>
-    public Dictionary<int, int> ProductSortingEnumDisplayOrder { get; set; }
+    public Dictionary<long, int> ProductSortingEnumDisplayOrder { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the products need to be exported/imported with their attributes
@@ -470,9 +491,19 @@ public partial class CatalogSettings : ISettings
     public bool ExportImportProductUseLimitedToStores { get; set; }
 
     /// <summary>
+    /// Gets or sets a value indicating whether need to use "limited to stores" property for exported/imported categories
+    /// </summary>
+    public bool ExportImportCategoryUseLimitedToStores { get; set; }
+
+    /// <summary>
     /// Gets or sets a value indicating whether the products need to be exported/imported with their specification attributes
     /// </summary>
     public bool ExportImportProductSpecificationAttributes { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the products need to be exported/imported with their tier prices
+    /// </summary>
+    public bool ExportImportTierPrices { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether need create dropdown list for export
@@ -525,12 +556,7 @@ public partial class CatalogSettings : ISettings
     public bool DisplayDatePreOrderAvailability { get; set; }
 
     /// <summary>
-    /// Get or set a value indicating whether use standart menu in public store or use Ajax to load menu
-    /// </summary>
-    public bool UseAjaxLoadMenu { get; set; }
-
-    /// <summary>
-    /// Get or set a value indicating whether use standart or AJAX products loading (applicable to 'paging', 'filtering', 'view modes') in catalog
+    /// Get or set a value indicating whether to use standard or AJAX products loading (applicable to 'paging', 'filtering', 'view modes') in catalog
     /// </summary>
     public bool UseAjaxCatalogProductsLoading { get; set; }
 
@@ -578,10 +604,20 @@ public partial class CatalogSettings : ISettings
     /// Gets or sets the identifier of product URL structure type (e.g. '/category-seo-name/product-seo-name' or '/product-seo-name')
     /// </summary>
     /// <remarks>We have ProductUrlStructureType enum, but we use int value here so that it can be overridden in third-party plugins</remarks>
-    public int ProductUrlStructureTypeId { get; set; }
+    public long ProductUrlStructureTypeId { get; set; }
 
     /// <summary>
     /// Gets or sets an system name of active search provider
     /// </summary>
     public string ActiveSearchProviderSystemName { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether standard search will be used when the search provider throws an exception
+    /// </summary>
+    public bool UseStandardSearchWhenSearchProviderThrowsException { get; set; }
+
+    /// <summary>
+    /// Gets or sets a number of reviews per page on vendor reviews page
+    /// </summary>
+    public int VendorProductReviewsPageSize { get; set; }
 }

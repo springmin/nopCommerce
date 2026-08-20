@@ -8,7 +8,7 @@ public partial class BlogComment : BaseEntity
     /// <summary>
     /// Gets or sets the customer identifier
     /// </summary>
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     /// <summary>
     /// Gets or sets the comment text
@@ -23,12 +23,12 @@ public partial class BlogComment : BaseEntity
     /// <summary>
     /// Gets or sets the store identifier
     /// </summary>
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 
     /// <summary>
     /// Gets or sets the blog post identifier
     /// </summary>
-    public int BlogPostId { get; set; }
+    public long BlogPostId { get; set; }
 
     /// <summary>
     /// Gets or sets the date and time of instance creation

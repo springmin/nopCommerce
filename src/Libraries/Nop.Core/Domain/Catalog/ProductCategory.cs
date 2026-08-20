@@ -8,12 +8,12 @@ public partial class ProductCategory : BaseEntity
     /// <summary>
     /// Gets or sets the product identifier
     /// </summary>
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     /// <summary>
     /// Gets or sets the category identifier
     /// </summary>
-    public int CategoryId { get; set; }
+    public long CategoryId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the product is featured

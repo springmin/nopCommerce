@@ -8,12 +8,12 @@ public partial class ShipmentItem : BaseEntity
     /// <summary>
     /// Gets or sets the shipment identifier
     /// </summary>
-    public int ShipmentId { get; set; }
+    public long ShipmentId { get; set; }
 
     /// <summary>
     /// Gets or sets the order item identifier
     /// </summary>
-    public int OrderItemId { get; set; }
+    public long OrderItemId { get; set; }
 
     /// <summary>
     /// Gets or sets the quantity
@@ -23,5 +23,5 @@ public partial class ShipmentItem : BaseEntity
     /// <summary>
     /// Gets or sets the warehouse identifier
     /// </summary>
-    public int WarehouseId { get; set; }
+    public long WarehouseId { get; set; }
 }

@@ -8,10 +8,10 @@ public partial class ShippingMethodCountryMapping : BaseEntity
     /// <summary>
     /// Gets or sets the shipping method identifier
     /// </summary>
-    public int ShippingMethodId { get; set; }
+    public long ShippingMethodId { get; set; }
 
     /// <summary>
     /// Gets or sets the country identifier
     /// </summary>
-    public int CountryId { get; set; }
+    public long CountryId { get; set; }
 }

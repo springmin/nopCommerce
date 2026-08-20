@@ -8,7 +8,7 @@ public partial class PictureHashItem : IComparable, IComparable<PictureHashItem>
     /// <summary>
     /// Gets or sets the picture ID
     /// </summary>
-    public int PictureId { get; set; }
+    public long PictureId { get; set; }
 
     /// <summary>
     /// Gets or sets the picture hash

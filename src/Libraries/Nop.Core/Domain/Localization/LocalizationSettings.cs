@@ -10,7 +10,7 @@ public partial class LocalizationSettings : ISettings
     /// <summary>
     /// Default admin area language identifier
     /// </summary>
-    public int DefaultAdminLanguageId { get; set; }
+    public long DefaultAdminLanguageId { get; set; }
 
     /// <summary>
     /// Use images for language selection

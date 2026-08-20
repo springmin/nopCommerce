@@ -22,8 +22,8 @@ public partial class ActivityLogBuilder : NopEntityBuilder<ActivityLog>
             .WithColumn(nameof(ActivityLog.Comment)).AsString(int.MaxValue).NotNullable()
             .WithColumn(nameof(ActivityLog.IpAddress)).AsString(100).Nullable()
             .WithColumn(nameof(ActivityLog.EntityName)).AsString(400).Nullable()
-            .WithColumn(nameof(ActivityLog.ActivityLogTypeId)).AsInt32().ForeignKey<ActivityLogType>()
-            .WithColumn(nameof(ActivityLog.CustomerId)).AsInt32().ForeignKey<Customer>();
+            .WithColumn(nameof(ActivityLog.ActivityLogTypeId)).AsInt64().ForeignKey<ActivityLogType>()
+            .WithColumn(nameof(ActivityLog.CustomerId)).AsInt64().ForeignKey<Customer>();
     }
 
     #endregion

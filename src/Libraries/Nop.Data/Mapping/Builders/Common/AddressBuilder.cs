@@ -20,8 +20,8 @@ public partial class AddressBuilder : NopEntityBuilder<Address>
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(Address.CountryId)).AsInt32().Nullable().ForeignKey<Country>(onDelete: Rule.None)
-            .WithColumn(nameof(Address.StateProvinceId)).AsInt32().Nullable().ForeignKey<StateProvince>(onDelete: Rule.None);
+            .WithColumn(nameof(Address.CountryId)).AsInt64().Nullable().ForeignKey<Country>(onDelete: Rule.None)
+            .WithColumn(nameof(Address.StateProvinceId)).AsInt64().Nullable().ForeignKey<StateProvince>(onDelete: Rule.None);
     }
 
     #endregion

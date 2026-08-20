@@ -70,7 +70,7 @@ public partial class RewardPointsSettings : ISettings
     /// <summary>
     /// Gets or sets the period of activation delay
     /// </summary>
-    public int ActivationDelayPeriodId { get; set; }
+    public long ActivationDelayPeriodId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether "You will earn" message should be displayed

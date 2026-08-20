@@ -13,12 +13,12 @@ public partial class OrderItem : BaseEntity
     /// <summary>
     /// Gets or sets the order identifier
     /// </summary>
-    public int OrderId { get; set; }
+    public long OrderId { get; set; }
 
     /// <summary>
     /// Gets or sets the product identifier
     /// </summary>
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     /// <summary>
     /// Gets or sets the quantity
@@ -83,7 +83,7 @@ public partial class OrderItem : BaseEntity
     /// <summary>
     /// Gets or sets a license download identifier (in case this is a downloadable product)
     /// </summary>
-    public int? LicenseDownloadId { get; set; }
+    public long? LicenseDownloadId { get; set; }
 
     /// <summary>
     /// Gets or sets the total weight of one item

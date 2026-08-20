@@ -10,12 +10,12 @@ public partial class GiftCard : BaseEntity
     /// <summary>
     /// Gets or sets the associated order item identifier
     /// </summary>
-    public int? PurchasedWithOrderItemId { get; set; }
+    public long? PurchasedWithOrderItemId { get; set; }
 
     /// <summary>
     /// Gets or sets the gift card type identifier
     /// </summary>
-    public int GiftCardTypeId { get; set; }
+    public long GiftCardTypeId { get; set; }
 
     /// <summary>
     /// Gets or sets the amount
