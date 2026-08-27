@@ -9,7 +9,7 @@
     <PackageProjectUrl>https://www.nopcommerce.com/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/nopSolutions/nopCommerce</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
-    <OutputPath>$(SolutionDir)/Presentation/Nop.Web/Plugins/Pickup.PickupInStore</OutputPath>
+    <OutputPath>$(SolutionDir)/Presentation/Nop.Web/Plugins/Widgets.Swiper</OutputPath>
     <OutDir>$(OutputPath)</OutDir>
     <!--Set this parameter to true to get the dlls copied from the NuGet cache to the output of your project.
     You need to set this parameter to true if your plugin has a nuget package 
@@ -19,32 +19,58 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Scripts/**" />
+    <EmbeddedResource Remove="Scripts/**" />
+    <None Remove="Scripts/**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Content/css/styles.css" />
+    <None Remove="Content/css/swiper-bundle.min.css" />
+    <None Remove="Content/js/swiper-bundle.min.js" />
+    <None Remove="Content/sample-images/banner_01.webp" />
+    <None Remove="Content/sample-images/banner_02.webp" />
     <None Remove="logo.png" />
     <None Remove="plugin.json" />
     <None Remove="Views/Configure.cshtml" />
-    <None Remove="Views/Create.cshtml" />
-    <None Remove="Views/Edit.cshtml" />
-    <None Remove="Views/_CreateOrUpdate.cshtml" />
+    <None Remove="Views/PublicInfo.cshtml" />
+    <None Remove="Views/_Configure.AddSlide.cshtml" />
+    <None Remove="Views/_PublicInfo.Slide.cshtml" />
     <None Remove="Views/_ViewImports.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Content/css/styles.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content/css/swiper-bundle.min.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content/js/swiper-bundle.min.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content/sample-images/banner_01.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content/sample-images/banner_02.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="logo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="plugin.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Views/_Configure.AddSlide.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Views/Configure.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Views/Create.cshtml">
+    <Content Include="Views/PublicInfo.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Views/Edit.cshtml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Views/_CreateOrUpdate.cshtml">
+    <Content Include="Views/_PublicInfo.Slide.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Views/_ViewImports.cshtml">
@@ -53,7 +79,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="$(SolutionDir)/Presentation/Nop.Web.Framework/Nop.Web.Framework.csproj" />
+    <ProjectReference Include="$(SolutionDir)/Presentation/Nop.Web/Nop.Web.csproj" />
     <ClearPluginAssemblies Include="$(SolutionDir)/Build/ClearPluginAssemblies.proj" />
   </ItemGroup>
 
