@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿using AwesomeAssertions;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Directory;
@@ -103,8 +103,6 @@ public class PriceCalculationServiceTests : ServiceTest
         foreach (var tierPrice in tierPrices)
             await _productService.InsertTierPriceAsync(tierPrice);
 
-        product.HasTierPrices = true;
-
         var (rezWithoutDiscount1, rez1, _, _) = await _priceCalcService.GetFinalPriceAsync(product, customer, store, 0, false);
         var (rezWithoutDiscount2, rez2, _, _) = await _priceCalcService.GetFinalPriceAsync(product, customer, store, 0, false, 2);
         var (rezWithoutDiscount3, rez3, _, _) = await _priceCalcService.GetFinalPriceAsync(product, customer, store, 0, false, 3);
@@ -161,9 +159,6 @@ public class PriceCalculationServiceTests : ServiceTest
         await _productService.InsertDiscountProductMappingAsync(mapping);
         await _customerService.ApplyDiscountCouponCodeAsync(customer, "123");
 
-        //set HasDiscountsApplied property
-        product.HasDiscountsApplied = true;
-
         var (finalPriceWithoutDiscounts, finalPrice, _, _) = await _priceCalcService.GetFinalPriceAsync(product, customer, store);
 
         await _productService.DeleteDiscountProductMappingAsync(mapping);
@@ -211,7 +206,9 @@ public class PriceCalculationServiceTests : ServiceTest
     [TestCase(12.00, 12.00, RoundingType.Rounding1Up)]
     public void CanRound(decimal valueToRounding, decimal roundedValue, RoundingType roundingType)
     {
-        _priceCalcService.Round(valueToRounding, roundingType).Should().Be(roundedValue);
+        //the expected values come from double literals converted to decimal, and
+        //Math.Round is exact since .NET 11, so compare with a small tolerance
+        _priceCalcService.Round(valueToRounding, roundingType).Should().BeApproximately(roundedValue, 0.000001m);
     }
 
     #endregion

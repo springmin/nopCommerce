@@ -330,7 +330,9 @@ public partial class ShippingService : IShippingService
             }
 
             //set dimensions as cube root of volume
-            width = length = height = Convert.ToDecimal(Math.Pow(Convert.ToDouble(totalVolume), 1.0 / 3.0));
+            //(round to 4 decimal places: Math.Pow works in double and can produce
+            //values like 3.9999999999999996 for a perfect cube, e.g. 64 ^ (1/3))
+            width = length = height = Math.Round(Convert.ToDecimal(Math.Pow(Convert.ToDouble(totalVolume), 1.0 / 3.0)), 4);
 
             //sometimes we have products with sizes like 1x1x20
             //that's why let's ensure that a maximum dimension is always preserved

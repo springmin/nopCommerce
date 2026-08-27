@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿using AwesomeAssertions;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Discounts;
@@ -21,7 +21,6 @@ using NUnit.Framework;
 namespace Nop.Tests.Nop.Services.Tests.Orders;
 
 [TestFixture]
-//[Ignore("This test leads the Stack Overflow Exception")]
 public class OrderTotalCalculationServiceTests : ServiceTest
 {
     private IOrderTotalCalculationService _orderTotalCalcService;
@@ -52,9 +51,7 @@ public class OrderTotalCalculationServiceTests : ServiceTest
             Name = "Product name 1",
             Price = productPrice,
             CustomerEntersPrice = false,
-            Published = true,
-            //set HasTierPrices property
-            HasTierPrices = true
+            Published = true
         };
 
         await _productService.InsertProductAsync(product);
@@ -87,16 +84,14 @@ public class OrderTotalCalculationServiceTests : ServiceTest
 
         var cart = new List<ShoppingCartItem> { sci1, sci2 };
         foreach (var sci in cart)
-        {
             sci.CustomerId = _customer.Id;
-        }
 
         return cart;
     }
 
     #endregion
 
-    [OneTimeSetUp]
+    [SetUp]
     public async Task SetUp()
     {
         _settingService = GetService<ISettingService>();
@@ -141,23 +136,21 @@ public class OrderTotalCalculationServiceTests : ServiceTest
         _customer = await _customerService.GetCustomerByEmailAsync(NopTestsDefaults.AdminEmail);
         _store = (await _storeService.GetAllStoresAsync()).First();
 
-        await GetService<IGenericAttributeService>().SaveAttributeAsync(_customer,
+        await _genericAttributeService.SaveAttributeAsync(_customer,
             NopCustomerDefaults.SelectedPaymentMethodAttribute, "Payments.TestMethod", 1);
     }
 
-    [OneTimeTearDown]
+    [TearDown]
     public async Task TearDown()
     {
-        var settingService = GetService<ISettingService>();
-
         var shippingSettings = GetService<ShippingSettings>();
         shippingSettings.ActiveShippingRateComputationMethodSystemNames.Clear();
 
         _taxSettings.PaymentMethodAdditionalFeeIsTaxable = false;
         _taxSettings.ActiveTaxProviderSystemName = string.Empty;
         _taxSettings.ShippingIsTaxable = false;
-        await settingService.SaveSettingAsync(shippingSettings);
-        await settingService.SaveSettingAsync(_taxSettings);
+        await _settingService.SaveSettingAsync(shippingSettings);
+        await _settingService.SaveSettingAsync(_taxSettings);
 
         var product = await _productService.GetProductBySkuAsync("FR_451_RB");
         product.AdditionalShippingCharge = 0M;
@@ -361,11 +354,11 @@ public class OrderTotalCalculationServiceTests : ServiceTest
         var role = await _customerService.GetCustomerRoleBySystemNameAsync(NopCustomerDefaults.AdministratorsRoleName);
         role.FreeShipping = true;
         await _customerService.UpdateCustomerRoleAsync(role);
-        var isFreeShipping = await _orderTotalCalcService.IsFreeShippingAsync(await GetShoppingCartAsync());
         product.IsFreeShipping = true;
         await _productService.UpdateProductAsync(product);
         role.FreeShipping = false;
         await _customerService.UpdateCustomerRoleAsync(role);
+        var isFreeShipping = await _orderTotalCalcService.IsFreeShippingAsync(await GetShoppingCartAsync());
         isFreeShipping.Should().BeTrue();
     }
 
@@ -644,7 +637,9 @@ public class OrderTotalCalculationServiceTests : ServiceTest
         var (resultPrice, _, _) = await GetService<IShoppingCartService>().GetUnitPriceAsync(shoppingCartItem, true);
 
         // assert
-        resultPrice.Should().Be(expectedPrice);
+        //the expected values come from double literals converted to decimal, and
+        //Math.Round is exact since .NET 11, so compare with a small tolerance
+        resultPrice.Should().BeApproximately(expectedPrice, 0.000001m);
     }
 
     [Test]
@@ -664,7 +659,9 @@ public class OrderTotalCalculationServiceTests : ServiceTest
         var (resultPrice, _, _) = await GetService<IShoppingCartService>().GetUnitPriceAsync(shoppingCartItem, true);
 
         // assert
-        resultPrice.Should().Be(expectedPrice);
+        //the expected values come from double literals converted to decimal, and
+        //Math.Round is exact since .NET 11, so compare with a small tolerance
+        resultPrice.Should().BeApproximately(expectedPrice, 0.000001m);
     }
 
     [Test]
@@ -724,7 +721,6 @@ public class OrderTotalCalculationServiceTests : ServiceTest
         _rewardPointsSettings.MinimumRewardPointsToUse = 0;
 
         await _settingService.SaveSettingAsync(_rewardPointsSettings);
-        //var orderTotalCalculationService = GetService<IOrderTotalCalculationService>();
 
         GetService<IOrderTotalCalculationService>().CheckMinimumRewardPointsToUseRequirement(0).Should().BeTrue();
         GetService<IOrderTotalCalculationService>().CheckMinimumRewardPointsToUseRequirement(1).Should().BeTrue();
