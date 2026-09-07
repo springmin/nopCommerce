@@ -48,7 +48,7 @@ public partial class RewardPointService : IRewardPointService
     /// A task that represents the asynchronous operation
     /// The task result contains the query to load reward points history
     /// </returns>
-    protected virtual async Task<IQueryable<RewardPointsHistory>> GetRewardPointsQueryAsync(int customerId, int? storeId, bool showNotActivated = false)
+    protected virtual async Task<IQueryable<RewardPointsHistory>> GetRewardPointsQueryAsync(long customerId, long? storeId, bool showNotActivated = false)
     {
         var query = _rewardPointsHistoryRepository.Table;
 
@@ -151,7 +151,7 @@ public partial class RewardPointService : IRewardPointService
     /// A task that represents the asynchronous operation
     /// The task result contains the reward point history records
     /// </returns>
-    public virtual async Task<IPagedList<RewardPointsHistory>> GetRewardPointsHistoryAsync(int customerId = 0, int? storeId = null,
+    public virtual async Task<IPagedList<RewardPointsHistory>> GetRewardPointsHistoryAsync(long customerId = 0, long? storeId = null,
         bool showNotActivated = false, Guid? orderGuid = null, int pageIndex = 0, int pageSize = int.MaxValue)
     {
         var query = await GetRewardPointsQueryAsync(customerId, storeId, showNotActivated);
@@ -175,7 +175,7 @@ public partial class RewardPointService : IRewardPointService
     /// A task that represents the asynchronous operation
     /// The task result contains the balance
     /// </returns>
-    public virtual async Task<int> GetRewardPointsBalanceAsync(int customerId, int storeId)
+    public virtual async Task<int> GetRewardPointsBalanceAsync(long customerId, long storeId)
     {
         var query = (await GetRewardPointsQueryAsync(customerId, storeId))
             .OrderByDescending(historyEntry => historyEntry.CreatedOnUtc).ThenByDescending(historyEntry => historyEntry.Id);
@@ -199,7 +199,7 @@ public partial class RewardPointService : IRewardPointService
     /// A task that represents the asynchronous operation
     /// The task result contains the reward points history entry identifier
     /// </returns>
-    public virtual async Task<int> AddRewardPointsHistoryEntryAsync(Customer customer, int points, int storeId, string message = "",
+    public virtual async Task<long> AddRewardPointsHistoryEntryAsync(Customer customer, int points, long storeId, string message = "",
         Order usedWithOrder = null, decimal usedAmount = 0M, DateTime? activatingDate = null, DateTime? endDate = null)
     {
         ArgumentNullException.ThrowIfNull(customer);
@@ -255,7 +255,7 @@ public partial class RewardPointService : IRewardPointService
     /// A task that represents the asynchronous operation
     /// The task result contains the reward point history entry
     /// </returns>
-    public virtual async Task<RewardPointsHistory> GetRewardPointsHistoryEntryByIdAsync(int rewardPointsHistoryId)
+    public virtual async Task<RewardPointsHistory> GetRewardPointsHistoryEntryByIdAsync(long rewardPointsHistoryId)
     {
         return await _rewardPointsHistoryRepository.GetByIdAsync(rewardPointsHistoryId);
     }

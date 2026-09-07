@@ -68,7 +68,7 @@ public partial interface IShippingService
     /// The task result contains the shipment packages (requests). Value indicating whether shipping is done from multiple locations (warehouses)
     /// </returns>
     Task<(IList<GetShippingOptionRequest> shipmentPackages, bool shippingFromMultipleLocations)> CreateShippingOptionRequestsAsync(IList<ShoppingCartItem> cart,
-        Address shippingAddress, int storeId);
+        Address shippingAddress, long storeId);
 
     /// <summary>
     ///  Gets available shipping options
@@ -83,7 +83,7 @@ public partial interface IShippingService
     /// The task result contains the shipping options
     /// </returns>
     Task<GetShippingOptionResponse> GetShippingOptionsAsync(IList<ShoppingCartItem> cart, Address shippingAddress,
-        Customer customer = null, string allowedShippingRateComputationMethodSystemName = "", int storeId = 0);
+        Customer customer = null, string allowedShippingRateComputationMethodSystemName = "", long storeId = 0);
 
     /// <summary>
     /// Gets available pickup points
@@ -98,7 +98,7 @@ public partial interface IShippingService
     /// The task result contains the pickup points
     /// </returns>
     Task<GetPickupPointsResponse> GetPickupPointsAsync(IList<ShoppingCartItem> cart, Address address,
-        Customer customer = null, string providerSystemName = null, int storeId = 0);
+        Customer customer = null, string providerSystemName = null, long storeId = 0);
 
     /// <summary>
     /// Whether the shopping cart item is ship enabled

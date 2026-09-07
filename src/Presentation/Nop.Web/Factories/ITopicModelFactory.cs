@@ -36,5 +36,5 @@ public partial interface ITopicModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the view path
     /// </returns>
-    Task<string> PrepareTemplateViewPathAsync(int topicTemplateId);
+    Task<string> PrepareTemplateViewPathAsync(long topicTemplateId);
 }

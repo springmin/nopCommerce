@@ -149,7 +149,7 @@ public partial class PriceListController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.PRICE_LISTS_VIEW)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         //try to get a price list with the specified id
         var priceList = await _priceListService.GetPriceListByIdAsync(id);
@@ -227,7 +227,7 @@ public partial class PriceListController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.PRICE_LISTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get a price list with the specified id
         var priceList = await _priceListService.GetPriceListByIdAsync(id);
@@ -264,7 +264,7 @@ public partial class PriceListController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.PRICE_LISTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ProductDelete(int id)
+    public virtual async Task<IActionResult> ProductDelete(long id)
     {
         //try to get a price list item with the specified id
         var priceListItem = await _priceListService.GetPriceListItemByIdAsync(id)
@@ -292,7 +292,7 @@ public partial class PriceListController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.PRICE_LISTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ProductAddPopup(int priceListId)
+    public virtual async Task<IActionResult> ProductAddPopup(long priceListId)
     {
         //prepare model
         var model = await _priceListModelFactory.PrepareAddProductToPriceListSearchModelAsync(new AddProductToPriceListSearchModel());
@@ -359,7 +359,7 @@ public partial class PriceListController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.PRICE_LISTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> CustomerDelete(int id)
+    public virtual async Task<IActionResult> CustomerDelete(long id)
     {
         //try to get a price list item with the specified id
         var priceListCustomer = await _priceListService.GetPriceListCustomerByIdAsync(id)
@@ -371,7 +371,7 @@ public partial class PriceListController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.PRICE_LISTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> CustomerAddPopup(int priceListId)
+    public virtual async Task<IActionResult> CustomerAddPopup(long priceListId)
     {
         //prepare model
         var model = await _priceListModelFactory.PrepareAddCustomerToPriceListSearchModelAsync(new AddCustomerToPriceListSearchModel());
@@ -460,7 +460,7 @@ public partial class PriceListController : BaseAdminController
         {
             var ids = selectedIds
                 .Split(_separator, StringSplitOptions.RemoveEmptyEntries)
-                .Select(x => Convert.ToInt32(x))
+                .Select(x => Convert.ToInt64(x))
                 .ToArray();
             priceLists.AddRange(await _priceListService.GetPriceListsByIdsAsync(ids));
         }

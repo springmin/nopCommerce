@@ -57,12 +57,12 @@ public partial class MetaTagsGeneratingEvent : IStopProcessingEvent
     /// <summary>
     /// Gets or sets the entity identifier to which generating meta tags
     /// </summary>
-    public int EntityId { get; set; }
+    public long EntityId { get; set; }
 
     /// <summary>
     /// Gets or sets the language identifier to which generating meta tags
     /// </summary>
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     /// <summary>
     /// Gets or sets the language name to which generating meta tags

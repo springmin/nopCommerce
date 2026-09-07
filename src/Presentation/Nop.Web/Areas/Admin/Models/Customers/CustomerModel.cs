@@ -19,10 +19,10 @@ public partial record CustomerModel : BaseNopEntityModel, IAclSupportedModel
         SendEmail = new SendEmailModel() { SendImmediately = true };
         SendPm = new SendPmModel();
 
-        SelectedCustomerRoleIds = new List<int>();
+        SelectedCustomerRoleIds = new List<long>();
         AvailableCustomerRoles = new List<SelectListItem>();
 
-        SelectedPriceListIds = new List<int>();
+        SelectedPriceListIds = new List<long>();
         AvailablePriceLists = new List<SelectListItem>();
 
         AvailableCountries = new List<SelectListItem>();
@@ -57,7 +57,7 @@ public partial record CustomerModel : BaseNopEntityModel, IAclSupportedModel
     public string Password { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.Customers.Fields.Vendor")]
-    public int VendorId { get; set; }
+    public long VendorId { get; set; }
 
     public IList<SelectListItem> AvailableVendors { get; set; }
 
@@ -119,14 +119,14 @@ public partial record CustomerModel : BaseNopEntityModel, IAclSupportedModel
     public bool CountryEnabled { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.Customers.Fields.Country")]
-    public int CountryId { get; set; }
+    public long CountryId { get; set; }
 
     public IList<SelectListItem> AvailableCountries { get; set; }
 
     public bool StateProvinceEnabled { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.Customers.Fields.StateProvince")]
-    public int StateProvinceId { get; set; }
+    public long StateProvinceId { get; set; }
 
     public IList<SelectListItem> AvailableStates { get; set; }
 
@@ -160,7 +160,7 @@ public partial record CustomerModel : BaseNopEntityModel, IAclSupportedModel
     public bool Active { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.Customers.Fields.Affiliate")]
-    public int AffiliateId { get; set; }
+    public long AffiliateId { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.Customers.Fields.Affiliate")]
     public string AffiliateName { get; set; }
@@ -204,13 +204,13 @@ public partial record CustomerModel : BaseNopEntityModel, IAclSupportedModel
     public IList<SelectListItem> AvailableCustomerRoles { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.Customers.Fields.CustomerRoles")]
-    public IList<int> SelectedCustomerRoleIds { get; set; }
+    public IList<long> SelectedCustomerRoleIds { get; set; }
 
     //price lists
     public IList<SelectListItem> AvailablePriceLists { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.Customers.Fields.PriceLists")]
-    public IList<int> SelectedPriceListIds { get; set; }
+    public IList<long> SelectedPriceListIds { get; set; }
 
     //binding with multi-factor authentication provider
     [NopResourceDisplayName("Admin.Customers.Customers.Fields.MultiFactorAuthenticationProvider")]

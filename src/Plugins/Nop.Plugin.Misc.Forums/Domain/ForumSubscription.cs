@@ -15,17 +15,17 @@ public class ForumSubscription : BaseEntity
     /// <summary>
     /// Gets or sets the customer identifier
     /// </summary>
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     /// <summary>
     /// Gets or sets the forum identifier
     /// </summary>
-    public int ForumId { get; set; }
+    public long ForumId { get; set; }
 
     /// <summary>
     /// Gets or sets the topic identifier
     /// </summary>
-    public int TopicId { get; set; }
+    public long TopicId { get; set; }
 
     /// <summary>
     /// Gets or sets the date and time of instance creation

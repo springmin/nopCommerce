@@ -19,7 +19,7 @@ public partial class VendorNoteBuilder : NopEntityBuilder<VendorNote>
     {
         table
             .WithColumn(nameof(VendorNote.Note)).AsString(int.MaxValue).NotNullable()
-            .WithColumn(nameof(VendorNote.VendorId)).AsInt32().ForeignKey<Vendor>();
+            .WithColumn(nameof(VendorNote.VendorId)).AsInt64().ForeignKey<Vendor>();
     }
 
     #endregion

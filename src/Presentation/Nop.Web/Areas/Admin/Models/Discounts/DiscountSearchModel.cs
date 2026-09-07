@@ -30,7 +30,7 @@ public partial record DiscountSearchModel : BaseSearchModel
     public string SearchDiscountName { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.Discounts.List.SearchDiscountType")]
-    public int SearchDiscountTypeId { get; set; }
+    public long SearchDiscountTypeId { get; set; }
 
     public IList<SelectListItem> AvailableDiscountTypes { get; set; }
 
@@ -43,11 +43,11 @@ public partial record DiscountSearchModel : BaseSearchModel
     public DateTime? SearchEndDate { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.Discounts.List.IsActive")]
-    public int IsActiveId { get; set; }
+    public long IsActiveId { get; set; }
     public IList<SelectListItem> AvailableActiveOptions { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.Discounts.List.SearchVendor")]
-    public int SearchVendorId { get; set; }
+    public long SearchVendorId { get; set; }
     public IList<SelectListItem> AvailableVendors { get; set; }
 
     public bool IsLoggedInAsVendor { get; set; }

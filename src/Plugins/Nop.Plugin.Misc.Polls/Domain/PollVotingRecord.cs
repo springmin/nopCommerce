@@ -10,12 +10,12 @@ public class PollVotingRecord : BaseEntity
     /// <summary>
     /// Gets or sets the poll answer identifier
     /// </summary>
-    public int PollAnswerId { get; set; }
+    public long PollAnswerId { get; set; }
 
     /// <summary>
     /// Gets or sets the customer identifier
     /// </summary>
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     /// <summary>
     /// Gets or sets the date and time of instance creation

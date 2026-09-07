@@ -4,6 +4,6 @@ namespace Nop.Web.Models.Directory;
 
 public partial record StateProvinceModel : BaseNopModel
 {
-    public int id { get; set; }
+    public long id { get; set; }
     public string name { get; set; }
 }

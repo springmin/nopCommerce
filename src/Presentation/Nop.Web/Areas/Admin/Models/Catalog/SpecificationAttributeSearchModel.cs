@@ -10,7 +10,7 @@ public partial record SpecificationAttributeSearchModel : BaseSearchModel
 {
     #region Properties
 
-    public int SpecificationAttributeGroupId { get; set; }
+    public long SpecificationAttributeGroupId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Attributes.SpecificationAttributes.List.SearchName")]
     public string AttributeName { get; set; }

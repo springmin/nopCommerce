@@ -21,7 +21,7 @@ public partial class CompatibleWithFilterLevelValuesViewComponent : NopViewCompo
         _filterLevelValueService = filterLevelValueService;
     }
 
-    public async Task<IViewComponentResult> InvokeAsync(int productId)
+    public async Task<IViewComponentResult> InvokeAsync(long productId)
     {
         if (_filterLevelSettings.FilterLevelEnabled && _filterLevelSettings.DisplayOnProductDetailsPage)
         {

@@ -8,7 +8,7 @@ public partial class StoreMapping : BaseEntity
     /// <summary>
     /// Gets or sets the entity identifier
     /// </summary>
-    public int EntityId { get; set; }
+    public long EntityId { get; set; }
 
     /// <summary>
     /// Gets or sets the entity name
@@ -18,5 +18,5 @@ public partial class StoreMapping : BaseEntity
     /// <summary>
     /// Gets or sets the store identifier
     /// </summary>
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 }

@@ -26,7 +26,7 @@ public partial interface IDiscountService
     /// A task that represents the asynchronous operation
     /// The task result contains the discount
     /// </returns>
-    Task<Discount> GetDiscountByIdAsync(int discountId);
+    Task<Discount> GetDiscountByIdAsync(long discountId);
 
     /// <summary>
     /// Gets all discounts
@@ -45,7 +45,7 @@ public partial interface IDiscountService
     /// </returns>
     Task<IList<Discount>> GetAllDiscountsAsync(DiscountType? discountType = null,
         string couponCode = null, string discountName = null, bool showHidden = false,
-        DateTime? startDateUtc = null, DateTime? endDateUtc = null, bool? isActive = true, int vendorId = 0);
+        DateTime? startDateUtc = null, DateTime? endDateUtc = null, bool? isActive = true, long vendorId = 0);
 
     /// <summary>
     /// Inserts a discount
@@ -115,14 +115,14 @@ public partial interface IDiscountService
     /// A task that represents the asynchronous operation
     /// The task result contains the requirements
     /// </returns>
-    Task<IList<DiscountRequirement>> GetAllDiscountRequirementsAsync(int discountId = 0, bool topLevelOnly = false);
+    Task<IList<DiscountRequirement>> GetAllDiscountRequirementsAsync(long discountId = 0, bool topLevelOnly = false);
 
     /// <summary>
     /// Get a discount requirement
     /// </summary>
     /// <param name="discountRequirementId">Discount requirement identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task<DiscountRequirement> GetDiscountRequirementByIdAsync(int discountRequirementId);
+    Task<DiscountRequirement> GetDiscountRequirementByIdAsync(long discountRequirementId);
 
     /// <summary>
     /// Gets child discount requirements
@@ -181,7 +181,7 @@ public partial interface IDiscountService
     /// A task that represents the asynchronous operation
     /// The task result contains the discount usage history
     /// </returns>
-    Task<DiscountUsageHistory> GetDiscountUsageHistoryByIdAsync(int discountUsageHistoryId);
+    Task<DiscountUsageHistory> GetDiscountUsageHistoryByIdAsync(long discountUsageHistoryId);
 
     /// <summary>
     /// Gets all discount usage history records
@@ -196,8 +196,8 @@ public partial interface IDiscountService
     /// A task that represents the asynchronous operation
     /// The task result contains the discount usage history records
     /// </returns>
-    Task<IPagedList<DiscountUsageHistory>> GetAllDiscountUsageHistoryAsync(int? discountId = null,
-        int? customerId = null, int? orderId = null, bool includeCancelledOrders = true,
+    Task<IPagedList<DiscountUsageHistory>> GetAllDiscountUsageHistoryAsync(long? discountId = null,
+        long? customerId = null, long? orderId = null, bool includeCancelledOrders = true,
         int pageIndex = 0, int pageSize = int.MaxValue);
 
     /// <summary>

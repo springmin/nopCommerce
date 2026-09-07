@@ -66,7 +66,7 @@ public partial class AddressService : IAddressService
     /// A task that represents the asynchronous operation
     /// The task result contains the number of addresses
     /// </returns>
-    public virtual async Task<int> GetAddressTotalByCountryIdAsync(int countryId)
+    public virtual async Task<long> GetAddressTotalByCountryIdAsync(long countryId)
     {
         if (countryId == 0)
             return 0;
@@ -86,7 +86,7 @@ public partial class AddressService : IAddressService
     /// A task that represents the asynchronous operation
     /// The task result contains the number of addresses
     /// </returns>
-    public virtual async Task<int> GetAddressTotalByStateProvinceIdAsync(int stateProvinceId)
+    public virtual async Task<long> GetAddressTotalByStateProvinceIdAsync(long stateProvinceId)
     {
         if (stateProvinceId == 0)
             return 0;
@@ -106,7 +106,7 @@ public partial class AddressService : IAddressService
     /// A task that represents the asynchronous operation
     /// The task result contains the address
     /// </returns>
-    public virtual async Task<Address> GetAddressByIdAsync(int addressId)
+    public virtual async Task<Address> GetAddressByIdAsync(long addressId)
     {
         return await _addressRepository.GetByIdAsync(addressId, cache => default, useShortTermCache: true);
     }
@@ -264,8 +264,8 @@ public partial class AddressService : IAddressService
     /// <param name="customAttributes">Custom address attributes (XML format)</param>
     /// <returns>Address</returns>
     public virtual Address FindAddress(List<Address> source, string firstName, string lastName, string phoneNumber, string email,
-        string faxNumber, string company, string address1, string address2, string city, string county, int? stateProvinceId,
-        string zipPostalCode, int? countryId, string customAttributes)
+        string faxNumber, string company, string address1, string address2, string city, string county, long? stateProvinceId,
+        string zipPostalCode, long? countryId, string customAttributes)
     {
         return source.Find(a => ((string.IsNullOrEmpty(a.FirstName) && string.IsNullOrEmpty(firstName)) || a.FirstName == firstName) &&
                                 ((string.IsNullOrEmpty(a.LastName) && string.IsNullOrEmpty(lastName)) || a.LastName == lastName) &&
@@ -324,7 +324,7 @@ public partial class AddressService : IAddressService
     /// A task that represents the asynchronous operation
     /// Address line, array address fields
     /// </returns>      
-    public virtual async Task<(string, KeyValuePair<AddressField, string>[])> FormatAddressAsync(Address address, int languageId = 0, string separator = ", ", bool htmlEncode = false)
+    public virtual async Task<(string, KeyValuePair<AddressField, string>[])> FormatAddressAsync(Address address, long languageId = 0, string separator = ", ", bool htmlEncode = false)
     {
         var fieldsList = new KeyValuePair<AddressField, string>[7];
 

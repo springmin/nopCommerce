@@ -19,7 +19,7 @@ public partial interface IGdprService
     /// A task that represents the asynchronous operation
     /// The task result contains the gDPR consent
     /// </returns>
-    Task<GdprConsent> GetConsentByIdAsync(int gdprConsentId);
+    Task<GdprConsent> GetConsentByIdAsync(long gdprConsentId);
 
     /// <summary>
     /// Get all GDPR consents
@@ -60,7 +60,7 @@ public partial interface IGdprService
     /// A task that represents the asynchronous operation
     /// The task result contains the result; null if previous a customer hasn't been asked
     /// </returns>
-    Task<bool?> IsConsentAcceptedAsync(int consentId, int customerId);
+    Task<bool?> IsConsentAcceptedAsync(long consentId, long customerId);
 
     #endregion
 
@@ -79,7 +79,7 @@ public partial interface IGdprService
     /// A task that represents the asynchronous operation
     /// The task result contains the gDPR log records
     /// </returns>
-    Task<IPagedList<GdprLog>> GetAllLogAsync(int customerId = 0, int consentId = 0,
+    Task<IPagedList<GdprLog>> GetAllLogAsync(long customerId = 0, long consentId = 0,
         string customerInfo = "", GdprRequestType? requestType = null,
         int pageIndex = 0, int pageSize = int.MaxValue);
 
@@ -91,7 +91,7 @@ public partial interface IGdprService
     /// <param name="requestType">Request type</param>
     /// <param name="requestDetails">Request details</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task InsertLogAsync(Customer customer, int consentId, GdprRequestType requestType, string requestDetails);
+    Task InsertLogAsync(Customer customer, long consentId, GdprRequestType requestType, string requestDetails);
 
     #endregion
 

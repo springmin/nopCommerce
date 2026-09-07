@@ -8,7 +8,7 @@ namespace Nop.Web.Areas.Admin.Models.Reminders;
 /// </summary>
 public partial record RemindersModel : BaseNopModel, ISettingsModel
 {
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.Reminder.AbandonedCartEnabled")]
     public bool AbandonedCartEnabled { get; set; }

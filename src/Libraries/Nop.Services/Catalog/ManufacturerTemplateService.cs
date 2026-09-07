@@ -62,7 +62,7 @@ public partial class ManufacturerTemplateService : IManufacturerTemplateService
     /// A task that represents the asynchronous operation
     /// The task result contains the manufacturer template
     /// </returns>
-    public virtual async Task<ManufacturerTemplate> GetManufacturerTemplateByIdAsync(int manufacturerTemplateId)
+    public virtual async Task<ManufacturerTemplate> GetManufacturerTemplateByIdAsync(long manufacturerTemplateId)
     {
         return await _manufacturerTemplateRepository.GetByIdAsync(manufacturerTemplateId, cache => default);
     }

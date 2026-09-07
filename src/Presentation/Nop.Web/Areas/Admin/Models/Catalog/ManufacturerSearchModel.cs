@@ -25,12 +25,12 @@ public partial record ManufacturerSearchModel : BaseSearchModel
     public string SearchManufacturerName { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Manufacturers.List.SearchStore")]
-    public int SearchStoreId { get; set; }
+    public long SearchStoreId { get; set; }
 
     public IList<SelectListItem> AvailableStores { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Manufacturers.List.SearchPublished")]
-    public int SearchPublishedId { get; set; }
+    public long SearchPublishedId { get; set; }
 
     public IList<SelectListItem> AvailablePublishedOptions { get; set; }
 

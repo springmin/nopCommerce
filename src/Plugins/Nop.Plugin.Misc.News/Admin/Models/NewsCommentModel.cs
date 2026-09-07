@@ -11,13 +11,13 @@ public record NewsCommentModel : BaseNopEntityModel
     #region Properties
 
     [NopResourceDisplayName("Plugins.Misc.News.Comments.Fields.NewsItem")]
-    public int NewsItemId { get; set; }
+    public long NewsItemId { get; set; }
 
     [NopResourceDisplayName("Plugins.Misc.News.Comments.Fields.NewsItem")]
     public string NewsItemTitle { get; set; }
 
     [NopResourceDisplayName("Plugins.Misc.News.Comments.Fields.Customer")]
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     [NopResourceDisplayName("Plugins.Misc.News.Comments.Fields.Customer")]
     public string CustomerInfo { get; set; }
@@ -32,7 +32,7 @@ public record NewsCommentModel : BaseNopEntityModel
     public bool IsApproved { get; set; }
 
     [NopResourceDisplayName("Plugins.Misc.News.Comments.Fields.StoreName")]
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 
     public string StoreName { get; set; }
 

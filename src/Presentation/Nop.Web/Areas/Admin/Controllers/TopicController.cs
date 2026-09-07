@@ -173,7 +173,7 @@ public partial class TopicController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.ContentManagement.TOPICS_VIEW)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         //try to get a topic with the specified id
         var topic = await _topicService.GetTopicByIdAsync(id);
@@ -234,7 +234,7 @@ public partial class TopicController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.ContentManagement.TOPICS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get a topic with the specified id
         var topic = await _topicService.GetTopicByIdAsync(id);

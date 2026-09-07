@@ -8,7 +8,7 @@ namespace Nop.Web.Areas.Admin.Models.Settings;
 /// </summary>
 public partial record SitemapSettingsModel : BaseNopModel, ISettingsModel
 {
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.GeneralCommon.SitemapEnabled")]
     public bool SitemapEnabled { get; set; }

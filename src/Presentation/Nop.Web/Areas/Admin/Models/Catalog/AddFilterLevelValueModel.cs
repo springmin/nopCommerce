@@ -11,15 +11,15 @@ public partial record AddFilterLevelValueModel : BaseNopModel
 
     public AddFilterLevelValueModel()
     {
-        SelectedFilterLevelValueIds = new List<int>();
+        SelectedFilterLevelValueIds = new List<long>();
     }
     #endregion
 
     #region Properties
 
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
-    public IList<int> SelectedFilterLevelValueIds { get; set; }
+    public IList<long> SelectedFilterLevelValueIds { get; set; }
 
     #endregion
 }

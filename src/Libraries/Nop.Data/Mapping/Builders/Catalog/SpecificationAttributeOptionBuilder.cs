@@ -20,7 +20,7 @@ public partial class SpecificationAttributeOptionBuilder : NopEntityBuilder<Spec
         table
             .WithColumn(nameof(SpecificationAttributeOption.Name)).AsString(int.MaxValue).NotNullable()
             .WithColumn(nameof(SpecificationAttributeOption.ColorSquaresRgb)).AsString(100).Nullable()
-            .WithColumn(nameof(SpecificationAttributeOption.SpecificationAttributeId)).AsInt32().ForeignKey<SpecificationAttribute>();
+            .WithColumn(nameof(SpecificationAttributeOption.SpecificationAttributeId)).AsInt64().ForeignKey<SpecificationAttribute>();
     }
 
     #endregion

@@ -83,7 +83,7 @@ public partial class QueuedEmailController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.System.MANAGE_MESSAGE_QUEUE)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         //try to get a queued email with the specified id
         var email = await _queuedEmailService.GetQueuedEmailByIdAsync(id);
@@ -165,7 +165,7 @@ public partial class QueuedEmailController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.System.MANAGE_MESSAGE_QUEUE)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get a queued email with the specified id
         var email = await _queuedEmailService.GetQueuedEmailByIdAsync(id);
@@ -181,7 +181,7 @@ public partial class QueuedEmailController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.System.MANAGE_MESSAGE_QUEUE)]
-    public virtual async Task<IActionResult> DeleteSelected(ICollection<int> selectedIds)
+    public virtual async Task<IActionResult> DeleteSelected(ICollection<long> selectedIds)
     {
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();
@@ -205,7 +205,7 @@ public partial class QueuedEmailController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.System.MANAGE_MESSAGE_QUEUE)]
-    public virtual async Task<IActionResult> RequeueSelected(int[] selectedIds)
+    public virtual async Task<IActionResult> RequeueSelected(long[] selectedIds)
     {
         if (selectedIds == null || selectedIds.Length == 0)
             return NoContent();

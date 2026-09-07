@@ -8,10 +8,10 @@ public partial class PriceListCustomer : BaseEntity
     /// <summary>
     ///  Gets or sets the price list identifier
     /// </summary>
-    public int PriceListId { get; set; }
+    public long PriceListId { get; set; }
 
     /// <summary>
     ///  Gets or sets the customer identifier
     /// </summary>
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 }

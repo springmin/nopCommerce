@@ -376,7 +376,7 @@ public class ZettleAdminController : BasePluginController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_PLUGINS)]
-    public async Task<IActionResult> SyncRecordDelete(ICollection<int> selectedIds)
+    public async Task<IActionResult> SyncRecordDelete(ICollection<long> selectedIds)
     {
         if (!selectedIds?.Any() ?? true)
             return NoContent();
@@ -417,8 +417,8 @@ public class ZettleAdminController : BasePluginController
         var products = await _productService.SearchProductsAsync(showHidden: true,
             keywords: searchModel.SearchProductName,
             productType: searchModel.SearchProductTypeId > 0 ? (ProductType?)searchModel.SearchProductTypeId : null,
-            categoryIds: new List<int> { searchModel.SearchCategoryId },
-            manufacturerIds: new List<int> { searchModel.SearchManufacturerId },
+            categoryIds: new List<long> { searchModel.SearchCategoryId },
+            manufacturerIds: new List<long> { searchModel.SearchManufacturerId },
             storeId: searchModel.SearchStoreId,
             vendorId: searchModel.SearchVendorId,
             pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);

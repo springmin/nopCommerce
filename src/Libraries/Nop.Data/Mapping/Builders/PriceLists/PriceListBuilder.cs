@@ -21,7 +21,7 @@ public partial class PriceListBuilder : NopEntityBuilder<PriceList>
             .WithColumn(nameof(PriceList.Description)).AsString(1000).Nullable()
             .WithColumn(nameof(PriceList.StartDateUtc)).AsDateTime2().Nullable()
             .WithColumn(nameof(PriceList.EndDateUtc)).AsDateTime2().Nullable()
-            .WithColumn(nameof(PriceList.PriceCalculationTypeId)).AsInt32();
+            .WithColumn(nameof(PriceList.PriceCalculationTypeId)).AsInt64();
     }
 
     #endregion

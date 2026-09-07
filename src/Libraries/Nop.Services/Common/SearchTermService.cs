@@ -41,7 +41,7 @@ public partial class SearchTermService : ISearchTermService
     /// <returns>
     /// A task that represents the asynchronous operation
     /// </returns>
-    public virtual async Task DeleteSearchTermsByKeywordAsync(string keyword, int customerId, int storeId)
+    public virtual async Task DeleteSearchTermsByKeywordAsync(string keyword, long customerId, long storeId)
     {
         if (string.IsNullOrEmpty(keyword))
             return;
@@ -67,8 +67,8 @@ public partial class SearchTermService : ISearchTermService
     /// </returns>
     public virtual async Task<IPagedList<SearchTerm>> GetSearchTermsAsync(
         string keyword, 
-        int customerId = 0, 
-        int storeId = 0,
+        long customerId = 0, 
+        long storeId = 0,
         bool showHidden = false,
         int pageIndex = 0, 
         int pageSize = int.MaxValue)
@@ -146,7 +146,7 @@ public partial class SearchTermService : ISearchTermService
     /// A task that represents the asynchronous operation
     /// The task result contains search term history items
     /// </returns>
-    public virtual async Task<IEnumerable<string>> SearchTermHistoryItemsAsync(int customerId, int storeId = 0)
+    public virtual async Task<IEnumerable<string>> SearchTermHistoryItemsAsync(long customerId, long storeId = 0)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(customerId);
 

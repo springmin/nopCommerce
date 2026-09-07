@@ -39,7 +39,7 @@ public partial class CustomWishlistService : ICustomWishlistService
     /// <returns>A task that represents the asynchronous operation. The task result contains a list of  <see
     /// cref="CustomWishlist"/> objects associated with the specified customer. If multiple wishlists  are not allowed,
     /// an empty list is returned.</returns>
-    public virtual async Task<IList<CustomWishlist>> GetAllCustomWishlistsAsync(int customerId)
+    public virtual async Task<IList<CustomWishlist>> GetAllCustomWishlistsAsync(long customerId)
     {
         if (!_shoppingCartSettings.AllowMultipleWishlist)
             return new List<CustomWishlist>();
@@ -67,7 +67,7 @@ public partial class CustomWishlistService : ICustomWishlistService
     /// Removes a custom wishlist item with the specified identifier.
     /// </summary>
     /// <param name="itemId">The unique identifier of the custom wishlist item to remove. Must be a valid identifier of an existing item.</param>
-    public virtual async Task RemoveCustomWishlistAsync(int itemId)
+    public virtual async Task RemoveCustomWishlistAsync(long itemId)
     {
         var item = await _customWishlistRepository.GetByIdAsync(itemId);
         if (item != null)
@@ -94,7 +94,7 @@ public partial class CustomWishlistService : ICustomWishlistService
     /// <param name="itemId">The unique identifier of the custom wishlist to retrieve. Must be a positive integer.</param>
     /// <returns>A <see cref="CustomWishlist"/> object representing the custom wishlist with the specified identifier. Returns
     /// null if no wishlist is found with the given identifier.</returns>
-    public virtual async Task<CustomWishlist> GetCustomWishlistByIdAsync(int itemId)
+    public virtual async Task<CustomWishlist> GetCustomWishlistByIdAsync(long itemId)
     {
         return await _customWishlistRepository.GetByIdAsync(itemId);
     }

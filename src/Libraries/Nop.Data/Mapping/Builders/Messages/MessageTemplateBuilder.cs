@@ -21,7 +21,7 @@ public partial class MessageTemplateBuilder : NopEntityBuilder<MessageTemplate>
             .WithColumn(nameof(MessageTemplate.BccEmailAddresses)).AsString(200).Nullable()
             .WithColumn(nameof(MessageTemplate.Subject)).AsString(1000).Nullable()
             //don't create an ForeignKey for the EmailAccount table, because this field may by zero
-            .WithColumn(nameof(MessageTemplate.EmailAccountId)).AsInt32();
+            .WithColumn(nameof(MessageTemplate.EmailAccountId)).AsInt64();
     }
 
     #endregion

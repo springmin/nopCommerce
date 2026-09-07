@@ -37,7 +37,7 @@ public class Product : ApiResponse
     /// Gets or sets the identifier
     /// </summary>
     [JsonIgnore]
-    public int Id { get; set; }
+    public long Id { get; set; }
 
     /// <summary>
     /// Gets or sets the description

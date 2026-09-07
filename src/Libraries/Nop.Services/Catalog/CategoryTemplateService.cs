@@ -62,7 +62,7 @@ public partial class CategoryTemplateService : ICategoryTemplateService
     /// A task that represents the asynchronous operation
     /// The task result contains the category template
     /// </returns>
-    public virtual async Task<CategoryTemplate> GetCategoryTemplateByIdAsync(int categoryTemplateId)
+    public virtual async Task<CategoryTemplate> GetCategoryTemplateByIdAsync(long categoryTemplateId)
     {
         return await _categoryTemplateRepository.GetByIdAsync(categoryTemplateId, cache => default);
     }

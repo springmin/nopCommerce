@@ -114,7 +114,7 @@ public partial class CatalogController : BasePublicController
     #region Categories
 
     [SaveLastContinueShoppingPage]
-    public virtual async Task<IActionResult> Category(int categoryId, CatalogProductsCommand command)
+    public virtual async Task<IActionResult> Category(long categoryId, CatalogProductsCommand command)
     {
         var category = await _categoryService.GetCategoryByIdAsync(categoryId);
 
@@ -138,7 +138,7 @@ public partial class CatalogController : BasePublicController
     }
 
     [HttpPost]
-    public virtual async Task<IActionResult> GetCategoryProducts(int categoryId, CatalogProductsCommand command)
+    public virtual async Task<IActionResult> GetCategoryProducts(long categoryId, CatalogProductsCommand command)
     {
         var category = await _categoryService.GetCategoryByIdAsync(categoryId);
 
@@ -155,7 +155,7 @@ public partial class CatalogController : BasePublicController
     #region Manufacturers
 
     [SaveLastContinueShoppingPage]
-    public virtual async Task<IActionResult> Manufacturer(int manufacturerId, CatalogProductsCommand command)
+    public virtual async Task<IActionResult> Manufacturer(long manufacturerId, CatalogProductsCommand command)
     {
         var manufacturer = await _manufacturerService.GetManufacturerByIdAsync(manufacturerId);
 
@@ -180,7 +180,7 @@ public partial class CatalogController : BasePublicController
     }
 
     [HttpPost]
-    public virtual async Task<IActionResult> GetManufacturerProducts(int manufacturerId, CatalogProductsCommand command)
+    public virtual async Task<IActionResult> GetManufacturerProducts(long manufacturerId, CatalogProductsCommand command)
     {
         var manufacturer = await _manufacturerService.GetManufacturerByIdAsync(manufacturerId);
 
@@ -204,7 +204,7 @@ public partial class CatalogController : BasePublicController
     #region Vendors
 
     [SaveLastContinueShoppingPage]
-    public virtual async Task<IActionResult> Vendor(int vendorId, CatalogProductsCommand command)
+    public virtual async Task<IActionResult> Vendor(long vendorId, CatalogProductsCommand command)
     {
         var vendor = await _vendorService.GetVendorByIdAsync(vendorId);
 
@@ -222,7 +222,7 @@ public partial class CatalogController : BasePublicController
     }
 
     [HttpPost]
-    public virtual async Task<IActionResult> GetVendorProducts(int vendorId, CatalogProductsCommand command)
+    public virtual async Task<IActionResult> GetVendorProducts(long vendorId, CatalogProductsCommand command)
     {
         var vendor = await _vendorService.GetVendorByIdAsync(vendorId);
 
@@ -234,7 +234,7 @@ public partial class CatalogController : BasePublicController
         return PartialView("_ProductsInGridOrLines", model);
     }
 
-    public virtual async Task<IActionResult> VendorReviews(int vendorId, VendorReviewsPagingFilteringModel pagingModel)
+    public virtual async Task<IActionResult> VendorReviews(long vendorId, VendorReviewsPagingFilteringModel pagingModel)
     {
         var vendor = await _vendorService.GetVendorByIdAsync(vendorId);
 
@@ -260,7 +260,7 @@ public partial class CatalogController : BasePublicController
 
     #region Product tags
 
-    public virtual async Task<IActionResult> ProductsByTag(int productTagId, CatalogProductsCommand command)
+    public virtual async Task<IActionResult> ProductsByTag(long productTagId, CatalogProductsCommand command)
     {
         var productTag = await _productTagService.GetProductTagByIdAsync(productTagId);
         if (productTag == null)
@@ -272,7 +272,7 @@ public partial class CatalogController : BasePublicController
     }
 
     [HttpPost]
-    public virtual async Task<IActionResult> GetTagProducts(int tagId, CatalogProductsCommand command)
+    public virtual async Task<IActionResult> GetTagProducts(long tagId, CatalogProductsCommand command)
     {
         var productTag = await _productTagService.GetProductTagByIdAsync(tagId);
         if (productTag == null)
@@ -372,7 +372,7 @@ public partial class CatalogController : BasePublicController
     }
 
     [CheckLanguageSeoCode(ignore: true)]
-    public virtual async Task<IActionResult> SearchTermAutoComplete(string term, int categoryId)
+    public virtual async Task<IActionResult> SearchTermAutoComplete(string term, long categoryId)
     {
         if (string.IsNullOrWhiteSpace(term))
             return Content("");
@@ -387,7 +387,7 @@ public partial class CatalogController : BasePublicController
             _catalogSettings.ProductSearchAutoCompleteNumberOfProducts : 10;
         var store = await _storeContext.GetCurrentStoreAsync();
 
-        var categoryIds = new List<int>();
+        var categoryIds = new List<long>();
         if (categoryId > 0)
             categoryIds.AddRange([categoryId, .. await _categoryService.GetChildCategoryIdsAsync(categoryId, store.Id)]);
 

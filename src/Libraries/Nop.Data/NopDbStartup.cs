@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Nop.Core.Configuration;
 using Nop.Core.Infrastructure;
+using Nop.Data.DataProviders;
 using Nop.Data.DataProviders.Fluentmigrator;
 using Nop.Data.Extensions;
 using Nop.Data.Migrations;
@@ -53,6 +54,23 @@ public partial class NopDbStartup : INopStartup
 
         services.AddScoped<IMySqlTypeMap>(_ => new NopMySql8TypeMap());
         services.AddTransient(p => new Lazy<IVersionLoader>(p.GetRequiredService<IVersionLoader>()));
+
+        //entity id generation strategy: database identity by default, yitter when configured.
+        //the strategy is resolved from IdGenerationConfig (stored as a setting), so an
+        //administrator can switch it via the settings table (key idgenerationsettings.idgenerationmode:
+        //0 = database, 1 = yitter). Note: tables are created with/without identity columns
+        //according to the active strategy at installation time.
+        services.AddSingleton<IEntityIdGenerator>(serviceProvider =>
+        {
+            var config = Singleton<AppSettings>.Instance?.Get<IdGenerationConfig>();
+
+            return config?.IdGenerationMode switch
+            {
+                (int)IdGenerationMode.Yitter => new YitterIdGenerator(config),
+                (int)IdGenerationMode.Tinyid => new TinyidIdGenerator(config),
+                _ => new DatabaseIdGenerator()
+            };
+        });
 
         //data layer
         services.AddTransient<IDataProviderManager, DataProviderManager>();

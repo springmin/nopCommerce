@@ -134,7 +134,7 @@ public class RfqService
         //by default PdfSettings contains settings for the current active store,
         //but we need PdfSettings for the store which was used to place a Request a Quote or order created by Quote
         //so let's try to load correct settings
-        int storeId;
+        long storeId;
 
         var stores = await _storeService.GetAllStoresAsync();
 
@@ -229,7 +229,7 @@ public class RfqService
                     await UpdateQuantityWithLogAsync(requestQuoteItem, quantity);
                 break;
             case RfqDefaults.UNIT_PRICE_FORM_KEY:
-                if (decimal.TryParse(formValue, out var price) && requestQuoteItem.RequestedUnitPrice != price)
+                if (decimal.TryParse(formValue, NumberStyles.Any, CultureInfo.InvariantCulture, out var price) && requestQuoteItem.RequestedUnitPrice != price)
                     await UpdateUnitPriceWithLogAsync(requestQuoteItem, price);
 
                 break;
@@ -370,7 +370,7 @@ public class RfqService
     /// A task that represents the asynchronous operation
     /// The task result contains the request quote item
     /// </returns>
-    public async Task<RequestQuote> GetRequestQuoteByIdAsync(int requestId)
+    public async Task<RequestQuote> GetRequestQuoteByIdAsync(long requestId)
     {
         return await _requestQuoteRepository.GetByIdAsync(requestId);
     }
@@ -393,7 +393,7 @@ public class RfqService
     /// A task that represents the asynchronous operation
     /// The task result contains the request a quote identifier
     /// </returns>
-    public async Task<int> SendNewRequestAsync(string customerNotes)
+    public async Task<long> SendNewRequestAsync(string customerNotes)
     {
         var (request, items) = await CreateRequestQuoteByShoppingCartAsync();
 
@@ -448,7 +448,7 @@ public class RfqService
     /// A task that represents the asynchronous operation
     /// The task result contains the request a quote item
     /// </returns>
-    public async Task<List<RequestQuote>> GetCustomerRequestsAsync(int customerId)
+    public async Task<List<RequestQuote>> GetCustomerRequestsAsync(long customerId)
     {
         return await _requestQuoteRepository.Table.Where(p => p.CustomerId == customerId).OrderByDescending(p => p.Id)
             .ToListAsync();
@@ -462,9 +462,9 @@ public class RfqService
     /// A task that represents the asynchronous operation
     /// The task result contains the request a quote item
     /// </returns>
-    public async Task<List<Quote>> GetCustomerQuotesAsync(int customerId)
+    public async Task<List<Quote>> GetCustomerQuotesAsync(long customerId)
     {
-        var statuses = new[] { (int)QuoteStatus.Submitted, (int)QuoteStatus.OrderCreated };
+        var statuses = new[] { (long)QuoteStatus.Submitted, (long)QuoteStatus.OrderCreated };
 
         return await _quoteRepository.Table.Where(p => p.CustomerId == customerId && statuses.Contains(p.StatusId))
             .OrderByDescending(p => p.Id).ToListAsync();
@@ -483,7 +483,7 @@ public class RfqService
     /// A task that represents the asynchronous operation
     /// The task result contains the request a quote item
     /// </returns>
-    public async Task<IPagedList<RequestQuote>> SearchRequestsQuoteAsync(int requestQuoteStatusId, DateTime? createdOnFrom, DateTime? createdOnTo, string customerEmail, int pageIndex = 0, int pageSize = int.MaxValue)
+    public async Task<IPagedList<RequestQuote>> SearchRequestsQuoteAsync(long requestQuoteStatusId, DateTime? createdOnFrom, DateTime? createdOnTo, string customerEmail, int pageIndex = 0, int pageSize = int.MaxValue)
     {
         var requests = await _requestQuoteRepository.GetAllPagedAsync(query =>
         {
@@ -517,7 +517,7 @@ public class RfqService
     /// </summary>
     /// <param name="requestQuoteId">Request quote identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public async Task DeleteRequestQuoteAsync(int requestQuoteId)
+    public async Task DeleteRequestQuoteAsync(long requestQuoteId)
     {
         var requestQuote = await GetRequestQuoteByIdAsync(requestQuoteId);
 
@@ -549,7 +549,7 @@ public class RfqService
     /// </summary>
     /// <param name="ids">Identifiers of request a quote to delete</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public async Task DeleteRequestsQuoteByIdsAsync(ICollection<int> ids)
+    public async Task DeleteRequestsQuoteByIdsAsync(ICollection<long> ids)
     {
         await _requestQuoteRepository.DeleteAsync(await _requestQuoteRepository.GetByIdsAsync(ids.ToArray()));
     }
@@ -566,7 +566,7 @@ public class RfqService
     /// A task that represents the asynchronous operation
     /// The task result contains the request a quote items
     /// </returns>
-    public async Task<List<RequestQuoteItem>> GetRequestQuoteItemsAsync(int requestId)
+    public async Task<List<RequestQuoteItem>> GetRequestQuoteItemsAsync(long requestId)
     {
         return await _requestQuoteItemRepository.Table
             .Where(p => p.RequestQuoteId == requestId)
@@ -581,7 +581,7 @@ public class RfqService
     /// A task that represents the asynchronous operation
     /// The task result contains the request a quote item
     /// </returns>
-    public async Task<RequestQuoteItem> GetRequestQuoteItemByIdAsync(int requestQuoteItemId)
+    public async Task<RequestQuoteItem> GetRequestQuoteItemByIdAsync(long requestQuoteItemId)
     {
         return await _requestQuoteItemRepository.GetByIdAsync(requestQuoteItemId, _ => default);
     }
@@ -591,7 +591,7 @@ public class RfqService
     /// </summary>
     /// <param name="requestQuoteItemId">Request a quote item identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public async Task DeleteRequestQuoteItemAsync(int requestQuoteItemId)
+    public async Task DeleteRequestQuoteItemAsync(long requestQuoteItemId)
     {
         var item = await GetRequestQuoteItemByIdAsync(requestQuoteItemId);
 
@@ -614,7 +614,7 @@ public class RfqService
     /// <param name="quantity">Quantity</param>
     /// <param name="unitPrice">Unit price</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public async Task UpdateRequestQuoteItemAsync(int requestQuoteItemId, int quantity, decimal unitPrice)
+    public async Task UpdateRequestQuoteItemAsync(long requestQuoteItemId, int quantity, decimal unitPrice)
     {
         var item = await GetRequestQuoteItemByIdAsync(requestQuoteItemId);
 
@@ -657,7 +657,7 @@ public class RfqService
     /// A task that represents the asynchronous operation
     /// The task result contains the new quote 
     /// </returns>
-    public async Task<Quote> CreateQuoteAsync(int customerId)
+    public async Task<Quote> CreateQuoteAsync(long customerId)
     {
         if (customerId <= 0)
             return null;
@@ -677,7 +677,7 @@ public class RfqService
     /// </summary>
     /// <param name="ids">Identifiers of the quote to delete</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public async Task DeleteQuotesByIdsAsync(ICollection<int> ids)
+    public async Task DeleteQuotesByIdsAsync(ICollection<long> ids)
     {
         await _quoteRepository.DeleteAsync(await _quoteRepository.GetByIdsAsync(ids.ToArray()));
     }
@@ -695,7 +695,7 @@ public class RfqService
     /// A task that represents the asynchronous operation
     /// The task result contains the request a quote item
     /// </returns>
-    public async Task<IPagedList<Quote>> SearchQuotesAsync(int quoteStatusId, DateTime? createdOnFrom, DateTime? createdOnTo, string customerEmail, int pageIndex = 0, int pageSize = int.MaxValue)
+    public async Task<IPagedList<Quote>> SearchQuotesAsync(long quoteStatusId, DateTime? createdOnFrom, DateTime? createdOnTo, string customerEmail, int pageIndex = 0, int pageSize = int.MaxValue)
     {
         var quotes = await _quoteRepository.GetAllPagedAsync(query =>
         {
@@ -734,7 +734,7 @@ public class RfqService
     /// A task that represents the asynchronous operation
     /// The task result contains the new quote identifier
     /// </returns>
-    public async Task<int> CreateQuoteByRequestAsync(int requestQuoteId)
+    public async Task<long> CreateQuoteByRequestAsync(long requestQuoteId)
     {
         var requestQuote = await GetRequestQuoteByIdAsync(requestQuoteId);
 
@@ -781,7 +781,7 @@ public class RfqService
     /// A task that represents the asynchronous operation
     /// The task result contains the quote item
     /// </returns>
-    public async Task<Quote> GetQuoteByIdAsync(int quoteId)
+    public async Task<Quote> GetQuoteByIdAsync(long quoteId)
     {
         return await CheckIsQuoteExpiredAsync(await _quoteRepository.GetByIdAsync(quoteId));
     }
@@ -820,7 +820,7 @@ public class RfqService
     /// </summary>
     /// <param name="quoteId">Quote identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public async Task DeleteQuoteAsync(int quoteId)
+    public async Task DeleteQuoteAsync(long quoteId)
     {
         var quote = await GetQuoteByIdAsync(quoteId);
 
@@ -848,7 +848,7 @@ public class RfqService
     /// </summary>
     /// <param name="quoteId">Quote identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public async Task CreateShoppingCartAsync(int quoteId)
+    public async Task CreateShoppingCartAsync(long quoteId)
     {
         var customer = await _workContext.GetCurrentCustomerAsync();
 
@@ -858,10 +858,10 @@ public class RfqService
         var store = await _storeContext.GetCurrentStoreAsync();
         var quoteItems = await GetQuoteItemsAsync(quoteId);
 
-        //reset cart and checkout info
-        await _shoppingCartService.SetShoppingCartVendorAsync(customer, null, store.Id);
         await _shoppingCartService.ClearShoppingCartAsync(customer, store.Id);
-        await _shoppingCartService.ResetCheckoutDataAsync(customer, store.Id);
+
+        //reset checkout info
+        await _customerService.ResetCheckoutDataAsync(customer, store.Id);
 
         foreach (var quoteItem in quoteItems)
         {
@@ -1047,7 +1047,7 @@ public class RfqService
     /// A task that represents the asynchronous operation
     /// The task result contains the quote items
     /// </returns>
-    public async Task<List<QuoteItem>> GetQuoteItemsAsync(int quoteId)
+    public async Task<List<QuoteItem>> GetQuoteItemsAsync(long quoteId)
     {
         return await _quoteItemRepository.Table
             .Where(p => p.QuoteId == quoteId)
@@ -1062,7 +1062,7 @@ public class RfqService
     /// A task that represents the asynchronous operation
     /// The task result contains the request a quote item
     /// </returns>
-    public async Task<QuoteItem> GetQuoteItemByIdAsync(int quoteItemId)
+    public async Task<QuoteItem> GetQuoteItemByIdAsync(long quoteItemId)
     {
         return await _quoteItemRepository.GetByIdAsync(quoteItemId, _ => default);
     }
@@ -1072,7 +1072,7 @@ public class RfqService
     /// </summary>
     /// <param name="quoteItemId">Quote item identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public async Task DeleteQuoteItemAsync(int quoteItemId)
+    public async Task DeleteQuoteItemAsync(long quoteItemId)
     {
         var item = await GetQuoteItemByIdAsync(quoteItemId);
 
@@ -1095,7 +1095,7 @@ public class RfqService
     /// <param name="quantity">Quantity</param>
     /// <param name="unitPrice">Unit price</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public async Task UpdateQuoteItemAsync(int quoteItemId, int quantity, decimal unitPrice)
+    public async Task UpdateQuoteItemAsync(long quoteItemId, int quantity, decimal unitPrice)
     {
         var item = await GetQuoteItemByIdAsync(quoteItemId);
 
@@ -1119,7 +1119,7 @@ public class RfqService
     /// A task that represents the asynchronous operation
     /// The task result contains the quote item
     /// </returns>
-    public async Task<QuoteItem> GetQuoteItemByShoppingCartItemIdAsync(int shoppingCartItemId)
+    public async Task<QuoteItem> GetQuoteItemByShoppingCartItemIdAsync(long shoppingCartItemId)
     {
         return await _quoteItemRepository.Table.FirstOrDefaultAsync(qi => qi.ShoppingCartItemId == shoppingCartItemId);
     }
@@ -1132,7 +1132,7 @@ public class RfqService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of quote item
     /// </returns>
-    public async Task<List<QuoteItem>> GetQuoteItemsByShoppingCartItemIdsAsync(IList<int> shoppingCartItemIds)
+    public async Task<List<QuoteItem>> GetQuoteItemsByShoppingCartItemIdsAsync(IList<long> shoppingCartItemIds)
     {
         return await _quoteItemRepository.Table.Where(qi => qi.ShoppingCartItemId.HasValue && shoppingCartItemIds.Contains(qi.ShoppingCartItemId.Value)).ToListAsync();
     }

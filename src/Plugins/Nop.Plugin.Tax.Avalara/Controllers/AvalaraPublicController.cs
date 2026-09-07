@@ -88,7 +88,7 @@ public class AvalaraPublicController : BasePublicController
     }
 
     [CheckLanguageSeoCode(ignore: true)]
-    public async Task<IActionResult> DownloadCertificate(int id)
+    public async Task<IActionResult> DownloadCertificate(long id)
     {
         var customer = await _workContext.GetCurrentCustomerAsync();
         if (!await _customerService.IsRegisteredAsync(customer))

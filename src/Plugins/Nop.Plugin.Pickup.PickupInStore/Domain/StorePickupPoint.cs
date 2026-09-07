@@ -20,7 +20,7 @@ public class StorePickupPoint : BaseEntity
     /// <summary>
     /// Gets or sets an address identifier
     /// </summary>
-    public int AddressId { get; set; }
+    public long AddressId { get; set; }
 
     /// <summary>
     /// Gets or sets a fee for the pickup
@@ -40,7 +40,7 @@ public class StorePickupPoint : BaseEntity
     /// <summary>
     /// Gets or sets a store identifier
     /// </summary>
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 
     /// <summary>
     /// Gets or sets a latitude

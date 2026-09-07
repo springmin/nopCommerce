@@ -179,7 +179,7 @@ public partial class SettingController : BaseAdminController
 
     #region Methods
 
-    public virtual async Task<IActionResult> ChangeStoreScopeConfiguration(int storeid, string returnUrl = "")
+    public virtual async Task<IActionResult> ChangeStoreScopeConfiguration(long storeid, string returnUrl = "")
     {
         var store = await _storeService.GetStoreByIdAsync(storeid);
         if (store != null || storeid == 0)
@@ -756,7 +756,7 @@ public partial class SettingController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public virtual async Task<IActionResult> EditFilterLevel(int id)
+    public virtual async Task<IActionResult> EditFilterLevel(long id)
     {
         //prepare model
         var model = await _settingModelFactory.PrepareFilterLevelModelAsync(null, (FilterLevelEnum)id);
@@ -1076,8 +1076,6 @@ public partial class SettingController : BaseAdminController
             await _settingService.SaveSettingOverridablePerStoreAsync(shoppingCartSettings, x => x.MiniShoppingCartProductNumber, model.MiniShoppingCartProductNumber_OverrideForStore, storeScope, false);
             await _settingService.SaveSettingOverridablePerStoreAsync(shoppingCartSettings, x => x.AllowCartItemEditing, model.AllowCartItemEditing_OverrideForStore, storeScope, false);
             await _settingService.SaveSettingOverridablePerStoreAsync(shoppingCartSettings, x => x.GroupTierPricesForDistinctShoppingCartItems, model.GroupTierPricesForDistinctShoppingCartItems_OverrideForStore, storeScope, false);
-            await _settingService.SaveSettingOverridablePerStoreAsync(shoppingCartSettings, x => x.VendorEnabled, model.VendorEnabled_OverrideForStore, storeScope, false);
-            await _settingService.SaveSettingOverridablePerStoreAsync(shoppingCartSettings, x => x.VendorRequired, model.VendorRequired_OverrideForStore, storeScope, false);
 
             //now clear settings cache
             await _settingService.ClearCacheAsync();
@@ -1414,7 +1412,7 @@ public partial class SettingController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public virtual async Task<IActionResult> EditGdprConsent(int id)
+    public virtual async Task<IActionResult> EditGdprConsent(long id)
     {
         //try to get a consent with the specified id
         var gdprConsent = await _gdprService.GetConsentByIdAsync(id);
@@ -1458,7 +1456,7 @@ public partial class SettingController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public virtual async Task<IActionResult> DeleteGdprConsent(int id)
+    public virtual async Task<IActionResult> DeleteGdprConsent(long id)
     {
         //try to get a GDPR consent with the specified id
         var gdprConsent = await _gdprService.GetConsentByIdAsync(id);
@@ -1622,7 +1620,7 @@ public partial class SettingController : BaseAdminController
             var robotsTxtSettings = await _settingService.LoadSettingAsync<RobotsTxtSettings>(storeScope);
             robotsTxtSettings.AllowSitemapXml = model.RobotsTxtSettings.AllowSitemapXml;
             robotsTxtSettings.AdditionsRules = model.RobotsTxtSettings.AdditionsRules?.Split(Environment.NewLine).ToList();
-            robotsTxtSettings.DisallowLanguages = model.RobotsTxtSettings.DisallowLanguages?.ToList() ?? new List<int>();
+            robotsTxtSettings.DisallowLanguages = model.RobotsTxtSettings.DisallowLanguages?.ToList() ?? new List<long>();
             robotsTxtSettings.DisallowPaths = model.RobotsTxtSettings.DisallowPaths?.Split(Environment.NewLine).ToList();
             robotsTxtSettings.LocalizableDisallowPaths = model.RobotsTxtSettings.LocalizableDisallowPaths?.Split(Environment.NewLine).ToList();
 
@@ -1727,7 +1725,7 @@ public partial class SettingController : BaseAdminController
             var translationSettings = await _settingService.LoadSettingAsync<TranslationSettings>(storeScope);
             translationSettings.AllowPreTranslate = model.TranslationSettings.AllowPreTranslate;
             translationSettings.TranslateFromLanguageId = model.TranslationSettings.TranslateFromLanguageId;
-            translationSettings.NotTranslateLanguages = model.TranslationSettings.NotTranslateLanguages?.ToList() ?? new List<int>();
+            translationSettings.NotTranslateLanguages = model.TranslationSettings.NotTranslateLanguages?.ToList() ?? new List<long>();
             translationSettings.GoogleApiKey = model.TranslationSettings.GoogleApiKey;
             translationSettings.DeepLAuthKey = model.TranslationSettings.DeepLAuthKey;
             translationSettings.TranslationServiceId = model.TranslationSettings.TranslationServiceId;
@@ -1950,7 +1948,7 @@ public partial class SettingController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public virtual async Task<IActionResult> SettingDelete(int id)
+    public virtual async Task<IActionResult> SettingDelete(long id)
     {
         //try to get a setting with the specified id
         var setting = await _settingService.GetSettingByIdAsync(id)

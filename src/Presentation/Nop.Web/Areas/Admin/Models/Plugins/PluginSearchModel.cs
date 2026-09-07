@@ -22,7 +22,7 @@ public partial record PluginSearchModel : BaseSearchModel
     #region Properties
 
     [NopResourceDisplayName("Admin.Configuration.Plugins.LoadMode")]
-    public int SearchLoadModeId { get; set; }
+    public long SearchLoadModeId { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Plugins.Group")]
     public string SearchGroup { get; set; }

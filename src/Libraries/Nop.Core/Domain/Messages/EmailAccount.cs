@@ -48,7 +48,7 @@ public partial class EmailAccount : BaseEntity
     /// <summary>
     /// Gets or sets an identifier of the email authentication method
     /// </summary>
-    public int EmailAuthenticationMethodId { get; set; }
+    public long EmailAuthenticationMethodId { get; set; }
 
     /// <summary>
     /// Gets or sets an authentication method

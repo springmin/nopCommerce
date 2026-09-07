@@ -10,7 +10,7 @@ public partial class CustomerPermanentlyDeleted
     /// </summary>
     /// <param name="customerId">Customer identifier</param>
     /// <param name="email">Email</param>
-    public CustomerPermanentlyDeleted(int customerId, string email)
+    public CustomerPermanentlyDeleted(long customerId, string email)
     {
         CustomerId = customerId;
         Email = email;
@@ -19,7 +19,7 @@ public partial class CustomerPermanentlyDeleted
     /// <summary>
     /// Customer identifier
     /// </summary>
-    public int CustomerId { get; }
+    public long CustomerId { get; }
 
     /// <summary>
     /// Email

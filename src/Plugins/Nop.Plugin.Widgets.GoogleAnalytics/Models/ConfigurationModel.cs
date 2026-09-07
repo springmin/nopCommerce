@@ -7,7 +7,7 @@ namespace Nop.Plugin.Widgets.GoogleAnalytics.Models;
 
 public record ConfigurationModel : BaseNopModel
 {
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Plugins.Widgets.GoogleAnalytics.UseSandbox")]
     public bool UseSandbox { get; set; }

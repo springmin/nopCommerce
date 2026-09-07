@@ -73,9 +73,9 @@ public partial class AttributeParser<TAttribute, TAttributeValue> : IAttributePa
     /// </summary>
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <returns>Selected attribute identifiers</returns>
-    public virtual IEnumerable<int> ParseAttributeIds(string attributesXml)
+    public virtual IEnumerable<long> ParseAttributeIds(string attributesXml)
     {
-        var ids = new List<int>();
+        var ids = new List<long>();
         if (string.IsNullOrEmpty(attributesXml))
             return ids;
 
@@ -87,7 +87,7 @@ public partial class AttributeParser<TAttribute, TAttributeValue> : IAttributePa
             var nodes = xmlDoc.SelectNodes(@$"//Attributes/{_attributeName}");
 
             if (nodes == null)
-                return Enumerable.Empty<int>();
+                return Enumerable.Empty<long>();
 
             foreach (XmlNode node in nodes)
             {
@@ -139,7 +139,7 @@ public partial class AttributeParser<TAttribute, TAttributeValue> : IAttributePa
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <param name="attributeId">Attribute identifier</param>
     /// <returns>Updated result (XML format)</returns>
-    public virtual string RemoveAttribute(string attributesXml, int attributeId)
+    public virtual string RemoveAttribute(string attributesXml, long attributeId)
     {
         var result = string.Empty;
 
@@ -201,7 +201,7 @@ public partial class AttributeParser<TAttribute, TAttributeValue> : IAttributePa
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <param name="attributeId">Attribute identifier</param>
     /// <returns>Attribute value</returns>
-    public virtual IList<string> ParseValues(string attributesXml, int attributeId)
+    public virtual IList<string> ParseValues(string attributesXml, long attributeId)
     {
         var selectedAddressAttributeValues = new List<string>();
         if (string.IsNullOrEmpty(attributesXml))

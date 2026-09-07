@@ -15,7 +15,7 @@ public partial record CurrencyModel : BaseNopEntityModel, ILocalizedModel<Curren
     {
         Locales = new List<CurrencyLocalizedModel>();
 
-        SelectedStoreIds = new List<int>();
+        SelectedStoreIds = new List<long>();
         AvailableStores = new List<SelectListItem>();
     }
 
@@ -57,18 +57,18 @@ public partial record CurrencyModel : BaseNopEntityModel, ILocalizedModel<Curren
 
     //store mapping
     [NopResourceDisplayName("Admin.Configuration.Currencies.Fields.LimitedToStores")]
-    public IList<int> SelectedStoreIds { get; set; }
+    public IList<long> SelectedStoreIds { get; set; }
     public IList<SelectListItem> AvailableStores { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Currencies.Fields.RoundingType")]
-    public int RoundingTypeId { get; set; }
+    public long RoundingTypeId { get; set; }
 
     #endregion
 }
 
 public partial record CurrencyLocalizedModel : ILocalizedLocaleModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Currencies.Fields.Name")]
     public string Name { get; set; }

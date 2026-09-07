@@ -10,12 +10,12 @@ public class QuoteItem : BaseEntity
     /// <summary>
     /// Gets or sets the quote identifier
     /// </summary>
-    public int QuoteId { get; set; }
+    public long QuoteId { get; set; }
 
     /// <summary>
     /// Gets or sets the product identifier
     /// </summary>
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     /// <summary>
     /// Gets or sets the requested quantity
@@ -45,10 +45,10 @@ public class QuoteItem : BaseEntity
     /// <summary>
     /// Request a quote identifier
     /// </summary>
-    public int? RequestQuoteId { get; set; }
+    public long? RequestQuoteId { get; set; }
 
     /// <summary>
     /// Shopping cart item identifier
     /// </summary>
-    public int? ShoppingCartItemId { get; set; }
+    public long? ShoppingCartItemId { get; set; }
 }

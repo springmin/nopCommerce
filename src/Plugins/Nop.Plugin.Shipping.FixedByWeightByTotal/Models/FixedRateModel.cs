@@ -6,7 +6,7 @@ namespace Nop.Plugin.Shipping.FixedByWeightByTotal.Models;
 
 public record FixedRateModel : BaseNopModel
 {
-    public int ShippingMethodId { get; set; }
+    public long ShippingMethodId { get; set; }
 
     [NopResourceDisplayName("Plugins.Shipping.FixedByWeightByTotal.Fields.ShippingMethod")]
     public string ShippingMethodName { get; set; }

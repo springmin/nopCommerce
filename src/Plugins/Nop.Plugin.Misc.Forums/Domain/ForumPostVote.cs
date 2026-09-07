@@ -10,12 +10,12 @@ public class ForumPostVote : BaseEntity
     /// <summary>
     /// Gets or sets the forum post identifier
     /// </summary>
-    public int ForumPostId { get; set; }
+    public long ForumPostId { get; set; }
 
     /// <summary>
     /// Gets or sets the customer identifier
     /// </summary>
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether this vote is up or is down

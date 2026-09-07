@@ -17,7 +17,7 @@ public partial interface IBlogModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the blog content model
     /// </returns>
-    Task<BlogContentModel> PrepareBlogContentModelAsync(BlogContentModel blogContentModel, int? filterByBlogPostId);
+    Task<BlogContentModel> PrepareBlogContentModelAsync(BlogContentModel blogContentModel, long? filterByBlogPostId);
 
     /// <summary>
     /// Prepare paged blog post list model
@@ -61,7 +61,7 @@ public partial interface IBlogModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the blog comment list model
     /// </returns>
-    Task<BlogCommentListModel> PrepareBlogCommentListModelAsync(BlogCommentSearchModel searchModel, int? blogPostId);
+    Task<BlogCommentListModel> PrepareBlogCommentListModelAsync(BlogCommentSearchModel searchModel, long? blogPostId);
 
     /// <summary>
     /// Prepare blog post search model

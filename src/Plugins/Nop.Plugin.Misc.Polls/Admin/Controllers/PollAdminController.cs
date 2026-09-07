@@ -164,7 +164,7 @@ public class PollAdminController : BasePluginController
     }
 
     [CheckPermission(PollsDefaults.Permissions.POLLS_VIEW)]
-    public async Task<IActionResult> Edit(int id)
+    public async Task<IActionResult> Edit(long id)
     {
         //try to get a poll with the specified id
         var poll = await _pollService.GetPollByIdAsync(id);
@@ -211,7 +211,7 @@ public class PollAdminController : BasePluginController
 
     [HttpPost]
     [CheckPermission(PollsDefaults.Permissions.POLLS_MANAGE)]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(long id)
     {
         //try to get a poll with the specified id
         var poll = await _pollService.GetPollByIdAsync(id);
@@ -263,7 +263,7 @@ public class PollAdminController : BasePluginController
 
     [HttpPost]
     [CheckPermission(PollsDefaults.Permissions.POLLS_MANAGE)]
-    public async Task<IActionResult> PollAnswerAdd(int pollId, [Validate] PollAnswerModel model)
+    public async Task<IActionResult> PollAnswerAdd(long pollId, [Validate] PollAnswerModel model)
     {
         if (!ModelState.IsValid)
             return ErrorJson(ModelState.SerializeErrors());
@@ -276,7 +276,7 @@ public class PollAdminController : BasePluginController
 
     [HttpPost]
     [CheckPermission(PollsDefaults.Permissions.POLLS_MANAGE)]
-    public async Task<IActionResult> PollAnswerDelete(int id)
+    public async Task<IActionResult> PollAnswerDelete(long id)
     {
         //try to get a poll answer with the specified id
         var pollAnswer = await _pollService.GetPollAnswerByIdAsync(id)

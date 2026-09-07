@@ -10,22 +10,22 @@ public class TaxRate : BaseEntity
     /// <summary>
     /// Gets or sets the store identifier
     /// </summary>
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 
     /// <summary>
     /// Gets or sets the tax category identifier
     /// </summary>
-    public int TaxCategoryId { get; set; }
+    public long TaxCategoryId { get; set; }
 
     /// <summary>
     /// Gets or sets the country identifier
     /// </summary>
-    public int CountryId { get; set; }
+    public long CountryId { get; set; }
 
     /// <summary>
     /// Gets or sets the state/province identifier
     /// </summary>
-    public int StateProvinceId { get; set; }
+    public long StateProvinceId { get; set; }
 
     /// <summary>
     /// Gets or sets the zip

@@ -329,7 +329,7 @@ public class AvalaraController : BasePluginController
         return await Configure(testTaxResult);
     }
 
-    public async Task<IActionResult> ChangeOriginAddressType(int typeId)
+    public async Task<IActionResult> ChangeOriginAddressType(long typeId)
     {
         var message = (TaxOriginAddressType)typeId switch
         {

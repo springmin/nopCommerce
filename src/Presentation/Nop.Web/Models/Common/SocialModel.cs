@@ -12,5 +12,5 @@ public partial record SocialModel : BaseNopModel
     public string SnapchatLink { get; set; }
     public string PinterestLink { get; set; }
     public string TumblrLink { get; set; }
-    public int WorkingLanguageId { get; set; }
+    public long WorkingLanguageId { get; set; }
 }

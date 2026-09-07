@@ -70,7 +70,7 @@ public partial class CampaignController : BaseAdminController
 
     #region Utilities
 
-    protected virtual async Task<EmailAccount> GetEmailAccountAsync(int emailAccountId)
+    protected virtual async Task<EmailAccount> GetEmailAccountAsync(long emailAccountId)
     {
         return await _emailAccountService.GetEmailAccountByIdAsync(emailAccountId)
                ?? await _emailAccountService.GetEmailAccountByIdAsync(_emailAccountSettings.DefaultEmailAccountId)
@@ -145,7 +145,7 @@ public partial class CampaignController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Promotions.CAMPAIGNS_VIEW)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         //try to get a campaign with the specified id
         var campaign = await _campaignService.GetCampaignByIdAsync(id);
@@ -290,7 +290,7 @@ public partial class CampaignController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Promotions.CAMPAIGNS_DELETE)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get a campaign with the specified id
         var campaign = await _campaignService.GetCampaignByIdAsync(id);

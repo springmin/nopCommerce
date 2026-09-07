@@ -184,7 +184,7 @@ public partial class ManufacturerModelFactory : IManufacturerModelFactory
     public virtual async Task<ManufacturerModel> PrepareManufacturerModelAsync(ManufacturerModel model,
         Manufacturer manufacturer, bool excludeProperties = false)
     {
-        Func<ManufacturerLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<ManufacturerLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (manufacturer != null)
         {
@@ -330,8 +330,8 @@ public partial class ManufacturerModelFactory : IManufacturerModelFactory
 
         //get products
         var products = await _productService.SearchProductsAsync(showHidden: true,
-            categoryIds: new List<int> { searchModel.SearchCategoryId },
-            manufacturerIds: new List<int> { searchModel.SearchManufacturerId },
+            categoryIds: new List<long> { searchModel.SearchCategoryId },
+            manufacturerIds: new List<long> { searchModel.SearchManufacturerId },
             storeId: searchModel.SearchStoreId,
             vendorId: searchModel.SearchVendorId,
             productType: searchModel.SearchProductTypeId > 0 ? (ProductType?)searchModel.SearchProductTypeId : null,

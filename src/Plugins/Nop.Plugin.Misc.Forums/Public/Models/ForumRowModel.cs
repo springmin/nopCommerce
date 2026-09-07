@@ -11,7 +11,7 @@ public record ForumRowModel : BaseNopEntityModel
     public string Description { get; set; }
     public int NumTopics { get; set; }
     public int NumPosts { get; set; }
-    public int LastPostId { get; set; }
+    public long LastPostId { get; set; }
 
     #endregion
 }

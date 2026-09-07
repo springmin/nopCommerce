@@ -62,7 +62,7 @@ public partial interface ITaxService
     /// A task that represents the asynchronous operation
     /// The task result contains the price. Tax rate
     /// </returns>
-    Task<(decimal price, decimal taxRate)> GetProductPriceAsync(Product product, int taxCategoryId, decimal price,
+    Task<(decimal price, decimal taxRate)> GetProductPriceAsync(Product product, long taxCategoryId, decimal price,
         bool includingTax, Customer customer,
         bool priceIncludesTax);
 

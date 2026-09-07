@@ -36,6 +36,10 @@ public class NopProcessorAccessor : IProcessorAccessor
             DataProviderType.SqlServer => FindProcessor(processors, ProcessorIdConstants.SqlServer),
             DataProviderType.MySql => FindProcessor(processors, ProcessorIdConstants.MySql8),
             DataProviderType.PostgreSQL => FindProcessor(processors, ProcessorIdConstants.PostgreSQL15_0),
+            DataProviderType.Sqlite => FindProcessor(processors, ProcessorIdConstants.SQLite),
+            DataProviderType.Tidb => FindProcessor(processors, ProcessorIdConstants.MySql8),
+            DataProviderType.Oracle => FindProcessor(processors, ProcessorIdConstants.Oracle),
+            DataProviderType.OpenGauss or DataProviderType.GaussDB => FindProcessor(processors, ProcessorIdConstants.PostgreSQL15_0),
             _ => throw new ProcessorFactoryNotFoundException(
                 $@"A migration processor for Data provider type {dataSettings.DataProvider} couldn't be found.")
         };
@@ -50,7 +54,9 @@ public class NopProcessorAccessor : IProcessorAccessor
     protected IMigrationProcessor FindProcessor(IList<IMigrationProcessor> processors,
         string processorsId)
     {
-        if (processors.FirstOrDefault(p =>
+        //use the last matching registration so custom processors (e.g. NopSqliteProcessor)
+        //registered after the stock ones take precedence
+        if (processors.LastOrDefault(p =>
                 p.DatabaseType.Equals(processorsId, StringComparison.OrdinalIgnoreCase) ||
                 p.DatabaseTypeAliases.Any(a => a.Equals(processorsId, StringComparison.OrdinalIgnoreCase))) is
             IMigrationProcessor processor)

@@ -501,7 +501,7 @@ public class PayPalCommercePaymentMethod : BasePlugin, IPaymentMethod, IWidgetPl
     {
         //clear webhooks when uninstall
         var stores = await _storeService.GetAllStoresAsync();
-        var storeIds = new List<int> { 0 }.Union(stores.Select(store => store.Id));
+        var storeIds = new List<long> { 0 }.Union(stores.Select(store => store.Id));
         foreach (var storeId in storeIds)
         {
             var settings = await _settingService.LoadSettingAsync<PayPalCommerceSettings>(storeId);

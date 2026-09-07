@@ -20,7 +20,7 @@ public partial interface IPriceListService
     /// A task that represents the asynchronous operation
     /// The task result contains the price lists
     /// </returns>
-    Task<IList<PriceList>> GetAllPriceListsAsync(int[] customerRoleIds = null, int[] customerIds = null, bool? isActive = null);
+    Task<IList<PriceList>> GetAllPriceListsAsync(long[] customerRoleIds = null, long[] customerIds = null, bool? isActive = null);
 
     /// <summary>
     /// Search price lists
@@ -34,7 +34,7 @@ public partial interface IPriceListService
     /// A task that represents the asynchronous operation
     /// The task result contains the price lists
     /// </returns>
-    Task<IPagedList<PriceList>> SearchPriceListsAsync(int[] customerRoleIds = null, int[] customerIds = null, bool? isActive = null,
+    Task<IPagedList<PriceList>> SearchPriceListsAsync(long[] customerRoleIds = null, long[] customerIds = null, bool? isActive = null,
         int pageIndex = 0, int pageSize = int.MaxValue);
 
     /// <summary>
@@ -55,7 +55,7 @@ public partial interface IPriceListService
     /// A task that represents the asynchronous operation
     /// The task result contains the customer role identifiers
     /// </returns>
-    Task<int[]> GetCustomerRoleIdsAsync(PriceList priceList);
+    Task<long[]> GetCustomerRoleIdsAsync(PriceList priceList);
 
     /// <summary>
     /// Inserts price list
@@ -72,7 +72,7 @@ public partial interface IPriceListService
     /// A task that represents the asynchronous operation
     /// The task result contains the price list
     /// </returns>
-    Task<PriceList> GetPriceListByIdAsync(int priceListId);
+    Task<PriceList> GetPriceListByIdAsync(long priceListId);
 
     /// <summary>
     /// Get price lists by identifiers
@@ -82,7 +82,7 @@ public partial interface IPriceListService
     /// A task that represents the asynchronous operation
     /// The task result contains the price lists
     /// </returns>
-    Task<IList<PriceList>> GetPriceListsByIdsAsync(int[] priceListIds);
+    Task<IList<PriceList>> GetPriceListsByIdsAsync(long[] priceListIds);
 
     /// <summary>
     /// Updates the price list
@@ -108,7 +108,7 @@ public partial interface IPriceListService
     /// A task that represents the asynchronous operation
     /// The task result contains the price list product mapping collection
     /// </returns>
-    Task<IPagedList<PriceListItem>> GetPriceListItemsByPriceListIdAsync(int priceListId,
+    Task<IPagedList<PriceListItem>> GetPriceListItemsByPriceListIdAsync(long priceListId,
         int pageIndex = 0, int pageSize = int.MaxValue);
 
     /// <summary>
@@ -129,7 +129,7 @@ public partial interface IPriceListService
     /// A task that represents the asynchronous operation
     /// The task result contains the price list item
     /// </returns>
-    Task<PriceListItem> GetPriceListItemByIdAsync(int priceListItemId);
+    Task<PriceListItem> GetPriceListItemByIdAsync(long priceListItemId);
 
     /// <summary>
     /// Gets list of product price lists
@@ -180,7 +180,7 @@ public partial interface IPriceListService
     /// A task that represents the asynchronous operation
     /// The task result contains the price list item collection
     /// </returns>
-    Task<IPagedList<PriceListCustomer>> GetPriceListCustomersByPriceListIdAsync(int priceListId,
+    Task<IPagedList<PriceListCustomer>> GetPriceListCustomersByPriceListIdAsync(long priceListId,
         int pageIndex = 0, int pageSize = int.MaxValue);
 
     /// <summary>
@@ -191,7 +191,7 @@ public partial interface IPriceListService
     /// A task that represents the asynchronous operation
     /// The task result contains the price list item
     /// </returns>
-    Task<PriceListCustomer> GetPriceListCustomerByIdAsync(int priceListCustomerId);
+    Task<PriceListCustomer> GetPriceListCustomerByIdAsync(long priceListCustomerId);
 
     /// <summary>
     /// Gets list of customer price lists

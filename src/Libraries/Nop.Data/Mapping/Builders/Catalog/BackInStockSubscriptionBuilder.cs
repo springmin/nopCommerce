@@ -19,8 +19,8 @@ public partial class BackInStockSubscriptionBuilder : NopEntityBuilder<BackInSto
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(BackInStockSubscription.CustomerId)).AsInt32().ForeignKey<Customer>()
-            .WithColumn(nameof(BackInStockSubscription.ProductId)).AsInt32().ForeignKey<Product>();
+            .WithColumn(nameof(BackInStockSubscription.CustomerId)).AsInt64().ForeignKey<Customer>()
+            .WithColumn(nameof(BackInStockSubscription.ProductId)).AsInt64().ForeignKey<Product>();
     }
 
     #endregion

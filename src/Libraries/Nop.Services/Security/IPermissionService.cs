@@ -32,7 +32,7 @@ public partial interface IPermissionService
     /// A task that represents the asynchronous operation
     /// The task result contains a permission record
     /// </returns>
-    Task<PermissionRecord> GetPermissionRecordByIdAsync(int permissionId);
+    Task<PermissionRecord> GetPermissionRecordByIdAsync(long permissionId);
 
     /// <summary>
     /// Updates the permission
@@ -106,7 +106,7 @@ public partial interface IPermissionService
     /// A task that represents the asynchronous operation
     /// The task result contains true - authorized; otherwise, false
     /// </returns>
-    Task<bool> AuthorizeAsync(string permissionRecordSystemName, int customerRoleId);
+    Task<bool> AuthorizeAsync(string permissionRecordSystemName, long customerRoleId);
 
     /// <summary>
     /// Gets a permission record-customer role mapping
@@ -116,7 +116,7 @@ public partial interface IPermissionService
     /// A task that represents the asynchronous operation
     /// The task result contains a list of mappings
     /// </returns>
-    Task<IList<PermissionRecordCustomerRoleMapping>> GetMappingByPermissionRecordIdAsync(int permissionId);
+    Task<IList<PermissionRecordCustomerRoleMapping>> GetMappingByPermissionRecordIdAsync(long permissionId);
 
     /// <summary>
     /// Delete a permission record-customer role mapping
@@ -124,7 +124,7 @@ public partial interface IPermissionService
     /// <param name="permissionId">Permission identifier</param>
     /// <param name="customerRoleId">Customer role identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task DeletePermissionRecordCustomerRoleMappingAsync(int permissionId, int customerRoleId);
+    Task DeletePermissionRecordCustomerRoleMappingAsync(long permissionId, long customerRoleId);
 
     /// <summary>
     /// Inserts a permission record-customer role mapping
@@ -145,5 +145,5 @@ public partial interface IPermissionService
     /// <param name="customerRoleId">Customer role ID</param>
     /// <param name="permissions">Permissions</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task InsertPermissionMappingAsync(int customerRoleId, params string[] permissions);
+    Task InsertPermissionMappingAsync(long customerRoleId, params string[] permissions);
 }

@@ -19,7 +19,7 @@ public partial record AddressAttributeValueModel : BaseNopEntityModel, ILocalize
 
     #region Properties
 
-    public int AttributeId { get; set; }
+    public long AttributeId { get; set; }
 
     [NopResourceDisplayName("Admin.Address.AddressAttributes.Values.Fields.Name")]
     public string Name { get; set; }
@@ -37,7 +37,7 @@ public partial record AddressAttributeValueModel : BaseNopEntityModel, ILocalize
 
 public partial record AddressAttributeValueLocalizedModel : ILocalizedLocaleModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Address.AddressAttributes.Values.Fields.Name")]
     public string Name { get; set; }

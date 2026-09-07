@@ -19,8 +19,8 @@ public partial class ProductWarehouseInventoryBuilder : NopEntityBuilder<Product
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(ProductWarehouseInventory.ProductId)).AsInt32().ForeignKey<Product>()
-            .WithColumn(nameof(ProductWarehouseInventory.WarehouseId)).AsInt32().ForeignKey<Warehouse>();
+            .WithColumn(nameof(ProductWarehouseInventory.ProductId)).AsInt64().ForeignKey<Product>()
+            .WithColumn(nameof(ProductWarehouseInventory.WarehouseId)).AsInt64().ForeignKey<Warehouse>();
     }
 
     #endregion

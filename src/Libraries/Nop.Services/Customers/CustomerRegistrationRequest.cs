@@ -20,7 +20,7 @@ public partial class CustomerRegistrationRequest
     public CustomerRegistrationRequest(Customer customer, string email, string username,
         string password,
         PasswordFormat passwordFormat,
-        int storeId,
+        long storeId,
         bool isApproved = true)
     {
         Customer = customer;
@@ -60,7 +60,7 @@ public partial class CustomerRegistrationRequest
     /// <summary>
     /// Store identifier
     /// </summary>
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 
     /// <summary>
     /// Is approved

@@ -22,7 +22,7 @@ public partial interface IMeasureService
     /// A task that represents the asynchronous operation
     /// The task result contains the measure dimension
     /// </returns>
-    Task<MeasureDimension> GetMeasureDimensionByIdAsync(int measureDimensionId);
+    Task<MeasureDimension> GetMeasureDimensionByIdAsync(long measureDimensionId);
 
     /// <summary>
     /// Gets a measure dimension by system keyword
@@ -98,7 +98,7 @@ public partial interface IMeasureService
     /// A task that represents the asynchronous operation
     /// The task result contains the measure weight
     /// </returns>
-    Task<MeasureWeight> GetMeasureWeightByIdAsync(int measureWeightId);
+    Task<MeasureWeight> GetMeasureWeightByIdAsync(long measureWeightId);
 
     /// <summary>
     /// Gets a measure weight by system keyword

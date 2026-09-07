@@ -8,12 +8,12 @@ public partial class ProductVideo : BaseEntity
     /// <summary>
     /// Gets or sets the product identifier
     /// </summary>
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     /// <summary>
     /// Gets or sets the video identifier
     /// </summary>
-    public int VideoId { get; set; }
+    public long VideoId { get; set; }
 
     /// <summary>
     /// Gets or sets the display order

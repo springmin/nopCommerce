@@ -16,7 +16,7 @@ public partial interface IDownloadService
     /// A task that represents the asynchronous operation
     /// The task result contains the download
     /// </returns>
-    Task<Download> GetDownloadByIdAsync(int downloadId);
+    Task<Download> GetDownloadByIdAsync(long downloadId);
 
     /// <summary>
     /// Gets a download by GUID

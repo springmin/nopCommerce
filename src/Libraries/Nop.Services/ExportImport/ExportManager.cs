@@ -194,7 +194,7 @@ public partial class ExportManager : IExportManager
     #region Utilities
 
     /// <returns>A task that represents the asynchronous operation</returns>
-    protected virtual async Task<int> WriteCategoriesAsync(XmlWriter xmlWriter, int parentCategoryId, int totalCategories)
+    protected virtual async Task<int> WriteCategoriesAsync(XmlWriter xmlWriter, long parentCategoryId, int totalCategories)
     {
         var categories = await _categoryService.GetAllCategoriesByParentCategoryIdAsync(parentCategoryId, true);
         if (categories == null || !categories.Any())
@@ -269,7 +269,7 @@ public partial class ExportManager : IExportManager
     /// A task that represents the asynchronous operation
     /// The task result contains the path to the image file
     /// </returns>
-    protected virtual async Task<string> GetPicturesAsync(int pictureId)
+    protected virtual async Task<string> GetPicturesAsync(long pictureId)
     {
         var picture = await _pictureService.GetPictureByIdAsync(pictureId);
 
@@ -2811,7 +2811,7 @@ public partial class ExportManager : IExportManager
     /// A task that represents the asynchronous operation
     /// The task result contains the customer GDPR info
     /// </returns>
-    public virtual async Task<byte[]> ExportCustomerGdprInfoToXlsxAsync(Customer customer, int storeId)
+    public virtual async Task<byte[]> ExportCustomerGdprInfoToXlsxAsync(Customer customer, long storeId)
     {
         ArgumentNullException.ThrowIfNull(customer);
 

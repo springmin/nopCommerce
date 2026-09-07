@@ -202,7 +202,7 @@ public partial class SpecificationAttributeController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.SPECIFICATION_ATTRIBUTES_VIEW)]
-    public virtual async Task<IActionResult> EditSpecificationAttributeGroup(int id)
+    public virtual async Task<IActionResult> EditSpecificationAttributeGroup(long id)
     {
         var specificationAttributeGroup = await _specificationAttributeService.GetSpecificationAttributeGroupByIdAsync(id);
         if (specificationAttributeGroup == null)
@@ -245,7 +245,7 @@ public partial class SpecificationAttributeController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.SPECIFICATION_ATTRIBUTES_VIEW)]
-    public virtual async Task<IActionResult> EditSpecificationAttribute(int id)
+    public virtual async Task<IActionResult> EditSpecificationAttribute(long id)
     {
         //try to get a specification attribute with the specified id
         var specificationAttribute = await _specificationAttributeService.GetSpecificationAttributeByIdAsync(id);
@@ -295,7 +295,7 @@ public partial class SpecificationAttributeController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.SPECIFICATION_ATTRIBUTES_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> PreTranslate(int itemId)
+    public virtual async Task<IActionResult> PreTranslate(long itemId)
     {
         var translationModel = new TranslationModel();
 
@@ -314,7 +314,7 @@ public partial class SpecificationAttributeController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.SPECIFICATION_ATTRIBUTES_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> DeleteSpecificationAttributeGroup(int id)
+    public virtual async Task<IActionResult> DeleteSpecificationAttributeGroup(long id)
     {
         var specificationAttributeGroup = await _specificationAttributeService.GetSpecificationAttributeGroupByIdAsync(id);
         if (specificationAttributeGroup == null)
@@ -332,7 +332,7 @@ public partial class SpecificationAttributeController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.SPECIFICATION_ATTRIBUTES_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> DeleteSpecificationAttribute(int id)
+    public virtual async Task<IActionResult> DeleteSpecificationAttribute(long id)
     {
         var specificationAttribute = await _specificationAttributeService.GetSpecificationAttributeByIdAsync(id);
 
@@ -351,7 +351,7 @@ public partial class SpecificationAttributeController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.SPECIFICATION_ATTRIBUTES_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> DeleteSelectedSpecificationAttributes(ICollection<int> selectedIds)
+    public virtual async Task<IActionResult> DeleteSelectedSpecificationAttributes(ICollection<long> selectedIds)
     {
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();
@@ -385,7 +385,7 @@ public partial class SpecificationAttributeController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.SPECIFICATION_ATTRIBUTES_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> OptionCreatePopup(int specificationAttributeId)
+    public virtual async Task<IActionResult> OptionCreatePopup(long specificationAttributeId)
     {
         //try to get a specification attribute with the specified id
         var specificationAttribute = await _specificationAttributeService.GetSpecificationAttributeByIdAsync(specificationAttributeId);
@@ -433,7 +433,7 @@ public partial class SpecificationAttributeController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.SPECIFICATION_ATTRIBUTES_VIEW)]
-    public virtual async Task<IActionResult> OptionEditPopup(int id)
+    public virtual async Task<IActionResult> OptionEditPopup(long id)
     {
         //try to get a specification attribute option with the specified id
         var specificationAttributeOption = await _specificationAttributeService.GetSpecificationAttributeOptionByIdAsync(id);
@@ -495,7 +495,7 @@ public partial class SpecificationAttributeController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.SPECIFICATION_ATTRIBUTES_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> OptionDelete(int id, int specificationAttributeId)
+    public virtual async Task<IActionResult> OptionDelete(long id, long specificationAttributeId)
     {
         //try to get a specification attribute option with the specified id
         var specificationAttributeOption = await _specificationAttributeService.GetSpecificationAttributeOptionByIdAsync(id)

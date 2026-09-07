@@ -35,13 +35,13 @@ public partial record BestCustomersReportSearchModel : BaseSearchModel
     public DateTime? EndDate { get; set; }
 
     [NopResourceDisplayName("Admin.Reports.Customers.BestBy.OrderStatus")]
-    public int OrderStatusId { get; set; }
+    public long OrderStatusId { get; set; }
 
     [NopResourceDisplayName("Admin.Reports.Customers.BestBy.PaymentStatus")]
-    public int PaymentStatusId { get; set; }
+    public long PaymentStatusId { get; set; }
 
     [NopResourceDisplayName("Admin.Reports.Customers.BestBy.ShippingStatus")]
-    public int ShippingStatusId { get; set; }
+    public long ShippingStatusId { get; set; }
 
     public IList<SelectListItem> AvailableOrderStatuses { get; set; }
 

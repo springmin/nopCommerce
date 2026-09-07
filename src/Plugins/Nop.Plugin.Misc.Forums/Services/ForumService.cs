@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using Markdig;
+﻿using Markdig;
 using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Domain.Customers;
@@ -99,54 +98,6 @@ public class ForumService
     #region Utilities
 
     /// <summary>
-    /// Ensure only allowed HTML tags
-    /// </summary>
-    /// <param name="text">Text</param>
-    /// <returns>Sanitized text with all invalid tags removed</returns>
-    private static string EnsureOnlyAllowedHtml(string text)
-    {
-        if (string.IsNullOrEmpty(text))
-            return string.Empty;
-
-        const string allowedTags = "br,hr,b,i,u,a,div,ol,ul,li,blockquote,img,span,p,em,strong,font,pre,h1,h2,h3,h4,h5,h6,address,cite,code";
-
-        var m = Regex.Matches(text, "<.*?>", RegexOptions.IgnoreCase);
-
-        for (var i = m.Count - 1; i >= 0; i--)
-        {
-            var tag = text[(m[i].Index + 1)..(m[i].Index + m[i].Length)].Trim().ToLower();
-
-            if (!isValidTag(tag))
-                text = text.Remove(m[i].Index, m[i].Length);
-        }
-
-        return text;
-
-        static bool isValidTag(string tag)
-        {
-            var aTags = allowedTags.Split(',');
-            if (tag.Contains("javascript", StringComparison.InvariantCultureIgnoreCase))
-                return false;
-
-            if (tag.Contains("vbscript", StringComparison.InvariantCultureIgnoreCase))
-                return false;
-
-            if (tag.Contains("onclick", StringComparison.InvariantCultureIgnoreCase))
-                return false;
-
-            var endChars = new[] { ' ', '>', '/', '\t' };
-
-            var pos = tag.IndexOfAny(endChars, 1);
-            if (pos > 0)
-                tag = tag[0..pos];
-            if (tag[0] == '/')
-                tag = tag[1..^0];
-
-            return aTags.Any(aTag => tag == aTag);
-        }
-    }
-
-    /// <summary>
     /// Formats the text
     /// </summary>
     /// <param name="text">Text</param>
@@ -157,23 +108,23 @@ public class ForumService
         if (string.IsNullOrEmpty(text))
             return string.Empty;
 
-        string formatedText;
-
         try
         {
-            formatedText = textFormatType switch
+            text = _htmlFormatter.FormatText(text);
+
+            text = textFormatType switch
             {
-                TextFormatType.BBCode => _bbCodeHelper.FormatText(_htmlFormatter.FormatText(text)),
-                TextFormatType.Markdown => EnsureOnlyAllowedHtml(Markdown.ToHtml(CSharpFormat.FormatTextSimple(text))),
-                _ => _htmlFormatter.FormatText(text)
+                TextFormatType.BBCode => _bbCodeHelper.FormatText(text),
+                TextFormatType.Markdown => Markdown.ToHtml(CSharpFormat.FormatTextSimple(text)),
+                _ => text
             };
         }
         catch (Exception exc)
         {
-            formatedText = $"Text cannot be formatted. Error: {exc.Message}";
+            text = $"Text cannot be formatted. Error: {exc.Message}";
         }
 
-        return formatedText;
+        return text;
     }
 
     /// <summary>
@@ -199,7 +150,7 @@ public class ForumService
     /// <param name="appendedPostIdentifierAnchor">Forum post identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
     private async Task AddForumTopicTokensAsync(List<Token> tokens, ForumTopic forumTopic,
-        int? friendlyForumTopicPageIndex = null, int? appendedPostIdentifierAnchor = null)
+        int? friendlyForumTopicPageIndex = null, long? appendedPostIdentifierAnchor = null)
     {
         var topicUrl = friendlyForumTopicPageIndex.HasValue && friendlyForumTopicPageIndex.Value > 1
             ? _nopUrlHelper.RouteUrl(ForumDefaults.Routes.Public.TOPIC_SLUG_PAGED, new { id = forumTopic.Id, slug = await GetTopicSeNameAsync(forumTopic), pageNumber = friendlyForumTopicPageIndex.Value }, _webHelper.GetCurrentRequestProtocol())
@@ -229,7 +180,7 @@ public class ForumService
     /// </summary>
     /// <param name="forumId">The forum identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    private async Task UpdateForumStatsAsync(int forumId)
+    private async Task UpdateForumStatsAsync(long forumId)
     {
         var forum = await GetForumByIdAsync(forumId);
         if (forum == null)
@@ -251,9 +202,9 @@ public class ForumService
         var numPosts = await queryNumPosts.CountAsync();
 
         //last values
-        var lastTopicId = 0;
-        var lastPostId = 0;
-        var lastPostCustomerId = 0;
+        long lastTopicId = 0;
+        long lastPostId = 0;
+        long lastPostCustomerId = 0;
         DateTime? lastPostTime = null;
         var queryLastValues =
             from ft in _forumTopicRepository.Table
@@ -291,7 +242,7 @@ public class ForumService
     /// </summary>
     /// <param name="forumTopicId">The forum topic identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    private async Task UpdateForumTopicStatsAsync(int forumTopicId)
+    private async Task UpdateForumTopicStatsAsync(long forumTopicId)
     {
         var forumTopic = await GetTopicByIdAsync(forumTopicId);
         if (forumTopic == null)
@@ -305,8 +256,8 @@ public class ForumService
         var numPosts = await queryNumPosts.CountAsync();
 
         //last values
-        var lastPostId = 0;
-        var lastPostCustomerId = 0;
+        long lastPostId = 0;
+        long lastPostCustomerId = 0;
         DateTime? lastPostTime = null;
         var queryLastValues =
             from fp in _forumPostRepository.Table
@@ -340,7 +291,7 @@ public class ForumService
     /// </summary>
     /// <param name="customerId">The customer identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    private async Task UpdateCustomerStatsAsync(int customerId)
+    private async Task UpdateCustomerStatsAsync(long customerId)
     {
         var customer = await _customerService.GetCustomerByIdAsync(customerId);
         if (customer == null)
@@ -364,7 +315,7 @@ public class ForumService
     /// A task that represents the asynchronous operation
     /// The task result contains the forum Topic
     /// </returns>
-    private async Task<ForumTopic> GetTopicByIdAsync(int forumTopicId, bool increaseViews)
+    private async Task<ForumTopic> GetTopicByIdAsync(long forumTopicId, bool increaseViews)
     {
         var forumTopic = await _forumTopicRepository.GetByIdAsync(forumTopicId, cache => default);
         if (forumTopic == null)
@@ -390,7 +341,7 @@ public class ForumService
     /// A task that represents the asynchronous operation
     /// The task result contains the queued email identifier
     /// </returns>
-    private async Task<IList<int>> SendNewForumTopicMessageAsync(Customer customer, ForumTopic forumTopic, Forum forum, int languageId)
+    private async Task<IList<long>> SendNewForumTopicMessageAsync(Customer customer, ForumTopic forumTopic, Forum forum, long languageId)
     {
         ArgumentNullException.ThrowIfNull(customer);
 
@@ -398,7 +349,7 @@ public class ForumService
 
         var messageTemplates = await _workflowMessageService.GetActiveMessageTemplatesAsync(ForumDefaults.NEW_FORUM_TOPIC_MESSAGE, store.Id);
         if (!messageTemplates.Any())
-            return new List<int>();
+            return new List<long>();
 
         //tokens
         var commonTokens = new List<Token>();
@@ -443,7 +394,7 @@ public class ForumService
     /// A task that represents the asynchronous operation
     /// The task result contains the forum group
     /// </returns>
-    public async Task<ForumGroup> GetForumGroupByIdAsync(int forumGroupId)
+    public async Task<ForumGroup> GetForumGroupByIdAsync(long forumGroupId)
     {
         return await _forumGroupRepository.GetByIdAsync(forumGroupId, cache => default);
     }
@@ -526,7 +477,7 @@ public class ForumService
     /// A task that represents the asynchronous operation
     /// The task result contains the forum
     /// </returns>
-    public async Task<Forum> GetForumByIdAsync(int forumId)
+    public async Task<Forum> GetForumByIdAsync(long forumId)
     {
         return await _forumRepository.GetByIdAsync(forumId, cache => default);
     }
@@ -539,7 +490,7 @@ public class ForumService
     /// A task that represents the asynchronous operation
     /// The task result contains the forums
     /// </returns>
-    public async Task<IList<Forum>> GetAllForumsByGroupIdAsync(int forumGroupId)
+    public async Task<IList<Forum>> GetAllForumsByGroupIdAsync(long forumGroupId)
     {
         var forums = await _forumRepository.GetAllAsync(query =>
         {
@@ -615,7 +566,7 @@ public class ForumService
     /// A task that represents the asynchronous operation
     /// The task result contains the forum topic
     /// </returns>
-    public async Task<ForumTopic> GetTopicByIdAsync(int forumTopicId)
+    public async Task<ForumTopic> GetTopicByIdAsync(long forumTopicId)
     {
         return await GetTopicByIdAsync(forumTopicId, false);
     }
@@ -634,8 +585,8 @@ public class ForumService
     /// A task that represents the asynchronous operation
     /// The task result contains the forum topics
     /// </returns>
-    public async Task<IPagedList<ForumTopic>> GetAllTopicsAsync(int forumId = 0,
-        int customerId = 0, string keywords = "", ForumSearchType searchType = ForumSearchType.All,
+    public async Task<IPagedList<ForumTopic>> GetAllTopicsAsync(long forumId = 0,
+        long customerId = 0, string keywords = "", ForumSearchType searchType = ForumSearchType.All,
         int limitDays = 0, int pageIndex = 0, int pageSize = int.MaxValue)
     {
         DateTime? limitDate = null;
@@ -682,7 +633,7 @@ public class ForumService
     /// A task that represents the asynchronous operation
     /// The task result contains the forum topics
     /// </returns>
-    public async Task<IPagedList<ForumTopic>> GetActiveTopicsAsync(int forumId = 0,
+    public async Task<IPagedList<ForumTopic>> GetActiveTopicsAsync(long forumId = 0,
         int pageIndex = 0, int pageSize = int.MaxValue)
     {
         var query1 =
@@ -751,7 +702,7 @@ public class ForumService
     /// A task that represents the asynchronous operation
     /// The task result contains the moved forum topic
     /// </returns>
-    public async Task<ForumTopic> MoveTopicAsync(int forumTopicId, int newForumId)
+    public async Task<ForumTopic> MoveTopicAsync(long forumTopicId, long newForumId)
     {
         var forumTopic = await GetTopicByIdAsync(forumTopicId);
         if (forumTopic == null)
@@ -822,7 +773,7 @@ public class ForumService
     /// A task that represents the asynchronous operation
     /// The task result contains the forum post
     /// </returns>
-    public async Task<ForumPost> GetPostByIdAsync(int forumPostId)
+    public async Task<ForumPost> GetPostByIdAsync(long forumPostId)
     {
         return await _forumPostRepository.GetByIdAsync(forumPostId, cache => default, useShortTermCache: true);
     }
@@ -839,8 +790,8 @@ public class ForumService
     /// A task that represents the asynchronous operation
     /// The task result contains the posts
     /// </returns>
-    public async Task<IPagedList<ForumPost>> GetAllPostsAsync(int forumTopicId = 0,
-        int customerId = 0, string keywords = "",
+    public async Task<IPagedList<ForumPost>> GetAllPostsAsync(long forumTopicId = 0,
+        long customerId = 0, string keywords = "",
         int pageIndex = 0, int pageSize = int.MaxValue)
     {
         return await GetAllPostsAsync(forumTopicId, customerId, keywords, true, pageIndex, pageSize);
@@ -859,7 +810,7 @@ public class ForumService
     /// A task that represents the asynchronous operation
     /// The task result contains the forum posts
     /// </returns>
-    public async Task<IPagedList<ForumPost>> GetAllPostsAsync(int forumTopicId = 0, int customerId = 0,
+    public async Task<IPagedList<ForumPost>> GetAllPostsAsync(long forumTopicId = 0, long customerId = 0,
         string keywords = "", bool ascSort = false,
         int pageIndex = 0, int pageSize = int.MaxValue)
     {
@@ -956,7 +907,7 @@ public class ForumService
     /// A task that represents the asynchronous operation
     /// The task result contains the forum subscription
     /// </returns>
-    public async Task<ForumSubscription> GetSubscriptionByIdAsync(int forumSubscriptionId)
+    public async Task<ForumSubscription> GetSubscriptionByIdAsync(long forumSubscriptionId)
     {
         return await _forumSubscriptionRepository.GetByIdAsync(forumSubscriptionId, cache => default, useShortTermCache: true);
     }
@@ -973,8 +924,8 @@ public class ForumService
     /// A task that represents the asynchronous operation
     /// The task result contains the forum subscriptions
     /// </returns>
-    public async Task<IPagedList<ForumSubscription>> GetAllSubscriptionsAsync(int customerId = 0, int forumId = 0,
-        int topicId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
+    public async Task<IPagedList<ForumSubscription>> GetAllSubscriptionsAsync(long customerId = 0, long forumId = 0,
+        long topicId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
     {
         var forumSubscriptions = await _forumSubscriptionRepository.GetAllPagedAsync(query =>
         {
@@ -1265,7 +1216,7 @@ public class ForumService
     /// A task that represents the asynchronous operation
     /// The task result contains the page index
     /// </returns>
-    public async Task<int> CalculateTopicPageIndexAsync(int forumTopicId, int pageSize, int postId)
+    public async Task<int> CalculateTopicPageIndexAsync(long forumTopicId, int pageSize, long postId)
     {
         var pageIndex = 0;
         var forumPosts = await GetAllPostsAsync(forumTopicId, ascSort: true);
@@ -1291,7 +1242,7 @@ public class ForumService
     /// A task that represents the asynchronous operation
     /// The task result contains the post vote
     /// </returns>
-    public async Task<ForumPostVote> GetPostVoteAsync(int postId, Customer customer)
+    public async Task<ForumPostVote> GetPostVoteAsync(long postId, Customer customer)
     {
         if (customer == null)
             return null;
@@ -1509,8 +1460,8 @@ public class ForumService
     /// A task that represents the asynchronous operation
     /// The task result contains the queued email identifier
     /// </returns>
-    public async Task<IList<int>> SendNewForumPostMessageAsync(Customer customer, ForumPost forumPost, ForumTopic forumTopic,
-        Forum forum, int friendlyForumTopicPageIndex, int languageId)
+    public async Task<IList<long>> SendNewForumPostMessageAsync(Customer customer, ForumPost forumPost, ForumTopic forumTopic,
+        Forum forum, int friendlyForumTopicPageIndex, long languageId)
     {
         ArgumentNullException.ThrowIfNull(customer);
 
@@ -1518,7 +1469,7 @@ public class ForumService
 
         var messageTemplates = await _workflowMessageService.GetActiveMessageTemplatesAsync(ForumDefaults.NEW_FORUM_POST_MESSAGE, store.Id);
         if (!messageTemplates.Any())
-            return new List<int>();
+            return new List<long>();
 
         //tokens
         var commonTokens = new List<Token>();

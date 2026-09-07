@@ -126,7 +126,7 @@ public partial class ProductController : BasePublicController
     
     #region Product details page
 
-    public virtual async Task<IActionResult> ProductDetails(int productId, int updatecartitemid = 0, int? customwishlistid = null)
+    public virtual async Task<IActionResult> ProductDetails(long productId, long updatecartitemid = 0, long? customwishlistid = null)
     {
         var product = await _productService.GetProductByIdAsync(productId);
         if (product == null || product.Deleted)
@@ -273,7 +273,7 @@ public partial class ProductController : BasePublicController
 
     //ignore SEO friendly URLs checks
     [CheckLanguageSeoCode(ignore: true)]
-    public virtual async Task<IActionResult> GetProductCombinations(int productId)
+    public virtual async Task<IActionResult> GetProductCombinations(long productId)
     {
         var product = await _productService.GetProductByIdAsync(productId);
         if (product == null)
@@ -306,7 +306,7 @@ public partial class ProductController : BasePublicController
 
     [HttpPost, ActionName("ProductReviews")]
     [ValidateCaptcha]
-    public virtual async Task<IActionResult> ProductReviewsAdd(int productId, ProductReviewsModel model, bool captchaValid)
+    public virtual async Task<IActionResult> ProductReviewsAdd(long productId, ProductReviewsModel model, bool captchaValid)
     {
         //validate CAPTCHA
         if (_captchaSettings.Enabled && _captchaSettings.ShowOnProductReviewPage && !captchaValid) 
@@ -382,7 +382,7 @@ public partial class ProductController : BasePublicController
     }
 
     [HttpPost]
-    public virtual async Task<IActionResult> SetProductReviewHelpfulness(int productReviewId, bool washelpful)
+    public virtual async Task<IActionResult> SetProductReviewHelpfulness(long productReviewId, bool washelpful)
     {
         var productReview = await _productReviewService.GetProductReviewByIdAsync(productReviewId) ?? throw new ArgumentException("No product review found with the specified id");
 
@@ -438,7 +438,7 @@ public partial class ProductController : BasePublicController
 
     #region Email a friend
 
-    public virtual async Task<IActionResult> ProductEmailAFriend(int productId)
+    public virtual async Task<IActionResult> ProductEmailAFriend(long productId)
     {
         var product = await _productService.GetProductByIdAsync(productId);
         if (product == null || product.Deleted || !product.Published || !_catalogSettings.EmailAFriendEnabled)
@@ -492,7 +492,7 @@ public partial class ProductController : BasePublicController
     #region Comparing products
 
     [HttpPost]
-    public virtual async Task<IActionResult> AddProductToCompareList(int productId)
+    public virtual async Task<IActionResult> AddProductToCompareList(long productId)
     {
         var product = await _productService.GetProductByIdAsync(productId);
         if (product == null || product.Deleted || !product.Published)
@@ -528,7 +528,7 @@ public partial class ProductController : BasePublicController
         });
     }
 
-    public virtual async Task<IActionResult> RemoveProductFromCompareList(int productId)
+    public virtual async Task<IActionResult> RemoveProductFromCompareList(long productId)
     {
         var product = await _productService.GetProductByIdAsync(productId);
         if (product == null)

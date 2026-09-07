@@ -145,7 +145,7 @@ public partial class PaymentModelFactory : IPaymentModelFactory
             foreach (var country in countries)
             {
                 if (!model.Restricted.ContainsKey(method.PluginDescriptor.SystemName))
-                    model.Restricted[method.PluginDescriptor.SystemName] = new Dictionary<int, bool>();
+                    model.Restricted[method.PluginDescriptor.SystemName] = new Dictionary<long, bool>();
 
                 model.Restricted[method.PluginDescriptor.SystemName][country.Id] = restrictedCountries.Contains(country.Id);
             }

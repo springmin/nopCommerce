@@ -14,7 +14,7 @@ public partial record PriceListModel : BaseNopEntityModel, IAclSupportedModel
 
     public PriceListModel()
     {
-        SelectedCustomerRoleIds = new List<int>();
+        SelectedCustomerRoleIds = new List<long>();
         AvailableCustomerRoles = new List<SelectListItem>();
         PriceListItemSearchModel = new PriceListItemSearchModel();
         PriceListCustomerSearchModel = new PriceListCustomerSearchModel();
@@ -42,7 +42,7 @@ public partial record PriceListModel : BaseNopEntityModel, IAclSupportedModel
     public DateTime? EndDateUtc { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.PriceLists.Fields.PriceCalculationTypeId")]
-    public int PriceCalculationTypeId { get; set; }
+    public long PriceCalculationTypeId { get; set; }
     public string PriceCalculationTypeName { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.PriceLists.Fields.PriceCalculationValue")]
@@ -56,7 +56,7 @@ public partial record PriceListModel : BaseNopEntityModel, IAclSupportedModel
 
     //ACL (customer roles)
     [NopResourceDisplayName("Admin.Catalog.PriceLists.Fields.CustomerRoles")]
-    public IList<int> SelectedCustomerRoleIds { get; set; }
+    public IList<long> SelectedCustomerRoleIds { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.PriceLists.Fields.CustomerRoles")]
     public string CustomerRoleNames { get; set; }

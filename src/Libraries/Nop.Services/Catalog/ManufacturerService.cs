@@ -121,7 +121,7 @@ public partial class ManufacturerService : IManufacturerService
     /// The task result contains the manufacturers
     /// </returns>
     public virtual async Task<IPagedList<Manufacturer>> GetAllManufacturersAsync(string manufacturerName = "",
-        int storeId = 0,
+        long storeId = 0,
         int pageIndex = 0,
         int pageSize = int.MaxValue,
         bool showHidden = false,
@@ -165,7 +165,7 @@ public partial class ManufacturerService : IManufacturerService
     /// A task that represents the asynchronous operation
     /// The task result contains the manufacturer identifiers
     /// </returns>
-    public virtual async Task<IList<int>> GetAppliedManufacturerIdsAsync(Discount discount, Customer customer)
+    public virtual async Task<IList<long>> GetAppliedManufacturerIdsAsync(Discount discount, Customer customer)
     {
         ArgumentNullException.ThrowIfNull(discount);
 
@@ -190,7 +190,7 @@ public partial class ManufacturerService : IManufacturerService
     /// A task that represents the asynchronous operation
     /// The task result contains the manufacturer
     /// </returns>
-    public virtual async Task<Manufacturer> GetManufacturerByIdAsync(int manufacturerId)
+    public virtual async Task<Manufacturer> GetManufacturerByIdAsync(long manufacturerId)
     {
         return await _manufacturerRepository.GetByIdAsync(manufacturerId, cache => default);
     }
@@ -206,7 +206,7 @@ public partial class ManufacturerService : IManufacturerService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of manufacturers
     /// </returns>
-    public virtual async Task<IPagedList<Manufacturer>> GetManufacturersWithAppliedDiscountAsync(int? discountId = null,
+    public virtual async Task<IPagedList<Manufacturer>> GetManufacturersWithAppliedDiscountAsync(long? discountId = null,
         bool showHidden = false, int pageIndex = 0, int pageSize = int.MaxValue)
     {
         var manufacturers = _manufacturerRepository.Table;
@@ -235,7 +235,7 @@ public partial class ManufacturerService : IManufacturerService
     /// A task that represents the asynchronous operation
     /// The task result contains the manufacturers
     /// </returns>
-    public virtual async Task<IList<Manufacturer>> GetManufacturersByCategoryIdAsync(int categoryId)
+    public virtual async Task<IList<Manufacturer>> GetManufacturersByCategoryIdAsync(long categoryId)
     {
         if (categoryId <= 0)
             return new List<Manufacturer>();
@@ -303,7 +303,7 @@ public partial class ManufacturerService : IManufacturerService
     /// A task that represents the asynchronous operation
     /// The task result contains the manufacturers
     /// </returns>
-    public virtual async Task<IList<Manufacturer>> GetManufacturersByIdsAsync(int[] manufacturerIds)
+    public virtual async Task<IList<Manufacturer>> GetManufacturersByIdsAsync(long[] manufacturerIds)
     {
         return await _manufacturerRepository.GetByIdsAsync(manufacturerIds, includeDeleted: false);
     }
@@ -359,7 +359,7 @@ public partial class ManufacturerService : IManufacturerService
     /// A task that represents the asynchronous operation
     /// The task result contains the product manufacturer collection
     /// </returns>
-    public virtual async Task<IPagedList<ProductManufacturer>> GetProductManufacturersByManufacturerIdAsync(int manufacturerId,
+    public virtual async Task<IPagedList<ProductManufacturer>> GetProductManufacturersByManufacturerIdAsync(long manufacturerId,
         int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false)
     {
         if (manufacturerId == 0)
@@ -398,7 +398,7 @@ public partial class ManufacturerService : IManufacturerService
     /// A task that represents the asynchronous operation
     /// The task result contains the product manufacturer mapping collection
     /// </returns>
-    public virtual async Task<IList<ProductManufacturer>> GetProductManufacturersByProductIdAsync(int productId,
+    public virtual async Task<IList<ProductManufacturer>> GetProductManufacturersByProductIdAsync(long productId,
         bool showHidden = false)
     {
         if (productId == 0)
@@ -441,7 +441,7 @@ public partial class ManufacturerService : IManufacturerService
     /// A task that represents the asynchronous operation
     /// The task result contains the product manufacturer mapping
     /// </returns>
-    public virtual async Task<ProductManufacturer> GetProductManufacturerByIdAsync(int productManufacturerId)
+    public virtual async Task<ProductManufacturer> GetProductManufacturerByIdAsync(long productManufacturerId)
     {
         return await _productManufacturerRepository.GetByIdAsync(productManufacturerId, cache => default);
     }
@@ -474,7 +474,7 @@ public partial class ManufacturerService : IManufacturerService
     /// A task that represents the asynchronous operation
     /// The task result contains the manufacturer IDs for products
     /// </returns>
-    public virtual async Task<IDictionary<int, int[]>> GetProductManufacturerIdsAsync(int[] productIds)
+    public virtual async Task<IDictionary<long, long[]>> GetProductManufacturerIdsAsync(long[] productIds)
     {
         var query = _productManufacturerRepository.Table;
 
@@ -522,7 +522,7 @@ public partial class ManufacturerService : IManufacturerService
     /// <param name="productId">Product identifier</param>
     /// <param name="manufacturerId">Manufacturer identifier</param>
     /// <returns>A ProductManufacturer that has the specified values; otherwise null</returns>
-    public virtual ProductManufacturer FindProductManufacturer(IList<ProductManufacturer> source, int productId, int manufacturerId)
+    public virtual ProductManufacturer FindProductManufacturer(IList<ProductManufacturer> source, long productId, long manufacturerId)
     {
         return source.FirstOrDefault(pm => pm.ProductId == productId && pm.ManufacturerId == manufacturerId);
     }
@@ -536,7 +536,7 @@ public partial class ManufacturerService : IManufacturerService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public virtual async Task<DiscountManufacturerMapping> GetDiscountAppliedToManufacturerAsync(int manufacturerId, int discountId)
+    public virtual async Task<DiscountManufacturerMapping> GetDiscountAppliedToManufacturerAsync(long manufacturerId, long discountId)
     {
         return await _discountManufacturerMappingRepository.Table
             .FirstOrDefaultAsync(dcm => dcm.EntityId == manufacturerId && dcm.DiscountId == discountId);

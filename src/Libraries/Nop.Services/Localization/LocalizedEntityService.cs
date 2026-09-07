@@ -45,7 +45,7 @@ public partial class LocalizedEntityService : ILocalizedEntityService
     /// A task that represents the asynchronous operation
     /// The task result contains the localized properties
     /// </returns>
-    protected virtual async Task<IList<LocalizedProperty>> GetLocalizedPropertiesAsync(int entityId, string localeKeyGroup)
+    protected virtual async Task<IList<LocalizedProperty>> GetLocalizedPropertiesAsync(long entityId, string localeKeyGroup)
     {
         if (entityId == 0 || string.IsNullOrEmpty(localeKeyGroup))
             return new List<LocalizedProperty>();
@@ -84,7 +84,7 @@ public partial class LocalizedEntityService : ILocalizedEntityService
     /// A task that represents the asynchronous operation
     /// The task result contains the uncached localized properties
     /// </returns>
-    protected virtual async Task<IList<LocalizedProperty>> GetAllLocalizedPropertiesAsync(int languageId)
+    protected virtual async Task<IList<LocalizedProperty>> GetAllLocalizedPropertiesAsync(long languageId)
     {
         // do not cache here
         return await _localizedPropertyRepository.GetAllAsync(query => query.Where(lp => lp.LanguageId == languageId));
@@ -134,7 +134,7 @@ public partial class LocalizedEntityService : ILocalizedEntityService
     /// A task that represents the asynchronous operation
     /// The task result contains the found localized properties
     /// </returns>
-    public virtual async Task<IList<LocalizedProperty>> GetEntityLocalizedPropertiesAsync(int entityId, string localeKeyGroup, string localeKey)
+    public virtual async Task<IList<LocalizedProperty>> GetEntityLocalizedPropertiesAsync(long entityId, string localeKeyGroup, string localeKey)
     {
         var key = _staticCacheManager.PrepareKeyForDefaultCache(NopLocalizationDefaults.LocalizedPropertiesCacheKey,
             entityId, localeKeyGroup, localeKey);
@@ -168,12 +168,12 @@ public partial class LocalizedEntityService : ILocalizedEntityService
     /// A task that represents the asynchronous operation
     /// The task result contains the found localized value
     /// </returns>
-    public virtual async Task<string> GetLocalizedValueAsync(int languageId, int entityId, string localeKeyGroup, string localeKey)
+    public virtual async Task<string> GetLocalizedValueAsync(long languageId, long entityId, string localeKeyGroup, string localeKey)
     {
         if (_localizationSettings.LoadAllLocalizedPropertiesOnStartup)
         {
             //value tuples aren't json-serializable by default, so we use a string key
-            static string formatKey(string keyGroup, string key, int id) => $"{keyGroup}:{key}:{id}";
+            static string formatKey(string keyGroup, string key, long id) => $"{keyGroup}:{key}:{id}";
 
             var localizedValues = await _staticCacheManager.GetAsync(
                 _staticCacheManager.PrepareKeyForDefaultCache(NopLocalizationDefaults.LocalizedPropertyLookupCacheKey, languageId),
@@ -216,7 +216,7 @@ public partial class LocalizedEntityService : ILocalizedEntityService
     public virtual async Task SaveLocalizedValueAsync<T>(T entity,
         Expression<Func<T, string>> keySelector,
         string localeValue,
-        int languageId) where T : BaseEntity, ILocalizedEntity
+        long languageId) where T : BaseEntity, ILocalizedEntity
     {
         await SaveLocalizedValueAsync<T, string>(entity, keySelector, localeValue, languageId);
     }
@@ -234,7 +234,7 @@ public partial class LocalizedEntityService : ILocalizedEntityService
     public virtual async Task SaveLocalizedValueAsync<T, TPropType>(T entity,
         Expression<Func<T, TPropType>> keySelector,
         TPropType localeValue,
-        int languageId) where T : BaseEntity, ILocalizedEntity
+        long languageId) where T : BaseEntity, ILocalizedEntity
     {
         ArgumentNullException.ThrowIfNull(entity);
 

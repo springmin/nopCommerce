@@ -18,8 +18,8 @@ public partial class ProductCategoryBuilder : NopEntityBuilder<ProductCategory>
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(ProductCategory.CategoryId)).AsInt32().ForeignKey<Category>()
-            .WithColumn(nameof(ProductCategory.ProductId)).AsInt32().ForeignKey<Product>();
+            .WithColumn(nameof(ProductCategory.CategoryId)).AsInt64().ForeignKey<Category>()
+            .WithColumn(nameof(ProductCategory.ProductId)).AsInt64().ForeignKey<Product>();
     }
 
     #endregion

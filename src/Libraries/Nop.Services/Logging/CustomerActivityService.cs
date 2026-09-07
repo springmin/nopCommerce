@@ -77,7 +77,7 @@ public partial class CustomerActivityService : ICustomerActivityService
     /// A task that represents the asynchronous operation
     /// The task result contains the activity log type item
     /// </returns>
-    public virtual async Task<ActivityLogType> GetActivityTypeByIdAsync(int activityLogTypeId)
+    public virtual async Task<ActivityLogType> GetActivityTypeByIdAsync(long activityLogTypeId)
     {
         return await _activityLogTypeRepository.GetByIdAsync(activityLogTypeId, cache => default);
     }
@@ -213,7 +213,7 @@ public partial class CustomerActivityService : ICustomerActivityService
     /// The task result contains the activity log items
     /// </returns>
     public virtual async Task<IPagedList<ActivityLog>> GetAllActivitiesAsync(DateTime? createdOnFrom = null, DateTime? createdOnTo = null,
-        int? customerId = null, int? activityLogTypeId = null, string ipAddress = null, string entityName = null, int? entityId = null,
+        long? customerId = null, long? activityLogTypeId = null, string ipAddress = null, string entityName = null, long? entityId = null,
         int pageIndex = 0, int pageSize = int.MaxValue)
     {
         return await _activityLogRepository.GetAllPagedAsync(query =>
@@ -256,7 +256,7 @@ public partial class CustomerActivityService : ICustomerActivityService
     /// A task that represents the asynchronous operation
     /// The task result contains the activity log item
     /// </returns>
-    public virtual async Task<ActivityLog> GetActivityByIdAsync(int activityLogId)
+    public virtual async Task<ActivityLog> GetActivityByIdAsync(long activityLogId)
     {
         return await _activityLogRepository.GetByIdAsync(activityLogId);
     }

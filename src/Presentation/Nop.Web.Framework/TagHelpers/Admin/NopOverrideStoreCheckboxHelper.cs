@@ -113,7 +113,7 @@ public partial class NopOverrideStoreCheckboxHelper : TagHelper
     ///The store scope
     /// </summary>
     [HtmlAttributeName(STORE_SCOPE_ATTRIBUTE_NAME)]
-    public int StoreScope { set; get; }
+    public long StoreScope { set; get; }
 
     /// <summary>
     /// Parent container

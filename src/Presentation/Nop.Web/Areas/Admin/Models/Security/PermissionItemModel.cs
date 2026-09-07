@@ -13,7 +13,7 @@ public partial record PermissionItemModel : BaseNopEntityModel
 
     public PermissionItemModel()
     {
-        SelectedCustomerRoleIds = new List<int>();
+        SelectedCustomerRoleIds = new List<long>();
         AvailableCustomerRoles = new List<SelectListItem>();
     }
 
@@ -26,7 +26,7 @@ public partial record PermissionItemModel : BaseNopEntityModel
     public string PermissionAppliedFor { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.CustomerRoles")]
-    public IList<int> SelectedCustomerRoleIds { get; set; }
+    public IList<long> SelectedCustomerRoleIds { get; set; }
 
     public IList<SelectListItem> AvailableCustomerRoles { get; set; }
 

@@ -20,7 +20,7 @@ public partial record StoreInformationSettingsModel : BaseNopModel, ISettingsMod
 
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.GeneralCommon.StoreClosed")]
     public bool StoreClosed { get; set; }
@@ -37,7 +37,7 @@ public partial record StoreInformationSettingsModel : BaseNopModel, ISettingsMod
 
     [UIHint("Picture")]
     [NopResourceDisplayName("Admin.Configuration.Settings.GeneralCommon.Logo")]
-    public int LogoPictureId { get; set; }
+    public long LogoPictureId { get; set; }
     public bool LogoPictureId_OverrideForStore { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.GeneralCommon.DisplayEuCookieLawWarning")]

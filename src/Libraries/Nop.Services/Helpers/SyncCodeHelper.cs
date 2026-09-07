@@ -212,7 +212,7 @@ public partial class SyncCodeHelper : ISyncCodeHelper
     /// <param name="storeId">Load records allowed only in a specified store; pass 0 to load all records</param>
     /// <param name="showHidden">A value indicating whether to show hidden records</param>
     /// <returns>The languages</returns>
-    public virtual IList<Language> GetAllLanguages(bool showHidden = false, int storeId = 0)
+    public virtual IList<Language> GetAllLanguages(bool showHidden = false, long storeId = 0)
     {
         var key = _staticCacheManager.PrepareKeyForDefaultCache(NopLocalizationDefaults.LanguagesAllCacheKey, storeId,
             showHidden);
@@ -260,7 +260,7 @@ public partial class SyncCodeHelper : ISyncCodeHelper
             return getStoresIdsWithAccess().Any(storeIdWithAccess => storeId == storeIdWithAccess);
 
             //no permission found
-            int[] getStoresIdsWithAccess()
+            long[] getStoresIdsWithAccess()
             {
                 ArgumentNullException.ThrowIfNull(entity);
 

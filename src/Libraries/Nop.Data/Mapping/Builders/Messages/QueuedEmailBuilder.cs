@@ -27,7 +27,7 @@ public partial class QueuedEmailBuilder : NopEntityBuilder<QueuedEmail>
             .WithColumn(nameof(QueuedEmail.CC)).AsString(500).Nullable()
             .WithColumn(nameof(QueuedEmail.Bcc)).AsString(500).Nullable()
             .WithColumn(nameof(QueuedEmail.Subject)).AsString(1000).Nullable()
-            .WithColumn(nameof(QueuedEmail.EmailAccountId)).AsInt32().ForeignKey<EmailAccount>();
+            .WithColumn(nameof(QueuedEmail.EmailAccountId)).AsInt64().ForeignKey<EmailAccount>();
     }
 
     #endregion

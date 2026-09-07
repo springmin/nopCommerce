@@ -262,7 +262,7 @@ public partial class ShippingModelFactory : IShippingModelFactory
     public virtual async Task<ShippingMethodModel> PrepareShippingMethodModelAsync(ShippingMethodModel model,
         ShippingMethod shippingMethod, bool excludeProperties = false)
     {
-        Func<ShippingMethodLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<ShippingMethodLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (shippingMethod != null)
         {
@@ -340,7 +340,7 @@ public partial class ShippingModelFactory : IShippingModelFactory
     /// </returns>
     public virtual async Task<DeliveryDateModel> PrepareDeliveryDateModelAsync(DeliveryDateModel model, DeliveryDate deliveryDate, bool excludeProperties = false)
     {
-        Func<DeliveryDateLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<DeliveryDateLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (deliveryDate != null)
         {
@@ -399,7 +399,7 @@ public partial class ShippingModelFactory : IShippingModelFactory
     public virtual async Task<ProductAvailabilityRangeModel> PrepareProductAvailabilityRangeModelAsync(ProductAvailabilityRangeModel model,
         ProductAvailabilityRange productAvailabilityRange, bool excludeProperties = false)
     {
-        Func<ProductAvailabilityRangeLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<ProductAvailabilityRangeLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (productAvailabilityRange != null)
         {
@@ -522,7 +522,7 @@ public partial class ShippingModelFactory : IShippingModelFactory
             foreach (var country in countries)
             {
                 if (!model.Restricted.ContainsKey(country.Id))
-                    model.Restricted[country.Id] = new Dictionary<int, bool>();
+                    model.Restricted[country.Id] = new Dictionary<long, bool>();
 
                 model.Restricted[country.Id][shippingMethod.Id] = await _shippingMethodsService.CountryRestrictionExistsAsync(shippingMethod, country.Id);
             }

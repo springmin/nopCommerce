@@ -24,7 +24,7 @@ public partial interface IOrderReportService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    Task<IList<OrderByCountryReportLine>> GetCountryReportAsync(int storeId = 0, OrderStatus? os = null,
+    Task<IList<OrderByCountryReportLine>> GetCountryReportAsync(long storeId = 0, OrderStatus? os = null,
         PaymentStatus? ps = null, ShippingStatus? ss = null,
         DateTime? startTimeUtc = null, DateTime? endTimeUtc = null);
 
@@ -51,9 +51,9 @@ public partial interface IOrderReportService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    Task<OrderAverageReportLine> GetOrderAverageReportLineAsync(int storeId = 0, int vendorId = 0, int productId = 0,
-        int warehouseId = 0, int billingCountryId = 0, int orderId = 0, string paymentMethodSystemName = null,
-        List<int> osIds = null, List<int> psIds = null, List<int> ssIds = null,
+    Task<OrderAverageReportLine> GetOrderAverageReportLineAsync(long storeId = 0, long vendorId = 0, long productId = 0,
+        long warehouseId = 0, long billingCountryId = 0, long orderId = 0, string paymentMethodSystemName = null,
+        List<long> osIds = null, List<long> psIds = null, List<long> ssIds = null,
         DateTime? startTimeUtc = null, DateTime? endTimeUtc = null,
         string billingPhone = null, string billingEmail = null, string billingLastName = "", string orderNotes = null);
 
@@ -66,7 +66,7 @@ public partial interface IOrderReportService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    Task<OrderAverageReportLineSummary> OrderAverageReportAsync(int storeId, OrderStatus os);
+    Task<OrderAverageReportLineSummary> OrderAverageReportAsync(long storeId, OrderStatus os);
 
     /// <summary>
     /// Get sales summary report
@@ -89,16 +89,16 @@ public partial interface IOrderReportService
     /// The task result contains the result
     /// </returns>
     Task<IPagedList<SalesSummaryReportLine>> SalesSummaryReportAsync(
-        int categoryId = 0,
-        int productId = 0,
-        int manufacturerId = 0,
-        int storeId = 0,
-        int vendorId = 0,
+        long categoryId = 0,
+        long productId = 0,
+        long manufacturerId = 0,
+        long storeId = 0,
+        long vendorId = 0,
         DateTime? createdFromUtc = null,
         DateTime? createdToUtc = null,
-        List<int> osIds = null,
-        List<int> psIds = null,
-        int billingCountryId = 0,
+        List<long> osIds = null,
+        List<long> psIds = null,
+        long billingCountryId = 0,
         GroupByOptions groupBy = GroupByOptions.Day,
         int pageIndex = 0,
         int pageSize = int.MaxValue);
@@ -125,16 +125,16 @@ public partial interface IOrderReportService
     /// The task result contains the result
     /// </returns>
     Task<IPagedList<BestsellersReportLine>> BestSellersReportAsync(
-        int categoryId = 0,
-        int manufacturerId = 0,
-        int storeId = 0,
-        int vendorId = 0,
+        long categoryId = 0,
+        long manufacturerId = 0,
+        long storeId = 0,
+        long vendorId = 0,
         DateTime? createdFromUtc = null,
         DateTime? createdToUtc = null,
         OrderStatus? os = null,
         PaymentStatus? ps = null,
         ShippingStatus? ss = null,
-        int billingCountryId = 0,
+        long billingCountryId = 0,
         OrderByEnum orderBy = OrderByEnum.OrderByQuantity,
         int pageIndex = 0,
         int pageSize = int.MaxValue,
@@ -159,16 +159,16 @@ public partial interface IOrderReportService
     /// The task result contains the result
     /// </returns>
     Task<decimal> BestSellersReportTotalAmountAsync(
-        int categoryId = 0,
-        int manufacturerId = 0,
-        int storeId = 0,
-        int vendorId = 0,
+        long categoryId = 0,
+        long manufacturerId = 0,
+        long storeId = 0,
+        long vendorId = 0,
         DateTime? createdFromUtc = null,
         DateTime? createdToUtc = null,
         OrderStatus? os = null,
         PaymentStatus? ps = null,
         ShippingStatus? ss = null,
-        int billingCountryId = 0,
+        long billingCountryId = 0,
         bool showHidden = false);
 
     /// <summary>
@@ -183,7 +183,7 @@ public partial interface IOrderReportService
     /// A task that represents the asynchronous operation
     /// The task result contains the products
     /// </returns>
-    Task<int[]> GetAlsoPurchasedProductsIdsAsync(int storeId, int productId,
+    Task<long[]> GetAlsoPurchasedProductsIdsAsync(long storeId, long productId,
         int recordsToReturn = 5, bool visibleIndividuallyOnly = true, bool showHidden = false);
 
     /// <summary>
@@ -202,8 +202,8 @@ public partial interface IOrderReportService
     /// A task that represents the asynchronous operation
     /// The task result contains the products
     /// </returns>
-    Task<IPagedList<Product>> ProductsNeverSoldAsync(int vendorId = 0, int storeId = 0,
-        int categoryId = 0, int manufacturerId = 0,
+    Task<IPagedList<Product>> ProductsNeverSoldAsync(long vendorId = 0, long storeId = 0,
+        long categoryId = 0, long manufacturerId = 0,
         DateTime? createdFromUtc = null, DateTime? createdToUtc = null,
         int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false);
 
@@ -230,9 +230,9 @@ public partial interface IOrderReportService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    Task<decimal> ProfitReportAsync(int storeId = 0, int vendorId = 0, int productId = 0,
-        int warehouseId = 0, int billingCountryId = 0, int orderId = 0, string paymentMethodSystemName = null,
-        List<int> osIds = null, List<int> psIds = null, List<int> ssIds = null,
+    Task<decimal> ProfitReportAsync(long storeId = 0, long vendorId = 0, long productId = 0,
+        long warehouseId = 0, long billingCountryId = 0, long orderId = 0, string paymentMethodSystemName = null,
+        List<long> osIds = null, List<long> psIds = null, List<long> ssIds = null,
         DateTime? startTimeUtc = null, DateTime? endTimeUtc = null,
         string billingPhone = null, string billingEmail = null, string billingLastName = "", string orderNotes = null);
 }

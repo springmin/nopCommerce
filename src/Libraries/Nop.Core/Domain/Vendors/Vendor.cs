@@ -27,12 +27,12 @@ public partial class Vendor : BaseEntity, ILocalizedEntity, ISlugSupported, ISof
     /// <summary>
     /// Gets or sets the picture identifier
     /// </summary>
-    public int PictureId { get; set; }
+    public long PictureId { get; set; }
 
     /// <summary>
     /// Gets or sets the address identifier
     /// </summary>
-    public int AddressId { get; set; }
+    public long AddressId { get; set; }
 
     /// <summary>
     /// Gets or sets the admin comment
@@ -107,5 +107,5 @@ public partial class Vendor : BaseEntity, ILocalizedEntity, ISlugSupported, ISof
     /// <summary>
     /// Gets or sets the customer identifier
     /// </summary>
-    public int? PmCustomerId { get; set; }
+    public long? PmCustomerId { get; set; }
 }

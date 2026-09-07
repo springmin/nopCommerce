@@ -62,7 +62,7 @@ public partial class TopicTemplateService : ITopicTemplateService
     /// A task that represents the asynchronous operation
     /// The task result contains the topic template
     /// </returns>
-    public virtual async Task<TopicTemplate> GetTopicTemplateByIdAsync(int topicTemplateId)
+    public virtual async Task<TopicTemplate> GetTopicTemplateByIdAsync(long topicTemplateId)
     {
         return await _topicTemplateRepository.GetByIdAsync(topicTemplateId, cache => default);
     }

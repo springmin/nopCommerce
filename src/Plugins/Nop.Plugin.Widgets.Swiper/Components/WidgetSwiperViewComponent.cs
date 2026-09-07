@@ -44,7 +44,7 @@ public class WidgetSwiperViewComponent : NopViewComponent
     #region Utilities
 
     /// <returns>A task that represents the asynchronous operation</returns>
-    private async Task<string> GetPictureUrlAsync(int pictureId)
+    private async Task<string> GetPictureUrlAsync(long pictureId)
     {
         if (pictureId == 0)
             return string.Empty;

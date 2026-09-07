@@ -147,7 +147,7 @@ public class BrevoMessageService : WorkflowMessageService
     /// A task that represents the asynchronous operation
     /// The task result contains the queued email identifier
     /// </returns>
-    protected async Task<int?> SendEmailNotificationAsync(MessageTemplate messageTemplate, EmailAccount emailAccount, IEnumerable<Token> tokens,
+    protected async Task<long?> SendEmailNotificationAsync(MessageTemplate messageTemplate, EmailAccount emailAccount, IEnumerable<Token> tokens,
         string toEmailAddress, string toName,
         string attachmentFilePath = null, string attachmentFileName = null,
         string replyToEmailAddress = null, string replyToName = null,
@@ -231,7 +231,7 @@ public class BrevoMessageService : WorkflowMessageService
     /// A task that represents the asynchronous operation
     /// The task result contains the queued email identifier
     /// </returns>
-    public override async Task<int> SendNotificationAsync(MessageTemplate messageTemplate, EmailAccount emailAccount, int languageId, IList<Token> tokens,
+    public override async Task<long> SendNotificationAsync(MessageTemplate messageTemplate, EmailAccount emailAccount, long languageId, IList<Token> tokens,
         string toEmailAddress, string toName, string attachmentFilePath = null, string attachmentFileName = null,
         string replyToEmailAddress = null, string replyToName = null, string fromEmail = null, string fromName = null,
         string subject = null, bool ignoreDelayBeforeSend = false)

@@ -20,7 +20,7 @@ public partial record VendorSettingsModel : BaseNopModel, ISettingsModel
 
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Vendor.VendorsBlockItemsToDisplay")]
     public int VendorsBlockItemsToDisplay { get; set; }

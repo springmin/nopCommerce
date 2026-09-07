@@ -10,12 +10,12 @@ public class ForumPost : BaseEntity
     /// <summary>
     /// Gets or sets the forum topic identifier
     /// </summary>
-    public int TopicId { get; set; }
+    public long TopicId { get; set; }
 
     /// <summary>
     /// Gets or sets the customer identifier
     /// </summary>
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     /// <summary>
     /// Gets or sets the text

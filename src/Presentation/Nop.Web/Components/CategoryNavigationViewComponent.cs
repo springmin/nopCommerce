@@ -13,7 +13,7 @@ public partial class CategoryNavigationViewComponent : NopViewComponent
         _catalogModelFactory = catalogModelFactory;
     }
 
-    public async Task<IViewComponentResult> InvokeAsync(int currentCategoryId, int currentProductId)
+    public async Task<IViewComponentResult> InvokeAsync(long currentCategoryId, long currentProductId)
     {
         var model = await _catalogModelFactory.PrepareCategoryNavigationModelAsync(currentCategoryId, currentProductId);
         return await ViewAsync(model);

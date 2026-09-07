@@ -20,7 +20,7 @@ public partial class RobotsTxtSettings : ISettings
     /// <summary>
     /// Disallow languages
     /// </summary>
-    public List<int> DisallowLanguages { get; set; } = new();
+    public List<long> DisallowLanguages { get; set; } = new();
 
     /// <summary>
     /// Additions rules

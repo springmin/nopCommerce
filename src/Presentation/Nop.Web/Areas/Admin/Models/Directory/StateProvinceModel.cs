@@ -19,7 +19,7 @@ public partial record StateProvinceModel : BaseNopEntityModel, ILocalizedModel<S
 
     #region Properties
 
-    public int CountryId { get; set; }
+    public long CountryId { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Countries.States.Fields.Name")]
     public string Name { get; set; }
@@ -40,7 +40,7 @@ public partial record StateProvinceModel : BaseNopEntityModel, ILocalizedModel<S
 
 public partial record StateProvinceLocalizedModel : ILocalizedLocaleModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Countries.States.Fields.Name")]
     public string Name { get; set; }

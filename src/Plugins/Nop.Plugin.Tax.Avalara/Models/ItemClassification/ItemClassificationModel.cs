@@ -11,7 +11,7 @@ public record ItemClassificationModel : BaseNopEntityModel
     #region Properties
 
     [NopResourceDisplayName("Plugins.Tax.Avalara.ItemClassification.Product")]
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
     [NopResourceDisplayName("Plugins.Tax.Avalara.ItemClassification.Product")]
     public string ProductName { get; set; }
 
@@ -19,7 +19,7 @@ public record ItemClassificationModel : BaseNopEntityModel
     public string HSClassificationRequestId { get; set; }
 
     [NopResourceDisplayName("Plugins.Tax.Avalara.ItemClassification.Country")]
-    public int CountryId { get; set; }
+    public long CountryId { get; set; }
     [NopResourceDisplayName("Plugins.Tax.Avalara.ItemClassification.Country")]
     public string CountryName { get; set; }
 

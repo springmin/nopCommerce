@@ -137,7 +137,7 @@ public partial class GiftCardController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Orders.GIFT_CARDS_VIEW)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         //try to get a gift card with the specified id
         var giftCard = await _giftCardService.GetGiftCardByIdAsync(id);
@@ -218,7 +218,7 @@ public partial class GiftCardController : BaseAdminController
             if (!CommonHelper.IsValidEmail(giftCard.SenderEmail))
                 throw new NopException("Sender email is not valid");
 
-            var languageId = 0;
+            long languageId = 0;
             var order = await _orderService.GetOrderByOrderItemAsync(giftCard.PurchasedWithOrderItemId ?? 0);
 
             if (order != null)
@@ -257,7 +257,7 @@ public partial class GiftCardController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Orders.GIFT_CARDS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get a gift card with the specified id
         var giftCard = await _giftCardService.GetGiftCardByIdAsync(id);

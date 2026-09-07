@@ -21,22 +21,22 @@ public partial class Order : BaseEntity, ISoftDeletedEntity
     /// <summary>
     /// Gets or sets the store identifier
     /// </summary>
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 
     /// <summary>
     /// Gets or sets the customer identifier
     /// </summary>
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     /// <summary>
     /// Gets or sets the billing address identifier
     /// </summary>
-    public int BillingAddressId { get; set; }
+    public long BillingAddressId { get; set; }
 
     /// <summary>
     /// Gets or sets the shipping address identifier
     /// </summary>
-    public int? ShippingAddressId { get; set; }
+    public long? ShippingAddressId { get; set; }
 
     /// <summary>
     /// Gets or sets the desired delivery date
@@ -46,7 +46,7 @@ public partial class Order : BaseEntity, ISoftDeletedEntity
     /// <summary>
     /// Gets or sets the pickup address identifier
     /// </summary>
-    public int? PickupAddressId { get; set; }
+    public long? PickupAddressId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether a customer chose "pick up in store" shipping option
@@ -56,17 +56,17 @@ public partial class Order : BaseEntity, ISoftDeletedEntity
     /// <summary>
     /// Gets or sets an order status identifier
     /// </summary>
-    public int OrderStatusId { get; set; }
+    public long OrderStatusId { get; set; }
 
     /// <summary>
     /// Gets or sets the shipping status identifier
     /// </summary>
-    public int ShippingStatusId { get; set; }
+    public long ShippingStatusId { get; set; }
 
     /// <summary>
     /// Gets or sets the payment status identifier
     /// </summary>
-    public int PaymentStatusId { get; set; }
+    public long PaymentStatusId { get; set; }
 
     /// <summary>
     /// Gets or sets the payment method system name
@@ -86,7 +86,7 @@ public partial class Order : BaseEntity, ISoftDeletedEntity
     /// <summary>
     /// Gets or sets the customer tax display type identifier
     /// </summary>
-    public int CustomerTaxDisplayTypeId { get; set; }
+    public long CustomerTaxDisplayTypeId { get; set; }
 
     /// <summary>
     /// Gets or sets the VAT number (the European Union Value Added Tax)
@@ -161,7 +161,7 @@ public partial class Order : BaseEntity, ISoftDeletedEntity
     /// <summary>
     /// Gets or sets the reward points history entry identifier when reward points were earned (gained) for placing this order
     /// </summary>
-    public int? RewardPointsHistoryEntryId { get; set; }
+    public long? RewardPointsHistoryEntryId { get; set; }
 
     /// <summary>
     /// Gets or sets the checkout attribute description
@@ -176,12 +176,12 @@ public partial class Order : BaseEntity, ISoftDeletedEntity
     /// <summary>
     /// Gets or sets the customer language identifier
     /// </summary>
-    public int CustomerLanguageId { get; set; }
+    public long CustomerLanguageId { get; set; }
 
     /// <summary>
     /// Gets or sets the affiliate identifier
     /// </summary>
-    public int AffiliateId { get; set; }
+    public long AffiliateId { get; set; }
 
     /// <summary>
     /// Gets or sets the customer IP address
@@ -256,7 +256,7 @@ public partial class Order : BaseEntity, ISoftDeletedEntity
     /// <summary>
     /// Gets or sets the reward points history record (spent by a customer when placing this order)
     /// </summary>
-    public virtual int? RedeemedRewardPointsEntryId { get; set; }
+    public long? RedeemedRewardPointsEntryId { get; set; }
 
     /// <summary>
     /// Gets or sets the current follow-up number for the pending order

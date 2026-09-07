@@ -19,8 +19,8 @@ public partial class PriceListCustomerRoleBuilder : NopEntityBuilder<PriceListCu
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(PriceListCustomerRole.CustomerRoleId)).AsInt32().ForeignKey<CustomerRole>()
-            .WithColumn(nameof(PriceListCustomerRole.PriceListId)).AsInt32().ForeignKey<PriceList>();
+            .WithColumn(nameof(PriceListCustomerRole.CustomerRoleId)).AsInt64().ForeignKey<CustomerRole>()
+            .WithColumn(nameof(PriceListCustomerRole.PriceListId)).AsInt64().ForeignKey<PriceList>();
     }
 
     #endregion

@@ -25,7 +25,7 @@ public partial class Manufacturer : BaseEntity, ILocalizedEntity, ISlugSupported
     /// <summary>
     /// Gets or sets a value of used manufacturer template identifier
     /// </summary>
-    public int ManufacturerTemplateId { get; set; }
+    public long ManufacturerTemplateId { get; set; }
 
     /// <summary>
     /// Gets or sets the meta keywords
@@ -45,7 +45,7 @@ public partial class Manufacturer : BaseEntity, ILocalizedEntity, ISlugSupported
     /// <summary>
     /// Gets or sets the parent picture identifier
     /// </summary>
-    public int PictureId { get; set; }
+    public long PictureId { get; set; }
 
     /// <summary>
     /// Gets or sets the page size

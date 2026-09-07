@@ -21,5 +21,5 @@ public record RequestQuoteItemModel : BaseNopEntityModel
 
     public string AdminNotes { get; set; }
 
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 }

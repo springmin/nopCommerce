@@ -30,11 +30,16 @@ public class NopGeneratorAccessor : IGeneratorAccessor
         if (!generators.Any())
             throw new InvalidOperationException("No migration generator registered.");
 
+
         Generator = dataSettings is null ? generators.FirstOrDefault() : dataSettings.DataProvider switch
         {
             DataProviderType.SqlServer => FindGenerator(generators, GeneratorIdConstants.SqlServer),
             DataProviderType.MySql => FindGenerator(generators, GeneratorIdConstants.MySql8),
             DataProviderType.PostgreSQL => FindGenerator(generators, GeneratorIdConstants.PostgreSQL15_0),
+            DataProviderType.Sqlite => FindGenerator(generators, GeneratorIdConstants.SQLite),
+            DataProviderType.Tidb => FindGenerator(generators, GeneratorIdConstants.MySql8),
+            DataProviderType.Oracle => FindGenerator(generators, GeneratorIdConstants.Oracle),
+            DataProviderType.OpenGauss or DataProviderType.GaussDB => FindGenerator(generators, GeneratorIdConstants.PostgreSQL15_0),
             _ => throw new InvalidOperationException(
                 $@"A migration generator for Data provider type {dataSettings.DataProvider} couldn't be found.")
         };
@@ -49,7 +54,9 @@ public class NopGeneratorAccessor : IGeneratorAccessor
     protected IMigrationGenerator FindGenerator(IList<IMigrationGenerator> generators,
         string generatorId)
     {
-        if (generators.FirstOrDefault(p =>
+        //use the last matching registration so custom generators (e.g. NopSqliteGenerator)
+        //registered after the stock ones take precedence
+        if (generators.LastOrDefault(p =>
                 p.GeneratorId.Equals(generatorId, StringComparison.OrdinalIgnoreCase) ||
                 p.GeneratorIdAliases.Any(a => a.Equals(generatorId, StringComparison.OrdinalIgnoreCase))) is
             IMigrationGenerator processor)

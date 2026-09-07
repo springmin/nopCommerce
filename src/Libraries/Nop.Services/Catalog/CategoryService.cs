@@ -74,7 +74,7 @@ public partial class CategoryService : ICategoryService
     /// A task that represents the asynchronous operation
     /// The task result contains the product category mapping collection
     /// </returns>
-    protected virtual async Task<IList<ProductCategory>> GetProductCategoriesByProductIdAsync(int productId, int storeId,
+    protected virtual async Task<IList<ProductCategory>> GetProductCategoriesByProductIdAsync(long productId, long storeId,
         bool showHidden = false)
     {
         if (productId == 0)
@@ -117,14 +117,14 @@ public partial class CategoryService : ICategoryService
     /// An enumerable containing the sorted categories
     /// </returns>
     protected virtual IEnumerable<Category> SortCategoriesForTree(
-        ILookup<int, Category> categoriesByParentId,
-        int parentId = 0,
+        ILookup<long, Category> categoriesByParentId,
+        long parentId = 0,
         bool ignoreCategoriesWithoutExistingParent = false)
     {
         ArgumentNullException.ThrowIfNull(categoriesByParentId);
 
         var remaining = parentId > 0
-            ? new HashSet<int>(0)
+            ? new HashSet<long>(0)
             : categoriesByParentId.Select(g => g.Key).ToHashSet();
         remaining.Remove(parentId);
 
@@ -234,7 +234,7 @@ public partial class CategoryService : ICategoryService
     /// A task that represents the asynchronous operation
     /// The task result contains the categories
     /// </returns>
-    public virtual async Task<IList<Category>> GetAllCategoriesAsync(int storeId = 0, bool showHidden = false)
+    public virtual async Task<IList<Category>> GetAllCategoriesAsync(long storeId = 0, bool showHidden = false)
     {
         var key = _staticCacheManager.PrepareKeyForDefaultCache(NopCatalogDefaults.CategoriesAllCacheKey,
             storeId,
@@ -264,7 +264,7 @@ public partial class CategoryService : ICategoryService
     /// A task that represents the asynchronous operation
     /// The task result contains the categories
     /// </returns>
-    public virtual async Task<IPagedList<Category>> GetAllCategoriesAsync(string categoryName, int storeId = 0,
+    public virtual async Task<IPagedList<Category>> GetAllCategoriesAsync(string categoryName, long storeId = 0,
         int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false, bool? overridePublished = null)
     {
         var unsortedCategories = await _categoryRepository.GetAllAsync(async query =>
@@ -310,7 +310,7 @@ public partial class CategoryService : ICategoryService
     /// A task that represents the asynchronous operation
     /// The task result contains the categories
     /// </returns>
-    public virtual async Task<IList<Category>> GetAllCategoriesByParentCategoryIdAsync(int parentCategoryId,
+    public virtual async Task<IList<Category>> GetAllCategoriesByParentCategoryIdAsync(long parentCategoryId,
         bool showHidden = false)
     {
         var store = await _storeContext.GetCurrentStoreAsync();
@@ -384,7 +384,7 @@ public partial class CategoryService : ICategoryService
     /// A task that represents the asynchronous operation
     /// The task result contains the category identifiers
     /// </returns>
-    public virtual async Task<IList<int>> GetAppliedCategoryIdsAsync(Discount discount, Customer customer)
+    public virtual async Task<IList<long>> GetAppliedCategoryIdsAsync(Discount discount, Customer customer)
     {
         ArgumentNullException.ThrowIfNull(discount);
 
@@ -424,7 +424,7 @@ public partial class CategoryService : ICategoryService
     /// A task that represents the asynchronous operation
     /// The task result contains the category identifiers
     /// </returns>
-    public virtual async Task<IList<int>> GetChildCategoryIdsAsync(int parentCategoryId, int storeId = 0, bool showHidden = false)
+    public virtual async Task<IList<long>> GetChildCategoryIdsAsync(long parentCategoryId, long storeId = 0, bool showHidden = false)
     {
         var cacheKey = _staticCacheManager.PrepareKeyForDefaultCache(NopCatalogDefaults.CategoriesChildIdsCacheKey,
             parentCategoryId,
@@ -442,7 +442,7 @@ public partial class CategoryService : ICategoryService
                 async () => (await GetAllCategoriesAsync(storeId: storeId, showHidden: showHidden))
                     .ToGroupedDictionary(c => c.ParentCategoryId, x => x.Id));
 
-            var categoryIds = new List<int>();
+            var categoryIds = new List<long>();
             if (lookup.TryGetValue(parentCategoryId, out var categories))
             {
                 categoryIds.AddRange(categories);
@@ -464,7 +464,7 @@ public partial class CategoryService : ICategoryService
     /// A task that represents the asynchronous operation
     /// The task result contains the category
     /// </returns>
-    public virtual async Task<Category> GetCategoryByIdAsync(int categoryId)
+    public virtual async Task<Category> GetCategoryByIdAsync(long categoryId)
     {
         var category = await _categoryRepository.GetByIdAsync(categoryId, cache => default);
 
@@ -482,7 +482,7 @@ public partial class CategoryService : ICategoryService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of categories
     /// </returns>
-    public virtual async Task<IPagedList<Category>> GetCategoriesByAppliedDiscountAsync(int? discountId = null,
+    public virtual async Task<IPagedList<Category>> GetCategoriesByAppliedDiscountAsync(long? discountId = null,
         bool showHidden = false, int pageIndex = 0, int pageSize = int.MaxValue)
     {
         var categories = _categoryRepository.Table;
@@ -522,7 +522,7 @@ public partial class CategoryService : ICategoryService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public virtual async Task<DiscountCategoryMapping> GetDiscountAppliedToCategoryAsync(int categoryId, int discountId)
+    public virtual async Task<DiscountCategoryMapping> GetDiscountAppliedToCategoryAsync(long categoryId, long discountId)
     {
         return await _discountCategoryMappingRepository.Table
             .FirstOrDefaultAsync(dcm => dcm.EntityId == categoryId && dcm.DiscountId == discountId);
@@ -604,7 +604,7 @@ public partial class CategoryService : ICategoryService
     /// A task that represents the asynchronous operation
     /// The task result contains the product a category mapping collection
     /// </returns>
-    public virtual async Task<IPagedList<ProductCategory>> GetProductCategoriesByCategoryIdAsync(int categoryId,
+    public virtual async Task<IPagedList<ProductCategory>> GetProductCategoriesByCategoryIdAsync(long categoryId,
         int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false)
     {
         if (categoryId == 0)
@@ -643,7 +643,7 @@ public partial class CategoryService : ICategoryService
     /// A task that represents the asynchronous operation
     /// The task result contains the product category mapping collection
     /// </returns>
-    public virtual async Task<IList<ProductCategory>> GetProductCategoriesByProductIdAsync(int productId, bool showHidden = false)
+    public virtual async Task<IList<ProductCategory>> GetProductCategoriesByProductIdAsync(long productId, bool showHidden = false)
     {
         var store = await _storeContext.GetCurrentStoreAsync();
 
@@ -658,7 +658,7 @@ public partial class CategoryService : ICategoryService
     /// A task that represents the asynchronous operation
     /// The task result contains the product category mapping
     /// </returns>
-    public virtual async Task<ProductCategory> GetProductCategoryByIdAsync(int productCategoryId)
+    public virtual async Task<ProductCategory> GetProductCategoryByIdAsync(long productCategoryId)
     {
         return await _productCategoryRepository.GetByIdAsync(productCategoryId, cache => default);
     }
@@ -724,7 +724,7 @@ public partial class CategoryService : ICategoryService
     /// A task that represents the asynchronous operation
     /// The task result contains the category IDs for products
     /// </returns>
-    public virtual async Task<IDictionary<int, int[]>> GetProductCategoryIdsAsync(int[] productIds)
+    public virtual async Task<IDictionary<long, long[]>> GetProductCategoryIdsAsync(long[] productIds)
     {
         var query = _productCategoryRepository.Table;
 
@@ -743,7 +743,7 @@ public partial class CategoryService : ICategoryService
     /// A task that represents the asynchronous operation
     /// The task result contains the categories
     /// </returns>
-    public virtual async Task<IList<Category>> GetCategoriesByIdsAsync(int[] categoryIds)
+    public virtual async Task<IList<Category>> GetCategoriesByIdsAsync(long[] categoryIds)
     {
         return await _categoryRepository.GetByIdsAsync(categoryIds, includeDeleted: false);
     }
@@ -755,7 +755,7 @@ public partial class CategoryService : ICategoryService
     /// <param name="productId">Product identifier</param>
     /// <param name="categoryId">Category identifier</param>
     /// <returns>A ProductCategory that has the specified values; otherwise null</returns>
-    public virtual ProductCategory FindProductCategory(IList<ProductCategory> source, int productId, int categoryId)
+    public virtual ProductCategory FindProductCategory(IList<ProductCategory> source, long productId, long categoryId)
     {
         return source.FirstOrDefault(pc => pc.ProductId == productId && pc.CategoryId == categoryId);
     }
@@ -773,7 +773,7 @@ public partial class CategoryService : ICategoryService
     /// The task result contains the formatted breadcrumb
     /// </returns>
     public virtual async Task<string> GetFormattedBreadCrumbAsync(Category category, IList<Category> allCategories = null,
-        string separator = ">>", int languageId = 0)
+        string separator = ">>", long languageId = 0)
     {
         var result = string.Empty;
 
@@ -821,7 +821,7 @@ public partial class CategoryService : ICategoryService
             var result = new List<Category>();
 
             //used to prevent circular references (HashSet → O(1) lookups)
-            var alreadyProcessedCategoryIds = new HashSet<int>();
+            var alreadyProcessedCategoryIds = new HashSet<long>();
 
             while (currentCategory != null && //not null
                    !currentCategory.Deleted && //not deleted

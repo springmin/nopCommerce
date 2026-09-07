@@ -23,17 +23,17 @@ public class AttributeParserTests : BaseNopTest
     private IAttributeService<AddressAttribute, AddressAttributeValue> _addressAttributeService;
     private IAttributeService<CheckoutAttribute, CheckoutAttributeValue> _checkoutAttributeService;
 
-    private List<int> _customerAttributeIds = new();
-    private List<int> _customerAttributeValuesIds = new();
+    private List<long> _customerAttributeIds = new();
+    private List<long> _customerAttributeValuesIds = new();
 
-    private List<int> _vendorAttributeIds = new();
-    private List<int> _vendorAttributeValuesIds = new();
+    private List<long> _vendorAttributeIds = new();
+    private List<long> _vendorAttributeValuesIds = new();
 
-    private List<int> _addressAttributeIds = new();
-    private List<int> _addressAttributeValuesIds = new();
+    private List<long> _addressAttributeIds = new();
+    private List<long> _addressAttributeValuesIds = new();
 
-    private List<int> _checkoutAttributeIds = new();
-    private List<int> _checkoutAttributeValuesIds = new();
+    private List<long> _checkoutAttributeIds = new();
+    private List<long> _checkoutAttributeValuesIds = new();
 
     protected void PrepareTestData(Type attributeType)
     {

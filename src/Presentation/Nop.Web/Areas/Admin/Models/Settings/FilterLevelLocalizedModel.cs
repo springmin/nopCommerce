@@ -8,7 +8,7 @@ namespace Nop.Web.Areas.Admin.Models.Settings;
 /// </summary>
 public partial record FilterLevelLocalizedModel : ILocalizedLocaleModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.FilterLevel.Name")]
     public string Name { get; set; }

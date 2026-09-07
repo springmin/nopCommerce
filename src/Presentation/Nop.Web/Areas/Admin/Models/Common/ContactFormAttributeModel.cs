@@ -27,7 +27,7 @@ public partial record ContactFormAttributeModel : BaseNopEntityModel, ILocalized
     public bool IsRequired { get; set; }
 
     [NopResourceDisplayName("Admin.Common.ContactFormAttributes.Fields.AttributeControlType")]
-    public int AttributeControlTypeId { get; set; }
+    public long AttributeControlTypeId { get; set; }
 
     [NopResourceDisplayName("Admin.Common.ContactFormAttributes.Fields.AttributeControlType")]
     public string AttributeControlTypeName { get; set; }
@@ -44,7 +44,7 @@ public partial record ContactFormAttributeModel : BaseNopEntityModel, ILocalized
 
 public partial record ContactFormAttributeLocalizedModel : ILocalizedLocaleModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Common.ContactFormAttributes.Fields.Name")]
     public string Name { get; set; }

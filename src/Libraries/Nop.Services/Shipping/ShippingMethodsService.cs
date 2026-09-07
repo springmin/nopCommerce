@@ -46,7 +46,7 @@ public partial class ShippingMethodsService : IShippingMethodsService
     /// A task that represents the asynchronous operation
     /// The task result contains the shipping method
     /// </returns>
-    public virtual async Task<ShippingMethod> GetShippingMethodByIdAsync(int shippingMethodId)
+    public virtual async Task<ShippingMethod> GetShippingMethodByIdAsync(long shippingMethodId)
     {
         return await _shippingMethodRepository.GetByIdAsync(shippingMethodId, _ => default);
     }
@@ -59,7 +59,7 @@ public partial class ShippingMethodsService : IShippingMethodsService
     /// A task that represents the asynchronous operation
     /// The task result contains the shipping methods
     /// </returns>
-    public virtual async Task<IList<ShippingMethod>> GetAllShippingMethodsAsync(int? filterByCountryId = null)
+    public virtual async Task<IList<ShippingMethod>> GetAllShippingMethodsAsync(long? filterByCountryId = null)
     {
         if (filterByCountryId is > 0)
         {
@@ -118,7 +118,7 @@ public partial class ShippingMethodsService : IShippingMethodsService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public virtual async Task<bool> CountryRestrictionExistsAsync(ShippingMethod shippingMethod, int countryId)
+    public virtual async Task<bool> CountryRestrictionExistsAsync(ShippingMethod shippingMethod, long countryId)
     {
         ArgumentNullException.ThrowIfNull(shippingMethod);
 
@@ -137,8 +137,8 @@ public partial class ShippingMethodsService : IShippingMethodsService
     /// A task that represents the asynchronous operation
     /// The task result contains the shipping country mappings
     /// </returns>
-    public virtual async Task<IList<ShippingMethodCountryMapping>> GetShippingMethodCountryMappingAsync(int shippingMethodId,
-        int countryId)
+    public virtual async Task<IList<ShippingMethodCountryMapping>> GetShippingMethodCountryMappingAsync(long shippingMethodId,
+        long countryId)
     {
         var query = _shippingMethodCountryMappingRepository.Table.Where(shippingMethodCountryMapping =>
             shippingMethodCountryMapping.ShippingMethodId == shippingMethodId && shippingMethodCountryMapping.CountryId == countryId);

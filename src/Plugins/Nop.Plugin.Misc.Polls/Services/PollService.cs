@@ -44,7 +44,7 @@ public class PollService
     /// A task that represents the asynchronous operation
     /// The task result contains the poll
     /// </returns>
-    public async Task<Poll> GetPollByIdAsync(int pollId)
+    public async Task<Poll> GetPollByIdAsync(long pollId)
     {
         return await _pollRepository.GetByIdAsync(pollId, cache => default);
     }
@@ -64,7 +64,7 @@ public class PollService
     /// A task that represents the asynchronous operation
     /// The task result contains the polls
     /// </returns>
-    public async Task<IPagedList<Poll>> GetPollsAsync(int storeId = 0, int languageId = 0, bool showHidden = false,
+    public async Task<IPagedList<Poll>> GetPollsAsync(long storeId = 0, long languageId = 0, bool showHidden = false,
         bool loadShownOnHomepageOnly = false, bool loadShowInLeftSideOnly = false, string systemKeyword = null,
         int pageIndex = 0, int pageSize = int.MaxValue)
     {
@@ -144,7 +144,7 @@ public class PollService
     /// A task that represents the asynchronous operation
     /// The task result contains the poll answer
     /// </returns>
-    public async Task<PollAnswer> GetPollAnswerByIdAsync(int pollAnswerId)
+    public async Task<PollAnswer> GetPollAnswerByIdAsync(long pollAnswerId)
     {
         return await _pollAnswerRepository.GetByIdAsync(pollAnswerId, cache => default);
     }
@@ -169,7 +169,7 @@ public class PollService
     /// A task that represents the asynchronous operation
     /// The task result contains the poll answers
     /// </returns>
-    public async Task<IPagedList<PollAnswer>> GetPollAnswerByPollAsync(int pollId, int pageIndex = 0, int pageSize = int.MaxValue)
+    public async Task<IPagedList<PollAnswer>> GetPollAnswerByPollAsync(long pollId, int pageIndex = 0, int pageSize = int.MaxValue)
     {
         var query = _pollAnswerRepository.Table.Where(pa => pa.PollId == pollId);
 
@@ -209,7 +209,7 @@ public class PollService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public async Task<bool> AlreadyVotedAsync(int pollId, int customerId)
+    public async Task<bool> AlreadyVotedAsync(long pollId, long customerId)
     {
         if (pollId == 0 || customerId == 0)
             return false;
@@ -240,7 +240,7 @@ public class PollService
     /// A task that represents the asynchronous operation
     /// The task result contains the poll voting records
     /// </returns>
-    public async Task<IList<PollVotingRecord>> GetPollVotingRecordsByPollAnswerAsync(int pollAnswerId)
+    public async Task<IList<PollVotingRecord>> GetPollVotingRecordsByPollAnswerAsync(long pollAnswerId)
     {
         var query = _pollVotingRecordRepository.Table.Where(pa => pa.PollAnswerId == pollAnswerId);
 

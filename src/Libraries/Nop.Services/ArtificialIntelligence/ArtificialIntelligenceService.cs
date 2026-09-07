@@ -96,7 +96,7 @@ public partial class ArtificialIntelligenceService : IArtificialIntelligenceServ
     /// A task that represents the asynchronous operation
     /// The task result contains the title and text for AI request
     /// </returns>
-    protected virtual async Task<(string title, string text)> GetTitleAndTextAsync<TEntity>(TEntity entity, int languageId, string languageName,
+    protected virtual async Task<(string title, string text)> GetTitleAndTextAsync<TEntity>(TEntity entity, long languageId, string languageName,
         Expression<Func<TEntity, string>> titleSelector, Expression<Func<TEntity, string>> textSelector,
         string textRequiredLocale, string titleRequiredLocale)
         where TEntity : BaseEntity, ILocalizedEntity, IMetaTagsSupported
@@ -151,7 +151,7 @@ public partial class ArtificialIntelligenceService : IArtificialIntelligenceServ
     /// A task that represents the asynchronous operation
     /// The task result contains the generated meta tags
     /// </returns>
-    protected virtual async Task<(string metaTitle, string metaKeywords, string metaDescription)> CreateMetaTagsAsync(string currentMetaTitle, string currentMetaKeywords, string currentMetaDescription, string title, string text, int languageId)
+    protected virtual async Task<(string metaTitle, string metaKeywords, string metaDescription)> CreateMetaTagsAsync(string currentMetaTitle, string currentMetaKeywords, string currentMetaDescription, string title, string text, long languageId)
     {
         string metaTitle;
         string metaKeywords;
@@ -227,7 +227,7 @@ public partial class ArtificialIntelligenceService : IArtificialIntelligenceServ
     /// The task result contains the generated meta tags
     /// </returns>
     protected virtual async Task<(string metaTitle, string metaKeywords, string metaDescription)> CreateMetaTagsAsync<TEntity>(TEntity entity,
-        string currentMetaTitle, string currentMetaKeywords, string currentMetaDescription, int languageId)
+        string currentMetaTitle, string currentMetaKeywords, string currentMetaDescription, long languageId)
         where TEntity : BaseEntity, IMetaTagsSupported
     {
         var currentLanguage = await _languageService.GetLanguageByIdAsync(languageId != 0 ? languageId : _localizationSettings.DefaultAdminLanguageId);
@@ -296,7 +296,7 @@ public partial class ArtificialIntelligenceService : IArtificialIntelligenceServ
     /// A task that represents the asynchronous operation
     /// The task result contains the generated product description
     /// </returns>
-    public virtual async Task<string> CreateProductDescriptionAsync(string productName, string keywords, ToneOfVoiceType toneOfVoice, string instruction, string customToneOfVoice = null, int languageId = 0)
+    public virtual async Task<string> CreateProductDescriptionAsync(string productName, string keywords, ToneOfVoiceType toneOfVoice, string instruction, string customToneOfVoice = null, long languageId = 0)
     {
         var toneOfVoiceInstruction = await GetTonOfVoiceInstructionAsync(toneOfVoice, customToneOfVoice);
 
@@ -330,7 +330,7 @@ public partial class ArtificialIntelligenceService : IArtificialIntelligenceServ
     /// A task that represents the asynchronous operation
     /// The task result contains the generated meta tags
     /// </returns>
-    public virtual async Task<(string metaTitle, string metaKeywords, string metaDescription)> CreateMetaTagsForLocalizedEntityAsync<TEntity>(TEntity entity, int languageId)
+    public virtual async Task<(string metaTitle, string metaKeywords, string metaDescription)> CreateMetaTagsForLocalizedEntityAsync<TEntity>(TEntity entity, long languageId)
         where TEntity : BaseEntity, IMetaTagsSupported, ILocalizedEntity
     {
         var currentMetaTitle = languageId == 0
@@ -355,7 +355,7 @@ public partial class ArtificialIntelligenceService : IArtificialIntelligenceServ
     /// A task that represents the asynchronous operation
     /// The task result contains the generated meta tags
     /// </returns>
-    public virtual async Task<(string metaTitle, string metaKeywords, string metaDescription)> CreateMetaTagsAsync<TEntity>(TEntity entity, int languageId = 0)
+    public virtual async Task<(string metaTitle, string metaKeywords, string metaDescription)> CreateMetaTagsAsync<TEntity>(TEntity entity, long languageId = 0)
         where TEntity : BaseEntity, IMetaTagsSupported
     {
         var metaTitle = entity.MetaTitle;
@@ -375,7 +375,7 @@ public partial class ArtificialIntelligenceService : IArtificialIntelligenceServ
     /// A task that represents the asynchronous operation
     /// The task result contains the generated meta tags
     /// </returns>
-    public virtual async Task<(string metaTitle, string metaKeywords, string metaDescription)> CreateMetaTagsAsync(string entityTypeName, int entityId, int languageId)
+    public virtual async Task<(string metaTitle, string metaKeywords, string metaDescription)> CreateMetaTagsAsync(string entityTypeName, long entityId, long languageId)
     {
         var currentLanguage = await _languageService.GetLanguageByIdAsync(languageId != 0 ? languageId : _localizationSettings.DefaultAdminLanguageId);
 

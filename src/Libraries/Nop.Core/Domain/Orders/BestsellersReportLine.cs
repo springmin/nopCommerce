@@ -9,7 +9,7 @@ public partial class BestsellersReportLine
     /// <summary>
     /// Gets or sets the product identifier
     /// </summary>
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     /// <summary>
     /// Gets or sets the product name

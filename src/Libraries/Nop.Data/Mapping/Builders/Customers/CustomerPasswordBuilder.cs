@@ -17,7 +17,7 @@ public partial class CustomerPasswordBuilder : NopEntityBuilder<CustomerPassword
     /// <param name="table">Create table expression builder</param>
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
-        table.WithColumn(nameof(CustomerPassword.CustomerId)).AsInt32().ForeignKey<Customer>();
+        table.WithColumn(nameof(CustomerPassword.CustomerId)).AsInt64().ForeignKey<Customer>();
     }
 
     #endregion

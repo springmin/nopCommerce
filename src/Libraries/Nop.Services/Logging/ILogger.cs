@@ -62,7 +62,7 @@ public partial interface ILogger
     /// A task that represents the asynchronous operation
     /// The task result contains the log item
     /// </returns>
-    Task<Log> GetLogByIdAsync(int logId);
+    Task<Log> GetLogByIdAsync(long logId);
 
     /// <summary>
     /// Get log items by identifiers
@@ -72,7 +72,7 @@ public partial interface ILogger
     /// A task that represents the asynchronous operation
     /// The task result contains the log items
     /// </returns>
-    Task<IList<Log>> GetLogByIdsAsync(int[] logIds);
+    Task<IList<Log>> GetLogByIdsAsync(long[] logIds);
 
     /// <summary>
     /// Inserts a log item

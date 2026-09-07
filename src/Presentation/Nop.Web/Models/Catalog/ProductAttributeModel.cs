@@ -12,12 +12,12 @@ public partial record ProductAttributeModel : BaseNopModel
     /// <summary>
     /// Gets or sets the attribute id
     /// </summary>
-    public int Id { get; set; }
+    public long Id { get; set; }
 
     /// <summary>
     /// Gets or sets the value IDs of the attribute
     /// </summary>
-    public IList<int> ValueIds { get; set; }
+    public IList<long> ValueIds { get; set; }
 
     #endregion
 
@@ -25,7 +25,7 @@ public partial record ProductAttributeModel : BaseNopModel
 
     public ProductAttributeModel()
     {
-        ValueIds = new List<int>();
+        ValueIds = new List<long>();
     }
 
     #endregion

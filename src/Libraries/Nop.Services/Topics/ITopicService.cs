@@ -22,7 +22,7 @@ public partial interface ITopicService
     /// A task that represents the asynchronous operation
     /// The task result contains the topic
     /// </returns>
-    Task<Topic> GetTopicByIdAsync(int topicId);
+    Task<Topic> GetTopicByIdAsync(long topicId);
 
     /// <summary>
     /// Gets a topic
@@ -33,7 +33,7 @@ public partial interface ITopicService
     /// A task that represents the asynchronous operation
     /// The task result contains the topic
     /// </returns>
-    Task<Topic> GetTopicBySystemNameAsync(string systemName, int storeId = 0);
+    Task<Topic> GetTopicBySystemNameAsync(string systemName, long storeId = 0);
 
     /// <summary>
     /// Gets all topics
@@ -45,7 +45,7 @@ public partial interface ITopicService
     /// A task that represents the asynchronous operation
     /// The task result contains the topics
     /// </returns>
-    Task<IList<Topic>> GetAllTopicsAsync(int storeId, bool ignoreAcl = false, bool showHidden = false);
+    Task<IList<Topic>> GetAllTopicsAsync(long storeId, bool ignoreAcl = false, bool showHidden = false);
 
     /// <summary>
     /// Gets all topics
@@ -58,7 +58,7 @@ public partial interface ITopicService
     /// A task that represents the asynchronous operation
     /// The task result contains the topics
     /// </returns>
-    Task<IList<Topic>> GetAllTopicsAsync(int storeId, string keywords, bool ignoreAcl = false, bool showHidden = false);
+    Task<IList<Topic>> GetAllTopicsAsync(long storeId, string keywords, bool ignoreAcl = false, bool showHidden = false);
 
     /// <summary>
     /// Inserts a topic

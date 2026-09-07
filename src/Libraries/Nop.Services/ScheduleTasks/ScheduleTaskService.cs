@@ -46,7 +46,7 @@ public partial class ScheduleTaskService : IScheduleTaskService
     /// A task that represents the asynchronous operation
     /// The task result contains the schedule task
     /// </returns>
-    public virtual async Task<ScheduleTask> GetTaskByIdAsync(int taskId)
+    public virtual async Task<ScheduleTask> GetTaskByIdAsync(long taskId)
     {
         return await _taskRepository.GetByIdAsync(taskId, _ => default);
     }

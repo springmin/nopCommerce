@@ -60,7 +60,7 @@ public class PayPalCommercePublicController : BasePublicController
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateOrder(int placement, string paymentSource, int cardId, bool saveCard)
+    public async Task<IActionResult> CreateOrder(int placement, string paymentSource, long cardId, bool saveCard)
     {
         var model = await _modelFactory.PrepareOrderModelAsync((ButtonPlacement)placement, null, paymentSource, cardId, saveCard);
         if (model.LoginIsRequired)
@@ -300,7 +300,7 @@ public class PayPalCommercePublicController : BasePublicController
     }
 
     [HttpPost]
-    public async Task<IActionResult> CheckGoogleShipping(int placement, int? productId)
+    public async Task<IActionResult> CheckGoogleShipping(int placement, long? productId)
     {
         var (shippingIsRequired, error) = await _modelFactory.CheckShippingIsRequiredAsync(productId);
         if (!string.IsNullOrEmpty(error))
@@ -424,7 +424,7 @@ public class PayPalCommercePublicController : BasePublicController
     }
 
     [HttpPost]
-    public async Task<IActionResult> PaymentTokensDelete(int tokenId)
+    public async Task<IActionResult> PaymentTokensDelete(long tokenId)
     {
         var model = await _modelFactory.PreparePaymentTokenListModelAsync(deleteTokenId: tokenId);
         if (!model.VaultIsEnabled)
@@ -437,7 +437,7 @@ public class PayPalCommercePublicController : BasePublicController
     }
 
     [HttpPost]
-    public async Task<IActionResult> PaymentTokensMarkDefault(int tokenId)
+    public async Task<IActionResult> PaymentTokensMarkDefault(long tokenId)
     {
         var model = await _modelFactory.PreparePaymentTokenListModelAsync(defaultTokenId: tokenId);
         if (!model.VaultIsEnabled)

@@ -151,7 +151,7 @@ public partial class ProductAttributeController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.PRODUCT_ATTRIBUTES_VIEW)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         //try to get a product attribute with the specified id
         var productAttribute = await _productAttributeService.GetProductAttributeByIdAsync(id);
@@ -201,7 +201,7 @@ public partial class ProductAttributeController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.PRODUCT_ATTRIBUTES_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> PreTranslate(int itemId)
+    public virtual async Task<IActionResult> PreTranslate(long itemId)
     {
         var translationModel = new TranslationModel();
 
@@ -222,7 +222,7 @@ public partial class ProductAttributeController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.PRODUCT_ATTRIBUTES_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get a product attribute with the specified id
         var productAttribute = await _productAttributeService.GetProductAttributeByIdAsync(id);
@@ -242,7 +242,7 @@ public partial class ProductAttributeController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.PRODUCT_ATTRIBUTES_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> DeleteSelected(ICollection<int> selectedIds)
+    public virtual async Task<IActionResult> DeleteSelected(ICollection<long> selectedIds)
     {
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();
@@ -294,7 +294,7 @@ public partial class ProductAttributeController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.PRODUCT_ATTRIBUTES_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> PredefinedProductAttributeValueCreatePopup(int productAttributeId)
+    public virtual async Task<IActionResult> PredefinedProductAttributeValueCreatePopup(long productAttributeId)
     {
         //try to get a product attribute with the specified id
         var productAttribute = await _productAttributeService.GetProductAttributeByIdAsync(productAttributeId)
@@ -336,7 +336,7 @@ public partial class ProductAttributeController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.PRODUCT_ATTRIBUTES_VIEW)]
-    public virtual async Task<IActionResult> PredefinedProductAttributeValueEditPopup(int id)
+    public virtual async Task<IActionResult> PredefinedProductAttributeValueEditPopup(long id)
     {
         //try to get a predefined product attribute value with the specified id
         var productAttributeValue = await _productAttributeService.GetPredefinedProductAttributeValueByIdAsync(id)
@@ -385,7 +385,7 @@ public partial class ProductAttributeController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.PRODUCT_ATTRIBUTES_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> PredefinedProductAttributeValueDelete(int id)
+    public virtual async Task<IActionResult> PredefinedProductAttributeValueDelete(long id)
     {
         //try to get a predefined product attribute value with the specified id
         var productAttributeValue = await _productAttributeService.GetPredefinedProductAttributeValueByIdAsync(id)

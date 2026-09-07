@@ -9,7 +9,7 @@
 {
     //dynamic update support
     var attributeChangeScriptsBuilder = new StringBuilder();
-    var productId = Convert.ToInt32(ViewData["productId"]);
+    var productId = Convert.ToInt64(ViewData["productId"]);
     var attributesHaveConditions = Model.Any(a => a.HasCondition);
     var attributeChangeHandlerFuncName = $"attribute_change_handler_{productId}";
 

@@ -10,7 +10,7 @@ public partial record BestsellerModel : BaseNopModel
 {
     #region Properties
 
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     [NopResourceDisplayName("Admin.Reports.Sales.Bestsellers.Fields.Name")]
     public string ProductName { get; set; }

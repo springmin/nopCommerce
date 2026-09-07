@@ -10,7 +10,7 @@ public partial record BestCustomersReportModel : BaseNopModel
 {
     #region Properties
 
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     [NopResourceDisplayName("Admin.Reports.Customers.BestBy.Fields.Customer")]
     public string CustomerName { get; set; }

@@ -25,10 +25,10 @@ public partial record ProductAttributeMappingModel : BaseNopEntityModel, ITransl
 
     #region Properties
 
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Fields.Attribute")]
-    public int ProductAttributeId { get; set; }
+    public long ProductAttributeId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Fields.Attribute")]
     public string ProductAttribute { get; set; }
@@ -42,7 +42,7 @@ public partial record ProductAttributeMappingModel : BaseNopEntityModel, ITransl
     public bool IsRequired { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Fields.AttributeControlType")]
-    public int AttributeControlTypeId { get; set; }
+    public long AttributeControlTypeId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Fields.AttributeControlType")]
     public string AttributeControlType { get; set; }
@@ -90,7 +90,7 @@ public partial record ProductAttributeMappingModel : BaseNopEntityModel, ITransl
 
 public partial record ProductAttributeMappingLocalizedModel : ILocalizedLocaleModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Fields.TextPrompt")]
     public string TextPrompt { get; set; }

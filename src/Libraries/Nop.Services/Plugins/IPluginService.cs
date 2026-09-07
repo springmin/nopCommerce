@@ -23,7 +23,7 @@ public partial interface IPluginService
     /// The task result contains the plugin descriptors
     /// </returns>
     Task<IList<PluginDescriptor>> GetPluginDescriptorsAsync<TPlugin>(LoadPluginsMode loadMode = LoadPluginsMode.InstalledOnly,
-        Customer customer = null, int storeId = 0, string group = null, string dependsOnSystemName = "", string friendlyName = null, string author = null) where TPlugin : class, IPlugin;
+        Customer customer = null, long storeId = 0, string group = null, string dependsOnSystemName = "", string friendlyName = null, string author = null) where TPlugin : class, IPlugin;
 
     /// <summary>
     /// Get a plugin descriptor by the system name
@@ -40,7 +40,7 @@ public partial interface IPluginService
     /// </returns>
     Task<PluginDescriptor> GetPluginDescriptorBySystemNameAsync<TPlugin>(string systemName,
         LoadPluginsMode loadMode = LoadPluginsMode.InstalledOnly,
-        Customer customer = null, int storeId = 0, string group = null) where TPlugin : class, IPlugin;
+        Customer customer = null, long storeId = 0, string group = null) where TPlugin : class, IPlugin;
 
     /// <summary>
     /// Get plugins
@@ -55,7 +55,7 @@ public partial interface IPluginService
     /// The task result contains the plugins
     /// </returns>
     Task<IList<TPlugin>> GetPluginsAsync<TPlugin>(LoadPluginsMode loadMode = LoadPluginsMode.InstalledOnly,
-        Customer customer = null, int storeId = 0, string group = null) where TPlugin : class, IPlugin;
+        Customer customer = null, long storeId = 0, string group = null) where TPlugin : class, IPlugin;
 
     /// <summary>
     /// Find a plugin by the type which is located into the same assembly as a plugin

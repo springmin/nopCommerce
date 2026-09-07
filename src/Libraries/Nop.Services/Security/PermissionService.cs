@@ -60,7 +60,7 @@ public partial class PermissionService : IPermissionService
     /// A task that represents the asynchronous operation
     /// The task result contains the permissions
     /// </returns>
-    protected virtual async Task<IList<PermissionRecord>> GetPermissionRecordsByCustomerRoleIdAsync(int customerRoleId)
+    protected virtual async Task<IList<PermissionRecord>> GetPermissionRecordsByCustomerRoleIdAsync(long customerRoleId)
     {
         var key = _staticCacheManager.PrepareKeyForDefaultCache(NopSecurityDefaults.PermissionRecordsAllCacheKey, customerRoleId);
 
@@ -203,7 +203,7 @@ public partial class PermissionService : IPermissionService
     /// A task that represents the asynchronous operation
     /// The task result contains a permission record
     /// </returns>
-    public virtual async Task<PermissionRecord> GetPermissionRecordByIdAsync(int permissionId)
+    public virtual async Task<PermissionRecord> GetPermissionRecordByIdAsync(long permissionId)
     {
         return await _permissionRecordRepository.GetByIdAsync(permissionId);
     }
@@ -328,7 +328,7 @@ public partial class PermissionService : IPermissionService
     /// A task that represents the asynchronous operation
     /// The task result contains the true - authorized; otherwise, false
     /// </returns>
-    public virtual async Task<bool> AuthorizeAsync(string permissionRecordSystemName, int customerRoleId)
+    public virtual async Task<bool> AuthorizeAsync(string permissionRecordSystemName, long customerRoleId)
     {
         if (string.IsNullOrEmpty(permissionRecordSystemName))
             return false;
@@ -356,7 +356,7 @@ public partial class PermissionService : IPermissionService
     /// A task that represents the asynchronous operation
     /// The task result contains a list of mappings
     /// </returns>
-    public virtual async Task<IList<PermissionRecordCustomerRoleMapping>> GetMappingByPermissionRecordIdAsync(int permissionId)
+    public virtual async Task<IList<PermissionRecordCustomerRoleMapping>> GetMappingByPermissionRecordIdAsync(long permissionId)
     {
         var query = _permissionRecordCustomerRoleMappingRepository.Table;
 
@@ -371,7 +371,7 @@ public partial class PermissionService : IPermissionService
     /// <param name="permissionId">Permission identifier</param>
     /// <param name="customerRoleId">Customer role identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task DeletePermissionRecordCustomerRoleMappingAsync(int permissionId, int customerRoleId)
+    public virtual async Task DeletePermissionRecordCustomerRoleMappingAsync(long permissionId, long customerRoleId)
     {
         var mapping = await _permissionRecordCustomerRoleMappingRepository.Table
             .FirstOrDefaultAsync(prcm => prcm.CustomerRoleId == customerRoleId && prcm.PermissionRecordId == permissionId);
@@ -415,7 +415,7 @@ public partial class PermissionService : IPermissionService
     /// <param name="customerRoleId">Customer role ID</param>
     /// <param name="permissions">Permissions</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task InsertPermissionMappingAsync(int customerRoleId, params string[] permissions)
+    public virtual async Task InsertPermissionMappingAsync(long customerRoleId, params string[] permissions)
     {
         var permissionRecords = await GetAllPermissionRecordsAsync();
 

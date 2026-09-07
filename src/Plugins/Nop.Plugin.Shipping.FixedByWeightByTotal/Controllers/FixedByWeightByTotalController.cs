@@ -329,7 +329,7 @@ public class FixedByWeightByTotalController : BasePluginController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_SHIPPING_SETTINGS)]
-    public async Task<IActionResult> EditRateByWeightByTotalPopup(int id)
+    public async Task<IActionResult> EditRateByWeightByTotalPopup(long id)
     {
         var sbw = await _shippingByWeightService.GetByIdAsync(id);
         if (sbw == null)
@@ -426,7 +426,7 @@ public class FixedByWeightByTotalController : BasePluginController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_SHIPPING_SETTINGS)]
-    public async Task<IActionResult> DeleteRateByWeightByTotal(int id)
+    public async Task<IActionResult> DeleteRateByWeightByTotal(long id)
     {
         var sbw = await _shippingByWeightService.GetByIdAsync(id);
         if (sbw != null)

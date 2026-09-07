@@ -85,7 +85,7 @@ public partial class LogController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.System.MANAGE_SYSTEM_LOG)]
-    public virtual async Task<IActionResult> View(int id)
+    public virtual async Task<IActionResult> View(long id)
     {
         //try to get a log with the specified id
         var log = await _logger.GetLogByIdAsync(id);
@@ -100,7 +100,7 @@ public partial class LogController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.System.MANAGE_SYSTEM_LOG)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get a log with the specified id
         var log = await _logger.GetLogByIdAsync(id);
@@ -119,7 +119,7 @@ public partial class LogController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.System.MANAGE_SYSTEM_LOG)]
-    public virtual async Task<IActionResult> DeleteSelected(ICollection<int> selectedIds)
+    public virtual async Task<IActionResult> DeleteSelected(ICollection<long> selectedIds)
     {
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();

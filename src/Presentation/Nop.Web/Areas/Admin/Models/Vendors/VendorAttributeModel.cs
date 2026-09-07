@@ -27,7 +27,7 @@ public partial record VendorAttributeModel : BaseNopEntityModel, ILocalizedModel
     public bool IsRequired { get; set; }
 
     [NopResourceDisplayName("Admin.Vendors.VendorAttributes.Fields.AttributeControlType")]
-    public int AttributeControlTypeId { get; set; }
+    public long AttributeControlTypeId { get; set; }
 
     [NopResourceDisplayName("Admin.Vendors.VendorAttributes.Fields.AttributeControlType")]
     public string AttributeControlTypeName { get; set; }
@@ -44,7 +44,7 @@ public partial record VendorAttributeModel : BaseNopEntityModel, ILocalizedModel
 
 public partial record VendorAttributeLocalizedModel : ILocalizedLocaleModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Vendors.VendorAttributes.Fields.Name")]
     public string Name { get; set; }

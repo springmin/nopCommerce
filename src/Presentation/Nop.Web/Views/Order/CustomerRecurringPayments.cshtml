@@ -12,7 +12,7 @@
 }
 @section left
 {
-    @await Component.InvokeAsync(typeof(CustomerNavigationViewComponent), new { selectedTabId = CustomerNavigationEnum.RecurringPayments })
+    @await Component.InvokeAsync(typeof(CustomerNavigationViewComponent), new { selectedTabId = (long)CustomerNavigationEnum.RecurringPayments })
 }
 <div class="page account-page order-list-page">
     <div class="page-title">

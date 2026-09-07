@@ -119,14 +119,14 @@ public partial class EntityRepository<TEntity> : IRepository<TEntity> where TEnt
     /// A task that represents the asynchronous operation
     /// The task result contains the entity entry
     /// </returns>
-    public virtual async Task<TEntity> GetByIdAsync(int? id, Func<ICacheKeyService, CacheKey> getCacheKey = null, bool includeDeleted = true, bool useShortTermCache = false)
+    public virtual async Task<TEntity> GetByIdAsync(long? id, Func<ICacheKeyService, CacheKey> getCacheKey = null, bool includeDeleted = true, bool useShortTermCache = false)
     {
         if (!id.HasValue || id == 0)
             return null;
 
         async Task<TEntity> getEntityAsync()
         {
-            return await AddDeletedFilter(Table, includeDeleted).FirstOrDefaultAsync(entity => entity.Id == Convert.ToInt32(id));
+            return await AddDeletedFilter(Table, includeDeleted).FirstOrDefaultAsync(entity => entity.Id == Convert.ToInt64(id));
         }
 
         if (getCacheKey == null)
@@ -154,12 +154,12 @@ public partial class EntityRepository<TEntity> : IRepository<TEntity> where TEnt
     /// A task that represents the asynchronous operation
     /// The task result contains the entity entries
     /// </returns>
-    public virtual async Task<IList<TEntity>> GetByIdsAsync(IList<int> ids, Func<ICacheKeyService, CacheKey> getCacheKey = null, bool includeDeleted = true)
+    public virtual async Task<IList<TEntity>> GetByIdsAsync(IList<long> ids, Func<ICacheKeyService, CacheKey> getCacheKey = null, bool includeDeleted = true)
     {
         if (ids?.Any() != true)
             return new List<TEntity>();
 
-        static IList<TEntity> sortByIdList(IList<int> listOfId, IDictionary<int, TEntity> entitiesById)
+        static IList<TEntity> sortByIdList(IList<long> listOfId, IDictionary<long, TEntity> entitiesById)
         {
             var sortedEntities = new List<TEntity>(listOfId.Count);
 
@@ -172,7 +172,7 @@ public partial class EntityRepository<TEntity> : IRepository<TEntity> where TEnt
             return sortedEntities;
         }
 
-        async Task<IList<TEntity>> getByIdsAsync(IList<int> listOfId, bool sort = true)
+        async Task<IList<TEntity>> getByIdsAsync(IList<long> listOfId, bool sort = true)
         {
             var query = AddDeletedFilter(Table, includeDeleted)
                 .Where(entry => listOfId.Contains(entry.Id));
@@ -381,7 +381,7 @@ public partial class EntityRepository<TEntity> : IRepository<TEntity> where TEnt
     public virtual async Task<TEntity> LoadOriginalCopyAsync(TEntity entity)
     {
         return await _dataProvider.GetTable<TEntity>()
-            .FirstOrDefaultAsync(e => e.Id == Convert.ToInt32(entity.Id));
+            .FirstOrDefaultAsync(e => e.Id == Convert.ToInt64(entity.Id));
     }
 
     /// <summary>

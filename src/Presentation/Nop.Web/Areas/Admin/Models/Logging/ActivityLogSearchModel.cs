@@ -30,7 +30,7 @@ public partial record ActivityLogSearchModel : BaseSearchModel
     public DateTime? CreatedOnTo { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.ActivityLog.Fields.ActivityLogType")]
-    public int ActivityLogTypeId { get; set; }
+    public long ActivityLogTypeId { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.ActivityLog.Fields.ActivityLogType")]
     public IList<SelectListItem> ActivityLogType { get; set; }

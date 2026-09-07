@@ -141,7 +141,7 @@ public partial record ProductDetailsModel : BaseNopEntityModel, IMetaTagsSupport
 
         public bool Enabled { get; set; }
         public string JsonLd { get; set; }
-        public int ProductId { get; set; }
+        public long ProductId { get; set; }
         public string ProductName { get; set; }
         public string ProductSeName { get; set; }
         public IList<CategorySimpleModel> CategoryBreadcrumb { get; set; }
@@ -154,7 +154,7 @@ public partial record ProductDetailsModel : BaseNopEntityModel, IMetaTagsSupport
             AllowedQuantities = new List<SelectListItem>();
             ProductToWishlist = new ProductToWishlistModel();
         }
-        public int ProductId { get; set; }
+        public long ProductId { get; set; }
 
         //qty
         [NopResourceDisplayName("Products.Qty")]
@@ -181,7 +181,7 @@ public partial record ProductDetailsModel : BaseNopEntityModel, IMetaTagsSupport
         public string PreOrderAvailabilityStartDateTimeUserTime { get; set; }
 
         //updating existing shopping cart or wishlist item?
-        public int UpdatedShoppingCartItemId { get; set; }
+        public long UpdatedShoppingCartItemId { get; set; }
         public ShoppingCartType? UpdateShoppingCartItemType { get; set; }
         public ProductToWishlistModel ProductToWishlist { get; set; }
     }
@@ -226,9 +226,9 @@ public partial record ProductDetailsModel : BaseNopEntityModel, IMetaTagsSupport
             Values = new List<ProductAttributeValueModel>();
         }
 
-        public int ProductId { get; set; }
+        public long ProductId { get; set; }
 
-        public int ProductAttributeId { get; set; }
+        public long ProductAttributeId { get; set; }
 
         public string Name { get; set; }
 
@@ -293,7 +293,7 @@ public partial record ProductDetailsModel : BaseNopEntityModel, IMetaTagsSupport
         public bool IsPreSelected { get; set; }
 
         //product picture ID (associated to this value)
-        public int PictureId { get; set; }
+        public long PictureId { get; set; }
 
         public bool CustomerEntersQty { get; set; }
 
@@ -302,7 +302,7 @@ public partial record ProductDetailsModel : BaseNopEntityModel, IMetaTagsSupport
 
     public partial record ProductEstimateShippingModel : EstimateShippingModel
     {
-        public int ProductId { get; set; }
+        public long ProductId { get; set; }
     }
 
     #endregion

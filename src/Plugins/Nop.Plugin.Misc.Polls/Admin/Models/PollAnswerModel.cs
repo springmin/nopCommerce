@@ -10,7 +10,7 @@ public record PollAnswerModel : BaseNopEntityModel
 {
     #region Properties
 
-    public int PollId { get; set; }
+    public long PollId { get; set; }
 
     [NopResourceDisplayName("Plugins.Misc.Polls.Answers.Fields.Name")]
     public string Name { get; set; }

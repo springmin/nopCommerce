@@ -9,9 +9,9 @@ public partial record SelectMenuItemEntityModel : BaseNopModel
 {
     #region Properties
 
-    public int MenuItemId { get; set; }
+    public long MenuItemId { get; set; }
 
-    public int EntityId { get; set; }
+    public long EntityId { get; set; }
 
     #endregion
 }

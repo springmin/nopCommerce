@@ -161,7 +161,7 @@ public partial class CountryController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_COUNTRIES)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         //try to get a country with the specified id
         var country = await _countryService.GetCountryByIdAsync(id);
@@ -215,7 +215,7 @@ public partial class CountryController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_COUNTRIES)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get a country with the specified id
         var country = await _countryService.GetCountryByIdAsync(id);
@@ -246,7 +246,7 @@ public partial class CountryController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_COUNTRIES)]
-    public virtual async Task<IActionResult> PublishSelected(ICollection<int> selectedIds)
+    public virtual async Task<IActionResult> PublishSelected(ICollection<long> selectedIds)
     {
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();
@@ -263,7 +263,7 @@ public partial class CountryController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_COUNTRIES)]
-    public virtual async Task<IActionResult> UnpublishSelected(ICollection<int> selectedIds)
+    public virtual async Task<IActionResult> UnpublishSelected(ICollection<long> selectedIds)
     {
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();
@@ -297,7 +297,7 @@ public partial class CountryController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_COUNTRIES)]
-    public virtual async Task<IActionResult> StateCreatePopup(int countryId)
+    public virtual async Task<IActionResult> StateCreatePopup(long countryId)
     {
         //try to get a country with the specified id
         var country = await _countryService.GetCountryByIdAsync(countryId);
@@ -344,7 +344,7 @@ public partial class CountryController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_COUNTRIES)]
-    public virtual async Task<IActionResult> StateEditPopup(int id)
+    public virtual async Task<IActionResult> StateEditPopup(long id)
     {
         //try to get a state with the specified id
         var state = await _stateProvinceService.GetStateProvinceByIdAsync(id);
@@ -401,7 +401,7 @@ public partial class CountryController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_COUNTRIES)]
-    public virtual async Task<IActionResult> StateDelete(int id)
+    public virtual async Task<IActionResult> StateDelete(long id)
     {
         //try to get a state with the specified id
         var state = await _stateProvinceService.GetStateProvinceByIdAsync(id)
@@ -410,7 +410,7 @@ public partial class CountryController : BaseAdminController
         if (await _addressService.GetAddressTotalByStateProvinceIdAsync(state.Id) > 0)
             return ErrorJson(await _localizationService.GetResourceAsync("Admin.Configuration.Countries.States.CantDeleteWithAddresses"));
 
-        //int countryId = state.CountryId;
+        //long countryId = state.CountryId;
         await _stateProvinceService.DeleteStateProvinceAsync(state);
 
         //activity log
@@ -434,7 +434,7 @@ public partial class CountryController : BaseAdminController
         if (addAsterisk.HasValue && addAsterisk.Value)
         {
             //asterisk
-            result.Insert(0, new { id = 0, name = "*" });
+            result.Insert(0, new { id = 0L, name = "*" });
         }
         else
         {
@@ -442,9 +442,9 @@ public partial class CountryController : BaseAdminController
             {
                 //country is not selected ("choose country" item)
                 if (addSelectStateItem.HasValue && addSelectStateItem.Value)
-                    result.Insert(0, new { id = 0, name = await _localizationService.GetResourceAsync("Admin.Address.SelectState") });
+                    result.Insert(0, new { id = 0L, name = await _localizationService.GetResourceAsync("Admin.Address.SelectState") });
                 else
-                    result.Insert(0, new { id = 0, name = await _localizationService.GetResourceAsync("Admin.Address.Other") });
+                    result.Insert(0, new { id = 0L, name = await _localizationService.GetResourceAsync("Admin.Address.Other") });
             }
             else
             {
@@ -452,13 +452,13 @@ public partial class CountryController : BaseAdminController
                 if (!result.Any())
                 {
                     //country does not have states
-                    result.Insert(0, new { id = 0, name = await _localizationService.GetResourceAsync("Admin.Address.Other") });
+                    result.Insert(0, new { id = 0L, name = await _localizationService.GetResourceAsync("Admin.Address.Other") });
                 }
                 else
                 {
                     //country has some states
                     if (addSelectStateItem.HasValue && addSelectStateItem.Value)
-                        result.Insert(0, new { id = 0, name = await _localizationService.GetResourceAsync("Admin.Address.SelectState") });
+                        result.Insert(0, new { id = 0L, name = await _localizationService.GetResourceAsync("Admin.Address.SelectState") });
                 }
             }
         }

@@ -15,12 +15,12 @@ public partial class CurrencySettings : ISettings
     /// <summary>
     /// Primary store currency identifier
     /// </summary>
-    public int PrimaryStoreCurrencyId { get; set; }
+    public long PrimaryStoreCurrencyId { get; set; }
 
     /// <summary>
     ///  Primary exchange rate currency identifier
     /// </summary>
-    public int PrimaryExchangeRateCurrencyId { get; set; }
+    public long PrimaryExchangeRateCurrencyId { get; set; }
 
     /// <summary>
     /// Active exchange rate provider system name (of a plugin)

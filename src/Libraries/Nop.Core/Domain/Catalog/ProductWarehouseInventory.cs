@@ -8,12 +8,12 @@ public partial class ProductWarehouseInventory : BaseEntity
     /// <summary>
     /// Gets or sets the product identifier
     /// </summary>
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     /// <summary>
     /// Gets or sets the warehouse identifier
     /// </summary>
-    public int WarehouseId { get; set; }
+    public long WarehouseId { get; set; }
 
     /// <summary>
     /// Gets or sets the stock quantity

@@ -262,7 +262,7 @@ public partial interface IExportManager
     /// A task that represents the asynchronous operation
     /// The task result contains the customer GDPR info
     /// </returns>
-    Task<byte[]> ExportCustomerGdprInfoToXlsxAsync(Customer customer, int storeId);
+    Task<byte[]> ExportCustomerGdprInfoToXlsxAsync(Customer customer, long storeId);
 
     /// <summary>
     /// Export filter level values to XLSX

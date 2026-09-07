@@ -194,7 +194,7 @@ public partial class ShoppingCartController : BasePublicController
                     var ctrlAttributes = form[controlId];
                     if (!StringValues.IsNullOrEmpty(ctrlAttributes))
                     {
-                        var selectedAttributeId = int.Parse(ctrlAttributes);
+                        var selectedAttributeId = long.Parse(ctrlAttributes);
                         if (selectedAttributeId > 0)
                         {
                             attributesXml = _checkoutAttributeParser.AddAttribute(attributesXml,
@@ -211,7 +211,7 @@ public partial class ShoppingCartController : BasePublicController
                     {
                         foreach (var item in cblAttributes.ToString().Split(_separator, StringSplitOptions.RemoveEmptyEntries))
                         {
-                            var selectedAttributeId = int.Parse(item);
+                            var selectedAttributeId = long.Parse(item);
                             if (selectedAttributeId > 0)
                             {
                                 attributesXml = _checkoutAttributeParser.AddAttribute(attributesXml,
@@ -342,7 +342,7 @@ public partial class ShoppingCartController : BasePublicController
     }
 
     protected virtual async Task<IActionResult> GetProductToCartDetailsAsync(List<string> addToCartWarnings, ShoppingCartType cartType,
-        Product product, ShoppingCartItem updateCartItem = null, int? customWishlistId = null)
+        Product product, ShoppingCartItem updateCartItem = null, long? customWishlistId = null)
     {
         if (addToCartWarnings.Any())
         {
@@ -480,7 +480,7 @@ public partial class ShoppingCartController : BasePublicController
         return string.Empty;
     }
 
-    protected virtual async Task<string> CheckDuplicateWishlistNameAsync(int customerId, string wishlistName, IList<CustomWishlist> selectedWishlists = null)
+    protected virtual async Task<string> CheckDuplicateWishlistNameAsync(long customerId, string wishlistName, IList<CustomWishlist> selectedWishlists = null)
     {
         var currentWishlists = selectedWishlists ?? await _customWishlistService.GetAllCustomWishlistsAsync(customerId);
         if (currentWishlists.Any(wishlist => string.Equals(wishlist.Name, wishlistName, StringComparison.InvariantCultureIgnoreCase)))
@@ -590,7 +590,7 @@ public partial class ShoppingCartController : BasePublicController
     //add product to cart using AJAX
     //currently we use this method on catalog pages (category/manufacturer/etc)
     [HttpPost]
-    public virtual async Task<IActionResult> AddProductToCart_Catalog(int productId, int shoppingCartTypeId,
+    public virtual async Task<IActionResult> AddProductToCart_Catalog(long productId, long shoppingCartTypeId,
         int quantity, bool forceredirection = false)
     {
         var cartType = (ShoppingCartType)shoppingCartTypeId;
@@ -788,7 +788,7 @@ public partial class ShoppingCartController : BasePublicController
     //add product to cart using AJAX
     //currently we use this method on the product details pages
     [HttpPost]
-    public virtual async Task<IActionResult> AddProductToCart_Details(int productId, int shoppingCartTypeId, IFormCollection form, int? customwishlistid = null)
+    public virtual async Task<IActionResult> AddProductToCart_Details(long productId, long shoppingCartTypeId, IFormCollection form, long? customwishlistid = null)
     {
         var product = await _productService.GetProductByIdAsync(productId);
         if (product == null)
@@ -810,12 +810,12 @@ public partial class ShoppingCartController : BasePublicController
         }
 
         //update existing shopping cart item
-        var updatecartitemid = 0;
+        long updatecartitemid = 0;
         foreach (var formKey in form.Keys)
         {
             if (formKey.Equals($"addtocart_{productId}.UpdatedShoppingCartItemId", StringComparison.InvariantCultureIgnoreCase))
             {
-                _ = int.TryParse(form[formKey], out updatecartitemid);
+                _ = long.TryParse(form[formKey].ToString(), out updatecartitemid);
                 break;
             }
         }
@@ -824,10 +824,9 @@ public partial class ShoppingCartController : BasePublicController
         if (_shoppingCartSettings.AllowCartItemEditing && updatecartitemid > 0)
         {
             var store = await _storeContext.GetCurrentStoreAsync();
-
             //search with the same cart type as specified
-            var cart = await _shoppingCartService.GetShoppingCartAsync(await _workContext.GetCurrentCustomerAsync(),
-                [shoppingCartTypeId, (int)ShoppingCartType.Stash], store.Id, customWishlistId: customwishlistid);
+            var cart = await _shoppingCartService.GetShoppingCartAsync(await _workContext.GetCurrentCustomerAsync(), 
+                (ShoppingCartType)shoppingCartTypeId, store.Id, customWishlistId: customwishlistid);
 
             updatecartitem = cart.FirstOrDefault(x => x.Id == updatecartitemid);
             //not found? let's ignore it. in this case we'll add a new item
@@ -877,7 +876,7 @@ public partial class ShoppingCartController : BasePublicController
     //handle product attribute selection event. this way we return new price, overridden gtin/sku/mpn
     //currently we use this method on the product details pages
     [HttpPost]
-    public virtual async Task<IActionResult> ProductDetails_AttributeChange(int productId, bool validateAttributeConditions,
+    public virtual async Task<IActionResult> ProductDetails_AttributeChange(long productId, bool validateAttributeConditions,
         bool loadPicture, IFormCollection form)
     {
         var product = await _productService.GetProductByIdAsync(productId);
@@ -946,8 +945,8 @@ public partial class ShoppingCartController : BasePublicController
         var stockAvailability = await _productService.FormatStockMessageAsync(product, attributeXml);
 
         //conditional attributes
-        var enabledAttributeMappingIds = new List<int>();
-        var disabledAttributeMappingIds = new List<int>();
+        var enabledAttributeMappingIds = new List<long>();
+        var disabledAttributeMappingIds = new List<long>();
         if (validateAttributeConditions)
         {
             var attributes = await _productAttributeService.GetProductAttributeMappingsByProductIdAsync(product.Id);
@@ -967,11 +966,11 @@ public partial class ShoppingCartController : BasePublicController
         //picture. used when we want to override a default product picture when some attribute is selected
         var pictureFullSizeUrl = string.Empty;
         var pictureDefaultSizeUrl = string.Empty;
-        var pictureIds = new List<int>();
+        var pictureIds = new List<long>();
         if (loadPicture)
         {
             //first, try to get product attribute combination picture
-            var pictureId = 0;
+            long pictureId = 0;
             var combination = await _productAttributeParser.FindProductAttributeCombinationAsync(product, attributeXml);
             if (combination != null)
             {
@@ -1054,8 +1053,8 @@ public partial class ShoppingCartController : BasePublicController
             NopCustomerDefaults.CheckoutAttributes, store.Id);
 
         //conditions
-        var enabledAttributeIds = new List<int>();
-        var disabledAttributeIds = new List<int>();
+        var enabledAttributeIds = new List<long>();
+        var disabledAttributeIds = new List<long>();
         var excludeShippableAttributes = !await _shoppingCartService.ShoppingCartRequiresShippingAsync(cart);
         var attributes = await _checkoutAttributeService.GetAllAttributesAsync(_staticCacheManager, _storeMappingService, store.Id, excludeShippableAttributes);
         foreach (var attribute in attributes)
@@ -1085,7 +1084,7 @@ public partial class ShoppingCartController : BasePublicController
 
     [HttpPost]
     [IgnoreAntiforgeryToken]
-    public virtual async Task<IActionResult> UploadFileProductAttribute(int attributeId)
+    public virtual async Task<IActionResult> UploadFileProductAttribute(long attributeId)
     {
         var attribute = await _productAttributeService.GetProductAttributeMappingByIdAsync(attributeId);
         if (attribute == null || attribute.AttributeControlType != AttributeControlType.FileUpload)
@@ -1165,7 +1164,7 @@ public partial class ShoppingCartController : BasePublicController
 
     [HttpPost]
     [IgnoreAntiforgeryToken]
-    public virtual async Task<IActionResult> UploadFileCheckoutAttribute(int attributeId)
+    public virtual async Task<IActionResult> UploadFileCheckoutAttribute(long attributeId)
     {
         var attribute = await _checkoutAttributeService.GetAttributeByIdAsync(attributeId);
         if (attribute == null || attribute.AttributeControlType != AttributeControlType.FileUpload)
@@ -1249,9 +1248,7 @@ public partial class ShoppingCartController : BasePublicController
             return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
 
         var store = await _storeContext.GetCurrentStoreAsync();
-
         var cart = await _shoppingCartService.GetShoppingCartAsync(await _workContext.GetCurrentCustomerAsync(), ShoppingCartType.ShoppingCart, store.Id);
-
         var model = new ShoppingCartModel();
         model = await _shoppingCartModelFactory.PrepareShoppingCartModelAsync(model, cart);
         return View(model);
@@ -1270,25 +1267,6 @@ public partial class ShoppingCartController : BasePublicController
         return RedirectToRoute(NopRouteNames.General.CART);
     }
 
-
-    [HttpPost, ActionName("Cart")]
-    [FormValueRequired("changevendorcart")]
-    public virtual async Task<IActionResult> ChangeVendorCart(ShoppingCartModel model)
-    {
-        if (!await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_SHOPPING_CART))
-            return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
-
-        if (!_shoppingCartSettings.VendorEnabled)
-            return RedirectToRoute(NopRouteNames.General.CART);
-
-        var customer = await _workContext.GetCurrentCustomerAsync();
-        var store = await _storeContext.GetCurrentStoreAsync();
-
-        await _shoppingCartService.SetShoppingCartVendorAsync(customer, model.SelectedVendorId, store.Id);
-
-        return await Cart();
-    }
-
     [HttpPost, ActionName("Cart")]
     [FormValueRequired("updatecart")]
     public virtual async Task<IActionResult> UpdateCart(IFormCollection form)
@@ -1303,7 +1281,7 @@ public partial class ShoppingCartController : BasePublicController
         //get identifiers of items to remove
         var itemIdsToRemove = form["removefromcart"]
             .SelectMany(value => value.Split(_separator, StringSplitOptions.RemoveEmptyEntries))
-            .Select(idString => int.TryParse(idString, out var id) ? id : 0)
+            .Select(idString => long.TryParse(idString, out long id) ? id : 0)
             .Distinct().ToList();
 
         var products = (await _productService.GetProductsByIdsAsync(cart.Select(item => item.ProductId).Distinct().ToArray()))
@@ -1557,7 +1535,7 @@ public partial class ShoppingCartController : BasePublicController
         var model = new ShoppingCartModel();
 
         //get discount identifier
-        var discountId = 0;
+        long discountId = 0;
         foreach (var formValue in form.Keys)
         {
             if (formValue.StartsWith("removediscount-", StringComparison.InvariantCultureIgnoreCase))
@@ -1583,7 +1561,7 @@ public partial class ShoppingCartController : BasePublicController
         var model = new ShoppingCartModel();
 
         //get gift card identifier
-        var giftCardId = 0;
+        long giftCardId = 0;
         foreach (var formValue in form.Keys)
         {
             if (formValue.StartsWith("removegiftcard-", StringComparison.InvariantCultureIgnoreCase))
@@ -1638,12 +1616,12 @@ public partial class ShoppingCartController : BasePublicController
 
         var allIdsToRemove = form.ContainsKey("removefromcart")
             ? form["removefromcart"].ToString().Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                .Select(int.Parse)
+                .Select(long.Parse)
                 .ToList()
-            : new List<int>();
+            : new List<long>();
 
         //current warnings <cart item identifier, warnings>
-        var innerWarnings = new Dictionary<int, IList<string>>();
+        var innerWarnings = new Dictionary<long, IList<string>>();
         foreach (var sci in cart)
         {
             var remove = allIdsToRemove.Contains(sci.Id);
@@ -1718,7 +1696,7 @@ public partial class ShoppingCartController : BasePublicController
         var allWarnings = new List<string>();
         var countOfAddedItems = 0;
         var allIdsToAdd = form.ContainsKey("addtocart")
-            ? form["addtocart"].ToString().Split(_separator, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList()
+            ? form["addtocart"].ToString().Split(_separator, StringSplitOptions.RemoveEmptyEntries).Select(long.Parse).ToList()
             : [];
         foreach (var sci in pageCart)
         {
@@ -1770,7 +1748,7 @@ public partial class ShoppingCartController : BasePublicController
         return View(model);
     }
 
-    public virtual async Task<IActionResult> EmailWishlist(int? wishlistId = null)
+    public virtual async Task<IActionResult> EmailWishlist(long? wishlistId = null)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_WISHLIST) || !_shoppingCartSettings.EmailWishlistEnabled)
             return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
@@ -1834,7 +1812,7 @@ public partial class ShoppingCartController : BasePublicController
     }
 
     [HttpPost]
-    public virtual async Task<IActionResult> AddWishlist(string name, int productId)
+    public virtual async Task<IActionResult> AddWishlist(string name, long productId)
     {
         var customer = await _workContext.GetCurrentCustomerAsync();
         var isGuest = await _customerService.IsGuestAsync(customer);
@@ -1872,7 +1850,7 @@ public partial class ShoppingCartController : BasePublicController
         }
 
         // Check if customer has reached the maximum number of custom wishlists allowed
-        var maximumNumberOfCustomWishlist = _shoppingCartSettings.MaximumNumberOfCustomWishlist;
+        var maximumNumberOfCustomWishlist = _shoppingCartSettings.MaximumNumberOfCustomWishlist;        
         if (currentWishlists.Count >= maximumNumberOfCustomWishlist)
         {
             return Json(new
@@ -1904,7 +1882,7 @@ public partial class ShoppingCartController : BasePublicController
     }
 
     [HttpPost]
-    public virtual async Task<IActionResult> MoveProductToCustomWishlist(int productId, int wishlistId)
+    public virtual async Task<IActionResult> MoveProductToCustomWishlist(long productId, long wishlistId)
     {
         var customer = await _workContext.GetCurrentCustomerAsync();
         var isGuest = await _customerService.IsGuestAsync(customer);
@@ -1954,7 +1932,7 @@ public partial class ShoppingCartController : BasePublicController
     }
 
     [HttpPost]
-    public virtual async Task<IActionResult> MoveToCustomWishlist(int shoppingCartItemId, int customWishlistId)
+    public virtual async Task<IActionResult> MoveToCustomWishlist(long shoppingCartItemId, long customWishlistId)
     {
         var customer = await _workContext.GetCurrentCustomerAsync();
         var redirectUrl = Url.RouteUrl(NopRouteNames.General.WISHLIST, new { list = customWishlistId });
@@ -1985,7 +1963,7 @@ public partial class ShoppingCartController : BasePublicController
     }
 
     [HttpPost]
-    public virtual async Task<IActionResult> RenameWishlist(string wishlistName, int wishlistId)
+    public virtual async Task<IActionResult> RenameWishlist(string wishlistName, long wishlistId)
     {
         var customer = await _workContext.GetCurrentCustomerAsync();
         var wishlist = await _customWishlistService.GetCustomWishlistByIdAsync(wishlistId);
@@ -2022,9 +2000,9 @@ public partial class ShoppingCartController : BasePublicController
             redirect = Url.RouteUrl(NopRouteNames.General.WISHLIST, new { list = wishlistId })
         });
     }
-
+    
     [HttpPost]
-    public virtual async Task<IActionResult> DeleteWishlist(int wishlistId)
+    public virtual async Task<IActionResult> DeleteWishlist(long wishlistId)
     {
         var customer = await _workContext.GetCurrentCustomerAsync();
         var wishlist = await _customWishlistService.GetCustomWishlistByIdAsync(wishlistId);

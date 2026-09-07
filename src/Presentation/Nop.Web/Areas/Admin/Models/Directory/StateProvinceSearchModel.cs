@@ -9,7 +9,7 @@ public partial record StateProvinceSearchModel : BaseSearchModel
 {
     #region Properties
 
-    public int CountryId { get; set; }
+    public long CountryId { get; set; }
 
     #endregion
 }

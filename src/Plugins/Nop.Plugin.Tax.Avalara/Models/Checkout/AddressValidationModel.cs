@@ -15,7 +15,7 @@ public record AddressValidationModel : BaseNopModel
 
     public bool IsNewAddress { get; set; }
 
-    public int AddressId { get; set; }
+    public long AddressId { get; set; }
 
     #endregion
 }

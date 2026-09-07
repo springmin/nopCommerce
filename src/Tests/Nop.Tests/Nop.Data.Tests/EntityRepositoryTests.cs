@@ -89,7 +89,7 @@ public class EntityRepositoryTests : BaseNopTest
         product.Deleted = true;
         await productRepository.UpdateAsync(product);
 
-        var ids = new List<int> { 1, 2, 3 };
+        var ids = new List<long> { 1, 2, 3 };
 
         var products = await productRepository.GetByIdsAsync(ids);
         products.Count.Should().Be(3);

@@ -19,7 +19,7 @@ public partial class ContactFormAttributeValueBuilder : NopEntityBuilder<Contact
     {
         table
             .WithColumn(nameof(ContactFormAttributeValue.Name)).AsString(400).NotNullable()
-            .WithColumn(nameof(ContactFormAttributeValue.AttributeId)).AsInt32().ForeignKey<ContactFormAttribute>();
+            .WithColumn(nameof(ContactFormAttributeValue.AttributeId)).AsInt64().ForeignKey<ContactFormAttribute>();
     }
 
     #endregion

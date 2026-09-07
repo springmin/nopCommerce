@@ -19,7 +19,7 @@ public partial class CustomWishlistBuilder : NopEntityBuilder<CustomWishlist>
     /// <param name="table">Create table expression builder</param>
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
-        table.WithColumn(nameof(CustomWishlist.CustomerId)).AsInt32().NotNullable().ForeignKey<Customer>(onDelete: Rule.None);
+        table.WithColumn(nameof(CustomWishlist.CustomerId)).AsInt64().NotNullable().ForeignKey<Customer>(onDelete: Rule.None);
     }
 
     #endregion

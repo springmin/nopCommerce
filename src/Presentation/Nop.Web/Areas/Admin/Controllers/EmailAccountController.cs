@@ -129,7 +129,7 @@ public partial class EmailAccountController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_EMAIL_ACCOUNTS)]
-    public virtual async Task<IActionResult> MarkAsDefaultEmail(int id)
+    public virtual async Task<IActionResult> MarkAsDefaultEmail(long id)
     {
         var defaultEmailAccount = await _emailAccountService.GetEmailAccountByIdAsync(id);
         if (defaultEmailAccount == null)
@@ -179,7 +179,7 @@ public partial class EmailAccountController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_EMAIL_ACCOUNTS)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         //try to get an email account with the specified id
         var emailAccount = await _emailAccountService.GetEmailAccountByIdAsync(id);
@@ -310,7 +310,7 @@ public partial class EmailAccountController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_EMAIL_ACCOUNTS)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get an email account with the specified id
         var emailAccount = await _emailAccountService.GetEmailAccountByIdAsync(id);

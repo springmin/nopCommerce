@@ -162,7 +162,7 @@ public partial class StoreController : BaseAdminController
 
     [HttpsRequirement(ignore: true)]
     [CheckPermission(StandardPermission.Configuration.MANAGE_STORES)]
-    public virtual async Task<IActionResult> SetStoreSslByCurrentRequestScheme(int id)
+    public virtual async Task<IActionResult> SetStoreSslByCurrentRequestScheme(long id)
     {
         //try to get a store with the specified id
         var store = await _storeService.GetStoreByIdAsync(id);
@@ -184,7 +184,7 @@ public partial class StoreController : BaseAdminController
 
     [HttpsRequirement(ignore: true)]
     [CheckPermission(StandardPermission.Configuration.MANAGE_STORES)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         //try to get a store with the specified id
         var store = await _storeService.GetStoreByIdAsync(id);
@@ -238,7 +238,7 @@ public partial class StoreController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_STORES)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get a store with the specified id
         var store = await _storeService.GetStoreByIdAsync(id);

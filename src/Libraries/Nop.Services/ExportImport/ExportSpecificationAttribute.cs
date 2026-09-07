@@ -10,7 +10,7 @@ public partial class ExportSpecificationAttribute : ProductSpecificationAttribut
     /// <summary>
     /// Gets or sets the specification attribute identifier
     /// </summary>
-    public int SpecificationAttributeId { get; set; }
+    public long SpecificationAttributeId { get; set; }
 
     /// <summary>
     /// Create data to export the product specification attribute

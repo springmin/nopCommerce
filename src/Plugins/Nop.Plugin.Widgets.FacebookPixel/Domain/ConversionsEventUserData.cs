@@ -8,7 +8,7 @@ public class ConversionsEventUserData
     /// Gets or sets the customer identifier
     /// </summary>
     [JsonIgnore]
-    public int Id { get; set; }
+    public long Id { get; set; }
 
     /// <summary>
     /// Gets or sets the client ip address

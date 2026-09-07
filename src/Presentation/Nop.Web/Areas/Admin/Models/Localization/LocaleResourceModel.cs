@@ -16,7 +16,7 @@ public partial record LocaleResourceModel : BaseNopEntityModel
     [NopResourceDisplayName("Admin.Configuration.Languages.Resources.Fields.Value")]
     public string ResourceValue { get; set; }
 
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     #endregion
 }

@@ -87,7 +87,7 @@ public class SettingMigration : MigrationBase
         this.SetSettingIfNotExists<MediaSettings, int>(settings => settings.VideoIframeHeight, 150);
 
         //#385
-        this.SetSettingIfNotExists<CatalogSettings, int>(settings => settings.ProductUrlStructureTypeId, (int)ProductUrlStructureType.Product);
+        this.SetSettingIfNotExists<CatalogSettings, long>(settings => settings.ProductUrlStructureTypeId, (long)ProductUrlStructureType.Product);
 
         //#5261
         this.SetSettingIfNotExists<RobotsTxtSettings, List<string>>(settings => settings.DisallowPaths, setting => setting.DisallowPaths.AddRange(new[]
@@ -167,12 +167,12 @@ public class SettingMigration : MigrationBase
                 "/uploadfilereturnrequest",
                 "/wishlist"
             }));
-        this.SetSettingIfNotExists<RobotsTxtSettings, List<int>>(settings => settings.DisallowLanguages);
+        this.SetSettingIfNotExists<RobotsTxtSettings, List<long>>(settings => settings.DisallowLanguages);
         this.SetSettingIfNotExists<RobotsTxtSettings, List<string>>(settings => settings.AdditionsRules);
         this.SetSettingIfNotExists<RobotsTxtSettings, bool>(settings => settings.AllowSitemapXml);
 
         //#5753
-        this.SetSettingIfNotExists<MediaSettings, int>(settings => settings.ProductDefaultImageId, 0);
+        this.SetSettingIfNotExists<MediaSettings, long>(settings => settings.ProductDefaultImageId, 0);
 
         //#3651
         this.SetSettingIfNotExists<OrderSettings, bool>(settings => settings.AttachPdfInvoiceToOrderProcessingEmail, false);

@@ -108,7 +108,7 @@ public partial class MessageTemplateController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.ContentManagement.MESSAGE_TEMPLATES_VIEW)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         //try to get a message template with the specified id
         var messageTemplate = await _messageTemplateService.GetMessageTemplateByIdAsync(id);
@@ -169,7 +169,7 @@ public partial class MessageTemplateController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.ContentManagement.MESSAGE_TEMPLATES_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get a message template with the specified id
         var messageTemplate = await _messageTemplateService.GetMessageTemplateByIdAsync(id);
@@ -213,7 +213,7 @@ public partial class MessageTemplateController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.ContentManagement.MESSAGE_TEMPLATES_VIEW)]
-    public virtual async Task<IActionResult> TestTemplate(int id, int languageId = 0)
+    public virtual async Task<IActionResult> TestTemplate(long id, long languageId = 0)
     {
         //try to get a message template with the specified id
         var messageTemplate = await _messageTemplateService.GetMessageTemplateByIdAsync(id);

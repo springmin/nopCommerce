@@ -95,7 +95,7 @@ public partial class GdprService : IGdprService
     /// A task that represents the asynchronous operation
     /// The task result contains the gDPR consent
     /// </returns>
-    public virtual async Task<GdprConsent> GetConsentByIdAsync(int gdprConsentId)
+    public virtual async Task<GdprConsent> GetConsentByIdAsync(long gdprConsentId)
     {
         return await _gdprConsentRepository.GetByIdAsync(gdprConsentId, cache => default);
     }
@@ -158,7 +158,7 @@ public partial class GdprService : IGdprService
     /// A task that represents the asynchronous operation
     /// The task result contains the result; null if previous a customer hasn't been asked
     /// </returns>
-    public virtual async Task<bool?> IsConsentAcceptedAsync(int consentId, int customerId)
+    public virtual async Task<bool?> IsConsentAcceptedAsync(long consentId, long customerId)
     {
         //get latest record
         var log = (await GetAllLogAsync(customerId: customerId, consentId: consentId, pageIndex: 0, pageSize: 1)).FirstOrDefault();
@@ -190,7 +190,7 @@ public partial class GdprService : IGdprService
     /// A task that represents the asynchronous operation
     /// The task result contains the gDPR log records
     /// </returns>
-    public virtual async Task<IPagedList<GdprLog>> GetAllLogAsync(int customerId = 0, int consentId = 0,
+    public virtual async Task<IPagedList<GdprLog>> GetAllLogAsync(long customerId = 0, long consentId = 0,
         string customerInfo = "", GdprRequestType? requestType = null,
         int pageIndex = 0, int pageSize = int.MaxValue)
     {
@@ -225,7 +225,7 @@ public partial class GdprService : IGdprService
     /// <param name="requestType">Request type</param>
     /// <param name="requestDetails">Request details</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task InsertLogAsync(Customer customer, int consentId, GdprRequestType requestType, string requestDetails)
+    public virtual async Task InsertLogAsync(Customer customer, long consentId, GdprRequestType requestType, string requestDetails)
     {
         ArgumentNullException.ThrowIfNull(customer);
 

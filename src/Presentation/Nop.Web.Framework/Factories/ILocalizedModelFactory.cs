@@ -16,5 +16,5 @@ public partial interface ILocalizedModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the list of localized model
     /// </returns>
-    Task<IList<T>> PrepareLocalizedModelsAsync<T>(Func<T, int, Task> configure = null) where T : ILocalizedLocaleModel;
+    Task<IList<T>> PrepareLocalizedModelsAsync<T>(Func<T, long, Task> configure = null) where T : ILocalizedLocaleModel;
 }

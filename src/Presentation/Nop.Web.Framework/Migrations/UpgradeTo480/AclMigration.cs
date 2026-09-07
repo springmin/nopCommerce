@@ -38,7 +38,7 @@ public class AclMigration : Migration
     /// </summary>
     /// <param name="permissionId">Permission identifier</param>
     /// <returns>Permission record-customer role mapping</returns>
-    protected virtual IList<PermissionRecordCustomerRoleMapping> GetMappingByPermissionRecordId(int permissionId)
+    protected virtual IList<PermissionRecordCustomerRoleMapping> GetMappingByPermissionRecordId(long permissionId)
     {
         var records = _permissionRecordCustomerRoleMappingRepository.Table
             .Where(x => x.PermissionRecordId == permissionId);

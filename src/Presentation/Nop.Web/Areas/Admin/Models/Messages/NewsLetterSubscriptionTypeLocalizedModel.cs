@@ -8,7 +8,7 @@ namespace Nop.Web.Areas.Admin.Models.Messages;
 /// </summary>
 public partial record NewsLetterSubscriptionTypeLocalizedModel : ILocalizedLocaleModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.NewsLetterSubscriptionType.Fields.Name")]
     public string Name { get; set; }

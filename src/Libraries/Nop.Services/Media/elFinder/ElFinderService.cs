@@ -21,7 +21,7 @@ public partial class ElFinderService : IElFinderService
     protected readonly LinkGenerator _linkGenerator;
     protected readonly MediaSettings _mediaSettings;
 
-    protected readonly Dictionary<int, Connector> _connectors = new();
+    protected readonly Dictionary<long, Connector> _connectors = new();
 
     #endregion
 
@@ -49,7 +49,7 @@ public partial class ElFinderService : IElFinderService
     /// </summary>
     /// <param name="storeId">Store identifier</param>
     /// <returns>Connector</returns>
-    public virtual Connector GetConnector(int storeId)
+    public virtual Connector GetConnector(long storeId)
     {
         if (_connectors.TryGetValue(storeId, out var cachedConnector))
             return cachedConnector;

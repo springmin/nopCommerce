@@ -40,8 +40,8 @@ public class ItemClassificationService
     /// A task that represents the asynchronous operation
     /// The task result contains the paged list of classification items
     /// </returns>
-    public async Task<IPagedList<ItemClassification>> GetItemClassificationAsync(int? countryId = null,
-        int? productId = null,
+    public async Task<IPagedList<ItemClassification>> GetItemClassificationAsync(long? countryId = null,
+        long? productId = null,
         int pageIndex = 0, int pageSize = int.MaxValue)
     {
         //get all items
@@ -69,7 +69,7 @@ public class ItemClassificationService
     /// A task that represents the asynchronous operation
     /// The task result contains the item classification
     /// </returns>
-    public async Task<ItemClassification> GetItemClassificationByIdAsync(int itemId)
+    public async Task<ItemClassification> GetItemClassificationByIdAsync(long itemId)
     {
         return await _itemClassificationRepository.GetByIdAsync(itemId);
     }
@@ -96,7 +96,7 @@ public class ItemClassificationService
     /// </summary>
     /// <param name="productIds">Product identifiers</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public async Task AddItemClassificationAsync(List<int> productIds)
+    public async Task AddItemClassificationAsync(List<long> productIds)
     {
         if (!productIds?.Any() ?? true)
             return;
@@ -135,7 +135,7 @@ public class ItemClassificationService
     /// </summary>
     /// <param name="ids">Items identifiers</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public async Task DeleteItemsAsync(List<int> ids)
+    public async Task DeleteItemsAsync(List<long> ids)
     {
         await _itemClassificationRepository.DeleteAsync(item => ids.Contains(item.Id));
     }

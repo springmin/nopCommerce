@@ -37,7 +37,7 @@ public class PayPalTokenService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of payment tokens
     /// </returns>
-    public async Task<IList<PayPalToken>> GetAllTokensAsync(string clientId, int customerId = 0,
+    public async Task<IList<PayPalToken>> GetAllTokensAsync(string clientId, long customerId = 0,
         string vaultId = null, string vaultCustomerId = null, string type = null)
     {
         return await _tokenRepository.GetAllAsync(query =>
@@ -70,7 +70,7 @@ public class PayPalTokenService
     /// A task that represents the asynchronous operation
     /// The task result contains the payment token
     /// </returns>
-    public async Task<PayPalToken> GetTokenAsync(string clientId, int customerId = 0, string vaultId = null)
+    public async Task<PayPalToken> GetTokenAsync(string clientId, long customerId = 0, string vaultId = null)
     {
         var tokens = await GetAllTokensAsync(clientId, customerId, vaultId);
         return tokens.FirstOrDefault();
@@ -84,7 +84,7 @@ public class PayPalTokenService
     /// A task that represents the asynchronous operation
     /// The task result contains the payment token
     /// </returns>
-    public async Task<PayPalToken> GetByIdAsync(int id)
+    public async Task<PayPalToken> GetByIdAsync(long id)
     {
         return await _tokenRepository.GetByIdAsync(id, null);
     }

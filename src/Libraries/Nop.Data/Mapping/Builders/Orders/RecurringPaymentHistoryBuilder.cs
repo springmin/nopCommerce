@@ -17,7 +17,7 @@ public partial class RecurringPaymentHistoryBuilder : NopEntityBuilder<Recurring
     /// <param name="table">Create table expression builder</param>
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
-        table.WithColumn(nameof(RecurringPaymentHistory.RecurringPaymentId)).AsInt32().ForeignKey<RecurringPayment>();
+        table.WithColumn(nameof(RecurringPaymentHistory.RecurringPaymentId)).AsInt64().ForeignKey<RecurringPayment>();
     }
 
     #endregion

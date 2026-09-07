@@ -73,7 +73,7 @@ public partial class NewsLetterSubscriptionTypeService : INewsLetterSubscription
     /// A task that represents the asynchronous operation
     /// The task result contains the newsletter subscription type
     /// </returns>
-    public virtual async Task<NewsLetterSubscriptionType> GetNewsLetterSubscriptionTypeByIdAsync(int newsLetterSubscriptionTypeId)
+    public virtual async Task<NewsLetterSubscriptionType> GetNewsLetterSubscriptionTypeByIdAsync(long newsLetterSubscriptionTypeId)
     {
         return await _newsLetterSubscriptionTypeRepository.GetByIdAsync(newsLetterSubscriptionTypeId, cache => default);
     }
@@ -86,7 +86,7 @@ public partial class NewsLetterSubscriptionTypeService : INewsLetterSubscription
     /// A task that represents the asynchronous operation
     /// The task result contains the newsletter subscription types
     /// </returns>
-    public virtual async Task<IList<NewsLetterSubscriptionType>> GetAllNewsLetterSubscriptionTypesAsync(int storeId = 0)
+    public virtual async Task<IList<NewsLetterSubscriptionType>> GetAllNewsLetterSubscriptionTypesAsync(long storeId = 0)
     {
         return await _newsLetterSubscriptionTypeRepository.GetAllAsync(async query =>
         {

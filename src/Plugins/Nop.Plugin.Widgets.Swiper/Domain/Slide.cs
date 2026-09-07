@@ -10,7 +10,7 @@ public class Slide
     /// <summary>
     /// Picture identifier
     /// </summary>
-    public int PictureId { get; set; }
+    public long PictureId { get; set; }
 
     /// <summary>
     /// Title attribute for image

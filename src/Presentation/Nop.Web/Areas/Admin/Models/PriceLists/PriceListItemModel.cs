@@ -9,9 +9,9 @@ public partial record PriceListItemModel : BaseNopEntityModel
 {
     #region Properties
 
-    public int PriceListId { get; set; }
+    public long PriceListId { get; set; }
 
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     public string ProductName { get; set; }
     public string StandardPrice { get; set; }

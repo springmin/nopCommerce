@@ -59,7 +59,7 @@ public partial class Topic : BaseEntity, ILocalizedEntity, ISlugSupported, IStor
     /// <summary>
     /// Gets or sets a value of used topic template identifier
     /// </summary>
-    public int TopicTemplateId { get; set; }
+    public long TopicTemplateId { get; set; }
 
     /// <summary>
     /// Gets or sets the meta keywords

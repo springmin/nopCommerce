@@ -24,7 +24,7 @@ public class ItemClassificationModel
     /// Required
     /// </remarks>
     [JsonProperty(PropertyName = "companyId")]
-    public int CompanyId { get; set; }
+    public long CompanyId { get; set; }
 
     /// <summary>
     /// A unique code representing this item. It’s recommended to use the SKU number

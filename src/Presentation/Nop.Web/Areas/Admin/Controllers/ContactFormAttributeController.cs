@@ -144,7 +144,7 @@ public partial class ContactFormAttributeController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         var contactFormAttribute = await _contactFormAttributeService.GetAttributeByIdAsync(id);
         if (contactFormAttribute == null)
@@ -189,7 +189,7 @@ public partial class ContactFormAttributeController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         var contactFormAttribute = await _contactFormAttributeService.GetAttributeByIdAsync(id);
         await _contactFormAttributeService.DeleteAttributeAsync(contactFormAttribute);
@@ -221,7 +221,7 @@ public partial class ContactFormAttributeController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public virtual async Task<IActionResult> ValueCreatePopup(int contactFormAttributeId)
+    public virtual async Task<IActionResult> ValueCreatePopup(long contactFormAttributeId)
     {
         var contactFormAttribute = await _contactFormAttributeService.GetAttributeByIdAsync(contactFormAttributeId);
         if (contactFormAttribute == null)
@@ -266,7 +266,7 @@ public partial class ContactFormAttributeController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public virtual async Task<IActionResult> ValueEditPopup(int id)
+    public virtual async Task<IActionResult> ValueEditPopup(long id)
     {
         var contactFormAttributeValue = await _contactFormAttributeService.GetAttributeValueByIdAsync(id);
         if (contactFormAttributeValue == null)
@@ -320,7 +320,7 @@ public partial class ContactFormAttributeController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public virtual async Task<IActionResult> ValueDelete(int id)
+    public virtual async Task<IActionResult> ValueDelete(long id)
     {
         var contactFormAttributeValue = await _contactFormAttributeService.GetAttributeValueByIdAsync(id)
             ?? throw new ArgumentException("No contact form attribute value found with the specified id", nameof(id));

@@ -11,15 +11,15 @@ public partial record AddCategoryToDiscountModel : BaseNopModel
 
     public AddCategoryToDiscountModel()
     {
-        SelectedCategoryIds = new List<int>();
+        SelectedCategoryIds = new List<long>();
     }
     #endregion
 
     #region Properties
 
-    public int DiscountId { get; set; }
+    public long DiscountId { get; set; }
 
-    public IList<int> SelectedCategoryIds { get; set; }
+    public IList<long> SelectedCategoryIds { get; set; }
 
     #endregion
 }

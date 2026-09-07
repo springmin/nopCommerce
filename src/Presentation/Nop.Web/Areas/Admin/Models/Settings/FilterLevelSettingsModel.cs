@@ -19,7 +19,7 @@ public partial record FilterLevelSettingsModel : BaseNopModel, ISettingsModel
 
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.FilterLevel.FilterLevelEnabled")]
     public bool FilterLevelEnabled { get; set; }

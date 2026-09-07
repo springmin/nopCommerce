@@ -215,9 +215,9 @@ public partial class ProductReviewService : IProductReviewService
     /// A task that represents the asynchronous operation
     /// The task result contains the reviews
     /// </returns>
-    public virtual async Task<IPagedList<ProductReview>> GetAllProductReviewsAsync(int customerId = 0, bool? approved = null,
+    public virtual async Task<IPagedList<ProductReview>> GetAllProductReviewsAsync(long customerId = 0, bool? approved = null,
         DateTime? fromUtc = null, DateTime? toUtc = null,
-        string message = null, int storeId = 0, int productId = 0, int vendorId = 0, bool showHidden = false,
+        string message = null, long storeId = 0, long productId = 0, long vendorId = 0, bool showHidden = false,
         int pageIndex = 0, int pageSize = int.MaxValue)
     {
         var productReviews = await _productReviewRepository.GetAllPagedAsync(async query =>
@@ -277,7 +277,7 @@ public partial class ProductReviewService : IProductReviewService
     /// A task that represents the asynchronous operation
     /// The task result contains the product review
     /// </returns>
-    public virtual async Task<ProductReview> GetProductReviewByIdAsync(int productReviewId)
+    public virtual async Task<ProductReview> GetProductReviewByIdAsync(long productReviewId)
     {
         return await _productReviewRepository.GetByIdAsync(productReviewId, _ => default);
     }
@@ -290,7 +290,7 @@ public partial class ProductReviewService : IProductReviewService
     /// A task that represents the asynchronous operation
     /// The task result contains the product reviews
     /// </returns>
-    public virtual async Task<IList<ProductReview>> GetProductReviewsByIdsAsync(int[] productReviewIds)
+    public virtual async Task<IList<ProductReview>> GetProductReviewsByIdsAsync(long[] productReviewIds)
     {
         return await _productReviewRepository.GetByIdsAsync(productReviewIds);
     }
@@ -423,7 +423,7 @@ public partial class ProductReviewService : IProductReviewService
     /// A task that represents the asynchronous operation
     /// The task result contains the 
     /// </returns>
-    public virtual async Task<bool> CanAddReviewAsync(int productId, int storeId = 0)
+    public virtual async Task<bool> CanAddReviewAsync(long productId, long storeId = 0)
     {
         var customer = await _workContext.GetCurrentCustomerAsync();
 

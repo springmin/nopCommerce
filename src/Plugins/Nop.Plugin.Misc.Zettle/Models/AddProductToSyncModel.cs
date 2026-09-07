@@ -11,14 +11,14 @@ public record AddProductToSyncModel : BaseNopModel
 
     public AddProductToSyncModel()
     {
-        SelectedProductIds = new List<int>();
+        SelectedProductIds = new List<long>();
     }
 
     #endregion
 
     #region Properties
 
-    public IList<int> SelectedProductIds { get; set; }
+    public IList<long> SelectedProductIds { get; set; }
 
     #endregion
 }

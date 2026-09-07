@@ -18,7 +18,7 @@ public partial class SpecificationAttributeBuilder : NopEntityBuilder<Specificat
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table.WithColumn(nameof(SpecificationAttribute.Name)).AsString(int.MaxValue).NotNullable();
-        table.WithColumn(nameof(SpecificationAttribute.SpecificationAttributeGroupId)).AsInt32().Nullable().ForeignKey<SpecificationAttributeGroup>();
+        table.WithColumn(nameof(SpecificationAttribute.SpecificationAttributeGroupId)).AsInt64().Nullable().ForeignKey<SpecificationAttributeGroup>();
     }
 
     #endregion

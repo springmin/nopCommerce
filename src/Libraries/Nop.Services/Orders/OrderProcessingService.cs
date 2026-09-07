@@ -1164,7 +1164,7 @@ public partial class OrderProcessingService : IOrderProcessingService
         ArgumentNullException.ThrowIfNull(order);
 
         //purchased product identifiers
-        var purchasedProductIds = new List<int>();
+        var purchasedProductIds = new List<long>();
         foreach (var orderItem in await _orderService.GetOrderItemsAsync(order.Id))
         {
             //standard items
@@ -1504,7 +1504,7 @@ public partial class OrderProcessingService : IOrderProcessingService
                 //shipping is not required
                 completed = true;
             else
-            //shipping is required
+                //shipping is required
             {
                 completed = _orderSettings.CompleteOrderWhenDelivered
                     ? order.ShippingStatus == ShippingStatus.Delivered
@@ -1634,10 +1634,8 @@ public partial class OrderProcessingService : IOrderProcessingService
                     await SendNotificationsAndSaveNotesAsync(order);
 
                     //reset checkout data
-                    await _shoppingCartService.ResetCheckoutDataAsync(placeOrderContainer.Customer,
+                    await _customerService.ResetCheckoutDataAsync(placeOrderContainer.Customer,
                         processPaymentRequest.StoreId, clearCouponCodes: true, clearCheckoutAttributes: true);
-                    await _shoppingCartService.SetShoppingCartVendorAsync(placeOrderContainer.Customer, null, processPaymentRequest.StoreId);
-
                     await _customerActivityService.InsertActivityAsync("PublicStore.PlaceOrder",
                         string.Format(await _localizationService.GetResourceAsync("ActivityLog.PublicStore.PlaceOrder"),
                             order.Id), order);
@@ -1811,7 +1809,7 @@ public partial class OrderProcessingService : IOrderProcessingService
             }
         }
 
-        async Task<(List<ShoppingCartItem> restoredCart, ShoppingCartItem updatedShoppingCartItem)> restoreShoppingCartAsync(Order order, int updatedOrderItemId)
+        async Task<(List<ShoppingCartItem> restoredCart, ShoppingCartItem updatedShoppingCartItem)> restoreShoppingCartAsync(Order order, long updatedOrderItemId)
         {
             ArgumentNullException.ThrowIfNull(order);
 
@@ -2112,7 +2110,7 @@ public partial class OrderProcessingService : IOrderProcessingService
                         _localizationSettings.DefaultAdminLanguageId);
 
                 //remove next recurring payment notification emails
-                var emailIds = await _genericAttributeService.GetAttributeAsync<List<int>>(recurringPayment, NopPaymentDefaults.NextRecurringPaymentNotificationEmailsAttribute);
+                var emailIds = await _genericAttributeService.GetAttributeAsync<List<long>>(recurringPayment, NopPaymentDefaults.NextRecurringPaymentNotificationEmailsAttribute);
                 if (emailIds != null && emailIds.Any())
                 {
                     var emails = await _queuedEmailService.GetQueuedEmailsByIdsAsync(emailIds.ToArray());
@@ -3397,7 +3395,7 @@ public partial class OrderProcessingService : IOrderProcessingService
         /// <summary>
         /// Affiliate identifier
         /// </summary>
-        public int AffiliateId { get; set; }
+        public long AffiliateId { get; set; }
 
         /// <summary>
         /// TAx display type

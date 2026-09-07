@@ -7,7 +7,7 @@ public partial class RenderPicture : IRender
 {
     #region Ctor
 
-    public RenderPicture(string srcPrefix = "", int width = 0)
+    public RenderPicture(string srcPrefix = "", long width = 0)
     {
         SrcPrefix = srcPrefix;
         Width = width;
@@ -30,7 +30,7 @@ public partial class RenderPicture : IRender
     /// <summary>
     /// Gets or sets picture width
     /// </summary>
-    public int Width { get; set; }
+    public long Width { get; set; }
 
     #endregion
 }

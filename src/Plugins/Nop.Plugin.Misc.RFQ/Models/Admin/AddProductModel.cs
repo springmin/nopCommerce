@@ -23,9 +23,9 @@ public record AddProductModel : BaseNopModel
 
     #region Properties
 
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
-    public int? QuoteId { get; set; }
+    public long? QuoteId { get; set; }
 
     public ProductType ProductType { get; set; }
 
@@ -62,7 +62,7 @@ public record AddProductModel : BaseNopModel
             Values = new List<ProductAttributeValueModel>();
         }
 
-        public int ProductAttributeId { get; set; }
+        public long ProductAttributeId { get; set; }
 
         public string Name { get; set; }
 

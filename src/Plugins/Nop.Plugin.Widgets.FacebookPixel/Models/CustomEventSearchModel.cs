@@ -19,7 +19,7 @@ public record CustomEventSearchModel : BaseSearchModel
 
     #region Properties
 
-    public int ConfigurationId { get; set; }
+    public long ConfigurationId { get; set; }
 
     [NopResourceDisplayName("Plugins.Widgets.FacebookPixel.Configuration.CustomEvents.Search.WidgetZone")]
     public string WidgetZone { get; set; }

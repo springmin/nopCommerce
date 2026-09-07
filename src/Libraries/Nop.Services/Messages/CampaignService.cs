@@ -113,7 +113,7 @@ public partial class CampaignService : ICampaignService
     /// A task that represents the asynchronous operation
     /// The task result contains the campaign
     /// </returns>
-    public virtual async Task<Campaign> GetCampaignByIdAsync(int campaignId)
+    public virtual async Task<Campaign> GetCampaignByIdAsync(long campaignId)
     {
         return await _campaignRepository.GetByIdAsync(campaignId, cache => default);
     }
@@ -126,7 +126,7 @@ public partial class CampaignService : ICampaignService
     /// A task that represents the asynchronous operation
     /// The task result contains the campaigns
     /// </returns>
-    public virtual async Task<IList<Campaign>> GetAllCampaignsAsync(int storeId = 0)
+    public virtual async Task<IList<Campaign>> GetAllCampaignsAsync(long storeId = 0)
     {
         var campaigns = await _campaignRepository.GetAllAsync(query =>
         {
@@ -203,7 +203,7 @@ public partial class CampaignService : ICampaignService
     /// <param name="email">Email</param>
     /// <param name="languageId">Language identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task SendCampaignAsync(Campaign campaign, EmailAccount emailAccount, string email, int languageId)
+    public virtual async Task SendCampaignAsync(Campaign campaign, EmailAccount emailAccount, string email, long languageId)
     {
         ArgumentNullException.ThrowIfNull(campaign);
 

@@ -132,7 +132,7 @@ public partial class LanguageController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_LANGUAGES)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         //try to get a language with the specified id
         var language = await _languageService.GetLanguageByIdAsync(id);
@@ -194,7 +194,7 @@ public partial class LanguageController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_LANGUAGES)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get a language with the specified id
         var language = await _languageService.GetLanguageByIdAsync(id);
@@ -303,7 +303,7 @@ public partial class LanguageController : BaseAdminController
     //ValidateAttribute is used to force model validation
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_LANGUAGES)]
-    public virtual async Task<IActionResult> ResourceAdd(int languageId, [Validate] LocaleResourceModel model)
+    public virtual async Task<IActionResult> ResourceAdd(long languageId, [Validate] LocaleResourceModel model)
     {
         if (!ModelState.IsValid)
             return ErrorJson(ModelState.SerializeErrors());
@@ -328,7 +328,7 @@ public partial class LanguageController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_LANGUAGES)]
-    public virtual async Task<IActionResult> ResourceDelete(int id)
+    public virtual async Task<IActionResult> ResourceDelete(long id)
     {
         //try to get a locale resource with the specified id
         var resource = await _localizationService.GetLocaleStringResourceByIdAsync(id)
@@ -344,7 +344,7 @@ public partial class LanguageController : BaseAdminController
     #region Export / Import
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_LANGUAGES)]
-    public virtual async Task<IActionResult> ExportXml(int id)
+    public virtual async Task<IActionResult> ExportXml(long id)
     {
         //try to get a language with the specified id
         var language = await _languageService.GetLanguageByIdAsync(id);
@@ -365,7 +365,7 @@ public partial class LanguageController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_LANGUAGES)]
-    public virtual async Task<IActionResult> ImportXml(int id, IFormFile importxmlfile)
+    public virtual async Task<IActionResult> ImportXml(long id, IFormFile importxmlfile)
     {
         //try to get a language with the specified id
         var language = await _languageService.GetLanguageByIdAsync(id);

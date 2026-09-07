@@ -21,7 +21,7 @@ public partial record ShippingSettingsModel : BaseNopModel, ISettingsModel
 
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Shipping.ShipToSameAddress")]
     public bool ShipToSameAddress { get; set; }

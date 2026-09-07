@@ -48,7 +48,7 @@ public partial interface IShoppingCartModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the wishlist model
     /// </returns>
-    Task<WishlistModel> PrepareWishlistModelAsync(WishlistModel model, IList<ShoppingCartItem> cart, bool isEditable = true, int? list = null);
+    Task<WishlistModel> PrepareWishlistModelAsync(WishlistModel model, IList<ShoppingCartItem> cart, bool isEditable = true, long? list = null);
 
     /// <summary>
     /// Prepare the mini shopping cart model
@@ -101,7 +101,7 @@ public partial interface IShoppingCartModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the wishlist email a friend model
     /// </returns>
-    Task<WishlistEmailAFriendModel> PrepareWishlistEmailAFriendModelAsync(WishlistEmailAFriendModel model, bool excludeProperties, int? wishlistId = null);
+    Task<WishlistEmailAFriendModel> PrepareWishlistEmailAFriendModelAsync(WishlistEmailAFriendModel model, bool excludeProperties, long? wishlistId = null);
 
     /// <summary>
     /// Prepare the cart item picture model

@@ -9,7 +9,7 @@ public partial record ContactFormAttributeValueSearchModel : BaseSearchModel
 {
     #region Properties
 
-    public int ContactFormAttributeId { get; set; }
+    public long ContactFormAttributeId { get; set; }
 
     #endregion
 }

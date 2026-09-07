@@ -31,7 +31,7 @@ public partial interface ICategoryTemplateService
     /// A task that represents the asynchronous operation
     /// The task result contains the category template
     /// </returns>
-    Task<CategoryTemplate> GetCategoryTemplateByIdAsync(int categoryTemplateId);
+    Task<CategoryTemplate> GetCategoryTemplateByIdAsync(long categoryTemplateId);
 
     /// <summary>
     /// Inserts category template

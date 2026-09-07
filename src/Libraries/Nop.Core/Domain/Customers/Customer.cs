@@ -81,12 +81,12 @@ public partial class Customer : BaseEntity, ISoftDeletedEntity
     /// <summary>
     /// Gets or sets the country id
     /// </summary>
-    public int CountryId { get; set; }
+    public long CountryId { get; set; }
 
     /// <summary>
     /// Gets or sets the state province id
     /// </summary>
-    public int StateProvinceId { get; set; }
+    public long StateProvinceId { get; set; }
 
     /// <summary>
     /// Gets or sets the phone number
@@ -111,7 +111,7 @@ public partial class Customer : BaseEntity, ISoftDeletedEntity
     /// <summary>
     /// Gets or sets the vat number status id
     /// </summary>
-    public int VatNumberStatusId { get; set; }
+    public long VatNumberStatusId { get; set; }
 
     /// <summary>
     /// Gets or sets the time zone id
@@ -126,17 +126,17 @@ public partial class Customer : BaseEntity, ISoftDeletedEntity
     /// <summary>
     /// Gets or sets the currency id
     /// </summary>
-    public int? CurrencyId { get; set; }
+    public long? CurrencyId { get; set; }
 
     /// <summary>
     /// Gets or sets the language id
     /// </summary>
-    public int? LanguageId { get; set; }
+    public long? LanguageId { get; set; }
 
     /// <summary>
     /// Gets or sets the tax display type id
     /// </summary>
-    public int? TaxDisplayTypeId { get; set; }
+    public long? TaxDisplayTypeId { get; set; }
 
     /// <summary>
     /// Gets or sets the email that should be re-validated. Used in scenarios when a customer is already registered and wants to change an email address.
@@ -156,12 +156,12 @@ public partial class Customer : BaseEntity, ISoftDeletedEntity
     /// <summary>
     /// Gets or sets the affiliate identifier
     /// </summary>
-    public int AffiliateId { get; set; }
+    public long AffiliateId { get; set; }
 
     /// <summary>
     /// Gets or sets the vendor identifier with which this customer is associated (manager)
     /// </summary>
-    public int VendorId { get; set; }
+    public long VendorId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether this customer has some products in the shopping cart
@@ -231,12 +231,12 @@ public partial class Customer : BaseEntity, ISoftDeletedEntity
     /// <summary>
     ///  Gets or sets the store identifier in which customer registered
     /// </summary>
-    public int RegisteredInStoreId { get; set; }
+    public long RegisteredInStoreId { get; set; }
 
     /// <summary>
     /// Gets or sets the billing address identifier
     /// </summary>
-    public int? BillingAddressId { get; set; }
+    public long? BillingAddressId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the customer is required to change password
@@ -246,7 +246,7 @@ public partial class Customer : BaseEntity, ISoftDeletedEntity
     /// <summary>
     /// Gets or sets the shipping address identifier
     /// </summary>
-    public int? ShippingAddressId { get; set; }
+    public long? ShippingAddressId { get; set; }
 
     /// <summary>
     /// Gets or sets the date and time (in UTC) when the customer's shopping cart was last updated

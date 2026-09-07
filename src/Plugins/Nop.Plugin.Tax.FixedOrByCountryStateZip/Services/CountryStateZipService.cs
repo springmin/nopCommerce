@@ -67,7 +67,7 @@ public class CountryStateZipService : ICountryStateZipService
     /// A task that represents the asynchronous operation
     /// The task result contains the ax rate
     /// </returns>
-    public virtual async Task<TaxRate> GetTaxRateByIdAsync(int taxRateId)
+    public virtual async Task<TaxRate> GetTaxRateByIdAsync(long taxRateId)
     {
         return await _taxRateRepository.GetByIdAsync(taxRateId);
     }

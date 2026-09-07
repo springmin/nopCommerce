@@ -10,7 +10,7 @@ public partial record CustomerOrderModel : BaseNopEntityModel
 {
     #region Properties
 
-    public override int Id { get; set; }
+    public long Id { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.Customers.Orders.CustomOrderNumber")]
     public string CustomOrderNumber { get; set; }
@@ -19,7 +19,7 @@ public partial record CustomerOrderModel : BaseNopEntityModel
     public string OrderStatus { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.Customers.Orders.OrderStatus")]
-    public int OrderStatusId { get; set; }
+    public long OrderStatusId { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.Customers.Orders.PaymentStatus")]
     public string PaymentStatus { get; set; }

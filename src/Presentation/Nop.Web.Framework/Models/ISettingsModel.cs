@@ -9,5 +9,5 @@ public partial interface ISettingsModel
     /// <summary>
     /// Gets or sets an active store scope configuration (store identifier)
     /// </summary>
-    int ActiveStoreScopeConfiguration { get; set; }
+    long ActiveStoreScopeConfiguration { get; set; }
 }

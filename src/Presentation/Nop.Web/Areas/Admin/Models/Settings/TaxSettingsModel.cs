@@ -24,7 +24,7 @@ public partial record TaxSettingsModel : BaseNopModel, ISettingsModel
 
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Tax.PricesIncludeTax")]
     public bool PricesIncludeTax { get; set; }
@@ -64,7 +64,7 @@ public partial record TaxSettingsModel : BaseNopModel, ISettingsModel
     public bool ForceTaxExclusionFromOrderSubtotal_OverrideForStore { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Tax.DefaultTaxCategory")]
-    public int DefaultTaxCategoryId { get; set; }
+    public long DefaultTaxCategoryId { get; set; }
     public bool DefaultTaxCategoryId_OverrideForStore { get; set; }
     public IList<SelectListItem> TaxCategories { get; set; }
 
@@ -89,7 +89,7 @@ public partial record TaxSettingsModel : BaseNopModel, ISettingsModel
     public bool ShippingPriceIncludesTax_OverrideForStore { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Tax.ShippingTaxClass")]
-    public int ShippingTaxClassId { get; set; }
+    public long ShippingTaxClassId { get; set; }
     public bool ShippingTaxClassId_OverrideForStore { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Tax.PaymentMethodAdditionalFeeIsTaxable")]
@@ -101,7 +101,7 @@ public partial record TaxSettingsModel : BaseNopModel, ISettingsModel
     public bool PaymentMethodAdditionalFeeIncludesTax_OverrideForStore { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Tax.PaymentMethodAdditionalFeeTaxClass")]
-    public int PaymentMethodAdditionalFeeTaxClassId { get; set; }
+    public long PaymentMethodAdditionalFeeTaxClassId { get; set; }
     public bool PaymentMethodAdditionalFeeTaxClassId_OverrideForStore { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Tax.EuVatEnabled")]
@@ -117,7 +117,7 @@ public partial record TaxSettingsModel : BaseNopModel, ISettingsModel
     public bool EuVatRequired_OverrideForStore { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Tax.EuVatShopCountry")]
-    public int EuVatShopCountryId { get; set; }
+    public long EuVatShopCountryId { get; set; }
     public bool EuVatShopCountryId_OverrideForStore { get; set; }
     public IList<SelectListItem> EuVatShopCountries { get; set; }
 

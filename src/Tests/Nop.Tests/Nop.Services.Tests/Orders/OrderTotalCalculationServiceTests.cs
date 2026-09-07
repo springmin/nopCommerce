@@ -637,7 +637,9 @@ public class OrderTotalCalculationServiceTests : ServiceTest
         var (resultPrice, _, _) = await GetService<IShoppingCartService>().GetUnitPriceAsync(shoppingCartItem, true);
 
         // assert
-        resultPrice.Should().Be(expectedPrice);
+        //the expected values come from double literals converted to decimal, and
+        //Math.Round is exact since .NET 11, so compare with a small tolerance
+        resultPrice.Should().BeApproximately(expectedPrice, 0.000001m);
     }
 
     [Test]
@@ -657,7 +659,9 @@ public class OrderTotalCalculationServiceTests : ServiceTest
         var (resultPrice, _, _) = await GetService<IShoppingCartService>().GetUnitPriceAsync(shoppingCartItem, true);
 
         // assert
-        resultPrice.Should().Be(expectedPrice);
+        //the expected values come from double literals converted to decimal, and
+        //Math.Round is exact since .NET 11, so compare with a small tolerance
+        resultPrice.Should().BeApproximately(expectedPrice, 0.000001m);
     }
 
     [Test]

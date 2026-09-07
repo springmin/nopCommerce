@@ -1104,7 +1104,7 @@ public class ZettleService
     /// <param name="combinationId">Combination identifier</param>
     /// <param name="quantityAdjustment">Stock quantity adjustment</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public async Task ChangeInventoryBalanceAsync(int productId, int combinationId, int quantityAdjustment)
+    public async Task ChangeInventoryBalanceAsync(long productId, long combinationId, int quantityAdjustment)
     {
         var records = (await _zettleRecordService.GetAllRecordsAsync(active: true))
             .Where(record => record.ProductId == productId && record.InventoryTrackingEnabled && !string.IsNullOrEmpty(record.Uuid))

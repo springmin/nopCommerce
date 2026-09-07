@@ -21,7 +21,7 @@ public record ItemClassificationSearchModel : BaseSearchModel
     #region Properties
 
     [NopResourceDisplayName("Plugins.Tax.Avalara.ItemClassification.Search.Country")]
-    public int SearchCountryId { get; set; }
+    public long SearchCountryId { get; set; }
 
     public IList<SelectListItem> AvailableCountries { get; set; }
 

@@ -91,7 +91,7 @@ public partial class ProductReviewController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.PRODUCT_REVIEWS_VIEW)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         //try to get a product review with the specified id
         var productReview = await _productReviewService.GetProductReviewByIdAsync(id);
@@ -183,7 +183,7 @@ public partial class ProductReviewController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.PRODUCT_REVIEWS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get a product review with the specified id
         var productReview = await _productReviewService.GetProductReviewByIdAsync(id);
@@ -212,7 +212,7 @@ public partial class ProductReviewController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.PRODUCT_REVIEWS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ApproveSelected(ICollection<int> selectedIds)
+    public virtual async Task<IActionResult> ApproveSelected(ICollection<long> selectedIds)
     {
         //a vendor does not have access to this functionality
         if (await _workContext.GetCurrentVendorAsync() != null)
@@ -243,7 +243,7 @@ public partial class ProductReviewController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.PRODUCT_REVIEWS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> DisapproveSelected(ICollection<int> selectedIds)
+    public virtual async Task<IActionResult> DisapproveSelected(ICollection<long> selectedIds)
     {
         //a vendor does not have access to this functionality
         if (await _workContext.GetCurrentVendorAsync() != null)
@@ -271,7 +271,7 @@ public partial class ProductReviewController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.PRODUCT_REVIEWS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> DeleteSelected(ICollection<int> selectedIds)
+    public virtual async Task<IActionResult> DeleteSelected(ICollection<long> selectedIds)
     {
         //a vendor does not have access to this functionality
         if (await _workContext.GetCurrentVendorAsync() != null)

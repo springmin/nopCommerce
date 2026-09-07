@@ -7,7 +7,7 @@ public partial record OtpSettingsModel : BaseNopModel, ISettingsModel
 {
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.CustomerUser.LoginByPhoneEnabled")]
     public bool LoginByPhoneEnabled { get; set; }

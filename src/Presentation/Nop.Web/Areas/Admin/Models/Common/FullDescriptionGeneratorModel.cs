@@ -8,5 +8,5 @@ namespace Nop.Web.Areas.Admin.Models.Common;
 public partial record FullDescriptionGeneratorModel : BaseNopModel
 {
     public virtual string ProductNameElementId { get; set; }
-    public virtual int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 }

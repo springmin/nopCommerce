@@ -10,22 +10,22 @@ public class ShippingByWeightByTotalRecord : BaseEntity
     /// <summary>
     /// Gets or sets the store identifier
     /// </summary>
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 
     /// <summary>
     /// Gets or sets the warehouse identifier
     /// </summary>
-    public int WarehouseId { get; set; }
+    public long WarehouseId { get; set; }
 
     /// <summary>
     /// Gets or sets the country identifier
     /// </summary>
-    public int CountryId { get; set; }
+    public long CountryId { get; set; }
 
     /// <summary>
     /// Gets or sets the state/province identifier
     /// </summary>
-    public int StateProvinceId { get; set; }
+    public long StateProvinceId { get; set; }
 
     /// <summary>
     /// Gets or sets the zip
@@ -35,7 +35,7 @@ public class ShippingByWeightByTotalRecord : BaseEntity
     /// <summary>
     /// Gets or sets the shipping method identifier
     /// </summary>
-    public int ShippingMethodId { get; set; }
+    public long ShippingMethodId { get; set; }
 
     /// <summary>
     /// Gets or sets the transit days

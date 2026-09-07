@@ -5,17 +5,17 @@ public partial class ExportTierPrice
     /// <summary>
     /// Gets or sets the tier price identifier
     /// </summary>
-    public int Id { get; set; }
+    public long Id { get; set; }
 
     /// <summary>
     /// Gets or sets the store identifier (0 - all stores)
     /// </summary>
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 
     /// <summary>
     /// Gets or sets the customer role identifier
     /// </summary>
-    public int? CustomerRoleId { get; set; }
+    public long? CustomerRoleId { get; set; }
 
     /// <summary>
     /// Gets or sets the quantity

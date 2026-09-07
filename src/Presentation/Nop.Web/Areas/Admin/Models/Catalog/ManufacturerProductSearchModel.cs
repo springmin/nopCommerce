@@ -9,7 +9,7 @@ public partial record ManufacturerProductSearchModel : BaseSearchModel
 {
     #region Properties
 
-    public int ManufacturerId { get; set; }
+    public long ManufacturerId { get; set; }
 
     #endregion
 }

@@ -6,12 +6,12 @@ public record ForumPostModel : BaseNopEntityModel
 {
     #region Properties
 
-    public int ForumTopicId { get; set; }
+    public long ForumTopicId { get; set; }
     public string ForumTopicSeName { get; set; }
     public string FormattedText { get; set; }
     public bool IsCurrentCustomerAllowedToEditPost { get; set; }
     public bool IsCurrentCustomerAllowedToDeletePost { get; set; }
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
     public bool AllowViewingProfiles { get; set; }
     public string CustomerAvatarUrl { get; set; }
     public string CustomerName { get; set; }

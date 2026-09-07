@@ -21,7 +21,7 @@ public partial record AddRewardPointsToCustomerModel : BaseNopModel
 
     #region Properties
 
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.Customers.RewardPoints.Fields.Points")]
     public int Points { get; set; }
@@ -30,7 +30,7 @@ public partial record AddRewardPointsToCustomerModel : BaseNopModel
     public string Message { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.Customers.RewardPoints.Fields.Store")]
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 
     public IList<SelectListItem> AvailableStores { get; set; }
 
@@ -40,7 +40,7 @@ public partial record AddRewardPointsToCustomerModel : BaseNopModel
     [NopResourceDisplayName("Admin.Customers.Customers.RewardPoints.Fields.ActivationDelay")]
     public int ActivationDelay { get; set; }
 
-    public int ActivationDelayPeriodId { get; set; }
+    public long ActivationDelayPeriodId { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.Customers.RewardPoints.Fields.PointsValidity")]
     [UIHint("Int32Nullable")]

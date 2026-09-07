@@ -35,7 +35,7 @@ public partial record ShippingMethodModel : BaseNopEntityModel, ILocalizedModel<
 
 public partial record ShippingMethodLocalizedModel : ILocalizedLocaleModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Shipping.Methods.Fields.Name")]
     public string Name { get; set; }

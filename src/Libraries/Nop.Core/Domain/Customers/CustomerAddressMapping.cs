@@ -8,10 +8,10 @@ public partial class CustomerAddressMapping : BaseEntity
     /// <summary>
     /// Gets or sets the customer identifier
     /// </summary>
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     /// <summary>
     /// Gets or sets the address identifier
     /// </summary>
-    public int AddressId { get; set; }
+    public long AddressId { get; set; }
 }

@@ -67,7 +67,7 @@ public partial interface ICustomerModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the register result model
     /// </returns>
-    Task<RegisterResultModel> PrepareRegisterResultModelAsync(int resultId, string returnUrl);
+    Task<RegisterResultModel> PrepareRegisterResultModelAsync(long resultId, string returnUrl);
 
     /// <summary>
     /// Prepare the phone verification model
@@ -78,7 +78,7 @@ public partial interface ICustomerModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the phone verification model
     /// </returns>
-    Task<PhoneVerificationModel> PreparePhoneVerificationModelAsync(int typeId, string returnUrl);
+    Task<PhoneVerificationModel> PreparePhoneVerificationModelAsync(long typeId, string returnUrl);
 
     /// <summary>
     /// Prepare the customer navigation model
@@ -88,7 +88,7 @@ public partial interface ICustomerModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the customer navigation model
     /// </returns>
-    Task<CustomerNavigationModel> PrepareCustomerNavigationModelAsync(int selectedTabId = 0);
+    Task<CustomerNavigationModel> PrepareCustomerNavigationModelAsync(long selectedTabId = 0);
 
     /// <summary>
     /// Prepare the customer address list model

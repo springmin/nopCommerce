@@ -10,9 +10,9 @@ public partial record DiscountUsageHistoryModel : BaseNopEntityModel
 {
     #region Properties
 
-    public int DiscountId { get; set; }
+    public long DiscountId { get; set; }
 
-    public int OrderId { get; set; }
+    public long OrderId { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.Discounts.History.CustomOrderNumber")]
     public string CustomOrderNumber { get; set; }

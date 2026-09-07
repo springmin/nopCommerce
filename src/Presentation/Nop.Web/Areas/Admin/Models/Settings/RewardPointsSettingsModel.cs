@@ -11,7 +11,7 @@ public partial record RewardPointsSettingsModel : BaseNopModel, ISettingsModel
 {
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.RewardPoints.Enabled")]
     public bool Enabled { get; set; }
@@ -62,7 +62,7 @@ public partial record RewardPointsSettingsModel : BaseNopModel, ISettingsModel
     [NopResourceDisplayName("Admin.Configuration.Settings.RewardPoints.ActivationDelay")]
     public int ActivationDelay { get; set; }
     public bool ActivationDelay_OverrideForStore { get; set; }
-    public int ActivationDelayPeriodId { get; set; }
+    public long ActivationDelayPeriodId { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.RewardPoints.DisplayHowMuchWillBeEarned")]
     public bool DisplayHowMuchWillBeEarned { get; set; }

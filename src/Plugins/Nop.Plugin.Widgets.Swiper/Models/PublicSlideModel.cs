@@ -9,7 +9,7 @@ public record PublicSlideModel : BaseNopModel
 {
     #region Properties
 
-    public int PictureId { get; set; }
+    public long PictureId { get; set; }
     public string PictureUrl { get; set; }
     public string TitleText { get; set; }
     public string LinkUrl { get; set; }

@@ -91,7 +91,7 @@ public partial class ProductAttributeParser : IProductAttributeParser
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <param name="productAttributeMappingId">Product attribute mapping identifier</param>
     /// <returns>Collections of pairs of product attribute values and their quantity</returns>
-    protected virtual IList<Tuple<string, string>> ParseValuesWithQuantity(string attributesXml, int productAttributeMappingId)
+    protected virtual IList<Tuple<string, string>> ParseValuesWithQuantity(string attributesXml, long productAttributeMappingId)
     {
         var selectedValues = new List<Tuple<string, string>>();
         if (string.IsNullOrEmpty(attributesXml))
@@ -321,7 +321,7 @@ public partial class ProductAttributeParser : IProductAttributeParser
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <param name="attributeValueId">Attribute value id</param>
     /// <returns>Updated result (XML format)</returns>
-    protected virtual string RemoveAttribute(string attributesXml, int attributeValueId)
+    protected virtual string RemoveAttribute(string attributesXml, long attributeValueId)
     {
         var result = string.Empty;
 
@@ -382,9 +382,9 @@ public partial class ProductAttributeParser : IProductAttributeParser
     /// </summary>
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <returns>Selected attribute identifiers</returns>
-    protected virtual IList<int> ParseAttributeIds(string attributesXml)
+    protected virtual IList<long> ParseAttributeIds(string attributesXml)
     {
-        var ids = new List<int>();
+        var ids = new List<long>();
         if (string.IsNullOrEmpty(attributesXml))
             return ids;
 
@@ -396,7 +396,7 @@ public partial class ProductAttributeParser : IProductAttributeParser
             var elements = xmlDoc.SelectNodes(@$"//Attributes/{ChildElementName}");
 
             if (elements == null)
-                return Array.Empty<int>();
+                return Array.Empty<long>();
 
             foreach (XmlNode node in elements)
             {
@@ -454,7 +454,7 @@ public partial class ProductAttributeParser : IProductAttributeParser
     /// A task that represents the asynchronous operation
     /// The task result contains the product attribute values
     /// </returns>
-    public virtual async Task<IList<ProductAttributeValue>> ParseProductAttributeValuesAsync(string attributesXml, int productAttributeMappingId = 0)
+    public virtual async Task<IList<ProductAttributeValue>> ParseProductAttributeValuesAsync(string attributesXml, long productAttributeMappingId = 0)
     {
         var values = new List<ProductAttributeValue>();
         if (string.IsNullOrEmpty(attributesXml))
@@ -504,7 +504,7 @@ public partial class ProductAttributeParser : IProductAttributeParser
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <param name="productAttributeMappingId">Product attribute mapping identifier</param>
     /// <returns>Product attribute values</returns>
-    public virtual IList<string> ParseValues(string attributesXml, int productAttributeMappingId)
+    public virtual IList<string> ParseValues(string attributesXml, long productAttributeMappingId)
     {
         var selectedValues = new List<string>();
         if (string.IsNullOrEmpty(attributesXml))
@@ -795,7 +795,7 @@ public partial class ProductAttributeParser : IProductAttributeParser
     /// A task that represents the asynchronous operation
     /// The task result contains the attribute combinations in XML format
     /// </returns>
-    public virtual async Task<IList<string>> GenerateAllCombinationsAsync(Product product, bool ignoreNonCombinableAttributes = false, IList<int> allowedAttributeIds = null)
+    public virtual async Task<IList<string>> GenerateAllCombinationsAsync(Product product, bool ignoreNonCombinableAttributes = false, IList<long> allowedAttributeIds = null)
     {
         ArgumentNullException.ThrowIfNull(product);
 
@@ -908,7 +908,7 @@ public partial class ProductAttributeParser : IProductAttributeParser
             {
                 if (formKey.Equals($"addtocart_{product.Id}.CustomerEnteredPrice", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    if (decimal.TryParse(form[formKey], out var customerEnteredPrice))
+                    if (decimal.TryParse(form[formKey], NumberStyles.Any, CultureInfo.InvariantCulture, out var customerEnteredPrice))
                         customerEnteredPriceConverted = await _currencyService.ConvertToPrimaryStoreCurrencyAsync(customerEnteredPrice, await _workContext.GetWorkingCurrencyAsync());
                     break;
                 }

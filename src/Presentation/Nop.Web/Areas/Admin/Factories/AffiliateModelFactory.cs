@@ -246,9 +246,9 @@ public partial class AffiliateModelFactory : IAffiliateModelFactory
             : (DateTime?)_dateTimeHelper.ConvertToUtcTime(searchModel.StartDate.Value, await _dateTimeHelper.GetCurrentTimeZoneAsync());
         var endDateValue = !searchModel.EndDate.HasValue ? null
             : (DateTime?)_dateTimeHelper.ConvertToUtcTime(searchModel.EndDate.Value, await _dateTimeHelper.GetCurrentTimeZoneAsync()).AddDays(1);
-        var orderStatusIds = searchModel.OrderStatusId > 0 ? new List<int> { searchModel.OrderStatusId } : null;
-        var paymentStatusIds = searchModel.PaymentStatusId > 0 ? new List<int> { searchModel.PaymentStatusId } : null;
-        var shippingStatusIds = searchModel.ShippingStatusId > 0 ? new List<int> { searchModel.ShippingStatusId } : null;
+        var orderStatusIds = searchModel.OrderStatusId > 0 ? new List<long> { searchModel.OrderStatusId } : null;
+        var paymentStatusIds = searchModel.PaymentStatusId > 0 ? new List<long> { searchModel.PaymentStatusId } : null;
+        var shippingStatusIds = searchModel.ShippingStatusId > 0 ? new List<long> { searchModel.ShippingStatusId } : null;
 
         //get orders
         var orders = await _orderService.SearchOrdersAsync(createdFromUtc: startDateValue,

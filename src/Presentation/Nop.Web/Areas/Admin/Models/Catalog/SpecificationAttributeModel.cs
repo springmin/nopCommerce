@@ -31,7 +31,7 @@ public partial record SpecificationAttributeModel : BaseNopEntityModel, ITransla
     public int DisplayOrder { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Attributes.SpecificationAttributes.SpecificationAttribute.Fields.SpecificationAttributeGroup")]
-    public int? SpecificationAttributeGroupId { get; set; }
+    public long? SpecificationAttributeGroupId { get; set; }
 
     public IList<SelectListItem> AvailableGroups { get; set; }
 

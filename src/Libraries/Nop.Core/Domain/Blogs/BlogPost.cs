@@ -12,7 +12,7 @@ public partial class BlogPost : BaseEntity, ISlugSupported, IStoreMappingSupport
     /// <summary>
     /// Gets or sets the language identifier
     /// </summary>
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     /// <summary>
     /// Gets or sets the value indicating whether this blog post should be included in sitemap

@@ -172,7 +172,7 @@ public partial class CurrencyModelFactory : ICurrencyModelFactory
     /// </returns>
     public virtual async Task<CurrencyModel> PrepareCurrencyModelAsync(CurrencyModel model, Currency currency, bool excludeProperties = false)
     {
-        Func<CurrencyLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<CurrencyLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (currency != null)
         {

@@ -93,7 +93,7 @@ public class BoardsController : BasePluginController
         return View("~/Plugins/Misc.Forums/Public/Views/Index.cshtml", model);
     }
 
-    public async Task<IActionResult> ActiveDiscussions(int forumId = 0, int pageNumber = 1)
+    public async Task<IActionResult> ActiveDiscussions(long forumId = 0, int pageNumber = 1)
     {
         if (!_forumSettings.ForumsEnabled)
             return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
@@ -104,7 +104,7 @@ public class BoardsController : BasePluginController
     }
 
     [CheckLanguageSeoCode(ignore: true)]
-    public async Task<IActionResult> ActiveDiscussionsRss(int forumId = 0)
+    public async Task<IActionResult> ActiveDiscussionsRss(long forumId = 0)
     {
         if (!_forumSettings.ForumsEnabled)
             return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
@@ -142,7 +142,7 @@ public class BoardsController : BasePluginController
         return new RssActionResult(feed, _webHelper.GetThisPageUrl(false));
     }
 
-    public async Task<IActionResult> ForumGroup(int id)
+    public async Task<IActionResult> ForumGroup(long id)
     {
         if (!_forumSettings.ForumsEnabled)
             return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
@@ -156,7 +156,7 @@ public class BoardsController : BasePluginController
         return View("~/Plugins/Misc.Forums/Public/Views/ForumGroup.cshtml", model);
     }
 
-    public async Task<IActionResult> Forum(int id, int pageNumber = 1)
+    public async Task<IActionResult> Forum(long id, int pageNumber = 1)
     {
         if (!_forumSettings.ForumsEnabled)
             return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
@@ -171,7 +171,7 @@ public class BoardsController : BasePluginController
     }
 
     [CheckLanguageSeoCode(ignore: true)]
-    public async Task<IActionResult> ForumRss(int id)
+    public async Task<IActionResult> ForumRss(long id)
     {
         if (!_forumSettings.ForumsEnabled)
             return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
@@ -221,7 +221,7 @@ public class BoardsController : BasePluginController
     }
 
     [HttpPost]
-    public async Task<IActionResult> ForumWatch(int id)
+    public async Task<IActionResult> ForumWatch(long id)
     {
         var watchTopic = await _localizationService.GetResourceAsync("Plugins.Misc.Forums.WatchForum");
         var unwatchTopic = await _localizationService.GetResourceAsync("Plugins.Misc.Forums.UnwatchForum");
@@ -260,7 +260,7 @@ public class BoardsController : BasePluginController
         return Json(new { Subscribed = subscribed, Text = returnText, Error = false });
     }
 
-    public async Task<IActionResult> Topic(int id, int pageNumber = 1)
+    public async Task<IActionResult> Topic(long id, int pageNumber = 1)
     {
         if (!_forumSettings.ForumsEnabled)
             return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
@@ -286,7 +286,7 @@ public class BoardsController : BasePluginController
     }
 
     [HttpPost]
-    public async Task<IActionResult> TopicWatch(int id)
+    public async Task<IActionResult> TopicWatch(long id)
     {
         var watchTopic = await _localizationService.GetResourceAsync("Plugins.Misc.Forums.WatchTopic");
         var unwatchTopic = await _localizationService.GetResourceAsync("Plugins.Misc.Forums.UnwatchTopic");
@@ -325,7 +325,7 @@ public class BoardsController : BasePluginController
         return Json(new { Subscribed = subscribed, Text = returnText, Error = false });
     }
 
-    public async Task<IActionResult> TopicMove(int id)
+    public async Task<IActionResult> TopicMove(long id)
     {
         if (!_forumSettings.ForumsEnabled)
             return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
@@ -363,7 +363,7 @@ public class BoardsController : BasePluginController
     }
 
     [HttpPost]
-    public async Task<IActionResult> TopicDelete(int id)
+    public async Task<IActionResult> TopicDelete(long id)
     {
         if (!_forumSettings.ForumsEnabled)
         {
@@ -402,7 +402,7 @@ public class BoardsController : BasePluginController
         });
     }
 
-    public async Task<IActionResult> TopicCreate(int id)
+    public async Task<IActionResult> TopicCreate(long id)
     {
         if (!_forumSettings.ForumsEnabled)
             return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
@@ -521,7 +521,7 @@ public class BoardsController : BasePluginController
         return View("~/Plugins/Misc.Forums/Public/Views/TopicCreate.cshtml", model);
     }
 
-    public async Task<IActionResult> TopicEdit(int id)
+    public async Task<IActionResult> TopicEdit(long id)
     {
         if (!_forumSettings.ForumsEnabled)
             return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
@@ -658,7 +658,7 @@ public class BoardsController : BasePluginController
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostDelete(int id)
+    public async Task<IActionResult> PostDelete(long id)
     {
         if (!_forumSettings.ForumsEnabled)
         {
@@ -704,7 +704,7 @@ public class BoardsController : BasePluginController
 
     }
 
-    public async Task<IActionResult> PostCreate(int id, int? quote)
+    public async Task<IActionResult> PostCreate(long id, int? quote)
     {
         if (!_forumSettings.ForumsEnabled)
             return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
@@ -812,7 +812,7 @@ public class BoardsController : BasePluginController
         return View("~/Plugins/Misc.Forums/Public/Views/PostCreate.cshtml", model);
     }
 
-    public async Task<IActionResult> PostEdit(int id)
+    public async Task<IActionResult> PostEdit(long id)
     {
         if (!_forumSettings.ForumsEnabled)
             return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
@@ -966,7 +966,7 @@ public class BoardsController : BasePluginController
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostVote(int postId, bool isUp)
+    public async Task<IActionResult> PostVote(long postId, bool isUp)
     {
         if (!_forumSettings.AllowPostVoting)
             return new NullJsonResult();
@@ -1044,7 +1044,7 @@ public class BoardsController : BasePluginController
         return RedirectToRoute(NopRouteNames.General.CUSTOMER_INFO);
     }
 
-    public async Task<IActionResult> ProfilePosts(int id, int pageNumber)
+    public async Task<IActionResult> ProfilePosts(long id, int pageNumber)
     {
         var customer = await _customerService.GetCustomerByIdAsync(id);
         if (customer is null)

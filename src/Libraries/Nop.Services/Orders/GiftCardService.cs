@@ -58,7 +58,7 @@ public partial class GiftCardService : IGiftCardService
     /// A task that represents the asynchronous operation
     /// The task result contains the gift card entry
     /// </returns>
-    public virtual async Task<GiftCard> GetGiftCardByIdAsync(int giftCardId)
+    public virtual async Task<GiftCard> GetGiftCardByIdAsync(long giftCardId)
     {
         return await _giftCardRepository.GetByIdAsync(giftCardId, cache => default);
     }
@@ -79,7 +79,7 @@ public partial class GiftCardService : IGiftCardService
     /// A task that represents the asynchronous operation
     /// The task result contains the gift cards
     /// </returns>
-    public virtual async Task<IPagedList<GiftCard>> GetAllGiftCardsAsync(int? purchasedWithOrderId = null, int? usedWithOrderId = null,
+    public virtual async Task<IPagedList<GiftCard>> GetAllGiftCardsAsync(long? purchasedWithOrderId = null, long? usedWithOrderId = null,
         DateTime? createdFromUtc = null, DateTime? createdToUtc = null,
         bool? isGiftCardActivated = null, string giftCardCouponCode = null,
         string recipientName = null,
@@ -149,7 +149,7 @@ public partial class GiftCardService : IGiftCardService
     /// A task that represents the asynchronous operation
     /// The task result contains the gift card entries
     /// </returns>
-    public virtual async Task<IList<GiftCard>> GetGiftCardsByPurchasedWithOrderItemIdAsync(int purchasedWithOrderItemId)
+    public virtual async Task<IList<GiftCard>> GetGiftCardsByPurchasedWithOrderItemIdAsync(long purchasedWithOrderItemId)
     {
         if (purchasedWithOrderItemId == 0)
             return new List<GiftCard>();

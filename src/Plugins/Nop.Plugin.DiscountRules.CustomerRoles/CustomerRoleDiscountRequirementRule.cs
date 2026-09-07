@@ -77,7 +77,7 @@ public class CustomerRoleDiscountRequirementRule : BasePlugin, IDiscountRequirem
     /// <param name="discountId">Discount identifier</param>
     /// <param name="discountRequirementId">Discount requirement identifier (if editing)</param>
     /// <returns>URL</returns>
-    public string GetConfigurationUrl(int discountId, int? discountRequirementId)
+    public string GetConfigurationUrl(long discountId, long? discountRequirementId)
     {
         return _nopUrlHelper.RouteUrl(DiscountRequirementDefaults.ConfigurationRouteName,
             new { discountId = discountId, discountRequirementId = discountRequirementId }, _webHelper.GetCurrentRequestProtocol());

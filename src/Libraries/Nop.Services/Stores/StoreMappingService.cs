@@ -87,7 +87,7 @@ public partial class StoreMappingService : IStoreMappingService
     /// A task that represents the asynchronous operation
     /// The task result contains the filtered query
     /// </returns>
-    public virtual async Task<IQueryable<TEntity>> ApplyStoreMapping<TEntity>(IQueryable<TEntity> query, int storeId)
+    public virtual async Task<IQueryable<TEntity>> ApplyStoreMapping<TEntity>(IQueryable<TEntity> query, long storeId)
         where TEntity : BaseEntity, IStoreMappingSupported
     {
         ArgumentNullException.ThrowIfNull(query);
@@ -146,7 +146,7 @@ public partial class StoreMappingService : IStoreMappingService
     /// <param name="entity">Entity</param>
     /// <param name="storeId">Store id</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task InsertStoreMappingAsync<TEntity>(TEntity entity, int storeId) where TEntity : BaseEntity, IStoreMappingSupported
+    public virtual async Task InsertStoreMappingAsync<TEntity>(TEntity entity, long storeId) where TEntity : BaseEntity, IStoreMappingSupported
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -175,7 +175,7 @@ public partial class StoreMappingService : IStoreMappingService
     /// A task that represents the asynchronous operation
     /// The task result contains the store identifiers
     /// </returns>
-    public virtual async Task<int[]> GetStoresIdsWithAccessAsync<TEntity>(TEntity entity) where TEntity : BaseEntity, IStoreMappingSupported
+    public virtual async Task<long[]> GetStoresIdsWithAccessAsync<TEntity>(TEntity entity) where TEntity : BaseEntity, IStoreMappingSupported
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -218,7 +218,7 @@ public partial class StoreMappingService : IStoreMappingService
     /// A task that represents the asynchronous operation
     /// The task result contains true - authorized; otherwise, false
     /// </returns>
-    public virtual async Task<bool> AuthorizeAsync<TEntity>(TEntity entity, int storeId) where TEntity : BaseEntity, IStoreMappingSupported
+    public virtual async Task<bool> AuthorizeAsync<TEntity>(TEntity entity, long storeId) where TEntity : BaseEntity, IStoreMappingSupported
     {
         if (entity == null)
             return false;
@@ -253,7 +253,7 @@ public partial class StoreMappingService : IStoreMappingService
     /// <returns>
     /// A task that represents the asynchronous operation
     /// </returns>
-    public virtual async Task SaveStoreMappingsAsync<TEntity>(TEntity entity, IEnumerable<int> storeIds) where TEntity : BaseEntity, IStoreMappingSupported
+    public virtual async Task SaveStoreMappingsAsync<TEntity>(TEntity entity, IEnumerable<long> storeIds) where TEntity : BaseEntity, IStoreMappingSupported
     {
         ArgumentNullException.ThrowIfNull(entity);
         ArgumentNullException.ThrowIfNull(storeIds);

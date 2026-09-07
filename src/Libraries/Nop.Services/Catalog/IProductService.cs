@@ -47,7 +47,7 @@ public partial interface IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of featured products
     /// </returns>
-    Task<IList<Product>> GetCategoryFeaturedProductsAsync(int categoryId, int storeId = 0);
+    Task<IList<Product>> GetCategoryFeaturedProductsAsync(long categoryId, long storeId = 0);
 
     /// <summary>
     /// Gets featured products by a manufacturer identifier
@@ -58,7 +58,7 @@ public partial interface IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of featured products
     /// </returns>
-    Task<IList<Product>> GetManufacturerFeaturedProductsAsync(int manufacturerId, int storeId = 0);
+    Task<IList<Product>> GetManufacturerFeaturedProductsAsync(long manufacturerId, long storeId = 0);
 
     /// <summary>
     /// Gets products which marked as new
@@ -70,7 +70,7 @@ public partial interface IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of new products
     /// </returns>
-    Task<IPagedList<Product>> GetProductsMarkedAsNewAsync(int storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue);
+    Task<IPagedList<Product>> GetProductsMarkedAsNewAsync(long storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue);
 
     /// <summary>
     /// Gets a product
@@ -80,7 +80,7 @@ public partial interface IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the product
     /// </returns>
-    Task<Product> GetProductByIdAsync(int productId);
+    Task<Product> GetProductByIdAsync(long productId);
 
     /// <summary>
     /// Gets products by identifier
@@ -90,7 +90,7 @@ public partial interface IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the products
     /// </returns>
-    Task<IList<Product>> GetProductsByIdsAsync(int[] productIds);
+    Task<IList<Product>> GetProductsByIdsAsync(long[] productIds);
 
     /// <summary>
     /// Inserts a product
@@ -129,7 +129,7 @@ public partial interface IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the number of products
     /// </returns>
-    Task<int> GetNumberOfProductsInCategoryAsync(IList<int> categoryIds = null, int storeId = 0);
+    Task<int> GetNumberOfProductsInCategoryAsync(IList<long> categoryIds = null, long storeId = 0);
 
     /// <summary>
     /// Search products
@@ -168,23 +168,23 @@ public partial interface IProductService
     Task<IPagedList<Product>> SearchProductsAsync(
         int pageIndex = 0,
         int pageSize = int.MaxValue,
-        IList<int> categoryIds = null,
-        IList<int> manufacturerIds = null,
-        int storeId = 0,
-        int vendorId = 0,
-        int warehouseId = 0,
+        IList<long> categoryIds = null,
+        IList<long> manufacturerIds = null,
+        long storeId = 0,
+        long vendorId = 0,
+        long warehouseId = 0,
         ProductType? productType = null,
         bool visibleIndividuallyOnly = false,
         bool excludeFeaturedProducts = false,
         decimal? priceMin = null,
         decimal? priceMax = null,
-        int productTagId = 0,
+        long productTagId = 0,
         string keywords = null,
         bool searchDescriptions = false,
         bool searchManufacturerPartNumber = true,
         bool searchSku = true,
         bool searchProductTags = false,
-        int languageId = 0,
+        long languageId = 0,
         IList<SpecificationAttributeOption> filteredSpecOptions = null,
         ProductSortingEnum orderBy = ProductSortingEnum.Position,
         bool showHidden = false,
@@ -200,7 +200,7 @@ public partial interface IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the products
     /// </returns>
-    Task<IPagedList<Product>> GetProductsByProductAttributeIdAsync(int productAttributeId,
+    Task<IPagedList<Product>> GetProductsByProductAttributeIdAsync(long productAttributeId,
         int pageIndex = 0, int pageSize = int.MaxValue);
 
     /// <summary>
@@ -214,8 +214,8 @@ public partial interface IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the products
     /// </returns>
-    Task<IList<Product>> GetAssociatedProductsAsync(int parentGroupedProductId,
-        int storeId = 0, int vendorId = 0, bool showHidden = false);
+    Task<IList<Product>> GetAssociatedProductsAsync(long parentGroupedProductId,
+        long storeId = 0, long vendorId = 0, bool showHidden = false);
 
     /// <summary>
     /// Get low stock products
@@ -229,7 +229,7 @@ public partial interface IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the products
     /// </returns>
-    Task<IPagedList<Product>> GetLowStockProductsAsync(int? vendorId = null, bool? loadPublishedOnly = true,
+    Task<IPagedList<Product>> GetLowStockProductsAsync(long? vendorId = null, bool? loadPublishedOnly = true,
         int pageIndex = 0, int pageSize = int.MaxValue, bool getOnlyTotalCount = false);
 
     /// <summary>
@@ -244,7 +244,7 @@ public partial interface IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the product combinations
     /// </returns>
-    Task<IPagedList<ProductAttributeCombination>> GetLowStockProductCombinationsAsync(int? vendorId = null, bool? loadPublishedOnly = true,
+    Task<IPagedList<ProductAttributeCombination>> GetLowStockProductCombinationsAsync(long? vendorId = null, bool? loadPublishedOnly = true,
         int pageIndex = 0, int pageSize = int.MaxValue, bool getOnlyTotalCount = false);
 
     /// <summary>
@@ -266,7 +266,7 @@ public partial interface IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the products
     /// </returns>
-    Task<IList<Product>> GetProductsBySkuAsync(string[] skuArray, int vendorId = 0);
+    Task<IList<Product>> GetProductsBySkuAsync(string[] skuArray, long vendorId = 0);
 
     /// <summary>
     /// Gets number of products by vendor identifier
@@ -276,14 +276,14 @@ public partial interface IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the number of products
     /// </returns>
-    Task<int> GetNumberOfProductsByVendorIdAsync(int vendorId);
+    Task<long> GetNumberOfProductsByVendorIdAsync(long vendorId);
 
     /// <summary>
     /// Parse "required product Ids" property
     /// </summary>
     /// <param name="product">Product</param>
     /// <returns>A list of required product IDs</returns>
-    int[] ParseRequiredProductIds(Product product);
+    long[] ParseRequiredProductIds(Product product);
 
     /// <summary>
     /// Get a value indicating whether a product is available now (availability dates)
@@ -316,7 +316,7 @@ public partial interface IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    Task<int> GetTotalStockQuantityAsync(Product product, bool useReservedQuantity = true, int warehouseId = 0);
+    Task<int> GetTotalStockQuantityAsync(Product product, bool useReservedQuantity = true, long warehouseId = 0);
 
     /// <summary>
     /// Get number of rental periods (price ratio)
@@ -387,7 +387,7 @@ public partial interface IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    Task<bool> HasAnyDownloadableProductAsync(int[] productIds);
+    Task<bool> HasAnyDownloadableProductAsync(long[] productIds);
 
     /// <summary>
     /// Gets the value whether the sequence contains gift card products
@@ -397,7 +397,7 @@ public partial interface IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    Task<bool> HasAnyGiftCardProductAsync(int[] productIds);
+    Task<bool> HasAnyGiftCardProductAsync(long[] productIds);
 
     /// <summary>
     /// Gets the value whether the sequence contains recurring products
@@ -407,7 +407,7 @@ public partial interface IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    Task<bool> HasAnyRecurringProductAsync(int[] productIds);
+    Task<bool> HasAnyRecurringProductAsync(long[] productIds);
 
     /// <summary>
     /// Returns a list of sku of not existing products
@@ -453,7 +453,7 @@ public partial interface IProductService
     /// <param name="quantity">Quantity, must be negative</param>
     /// <param name="message">Message for the stock quantity history</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task BookReservedInventoryAsync(Product product, int warehouseId, int quantity, string message = "");
+    Task BookReservedInventoryAsync(Product product, long warehouseId, int quantity, string message = "");
 
     /// <summary>
     /// Reverse booked inventory (if acceptable)
@@ -485,7 +485,7 @@ public partial interface IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the related products
     /// </returns>
-    Task<IList<RelatedProduct>> GetRelatedProductsByProductId1Async(int productId1, bool showHidden = false);
+    Task<IList<RelatedProduct>> GetRelatedProductsByProductId1Async(long productId1, bool showHidden = false);
 
     /// <summary>
     /// Gets a related product
@@ -495,7 +495,7 @@ public partial interface IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the related product
     /// </returns>
-    Task<RelatedProduct> GetRelatedProductByIdAsync(int relatedProductId);
+    Task<RelatedProduct> GetRelatedProductByIdAsync(long relatedProductId);
 
     /// <summary>
     /// Inserts a related product
@@ -518,7 +518,7 @@ public partial interface IProductService
     /// <param name="productId1">The first product identifier</param>
     /// <param name="productId2">The second product identifier</param>
     /// <returns>Related product</returns>
-    RelatedProduct FindRelatedProduct(IList<RelatedProduct> source, int productId1, int productId2);
+    RelatedProduct FindRelatedProduct(IList<RelatedProduct> source, long productId1, long productId2);
 
     #endregion
 
@@ -540,7 +540,7 @@ public partial interface IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the cross-sell products
     /// </returns>
-    Task<IList<CrossSellProduct>> GetCrossSellProductsByProductId1Async(int productId1, bool showHidden = false);
+    Task<IList<CrossSellProduct>> GetCrossSellProductsByProductId1Async(long productId1, bool showHidden = false);
 
     /// <summary>
     /// Gets a cross-sell product
@@ -550,7 +550,7 @@ public partial interface IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the cross-sell product
     /// </returns>
-    Task<CrossSellProduct> GetCrossSellProductByIdAsync(int crossSellProductId);
+    Task<CrossSellProduct> GetCrossSellProductByIdAsync(long crossSellProductId);
 
     /// <summary>
     /// Inserts a cross-sell product
@@ -577,7 +577,7 @@ public partial interface IProductService
     /// <param name="productId1">The first product identifier</param>
     /// <param name="productId2">The second product identifier</param>
     /// <returns>Cross-sell product</returns>
-    CrossSellProduct FindCrossSellProduct(IList<CrossSellProduct> source, int productId1, int productId2);
+    CrossSellProduct FindCrossSellProduct(IList<CrossSellProduct> source, long productId1, long productId2);
 
     #endregion
 
@@ -597,7 +597,7 @@ public partial interface IProductService
     /// </summary>
     /// <param name="productId">Product identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task<IList<TierPrice>> GetTierPricesByProductAsync(int productId);
+    Task<IList<TierPrice>> GetTierPricesByProductAsync(long productId);
 
     /// <summary>
     /// Deletes a tier price
@@ -614,7 +614,7 @@ public partial interface IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the ier price
     /// </returns>
-    Task<TierPrice> GetTierPriceByIdAsync(int tierPriceId);
+    Task<TierPrice> GetTierPriceByIdAsync(long tierPriceId);
 
     /// <summary>
     /// Inserts a tier price
@@ -662,7 +662,7 @@ public partial interface IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the product pictures
     /// </returns>
-    Task<IList<ProductPicture>> GetProductPicturesByProductIdAsync(int productId);
+    Task<IList<ProductPicture>> GetProductPicturesByProductIdAsync(long productId);
 
     /// <summary>
     /// Gets a product picture
@@ -672,7 +672,7 @@ public partial interface IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the product picture
     /// </returns>
-    Task<ProductPicture> GetProductPictureByIdAsync(int productPictureId);
+    Task<ProductPicture> GetProductPictureByIdAsync(long productPictureId);
 
     /// <summary>
     /// Inserts a product picture
@@ -696,7 +696,7 @@ public partial interface IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the all picture identifiers grouped by product ID
     /// </returns>
-    Task<IDictionary<int, int[]>> GetProductsImagesIdsAsync(int[] productsIds);
+    Task<IDictionary<long, long[]>> GetProductsImagesIdsAsync(long[] productsIds);
 
     /// <summary>
     /// Get products to which a discount is applied
@@ -709,7 +709,7 @@ public partial interface IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of products
     /// </returns>
-    Task<IPagedList<Product>> GetProductsWithAppliedDiscountAsync(int? discountId = null,
+    Task<IPagedList<Product>> GetProductsWithAppliedDiscountAsync(long? discountId = null,
         bool showHidden = false, int pageIndex = 0, int pageSize = int.MaxValue);
 
     #endregion
@@ -731,7 +731,7 @@ public partial interface IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the product videos
     /// </returns>
-    Task<IList<ProductVideo>> GetProductVideosByProductIdAsync(int productId);
+    Task<IList<ProductVideo>> GetProductVideosByProductIdAsync(long productId);
 
     /// <summary>
     /// Gets a product video
@@ -741,7 +741,7 @@ public partial interface IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the product video
     /// </returns>
-    Task<ProductVideo> GetProductVideoByIdAsync(int productVideoId);
+    Task<ProductVideo> GetProductVideoByIdAsync(long productVideoId);
 
     /// <summary>
     /// Inserts a product video
@@ -766,7 +766,7 @@ public partial interface IProductService
     /// </summary>
     /// <param name="productId">Product identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task<IList<ProductWarehouseInventory>> GetAllProductWarehouseInventoryRecordsAsync(int productId);
+    Task<IList<ProductWarehouseInventory>> GetAllProductWarehouseInventoryRecordsAsync(long productId);
 
     /// <summary>
     /// Deletes a ProductWarehouseInventory
@@ -804,7 +804,7 @@ public partial interface IProductService
     /// <param name="combinationId">Product attribute combination identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
     Task AddStockQuantityHistoryEntryAsync(Product product, int quantityAdjustment, int stockQuantity,
-        int warehouseId = 0, string message = "", int? combinationId = null);
+        long warehouseId = 0, string message = "", long? combinationId = null);
 
     /// <summary>
     /// Get the history of the product stock quantity changes
@@ -818,7 +818,7 @@ public partial interface IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of stock quantity change entries
     /// </returns>
-    Task<IPagedList<StockQuantityHistory>> GetStockQuantityHistoryAsync(Product product, int warehouseId = 0, int combinationId = 0,
+    Task<IPagedList<StockQuantityHistory>> GetStockQuantityHistoryAsync(Product product, long warehouseId = 0, long combinationId = 0,
         int pageIndex = 0, int pageSize = int.MaxValue);
 
     #endregion
@@ -837,7 +837,7 @@ public partial interface IProductService
     /// </summary>
     /// <param name="productId">Product identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task<IList<DiscountProductMapping>> GetAllDiscountsAppliedToProductAsync(int productId);
+    Task<IList<DiscountProductMapping>> GetAllDiscountsAppliedToProductAsync(long productId);
 
     /// <summary>
     /// Get a discount-product mapping record
@@ -848,7 +848,7 @@ public partial interface IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    Task<DiscountProductMapping> GetDiscountAppliedToProductAsync(int productId, int discountId);
+    Task<DiscountProductMapping> GetDiscountAppliedToProductAsync(long productId, long discountId);
 
     /// <summary>
     /// Inserts a discount-product mapping record

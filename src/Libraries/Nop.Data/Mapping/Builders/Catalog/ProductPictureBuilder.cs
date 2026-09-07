@@ -19,8 +19,8 @@ public partial class ProductPictureBuilder : NopEntityBuilder<ProductPicture>
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(ProductPicture.PictureId)).AsInt32().ForeignKey<Picture>()
-            .WithColumn(nameof(ProductPicture.ProductId)).AsInt32().ForeignKey<Product>();
+            .WithColumn(nameof(ProductPicture.PictureId)).AsInt64().ForeignKey<Picture>()
+            .WithColumn(nameof(ProductPicture.ProductId)).AsInt64().ForeignKey<Product>();
     }
 
     #endregion

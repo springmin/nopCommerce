@@ -151,7 +151,7 @@ public partial class SpecificationAttributeModelFactory : ISpecificationAttribut
     public virtual async Task<SpecificationAttributeGroupModel> PrepareSpecificationAttributeGroupModelAsync(SpecificationAttributeGroupModel model,
         SpecificationAttributeGroup specificationAttributeGroup, bool excludeProperties = false)
     {
-        Func<SpecificationAttributeGroupLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<SpecificationAttributeGroupLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (specificationAttributeGroup != null)
         {
@@ -214,7 +214,7 @@ public partial class SpecificationAttributeModelFactory : ISpecificationAttribut
     public virtual async Task<SpecificationAttributeModel> PrepareSpecificationAttributeModelAsync(SpecificationAttributeModel model,
         SpecificationAttribute specificationAttribute, bool excludeProperties = false)
     {
-        Func<SpecificationAttributeLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<SpecificationAttributeLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (specificationAttribute != null)
         {
@@ -302,7 +302,7 @@ public partial class SpecificationAttributeModelFactory : ISpecificationAttribut
     {
         ArgumentNullException.ThrowIfNull(specificationAttribute);
 
-        Func<SpecificationAttributeOptionLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<SpecificationAttributeOptionLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (specificationAttributeOption != null)
         {

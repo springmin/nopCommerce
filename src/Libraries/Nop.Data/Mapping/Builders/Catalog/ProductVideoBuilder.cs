@@ -19,8 +19,8 @@ public partial class ProductVideoBuilder : NopEntityBuilder<ProductVideo>
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(ProductVideo.VideoId)).AsInt32().ForeignKey<Video>()
-            .WithColumn(nameof(ProductVideo.ProductId)).AsInt32().ForeignKey<Product>();
+            .WithColumn(nameof(ProductVideo.VideoId)).AsInt64().ForeignKey<Video>()
+            .WithColumn(nameof(ProductVideo.ProductId)).AsInt64().ForeignKey<Product>();
     }
 
     #endregion

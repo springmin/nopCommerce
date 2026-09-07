@@ -32,15 +32,15 @@ public partial record AddressModel : BaseNopEntityModel
 
     public bool CountryEnabled { get; set; }
     [NopResourceDisplayName("Address.Fields.Country")]
-    public int? CountryId { get; set; }
+    public long? CountryId { get; set; }
     [NopResourceDisplayName("Address.Fields.Country")]
     public string CountryName { get; set; }
 
-    public int? DefaultCountryId { get; set; }
+    public long? DefaultCountryId { get; set; }
 
     public bool StateProvinceEnabled { get; set; }
     [NopResourceDisplayName("Address.Fields.StateProvince")]
-    public int? StateProvinceId { get; set; }
+    public long? StateProvinceId { get; set; }
     [NopResourceDisplayName("Address.Fields.StateProvince")]
     public string StateProvinceName { get; set; }
 

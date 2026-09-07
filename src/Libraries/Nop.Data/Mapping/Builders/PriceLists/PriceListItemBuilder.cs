@@ -19,8 +19,8 @@ public partial class PriceListItemBuilder : NopEntityBuilder<PriceListItem>
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(PriceListItem.ProductId)).AsInt32().ForeignKey<Product>()
-            .WithColumn(nameof(PriceListItem.PriceListId)).AsInt32().ForeignKey<PriceList>();
+            .WithColumn(nameof(PriceListItem.ProductId)).AsInt64().ForeignKey<Product>()
+            .WithColumn(nameof(PriceListItem.PriceListId)).AsInt64().ForeignKey<PriceList>();
     }
 
     #endregion

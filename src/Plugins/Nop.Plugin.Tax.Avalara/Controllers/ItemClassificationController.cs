@@ -111,12 +111,12 @@ public class ItemClassificationController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_TAX_SETTINGS)]
-    public async Task<IActionResult> DeleteSelected(List<int> selectedIds)
+    public async Task<IActionResult> DeleteSelected(List<long> selectedIds)
     {
         if (!selectedIds?.Any() ?? true)
             return NoContent();
 
-        var recordsToDelete = new List<int>();
+        var recordsToDelete = new List<long>();
 
         foreach (var id in selectedIds)
         {
@@ -162,8 +162,8 @@ public class ItemClassificationController : BaseAdminController
         var products = await _productService.SearchProductsAsync(showHidden: true,
             keywords: searchModel.SearchProductName,
             productType: searchModel.SearchProductTypeId > 0 ? (ProductType?)searchModel.SearchProductTypeId : null,
-            categoryIds: new List<int> { searchModel.SearchCategoryId },
-            manufacturerIds: new List<int> { searchModel.SearchManufacturerId },
+            categoryIds: new List<long> { searchModel.SearchCategoryId },
+            manufacturerIds: new List<long> { searchModel.SearchManufacturerId },
             storeId: searchModel.SearchStoreId,
             vendorId: searchModel.SearchVendorId,
             pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);

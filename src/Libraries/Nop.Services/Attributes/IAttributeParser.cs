@@ -27,7 +27,7 @@ public partial interface IAttributeParser<TAttribute, TAttributeValue>
     /// </summary>
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <returns>Selected attribute identifiers</returns>
-    IEnumerable<int> ParseAttributeIds(string attributesXml);
+    IEnumerable<long> ParseAttributeIds(string attributesXml);
 
     /// <summary>
     /// Remove an attribute
@@ -35,7 +35,7 @@ public partial interface IAttributeParser<TAttribute, TAttributeValue>
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <param name="attributeId">Attribute identifier</param>
     /// <returns>Updated result (XML format)</returns>
-    string RemoveAttribute(string attributesXml, int attributeId);
+    string RemoveAttribute(string attributesXml, long attributeId);
 
     /// <summary>
     /// Get custom attributes from the passed form
@@ -65,7 +65,7 @@ public partial interface IAttributeParser<TAttribute, TAttributeValue>
     /// <param name="attributesXml">Attributes in XML format</param>
     /// <param name="attributeId">Attribute identifier</param>
     /// <returns>Attribute value</returns>
-    IList<string> ParseValues(string attributesXml, int attributeId);
+    IList<string> ParseValues(string attributesXml, long attributeId);
 
     /// <summary>
     /// Get attribute values

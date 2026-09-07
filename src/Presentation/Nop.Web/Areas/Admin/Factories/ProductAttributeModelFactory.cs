@@ -148,7 +148,7 @@ public partial class ProductAttributeModelFactory : IProductAttributeModelFactor
     public virtual async Task<ProductAttributeModel> PrepareProductAttributeModelAsync(ProductAttributeModel model,
         ProductAttribute productAttribute, bool excludeProperties = false)
     {
-        Func<ProductAttributeLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<ProductAttributeLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (productAttribute != null)
         {
@@ -231,7 +231,7 @@ public partial class ProductAttributeModelFactory : IProductAttributeModelFactor
     {
         ArgumentNullException.ThrowIfNull(productAttribute);
 
-        Func<PredefinedProductAttributeValueLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<PredefinedProductAttributeValueLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (productAttributeValue != null)
         {

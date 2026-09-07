@@ -21,7 +21,7 @@ public partial record TopicSearchModel : BaseSearchModel
     #region Properties
 
     [NopResourceDisplayName("Admin.ContentManagement.Topics.List.SearchStore")]
-    public int SearchStoreId { get; set; }
+    public long SearchStoreId { get; set; }
 
     public IList<SelectListItem> AvailableStores { get; set; }
 

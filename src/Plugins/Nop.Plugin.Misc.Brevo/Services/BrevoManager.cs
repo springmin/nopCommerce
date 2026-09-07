@@ -707,7 +707,7 @@ public partial class BrevoManager
             {
                 var typeId = mapping.Key;
                 var listId = mapping.Value;
-                if (typeId == 0 || listId == 0 || !unsubscriber.list_id.Contains(listId))
+                if (typeId == 0 || listId == 0 || !unsubscriber.list_id.Contains((int)listId))
                     continue;
 
                 if (subscriptions.FirstOrDefault(subscription => subscription.TypeId == typeId) is not NewsLetterSubscription subscription)
@@ -730,7 +730,7 @@ public partial class BrevoManager
     /// A task that represents the asynchronous operation
     /// The task result contains the webhook id
     /// </returns>
-    public async Task<int> GetUnsubscribeWebHookIdAsync()
+    public async Task<long> GetUnsubscribeWebHookIdAsync()
     {
         try
         {
@@ -1251,7 +1251,7 @@ public partial class BrevoManager
     /// A task that represents the asynchronous operation
     /// The task result contains the email account identifier; errors if exist
     /// </returns>
-    public async Task<(int Id, string Errors)> GetEmailAccountIdAsync(string senderId, string smtpKey)
+    public async Task<(long Id, string Errors)> GetEmailAccountIdAsync(string senderId, string smtpKey)
     {
         try
         {
@@ -1309,7 +1309,7 @@ public partial class BrevoManager
     /// A task that represents the asynchronous operation
     /// The task result contains the email template identifier
     /// </returns>
-    public async Task<int?> GetTemplateIdAsync(int? templateId, MessageTemplate message, EmailAccount emailAccount)
+    public async Task<long?> GetTemplateIdAsync(long? templateId, MessageTemplate message, EmailAccount emailAccount)
     {
         try
         {
@@ -1356,7 +1356,7 @@ public partial class BrevoManager
     /// A task that represents the asynchronous operation
     /// The task result contains the queued email
     /// </returns>
-    public async Task<QueuedEmail> GetQueuedEmailFromTemplateAsync(int templateId)
+    public async Task<QueuedEmail> GetQueuedEmailFromTemplateAsync(long templateId)
     {
         try
         {
@@ -1440,7 +1440,7 @@ public partial class BrevoManager
     /// <param name="from">Name of sender</param>
     /// <param name="text">Text</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public async Task<string> SendSMSCampaignAsync(int listId, string from, string text)
+    public async Task<string> SendSMSCampaignAsync(long listId, string from, string text)
     {
         try
         {

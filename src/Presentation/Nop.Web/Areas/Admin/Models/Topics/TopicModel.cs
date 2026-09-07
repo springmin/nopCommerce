@@ -18,10 +18,10 @@ public partial record TopicModel : BaseNopEntityModel, IAclSupportedModel, ILoca
         AvailableTopicTemplates = new List<SelectListItem>();
         Locales = new List<TopicLocalizedModel>();
 
-        SelectedCustomerRoleIds = new List<int>();
+        SelectedCustomerRoleIds = new List<long>();
         AvailableCustomerRoles = new List<SelectListItem>();
 
-        SelectedStoreIds = new List<int>();
+        SelectedStoreIds = new List<long>();
         AvailableStores = new List<SelectListItem>();
     }
 
@@ -60,7 +60,7 @@ public partial record TopicModel : BaseNopEntityModel, IAclSupportedModel, ILoca
     public bool Published { get; set; }
 
     [NopResourceDisplayName("Admin.ContentManagement.Topics.Fields.TopicTemplate")]
-    public int TopicTemplateId { get; set; }
+    public long TopicTemplateId { get; set; }
 
     public IList<SelectListItem> AvailableTopicTemplates { get; set; }
 
@@ -80,12 +80,12 @@ public partial record TopicModel : BaseNopEntityModel, IAclSupportedModel, ILoca
 
     //store mapping
     [NopResourceDisplayName("Admin.ContentManagement.Topics.Fields.LimitedToStores")]
-    public IList<int> SelectedStoreIds { get; set; }
+    public IList<long> SelectedStoreIds { get; set; }
 
     public IList<SelectListItem> AvailableStores { get; set; }
 
     //ACL (customer roles)
-    public IList<int> SelectedCustomerRoleIds { get; set; }
+    public IList<long> SelectedCustomerRoleIds { get; set; }
 
     public IList<SelectListItem> AvailableCustomerRoles { get; set; }
 
@@ -104,7 +104,7 @@ public partial record TopicModel : BaseNopEntityModel, IAclSupportedModel, ILoca
 
 public partial record TopicLocalizedModel : ILocalizedLocaleModel, IMetaTagsSupportedModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.ContentManagement.Topics.Fields.Title")]
     public string Title { get; set; }

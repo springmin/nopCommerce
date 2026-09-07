@@ -190,7 +190,7 @@ public abstract class PdfDocument<TItem>
     /// <param name="propertyExpression">Property selector for cells in the column</param>
     /// <param name="width">The column's width according to the PdfRptPageSetup.MainTableColumnsWidthsType value</param>
     /// <param name="printProductAttributes">Indicates that product attribute descriptions should be printed if they exist</param>
-    protected virtual void ConfigureProductColumn(ColumnAttributesBuilder column, Expression<Func<TItem, object>> propertyExpression, int width = 1, bool printProductAttributes = false)
+    protected virtual void ConfigureProductColumn(ColumnAttributesBuilder column, Expression<Func<TItem, object>> propertyExpression, long width = 1, bool printProductAttributes = false)
     {
         column.PropertyName(propertyExpression);
         column.CellsHorizontalAlignment(HorizontalAlignment.Left);
@@ -362,7 +362,7 @@ public abstract class PdfDocument<TItem>
     /// <summary>
     /// Gets or sets a function to get a resource string by the specified key and language identifier
     /// </summary>
-    public required Func<string, int, Task<string>> GetResourceAsync { get; init; }
+    public required Func<string, long, Task<string>> GetResourceAsync { get; init; }
 
 
     #endregion

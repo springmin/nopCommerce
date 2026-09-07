@@ -37,7 +37,7 @@ public partial record FilterLevelValueSearchModel : BaseSearchModel
     public IList<SelectListItem> AvailableFilterLevel2Values { get; set; }
     public IList<SelectListItem> AvailableFilterLevel3Values { get; set; }
 
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     #endregion
 }

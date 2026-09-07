@@ -230,7 +230,7 @@ public partial class ReturnRequestModelFactory : IReturnRequestModelFactory
     public virtual async Task<ReturnRequestReasonModel> PrepareReturnRequestReasonModelAsync(ReturnRequestReasonModel model,
         ReturnRequestReason returnRequestReason, bool excludeProperties = false)
     {
-        Func<ReturnRequestReasonLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<ReturnRequestReasonLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (returnRequestReason != null)
         {
@@ -306,7 +306,7 @@ public partial class ReturnRequestModelFactory : IReturnRequestModelFactory
     public virtual async Task<ReturnRequestActionModel> PrepareReturnRequestActionModelAsync(ReturnRequestActionModel model,
         ReturnRequestAction returnRequestAction, bool excludeProperties = false)
     {
-        Func<ReturnRequestActionLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<ReturnRequestActionLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (returnRequestAction != null)
         {

@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Nop.Core;
@@ -397,7 +398,7 @@ public partial class ProductController : BaseAdminController
         await _productService.UpdateProductAsync(product);
     }
 
-    protected virtual async Task<string> GetAttributesXmlForProductAttributeCombinationAsync(IFormCollection form, List<string> warnings, int productId)
+    protected virtual async Task<string> GetAttributesXmlForProductAttributeCombinationAsync(IFormCollection form, List<string> warnings, long productId)
     {
         var attributesXml = string.Empty;
 
@@ -419,7 +420,7 @@ public partial class ProductController : BaseAdminController
                     ctrlAttributes = form[controlId];
                     if (!string.IsNullOrEmpty(ctrlAttributes))
                     {
-                        var selectedAttributeId = int.Parse(ctrlAttributes);
+                        var selectedAttributeId = long.Parse(ctrlAttributes);
                         if (selectedAttributeId > 0)
                         {
                             attributesXml = _productAttributeParser.AddProductAttribute(attributesXml,
@@ -435,7 +436,7 @@ public partial class ProductController : BaseAdminController
                         foreach (var item in cblAttributes.Split(_separator,
                                      StringSplitOptions.RemoveEmptyEntries))
                         {
-                            var selectedAttributeId = int.Parse(item);
+                            var selectedAttributeId = long.Parse(item);
                             if (selectedAttributeId > 0)
                             {
                                 attributesXml = _productAttributeParser.AddProductAttribute(attributesXml,
@@ -669,7 +670,7 @@ public partial class ProductController : BaseAdminController
                         var ctrlAttributes = form[controlId];
                         if (!StringValues.IsNullOrEmpty(ctrlAttributes))
                         {
-                            var selectedAttributeId = int.Parse(ctrlAttributes);
+                            var selectedAttributeId = long.Parse(ctrlAttributes);
                             //for conditions we should empty values save even when nothing is selected
                             //otherwise "attributesXml" will be empty
                             //hence we won't be able to find a selected attribute
@@ -694,7 +695,7 @@ public partial class ProductController : BaseAdminController
                             foreach (var item in cblAttributes.ToString()
                                          .Split(_separator, StringSplitOptions.RemoveEmptyEntries))
                             {
-                                var selectedAttributeId = int.Parse(item);
+                                var selectedAttributeId = long.Parse(item);
                                 if (selectedAttributeId <= 0)
                                     continue;
 
@@ -738,7 +739,7 @@ public partial class ProductController : BaseAdminController
         await _productAttributeService.UpdateProductAttributeMappingAsync(productAttributeMapping);
     }
 
-    protected virtual async Task GenerateAttributeCombinationsAsync(Product product, IList<int> allowedAttributeIds = null)
+    protected virtual async Task GenerateAttributeCombinationsAsync(Product product, IList<long> allowedAttributeIds = null)
     {
         var allAttributesXml = await _productAttributeParser.GenerateAllCombinationsAsync(product, true, allowedAttributeIds);
         foreach (var attributesXml in allAttributesXml)
@@ -840,7 +841,7 @@ public partial class ProductController : BaseAdminController
 
     protected virtual async Task<List<BulkEditData>> ParseBulkEditDataAsync()
     {
-        var rez = new Dictionary<int, BulkEditData>();
+        var rez = new Dictionary<long, BulkEditData>();
         var currentVendor = await _workContext.GetCurrentVendorAsync();
 
         foreach (var item in Request.Form)
@@ -873,7 +874,7 @@ public partial class ProductController : BaseAdminController
             {
                 setData(productId, data =>
                 {
-                    data.Price = decimal.Parse(item.Value);
+                    data.Price = decimal.Parse(item.Value, NumberStyles.Any, CultureInfo.InvariantCulture);
                 });
             }
 
@@ -881,7 +882,7 @@ public partial class ProductController : BaseAdminController
             {
                 setData(productId, data =>
                 {
-                    data.OldPrice = decimal.Parse(item.Value);
+                    data.OldPrice = decimal.Parse(item.Value, NumberStyles.Any, CultureInfo.InvariantCulture);
                 });
             }
 
@@ -924,7 +925,7 @@ public partial class ProductController : BaseAdminController
             return true;
         }
 
-        void setData(int productId, Action<BulkEditData> action)
+        void setData(long productId, Action<BulkEditData> action)
         {
             if (!rez.ContainsKey(productId))
                 rez.Add(productId, new BulkEditData(_taxSettings.DefaultTaxCategoryId, currentVendor?.Id ?? 0));
@@ -1010,7 +1011,7 @@ public partial class ProductController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_VIEW)]
-    public virtual async Task<IActionResult> BulkEditNewProduct(int id)
+    public virtual async Task<IActionResult> BulkEditNewProduct(long id)
     {
         var primaryStoreCurrencyCode = (await _currencyService.GetCurrencyByIdAsync(_currencySettings.PrimaryStoreCurrencyId)).CurrencyCode;
 
@@ -1159,7 +1160,7 @@ public partial class ProductController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_VIEW)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(id);
@@ -1179,7 +1180,7 @@ public partial class ProductController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> PreTranslate(int itemId)
+    public virtual async Task<IActionResult> PreTranslate(long itemId)
     {
         var translationModel = new TranslationModel();
 
@@ -1449,7 +1450,7 @@ public partial class ProductController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(id);
@@ -1474,7 +1475,7 @@ public partial class ProductController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> DeleteSelected(ICollection<int> selectedIds)
+    public virtual async Task<IActionResult> DeleteSelected(ICollection<long> selectedIds)
     {
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();
@@ -1529,7 +1530,7 @@ public partial class ProductController : BaseAdminController
     }
 
     //action displaying notification (warning) to a store owner that entered SKU already exists
-    public virtual async Task<IActionResult> SkuReservedWarning(int productId, string sku)
+    public virtual async Task<IActionResult> SkuReservedWarning(long productId, string sku)
     {
         string message;
 
@@ -1568,7 +1569,7 @@ public partial class ProductController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> FullDescriptionGeneratorPopup(int languageId, string productName)
+    public virtual async Task<IActionResult> FullDescriptionGeneratorPopup(long languageId, string productName)
     {
         var model = new ArtificialIntelligenceFullDescriptionModel
         {
@@ -1625,7 +1626,7 @@ public partial class ProductController : BaseAdminController
         if (string.IsNullOrWhiteSpace(productIds))
             return Json(new { Text = result });
 
-        var ids = new List<int>();
+        var ids = new List<long>();
         var rangeArray = productIds
             .Split(_separator, StringSplitOptions.RemoveEmptyEntries)
             .Select(x => x.Trim())
@@ -1633,7 +1634,7 @@ public partial class ProductController : BaseAdminController
 
         foreach (var str1 in rangeArray)
         {
-            if (int.TryParse(str1, out var tmp1))
+            if (long.TryParse(str1, out long tmp1))
                 ids.Add(tmp1);
         }
 
@@ -1715,7 +1716,7 @@ public partial class ProductController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> RelatedProductDelete(int id)
+    public virtual async Task<IActionResult> RelatedProductDelete(long id)
     {
         //try to get a related product with the specified id
         var relatedProduct = await _productService.GetRelatedProductByIdAsync(id)
@@ -1738,7 +1739,7 @@ public partial class ProductController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> RelatedProductAddPopup(int productId)
+    public virtual async Task<IActionResult> RelatedProductAddPopup(long productId)
     {
         //prepare model
         var model = await _productModelFactory.PrepareAddRelatedProductSearchModelAsync(new AddRelatedProductSearchModel());
@@ -1814,7 +1815,7 @@ public partial class ProductController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> CrossSellProductDelete(int id)
+    public virtual async Task<IActionResult> CrossSellProductDelete(long id)
     {
         //try to get a cross-sell product with the specified id
         var crossSellProduct = await _productService.GetCrossSellProductByIdAsync(id)
@@ -1835,7 +1836,7 @@ public partial class ProductController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> CrossSellProductAddPopup(int productId)
+    public virtual async Task<IActionResult> CrossSellProductAddPopup(long productId)
     {
         //prepare model
         var model = await _productModelFactory.PrepareAddCrossSellProductSearchModelAsync(new AddCrossSellProductSearchModel());
@@ -1910,7 +1911,7 @@ public partial class ProductController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.FILTER_LEVEL_VALUE_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> FilterLevelValueDelete(int productId, int id)
+    public virtual async Task<IActionResult> FilterLevelValueDelete(long productId, long id)
     {
         //try to get a filter level value mapping with the specified id
         var existingProductFilterLevelValues = await _filterLevelValueService.GetFilterLevelValueProductsByFilterLevelValueIdAsync(id);
@@ -1933,7 +1934,7 @@ public partial class ProductController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.FILTER_LEVEL_VALUE_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> FilterLevelValuesAddPopup(int productId)
+    public virtual async Task<IActionResult> FilterLevelValuesAddPopup(long productId)
     {
         //prepare model
         var model = await _filterLevelValueModelFactory.PrepareFilterLevelValueSearchModelAsync(new FilterLevelValueSearchModel());
@@ -2023,7 +2024,7 @@ public partial class ProductController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> AssociatedProductDelete(int id)
+    public virtual async Task<IActionResult> AssociatedProductDelete(long id)
     {
         //try to get an associated product with the specified id
         var product = await _productService.GetProductByIdAsync(id)
@@ -2041,7 +2042,7 @@ public partial class ProductController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> AssociatedProductAddPopup(int productId)
+    public virtual async Task<IActionResult> AssociatedProductAddPopup(long productId)
     {
         //prepare model
         var model = await _productModelFactory.PrepareAddAssociatedProductSearchModelAsync(new AddAssociatedProductSearchModel());
@@ -2114,7 +2115,7 @@ public partial class ProductController : BaseAdminController
     [HttpPost]
     [IgnoreAntiforgeryToken]
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ProductPictureAdd(int productId, IFormCollection form)
+    public virtual async Task<IActionResult> ProductPictureAdd(long productId, IFormCollection form)
     {
         if (productId == 0)
             throw new ArgumentException();
@@ -2229,7 +2230,7 @@ public partial class ProductController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ProductPictureDelete(int id)
+    public virtual async Task<IActionResult> ProductPictureDelete(long id)
     {
         //try to get a product picture with the specified id
         var productPicture = await _productService.GetProductPictureByIdAsync(id)
@@ -2262,7 +2263,7 @@ public partial class ProductController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ProductVideoAdd(int productId, [Validate] ProductVideoModel model)
+    public virtual async Task<IActionResult> ProductVideoAdd(long productId, [Validate] ProductVideoModel model)
     {
         if (productId == 0)
             throw new ArgumentException();
@@ -2395,7 +2396,7 @@ public partial class ProductController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ProductVideoDelete(int id)
+    public virtual async Task<IActionResult> ProductVideoDelete(long id)
     {
         //try to get a product video with the specified id
         var productVideo = await _productService.GetProductVideoByIdAsync(id)
@@ -2597,7 +2598,7 @@ public partial class ProductController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_VIEW)]
-    public virtual async Task<IActionResult> ProductSpecAttributeAddOrEdit(int productId, int? specificationId)
+    public virtual async Task<IActionResult> ProductSpecAttributeAddOrEdit(long productId, long? specificationId)
     {
         if (!specificationId.HasValue && !await _permissionService.AuthorizeAsync(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE))
             return AccessDeniedView();
@@ -2679,7 +2680,7 @@ public partial class ProductController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.PRODUCT_TAGS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ProductTagDelete(int id)
+    public virtual async Task<IActionResult> ProductTagDelete(long id)
     {
         //try to get a product tag with the specified id
         var tag = await _productTagService.GetProductTagByIdAsync(id)
@@ -2694,7 +2695,7 @@ public partial class ProductController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.PRODUCT_TAGS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ProductTagsDelete(ICollection<int> selectedIds)
+    public virtual async Task<IActionResult> ProductTagsDelete(ICollection<long> selectedIds)
     {
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();
@@ -2706,7 +2707,7 @@ public partial class ProductController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.PRODUCT_TAGS_VIEW)]
-    public virtual async Task<IActionResult> EditProductTag(int id)
+    public virtual async Task<IActionResult> EditProductTag(long id)
     {
         //try to get a product tag with the specified id
         var productTag = await _productTagService.GetProductTagByIdAsync(id);
@@ -2798,7 +2799,7 @@ public partial class ProductController : BaseAdminController
         if (currentVendor != null)
             model.SearchVendorId = currentVendor.Id;
 
-        var categoryIds = new List<int> { model.SearchCategoryId };
+        var categoryIds = new List<long> { model.SearchCategoryId };
         //include subcategories
         if (model.SearchIncludeSubCategories && model.SearchCategoryId > 0)
             categoryIds.AddRange(await _categoryService.GetChildCategoryIdsAsync(parentCategoryId: model.SearchCategoryId, showHidden: true));
@@ -2814,7 +2815,7 @@ public partial class ProductController : BaseAdminController
 
         var products = await _productService.SearchProductsAsync(0,
             categoryIds: categoryIds,
-            manufacturerIds: new List<int> { model.SearchManufacturerId },
+            manufacturerIds: new List<long> { model.SearchManufacturerId },
             storeId: model.SearchStoreId,
             vendorId: model.SearchVendorId,
             warehouseId: model.SearchWarehouseId,
@@ -2851,7 +2852,7 @@ public partial class ProductController : BaseAdminController
         if (currentVendor != null)
             model.SearchVendorId = currentVendor.Id;
 
-        var categoryIds = new List<int> { model.SearchCategoryId };
+        var categoryIds = new List<long> { model.SearchCategoryId };
         //include subcategories
         if (model.SearchIncludeSubCategories && model.SearchCategoryId > 0)
             categoryIds.AddRange(await _categoryService.GetChildCategoryIdsAsync(parentCategoryId: model.SearchCategoryId, showHidden: true));
@@ -2867,7 +2868,7 @@ public partial class ProductController : BaseAdminController
 
         var products = await _productService.SearchProductsAsync(0,
             categoryIds: categoryIds,
-            manufacturerIds: new List<int> { model.SearchManufacturerId },
+            manufacturerIds: new List<long> { model.SearchManufacturerId },
             storeId: model.SearchStoreId,
             vendorId: model.SearchVendorId,
             warehouseId: model.SearchWarehouseId,
@@ -2898,7 +2899,7 @@ public partial class ProductController : BaseAdminController
         {
             var ids = selectedIds
                 .Split(_separator, StringSplitOptions.RemoveEmptyEntries)
-                .Select(x => Convert.ToInt32(x))
+                .Select(x => Convert.ToInt64(x))
                 .ToArray();
             products.AddRange(await _productService.GetProductsByIdsAsync(ids));
         }
@@ -2929,7 +2930,7 @@ public partial class ProductController : BaseAdminController
         if (currentVendor != null)
             model.SearchVendorId = currentVendor.Id;
 
-        var categoryIds = new List<int> { model.SearchCategoryId };
+        var categoryIds = new List<long> { model.SearchCategoryId };
         //include subcategories
         if (model.SearchIncludeSubCategories && model.SearchCategoryId > 0)
             categoryIds.AddRange(await _categoryService.GetChildCategoryIdsAsync(parentCategoryId: model.SearchCategoryId, showHidden: true));
@@ -2945,7 +2946,7 @@ public partial class ProductController : BaseAdminController
 
         var products = await _productService.SearchProductsAsync(0,
             categoryIds: categoryIds,
-            manufacturerIds: new List<int> { model.SearchManufacturerId },
+            manufacturerIds: new List<long> { model.SearchManufacturerId },
             storeId: model.SearchStoreId,
             vendorId: model.SearchVendorId,
             warehouseId: model.SearchWarehouseId,
@@ -2977,7 +2978,7 @@ public partial class ProductController : BaseAdminController
         {
             var ids = selectedIds
                 .Split(_separator, StringSplitOptions.RemoveEmptyEntries)
-                .Select(x => Convert.ToInt32(x))
+                .Select(x => Convert.ToInt64(x))
                 .ToArray();
             products.AddRange(await _productService.GetProductsByIdsAsync(ids));
         }
@@ -3054,7 +3055,7 @@ public partial class ProductController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> TierPriceCreatePopup(int productId)
+    public virtual async Task<IActionResult> TierPriceCreatePopup(long productId)
     {
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(productId)
@@ -3102,7 +3103,7 @@ public partial class ProductController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_VIEW)]
-    public virtual async Task<IActionResult> TierPriceEditPopup(int id)
+    public virtual async Task<IActionResult> TierPriceEditPopup(long id)
     {
         //try to get a tier price with the specified id
         var tierPrice = await _productService.GetTierPriceByIdAsync(id);
@@ -3163,7 +3164,7 @@ public partial class ProductController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> TierPriceDelete(int id)
+    public virtual async Task<IActionResult> TierPriceDelete(long id)
     {
         //try to get a tier price with the specified id
         var tierPrice = await _productService.GetTierPriceByIdAsync(id)
@@ -3207,7 +3208,7 @@ public partial class ProductController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ProductAttributeMappingCreate(int productId)
+    public virtual async Task<IActionResult> ProductAttributeMappingCreate(long productId)
     {
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(productId)
@@ -3304,7 +3305,7 @@ public partial class ProductController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_VIEW)]
-    public virtual async Task<IActionResult> ProductAttributeMappingEdit(int id)
+    public virtual async Task<IActionResult> ProductAttributeMappingEdit(long id)
     {
         //try to get a product attribute mapping with the specified id
         var productAttributeMapping = await _productAttributeService.GetProductAttributeMappingByIdAsync(id)
@@ -3382,7 +3383,7 @@ public partial class ProductController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> PreTranslateProductAttribute(int itemId)
+    public virtual async Task<IActionResult> PreTranslateProductAttribute(long itemId)
     {
         var translationModel = new TranslationModel();
 
@@ -3405,7 +3406,7 @@ public partial class ProductController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ProductAttributeMappingDelete(int id)
+    public virtual async Task<IActionResult> ProductAttributeMappingDelete(long id)
     {
         //try to get a product attribute mapping with the specified id
         var productAttributeMapping = await _productAttributeService.GetProductAttributeMappingByIdAsync(id)
@@ -3473,7 +3474,7 @@ public partial class ProductController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ProductAttributeValueCreatePopup(int productAttributeMappingId)
+    public virtual async Task<IActionResult> ProductAttributeValueCreatePopup(long productAttributeMappingId)
     {
         //try to get a product attribute mapping with the specified id
         var productAttributeMapping = await _productAttributeService.GetProductAttributeMappingByIdAsync(productAttributeMappingId)
@@ -3556,7 +3557,7 @@ public partial class ProductController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_VIEW)]
-    public virtual async Task<IActionResult> ProductAttributeValueEditPopup(int id)
+    public virtual async Task<IActionResult> ProductAttributeValueEditPopup(long id)
     {
         //try to get a product attribute value with the specified id
         var productAttributeValue = await _productAttributeService.GetProductAttributeValueByIdAsync(id);
@@ -3650,7 +3651,7 @@ public partial class ProductController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ProductAttributeValueDelete(int id)
+    public virtual async Task<IActionResult> ProductAttributeValueDelete(long id)
     {
         //try to get a product attribute value with the specified id
         var productAttributeValue = await _productAttributeService.GetProductAttributeValueByIdAsync(id)
@@ -3735,7 +3736,7 @@ public partial class ProductController : BaseAdminController
     }
 
     //action displaying notification (warning) to a store owner when associating some product
-    public virtual async Task<IActionResult> AssociatedProductGetWarnings(int productId)
+    public virtual async Task<IActionResult> AssociatedProductGetWarnings(long productId)
     {
         var associatedProduct = await _productService.GetProductByIdAsync(productId);
         if (associatedProduct == null)
@@ -3786,7 +3787,7 @@ public partial class ProductController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ProductAttributeCombinationDelete(int id)
+    public virtual async Task<IActionResult> ProductAttributeCombinationDelete(long id)
     {
         //try to get a combination with the specified id
         var combination = await _productAttributeService.GetProductAttributeCombinationByIdAsync(id)
@@ -3807,7 +3808,7 @@ public partial class ProductController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ProductAttributeCombinationCreatePopup(int productId)
+    public virtual async Task<IActionResult> ProductAttributeCombinationCreatePopup(long productId)
     {
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(productId);
@@ -3827,7 +3828,7 @@ public partial class ProductController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ProductAttributeCombinationCreatePopup(int productId, ProductAttributeCombinationModel model, IFormCollection form)
+    public virtual async Task<IActionResult> ProductAttributeCombinationCreatePopup(long productId, ProductAttributeCombinationModel model, IFormCollection form)
     {
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(productId);
@@ -3886,7 +3887,7 @@ public partial class ProductController : BaseAdminController
 
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_VIEW)]
-    public virtual async Task<IActionResult> ProductAttributeCombinationGeneratePopup(int productId)
+    public virtual async Task<IActionResult> ProductAttributeCombinationGeneratePopup(long productId)
     {
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(productId);
@@ -3921,7 +3922,7 @@ public partial class ProductController : BaseAdminController
             return RedirectToAction("List", "Product");
 
         var allowedAttributeIds = form.Keys.Where(key => key.Contains("attribute_value_"))
-            .Select(key => int.TryParse(form[key], out var id) ? id : 0).Where(id => id > 0).ToList();
+            .Select(key => long.TryParse(form[key].ToString(), out long id) ? id : 0).Where(id => id > 0).ToList();
 
         var mappings = await _productAttributeService.GetProductAttributeMappingsByProductIdAsync(product.Id);
         var requiredMappings = mappings.Where(pam => pam.IsRequired && !pam.IsNonCombinable()).ToList();
@@ -3961,7 +3962,7 @@ public partial class ProductController : BaseAdminController
 
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_VIEW)]
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_VIEW)]
-    public virtual async Task<IActionResult> ProductAttributeCombinationEditPopup(int id)
+    public virtual async Task<IActionResult> ProductAttributeCombinationEditPopup(long id)
     {
         //try to get a combination with the specified id
         var combination = await _productAttributeService.GetProductAttributeCombinationByIdAsync(id);
@@ -4053,7 +4054,7 @@ public partial class ProductController : BaseAdminController
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_VIEW)]
-    public virtual async Task<IActionResult> GenerateAllAttributeCombinations(int productId)
+    public virtual async Task<IActionResult> GenerateAllAttributeCombinations(long productId)
     {
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(productId)
@@ -4124,7 +4125,7 @@ public partial class ProductController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> Product3dObjectSave(int productId, [Validate] Product3dObjectModel model)
+    public virtual async Task<IActionResult> Product3dObjectSave(long productId, [Validate] Product3dObjectModel model)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(productId);
 
@@ -4196,7 +4197,7 @@ public partial class ProductController : BaseAdminController
     //do not validate request token (XSRF)
     [IgnoreAntiforgeryToken]
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> Upload3dObject(int productId)
+    public virtual async Task<IActionResult> Upload3dObject(long productId)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(productId);
 
@@ -4247,10 +4248,10 @@ public partial class ProductController : BaseAdminController
     {
         protected bool _updated;
         protected bool _created;
-        protected int _defaultTaxCategoryId;
-        protected int _vendorId;
+        protected long _defaultTaxCategoryId;
+        protected long _vendorId;
 
-        public BulkEditData(int defaultTaxCategoryId, int vendorId)
+        public BulkEditData(long defaultTaxCategoryId, long vendorId)
         {
             _defaultTaxCategoryId = defaultTaxCategoryId;
             _vendorId = vendorId;

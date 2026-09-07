@@ -26,12 +26,12 @@ public partial class ProfileController : BasePublicController
         _profileModelFactory = profileModelFactory;
     }
 
-    public virtual async Task<IActionResult> Index(int? id, int? pageNumber)
+    public virtual async Task<IActionResult> Index(long? id, int? pageNumber)
     {
         if (!_customerSettings.AllowViewingProfiles)
             return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
 
-        var customerId = 0;
+        long customerId = 0;
         if (id.HasValue)
             customerId = id.Value;
 

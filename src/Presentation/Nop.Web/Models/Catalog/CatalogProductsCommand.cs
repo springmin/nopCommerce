@@ -17,12 +17,12 @@ public partial record CatalogProductsCommand : BasePageableModel
     /// <summary>
     /// Gets or sets the specification attribute option ids
     /// </summary>
-    public List<int> Specs { get; set; }
+    public List<long> Specs { get; set; }
 
     /// <summary>
     /// Gets or sets the manufacturer ids
     /// </summary>
-    public List<int> Ms { get; set; }
+    public List<long> Ms { get; set; }
 
     /// <summary>
     /// Gets or sets a order by

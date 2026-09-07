@@ -16,7 +16,7 @@ public record PollModel : BaseNopEntityModel, IStoreMappingSupportedModel
     {
         AvailableLanguages = new List<SelectListItem>();
         AvailableStores = new List<SelectListItem>();
-        SelectedStoreIds = new List<int>();
+        SelectedStoreIds = new List<long>();
         PollAnswerSearchModel = new PollAnswerSearchModel();
     }
 
@@ -25,7 +25,7 @@ public record PollModel : BaseNopEntityModel, IStoreMappingSupportedModel
     #region Properties
 
     [NopResourceDisplayName("Plugins.Misc.Polls.Fields.Language")]
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     public IList<SelectListItem> AvailableLanguages { get; set; }
 
@@ -59,7 +59,7 @@ public record PollModel : BaseNopEntityModel, IStoreMappingSupportedModel
     public DateTime? EndDateUtc { get; set; }
 
     [NopResourceDisplayName("Plugins.Misc.Polls.Fields.LimitedToStores")]
-    public IList<int> SelectedStoreIds { get; set; }
+    public IList<long> SelectedStoreIds { get; set; }
 
     public IList<SelectListItem> AvailableStores { get; set; }
 

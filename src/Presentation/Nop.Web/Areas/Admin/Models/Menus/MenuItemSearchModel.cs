@@ -9,7 +9,7 @@ public partial record MenuItemSearchModel : BaseSearchModel
 {
     #region Properties
 
-    public int MenuId { get; set; }
+    public long MenuId { get; set; }
 
     #endregion
 }

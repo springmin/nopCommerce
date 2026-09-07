@@ -10,7 +10,7 @@
 }
 @section left
 {
-    @await Component.InvokeAsync(typeof(CustomerNavigationViewComponent), new { selectedTabId = CustomerNavigationEnum.Addresses })
+    @await Component.InvokeAsync(typeof(CustomerNavigationViewComponent), new { selectedTabId = (long)CustomerNavigationEnum.Addresses })
 }
 <form asp-route="@NopRouteNames.Standard.CUSTOMER_ADDRESS_ADD" method="post">
     <div class="page account-page address-edit-page">

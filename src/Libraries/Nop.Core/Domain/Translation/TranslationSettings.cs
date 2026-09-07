@@ -15,12 +15,12 @@ public partial class TranslationSettings : ISettings
     /// <summary>
     /// Gets or sets a language to translate from
     /// </summary>
-    public int TranslateFromLanguageId { get; set; }
+    public long TranslateFromLanguageId { get; set; }
 
     /// <summary>
     /// Gets or sets a list of languages which is not allowed to pre-translate
     /// </summary>
-    public List<int> NotTranslateLanguages { get; set; } = new();
+    public List<long> NotTranslateLanguages { get; set; } = new();
 
     /// <summary>
     /// Gets or sets the Google Translate API key
@@ -35,5 +35,5 @@ public partial class TranslationSettings : ISettings
     /// <summary>
     /// Gets or sets a translation service type id
     /// </summary>
-    public int TranslationServiceId { get; set; }
+    public long TranslationServiceId { get; set; }
 }

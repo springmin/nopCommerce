@@ -68,7 +68,7 @@ public class OmnisendHelper
     /// </summary>
     /// <param name="product">Product</param>
     /// <param name="attributesXml">Product attributes on XML format</param>
-    public async Task<(string sku, int variantId)> GetSkuAndVariantIdAsync(Product product, string attributesXml)
+    public async Task<(string sku, long variantId)> GetSkuAndVariantIdAsync(Product product, string attributesXml)
     {
         var sku = product.Sku;
         var variantId = product.Id;

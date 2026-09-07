@@ -56,7 +56,7 @@ public partial class CurrencyService : ICurrencyService
     /// A task that represents the asynchronous operation
     /// The task result contains the currency
     /// </returns>
-    public virtual async Task<Currency> GetCurrencyByIdAsync(int currencyId)
+    public virtual async Task<Currency> GetCurrencyByIdAsync(long currencyId)
     {
         return await _currencyRepository.GetByIdAsync(currencyId, cache => default);
     }
@@ -87,7 +87,7 @@ public partial class CurrencyService : ICurrencyService
     /// A task that represents the asynchronous operation
     /// The task result contains the currencies
     /// </returns>
-    public virtual async Task<IList<Currency>> GetAllCurrenciesAsync(bool showHidden = false, int storeId = 0)
+    public virtual async Task<IList<Currency>> GetAllCurrenciesAsync(bool showHidden = false, long storeId = 0)
     {
         var currencies = await _currencyRepository.GetAllAsync(query =>
         {

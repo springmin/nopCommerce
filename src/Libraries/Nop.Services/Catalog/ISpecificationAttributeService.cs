@@ -18,7 +18,7 @@ public partial interface ISpecificationAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the specification attribute group
     /// </returns>
-    Task<SpecificationAttributeGroup> GetSpecificationAttributeGroupByIdAsync(int specificationAttributeGroupId);
+    Task<SpecificationAttributeGroup> GetSpecificationAttributeGroupByIdAsync(long specificationAttributeGroupId);
 
     /// <summary>
     /// Gets specification attribute groups
@@ -39,7 +39,7 @@ public partial interface ISpecificationAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the specification attribute groups
     /// </returns>
-    Task<IList<SpecificationAttributeGroup>> GetProductSpecificationAttributeGroupsAsync(int productId);
+    Task<IList<SpecificationAttributeGroup>> GetProductSpecificationAttributeGroupsAsync(long productId);
 
     /// <summary>
     /// Deletes a specification attribute group
@@ -85,7 +85,7 @@ public partial interface ISpecificationAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the specification attribute
     /// </returns>
-    Task<SpecificationAttribute> GetSpecificationAttributeByIdAsync(int specificationAttributeId);
+    Task<SpecificationAttribute> GetSpecificationAttributeByIdAsync(long specificationAttributeId);
 
     /// <summary>
     /// Gets specification attributes
@@ -95,7 +95,7 @@ public partial interface ISpecificationAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the specification attributes
     /// </returns>
-    Task<IList<SpecificationAttribute>> GetSpecificationAttributeByIdsAsync(int[] specificationAttributeIds);
+    Task<IList<SpecificationAttribute>> GetSpecificationAttributeByIdsAsync(long[] specificationAttributeIds);
 
     /// <summary>
     /// Gets specification attributes by group identifier
@@ -108,7 +108,7 @@ public partial interface ISpecificationAttributeService
     /// The task result contains the specification attributes
     /// </returns>
     Task<IPagedList<SpecificationAttribute>> GetSpecificationAttributesByGroupIdAsync(
-        int? groupId,
+        long? groupId,
         int pageIndex = 0,
         int pageSize = int.MaxValue);
 
@@ -176,7 +176,7 @@ public partial interface ISpecificationAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the specification attribute option
     /// </returns>
-    Task<SpecificationAttributeOption> GetSpecificationAttributeOptionByIdAsync(int specificationAttributeOption);
+    Task<SpecificationAttributeOption> GetSpecificationAttributeOptionByIdAsync(long specificationAttributeOption);
 
     /// <summary>
     /// Get specification attribute options by identifiers
@@ -186,7 +186,7 @@ public partial interface ISpecificationAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the specification attribute options
     /// </returns>
-    Task<IList<SpecificationAttributeOption>> GetSpecificationAttributeOptionsByIdsAsync(int[] specificationAttributeOptionIds);
+    Task<IList<SpecificationAttributeOption>> GetSpecificationAttributeOptionsByIdsAsync(long[] specificationAttributeOptionIds);
 
     /// <summary>
     /// Gets a specification attribute option by specification attribute id
@@ -196,7 +196,7 @@ public partial interface ISpecificationAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the specification attribute option
     /// </returns>
-    Task<IList<SpecificationAttributeOption>> GetSpecificationAttributeOptionsBySpecificationAttributeAsync(int specificationAttributeId);
+    Task<IList<SpecificationAttributeOption>> GetSpecificationAttributeOptionsBySpecificationAttributeAsync(long specificationAttributeId);
 
     /// <summary>
     /// Deletes a specification attribute option
@@ -227,7 +227,7 @@ public partial interface ISpecificationAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of IDs not existing specification attribute options
     /// </returns>
-    Task<int[]> GetNotExistingSpecificationAttributeOptionsAsync(int[] attributeOptionIds);
+    Task<long[]> GetNotExistingSpecificationAttributeOptionsAsync(long[] attributeOptionIds);
 
     /// <summary>
     /// Gets the filtrable specification attribute options by category id
@@ -237,7 +237,7 @@ public partial interface ISpecificationAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the specification attribute options
     /// </returns>
-    Task<IList<SpecificationAttributeOption>> GetFiltrableSpecificationAttributeOptionsByCategoryIdAsync(int categoryId);
+    Task<IList<SpecificationAttributeOption>> GetFiltrableSpecificationAttributeOptionsByCategoryIdAsync(long categoryId);
 
     /// <summary>
     /// Gets the filtrable specification attribute options by manufacturer id
@@ -247,7 +247,7 @@ public partial interface ISpecificationAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the specification attribute options
     /// </returns>
-    Task<IList<SpecificationAttributeOption>> GetFiltrableSpecificationAttributeOptionsByManufacturerIdAsync(int manufacturerId);
+    Task<IList<SpecificationAttributeOption>> GetFiltrableSpecificationAttributeOptionsByManufacturerIdAsync(long manufacturerId);
 
     #endregion
 
@@ -272,8 +272,8 @@ public partial interface ISpecificationAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the product specification attribute mapping collection
     /// </returns>
-    Task<IList<ProductSpecificationAttribute>> GetProductSpecificationAttributesAsync(int productId = 0,
-        int specificationAttributeOptionId = 0, bool? allowFiltering = null, bool? showOnProductPage = null, int? specificationAttributeGroupId = 0);
+    Task<IList<ProductSpecificationAttribute>> GetProductSpecificationAttributesAsync(long productId = 0,
+        long specificationAttributeOptionId = 0, bool? allowFiltering = null, bool? showOnProductPage = null, long? specificationAttributeGroupId = 0);
 
     /// <summary>
     /// Gets a product specification attribute mapping 
@@ -283,7 +283,7 @@ public partial interface ISpecificationAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the product specification attribute mapping
     /// </returns>
-    Task<ProductSpecificationAttribute> GetProductSpecificationAttributeByIdAsync(int productSpecificationAttributeId);
+    Task<ProductSpecificationAttribute> GetProductSpecificationAttributeByIdAsync(long productSpecificationAttributeId);
 
     /// <summary>
     /// Inserts a product specification attribute mapping
@@ -308,7 +308,7 @@ public partial interface ISpecificationAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the count
     /// </returns>
-    Task<int> GetProductSpecificationAttributeCountAsync(int productId = 0, int specificationAttributeOptionId = 0);
+    Task<int> GetProductSpecificationAttributeCountAsync(long productId = 0, long specificationAttributeOptionId = 0);
 
     /// <summary>
     /// Get mapped products for specification attribute
@@ -320,7 +320,7 @@ public partial interface ISpecificationAttributeService
     /// A task that represents the asynchronous operation
     /// The task result contains the products
     /// </returns>
-    Task<IPagedList<Product>> GetProductsBySpecificationAttributeIdAsync(int specificationAttributeId, int pageIndex, int pageSize);
+    Task<IPagedList<Product>> GetProductsBySpecificationAttributeIdAsync(long specificationAttributeId, int pageIndex, int pageSize);
 
     #endregion
 }

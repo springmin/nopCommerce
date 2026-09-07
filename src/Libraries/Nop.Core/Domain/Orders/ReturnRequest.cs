@@ -13,17 +13,17 @@ public partial class ReturnRequest : BaseEntity
     /// <summary>
     /// Gets or sets the store identifier
     /// </summary>
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 
     /// <summary>
     /// Gets or sets the order item identifier
     /// </summary>
-    public int OrderItemId { get; set; }
+    public long OrderItemId { get; set; }
 
     /// <summary>
     /// Gets or sets the customer identifier
     /// </summary>
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     /// <summary>
     /// Gets or sets the quantity
@@ -53,7 +53,7 @@ public partial class ReturnRequest : BaseEntity
     /// <summary>
     /// Gets or sets identifier of the file (Download) uploaded by the customer
     /// </summary>
-    public int UploadedFileId { get; set; }
+    public long UploadedFileId { get; set; }
 
     /// <summary>
     /// Gets or sets the staff notes
@@ -63,7 +63,7 @@ public partial class ReturnRequest : BaseEntity
     /// <summary>
     /// Gets or sets the return status identifier
     /// </summary>
-    public int ReturnRequestStatusId { get; set; }
+    public long ReturnRequestStatusId { get; set; }
 
     /// <summary>
     /// Gets or sets the date and time of entity creation

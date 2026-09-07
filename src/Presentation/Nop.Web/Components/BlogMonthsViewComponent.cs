@@ -16,7 +16,7 @@ public partial class BlogMonthsViewComponent : NopViewComponent
         _blogModelFactory = blogModelFactory;
     }
 
-    public async Task<IViewComponentResult> InvokeAsync(int currentCategoryId, int currentProductId)
+    public async Task<IViewComponentResult> InvokeAsync(long currentCategoryId, long currentProductId)
     {
         if (!_blogSettings.Enabled)
             return Content("");

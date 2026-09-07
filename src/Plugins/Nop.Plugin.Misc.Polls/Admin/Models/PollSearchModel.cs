@@ -21,7 +21,7 @@ public record PollSearchModel : BaseSearchModel
     #region Properties
 
     [NopResourceDisplayName("Plugins.Misc.Polls.List.SearchStore")]
-    public int SearchStoreId { get; set; }
+    public long SearchStoreId { get; set; }
 
     public IList<SelectListItem> AvailableStores { get; set; }
 

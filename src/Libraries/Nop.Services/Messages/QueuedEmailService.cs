@@ -74,7 +74,7 @@ public partial class QueuedEmailService : IQueuedEmailService
     /// A task that represents the asynchronous operation
     /// The task result contains the queued email
     /// </returns>
-    public virtual async Task<QueuedEmail> GetQueuedEmailByIdAsync(int queuedEmailId)
+    public virtual async Task<QueuedEmail> GetQueuedEmailByIdAsync(long queuedEmailId)
     {
         return await _queuedEmailRepository.GetByIdAsync(queuedEmailId, cache => default, useShortTermCache: true);
     }
@@ -87,7 +87,7 @@ public partial class QueuedEmailService : IQueuedEmailService
     /// A task that represents the asynchronous operation
     /// The task result contains the queued emails
     /// </returns>
-    public virtual async Task<IList<QueuedEmail>> GetQueuedEmailsByIdsAsync(int[] queuedEmailIds)
+    public virtual async Task<IList<QueuedEmail>> GetQueuedEmailsByIdsAsync(long[] queuedEmailIds)
     {
         return await _queuedEmailRepository.GetByIdsAsync(queuedEmailIds);
     }

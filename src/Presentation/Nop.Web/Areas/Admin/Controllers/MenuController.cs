@@ -55,7 +55,7 @@ public partial class MenuController : BaseAdminController
 
     #region Utilities
 
-    protected virtual void DefinePopupViewBagData(int entityId, string entityInfo)
+    protected virtual void DefinePopupViewBagData(long entityId, string entityInfo)
     {
         ViewBag.RefreshPage = true;
         ViewBag.entityId = entityId;
@@ -202,7 +202,7 @@ public partial class MenuController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.ContentManagement.MENU_VIEW)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         var menu = await _menuService.GetMenuByIdAsync(id);
         if (menu == null)
@@ -253,7 +253,7 @@ public partial class MenuController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.ContentManagement.MENU_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         var menu = await _menuService.GetMenuByIdAsync(id);
         if (menu is null)
@@ -275,7 +275,7 @@ public partial class MenuController : BaseAdminController
     #region Menu items
 
     [CheckPermission(StandardPermission.ContentManagement.MENU_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> MenuItemCreate(int menuId)
+    public virtual async Task<IActionResult> MenuItemCreate(long menuId)
     {
         var menu = await _menuService.GetMenuByIdAsync(menuId);
         if (menu == null)
@@ -319,7 +319,7 @@ public partial class MenuController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.ContentManagement.MENU_VIEW)]
-    public virtual async Task<IActionResult> MenuItemEdit(int id)
+    public virtual async Task<IActionResult> MenuItemEdit(long id)
     {
         var menuItem = await _menuService.GetMenuItemByIdAsync(id);
         if (menuItem == null)
@@ -372,7 +372,7 @@ public partial class MenuController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.ContentManagement.MENU_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> MenuItemDelete(int id)
+    public virtual async Task<IActionResult> MenuItemDelete(long id)
     {
         var menuItem = await _menuService.GetMenuItemByIdAsync(id);
         if (menuItem is null)
@@ -396,7 +396,7 @@ public partial class MenuController : BaseAdminController
     #region Products
 
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_VIEW)]
-    public virtual async Task<IActionResult> MenuItemSelectProductPopup(int menuItemId)
+    public virtual async Task<IActionResult> MenuItemSelectProductPopup(long menuItemId)
     {
         //prepare model
         var model = await _menuModelFactory.PrepareMenuItemSelectProductSearchModelAsync(new SelectMenuItemProductSearchModel());

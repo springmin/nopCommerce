@@ -21,7 +21,7 @@ public partial record CustomerSettingsModel : BaseNopModel, ISettingsModel
 
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.CustomerUser.UsernamesEnabled")]
     public bool UsernamesEnabled { get; set; }
@@ -205,7 +205,7 @@ public partial record CustomerSettingsModel : BaseNopModel, ISettingsModel
     public bool CountryRequired { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.CustomerUser.DefaultCountry")]
-    public int? DefaultCountryId { get; set; }
+    public long? DefaultCountryId { get; set; }
     public IList<SelectListItem> AvailableCountries { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.CustomerUser.StateProvinceEnabled")]

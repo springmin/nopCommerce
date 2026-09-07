@@ -125,7 +125,7 @@ public partial class CustomerAttributeModelFactory : ICustomerAttributeModelFact
     public virtual async Task<CustomerAttributeModel> PrepareCustomerAttributeModelAsync(CustomerAttributeModel model,
         CustomerAttribute customerAttribute, bool excludeProperties = false)
     {
-        Func<CustomerAttributeLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<CustomerAttributeLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (customerAttribute != null)
         {
@@ -195,7 +195,7 @@ public partial class CustomerAttributeModelFactory : ICustomerAttributeModelFact
     {
         ArgumentNullException.ThrowIfNull(customerAttribute);
 
-        Func<CustomerAttributeValueLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<CustomerAttributeValueLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (customerAttributeValue != null)
         {

@@ -33,22 +33,22 @@ public partial record NeverSoldReportSearchModel : BaseSearchModel
     public DateTime? EndDate { get; set; }
 
     [NopResourceDisplayName("Admin.Reports.Sales.NeverSold.SearchCategory")]
-    public int SearchCategoryId { get; set; }
+    public long SearchCategoryId { get; set; }
 
     public IList<SelectListItem> AvailableCategories { get; set; }
 
     [NopResourceDisplayName("Admin.Reports.Sales.NeverSold.SearchManufacturer")]
-    public int SearchManufacturerId { get; set; }
+    public long SearchManufacturerId { get; set; }
 
     public IList<SelectListItem> AvailableManufacturers { get; set; }
 
     [NopResourceDisplayName("Admin.Reports.Sales.NeverSold.SearchStore")]
-    public int SearchStoreId { get; set; }
+    public long SearchStoreId { get; set; }
 
     public IList<SelectListItem> AvailableStores { get; set; }
 
     [NopResourceDisplayName("Admin.Reports.Sales.NeverSold.SearchVendor")]
-    public int SearchVendorId { get; set; }
+    public long SearchVendorId { get; set; }
 
     public IList<SelectListItem> AvailableVendors { get; set; }
 

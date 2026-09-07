@@ -14,7 +14,7 @@ public partial record ShippingMethodRestrictionModel : BaseNopModel
     {
         AvailableShippingMethods = new List<ShippingMethodModel>();
         AvailableCountries = new List<CountryModel>();
-        Restricted = new Dictionary<int, IDictionary<int, bool>>();
+        Restricted = new Dictionary<long, IDictionary<long, bool>>();
     }
 
     #endregion
@@ -26,7 +26,7 @@ public partial record ShippingMethodRestrictionModel : BaseNopModel
     public IList<CountryModel> AvailableCountries { get; set; }
 
     //[country id] / [shipping method id] / [restricted]
-    public IDictionary<int, IDictionary<int, bool>> Restricted { get; set; }
+    public IDictionary<long, IDictionary<long, bool>> Restricted { get; set; }
 
     #endregion
 }

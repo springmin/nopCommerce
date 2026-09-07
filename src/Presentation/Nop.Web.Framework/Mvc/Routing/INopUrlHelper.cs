@@ -23,7 +23,7 @@ public partial interface INopUrlHelper
     /// The task result contains the generated URL
     /// </returns>
     Task<string> RouteGenericUrlAsync<TEntity>(TEntity entity,
-        string protocol = null, string host = null, string fragment = null, int? languageId = null, bool ensureTwoPublishedLanguages = true)
+        string protocol = null, string host = null, string fragment = null, long? languageId = null, bool ensureTwoPublishedLanguages = true)
         where TEntity : BaseEntity, ISlugSupported;
 
     /// <summary>

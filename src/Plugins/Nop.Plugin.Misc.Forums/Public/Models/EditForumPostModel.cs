@@ -7,7 +7,7 @@ public record EditForumPostModel : BaseNopEntityModel
 {
     #region Properties
 
-    public int ForumTopicId { get; set; }
+    public long ForumTopicId { get; set; }
 
     public bool IsEdit { get; set; }
 

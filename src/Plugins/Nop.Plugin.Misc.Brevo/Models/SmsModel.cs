@@ -22,7 +22,7 @@ public record SmsModel : BaseNopEntityModel
     #region Properties
 
     [NopResourceDisplayName("Admin.ContentManagement.MessageTemplates.Fields.Name")]
-    public int MessageId { get; set; }
+    public long MessageId { get; set; }
 
     public IList<SelectListItem> AvailableMessages { get; set; }
 
@@ -31,7 +31,7 @@ public record SmsModel : BaseNopEntityModel
     public string Name { get; set; }
 
     [NopResourceDisplayName("Plugins.Misc.Brevo.PhoneType")]
-    public int PhoneTypeId { get; set; }
+    public long PhoneTypeId { get; set; }
 
     public IList<SelectListItem> AvailablePhoneTypes { get; set; }
 

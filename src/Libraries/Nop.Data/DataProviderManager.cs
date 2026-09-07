@@ -24,6 +24,11 @@ public partial class DataProviderManager : IDataProviderManager
             DataProviderType.SqlServer => new MsSqlNopDataProvider(),
             DataProviderType.MySql => new MySqlNopDataProvider(),
             DataProviderType.PostgreSQL => new PostgreSqlDataProvider(),
+            DataProviderType.Sqlite => new SqliteNopDataProvider(),
+            DataProviderType.Tidb => new MySqlNopDataProvider(),
+            DataProviderType.Oracle => new OracleNopDataProvider(),
+            DataProviderType.OpenGauss => new PostgreSqlDataProvider(),
+            DataProviderType.GaussDB => new PostgreSqlDataProvider(),
             _ => throw new NopException($"Not supported data provider name: '{dataProviderType}'"),
         };
     }

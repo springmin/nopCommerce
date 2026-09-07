@@ -50,14 +50,14 @@ public partial class MenuService : IMenuService
     /// An enumerable containing the sorted menu items
     /// </returns>
     protected virtual IEnumerable<MenuItem> SortMenuItemsForTree(
-        ILookup<int, MenuItem> menuItemsByParentId,
-        int parentId = 0,
+        ILookup<long, MenuItem> menuItemsByParentId,
+        long parentId = 0,
         bool ignoreMenuItemWithoutExistingParent = false)
     {
         ArgumentNullException.ThrowIfNull(menuItemsByParentId);
 
         var remaining = parentId > 0
-            ? new HashSet<int>(0)
+            ? new HashSet<long>(0)
             : menuItemsByParentId.Select(g => g.Key).ToHashSet();
         remaining.Remove(parentId);
 
@@ -118,7 +118,7 @@ public partial class MenuService : IMenuService
     /// </returns>
     public virtual async Task<IPagedList<Menu>> GetAllMenusAsync(
         MenuType? menuType = null,
-        int storeId = 0,
+        long storeId = 0,
         bool showHidden = false,
         int pageIndex = 0,
         int pageSize = int.MaxValue)
@@ -159,7 +159,7 @@ public partial class MenuService : IMenuService
     /// A task that represents the asynchronous operation
     /// The task result contains a menu
     /// </returns>
-    public virtual Task<Menu> GetMenuByIdAsync(int menuId)
+    public virtual Task<Menu> GetMenuByIdAsync(long menuId)
     {
         return _menuRepository.GetByIdAsync(menuId, cache => default, includeDeleted: false);
     }
@@ -201,7 +201,7 @@ public partial class MenuService : IMenuService
         await deleteChildrenRecursive(menuItem.Id);
         await _menuItemRepository.DeleteAsync(menuItem);
 
-        async Task deleteChildrenRecursive(int parentId)
+        async Task deleteChildrenRecursive(long parentId)
         {
             var children = await GetAllMenuItemsAsync(parentMenuItemId: parentId, showHidden: true);
 
@@ -221,7 +221,7 @@ public partial class MenuService : IMenuService
     /// A task that represents the asynchronous operation
     /// The task result contains a menu item
     /// </returns>
-    public virtual Task<MenuItem> GetMenuItemByIdAsync(int menuItemId)
+    public virtual Task<MenuItem> GetMenuItemByIdAsync(long menuItemId)
     {
         return _menuItemRepository.GetByIdAsync(menuItemId, cache => default);
     }
@@ -277,9 +277,9 @@ public partial class MenuService : IMenuService
     /// The task result contains menu items
     /// </returns>
     public virtual async Task<IPagedList<MenuItem>> GetAllMenuItemsAsync(
-        int menuId = 0,
-        int parentMenuItemId = 0,
-        int storeId = 0,
+        long menuId = 0,
+        long parentMenuItemId = 0,
+        long storeId = 0,
         int depth = 0,
         bool treeSorting = false,
         bool showHidden = false,
@@ -332,7 +332,7 @@ public partial class MenuService : IMenuService
     /// <returns>
     /// Menu items limited in depth
     /// </returns>
-    public virtual IEnumerable<MenuItem> FilterMenuItemsByDepth(IEnumerable<MenuItem> menuItems, int parentId = 0, int depthLimit = 1)
+    public virtual IEnumerable<MenuItem> FilterMenuItemsByDepth(IEnumerable<MenuItem> menuItems, long parentId = 0, int depthLimit = 1)
     {
         ArgumentNullException.ThrowIfNull(menuItems);
 

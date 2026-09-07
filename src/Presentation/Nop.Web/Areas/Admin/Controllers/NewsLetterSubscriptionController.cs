@@ -131,7 +131,7 @@ public partial class NewsLetterSubscriptionController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Promotions.SUBSCRIBERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         var subscription = await _newsLetterSubscriptionService.GetNewsLetterSubscriptionByIdAsync(id);
         if (subscription == null)
@@ -189,7 +189,7 @@ public partial class NewsLetterSubscriptionController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Promotions.SUBSCRIBERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         var subscription = await _newsLetterSubscriptionService.GetNewsLetterSubscriptionByIdAsync(id);
         if (subscription == null)

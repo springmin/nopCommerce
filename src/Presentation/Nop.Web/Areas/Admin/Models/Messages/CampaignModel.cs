@@ -35,15 +35,15 @@ public partial record CampaignModel : BaseNopEntityModel
     public string Body { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.Campaigns.Fields.Store")]
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
     public IList<SelectListItem> AvailableStores { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.Campaigns.Fields.CustomerRole")]
-    public int CustomerRoleId { get; set; }
+    public long CustomerRoleId { get; set; }
     public IList<SelectListItem> AvailableCustomerRoles { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.Campaigns.Fields.NewsLetterSubscriptionType")]
-    public int NewsLetterSubscriptionTypeId { get; set; }
+    public long NewsLetterSubscriptionTypeId { get; set; }
     public IList<SelectListItem> AvailableNewsLetterSubscriptionTypes { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.Campaigns.Fields.CreatedOn")]
@@ -57,7 +57,7 @@ public partial record CampaignModel : BaseNopEntityModel
     public string AllowedTokens { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.Campaigns.Fields.EmailAccount")]
-    public int EmailAccountId { get; set; }
+    public long EmailAccountId { get; set; }
     public IList<SelectListItem> AvailableEmailAccounts { get; set; }
 
     [DataType(DataType.EmailAddress)]

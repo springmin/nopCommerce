@@ -8,7 +8,7 @@ public partial class QueuedEmail : BaseEntity
     /// <summary>
     /// Gets or sets the priority
     /// </summary>
-    public int PriorityId { get; set; }
+    public long PriorityId { get; set; }
 
     /// <summary>
     /// Gets or sets the From property (email address)
@@ -73,7 +73,7 @@ public partial class QueuedEmail : BaseEntity
     /// <summary>
     /// Gets or sets the download identifier of attached file
     /// </summary>
-    public int AttachedDownloadId { get; set; }
+    public long AttachedDownloadId { get; set; }
 
     /// <summary>
     /// Gets or sets the date and time of item creation in UTC
@@ -98,7 +98,7 @@ public partial class QueuedEmail : BaseEntity
     /// <summary>
     /// Gets or sets the used email account identifier
     /// </summary>
-    public int EmailAccountId { get; set; }
+    public long EmailAccountId { get; set; }
 
     /// <summary>
     /// Gets or sets the priority

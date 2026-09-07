@@ -72,7 +72,8 @@ public partial class MigrationManager : IMigrationManager
                 if (isApplied == !_versionLoader.Value.VersionInfo.HasAppliedMigration(migrationAttribute.Version))
                     return false;
 
-                if (exactlyProcessType && migrationProcessType != migrationAttribute.TargetMigrationProcess)
+                if (exactlyProcessType && migrationProcessType != migrationAttribute.TargetMigrationProcess
+                    && migrationAttribute.TargetMigrationProcess != MigrationProcessType.NoMatter)
                     return false;
 
                 if (migrationAttribute.TargetMigrationProcess != MigrationProcessType.NoMatter &&

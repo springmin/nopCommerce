@@ -12,7 +12,7 @@ public record ForumModel : BaseNopEntityModel
     #region Properties
 
     [NopResourceDisplayName("Plugins.Misc.Forums.Forum.Fields.ForumGroupId")]
-    public int ForumGroupId { get; set; }
+    public long ForumGroupId { get; set; }
 
     [NopResourceDisplayName("Plugins.Misc.Forums.Forum.Fields.Name")]
     public string Name { get; set; }

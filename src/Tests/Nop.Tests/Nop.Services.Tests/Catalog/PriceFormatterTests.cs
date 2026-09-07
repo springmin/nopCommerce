@@ -17,7 +17,7 @@ public class PriceFormatterTests : ServiceTest
     private IPriceFormatter _priceFormatter;
     private ISettingService _settingService;
 
-    private int _enLangId;
+    private long _enLangId;
     private Currency _euro;
     private Currency _dollar;
     private Currency _pound;

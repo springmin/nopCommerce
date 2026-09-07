@@ -352,7 +352,7 @@ public partial class CustomerSettings : ISettings
     /// <summary>
     /// Gets or sets a Default Country
     /// </summary>
-    public int? DefaultCountryId { get; set; }
+    public long? DefaultCountryId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether 'State / province' is enabled

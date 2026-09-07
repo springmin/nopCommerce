@@ -9,7 +9,7 @@ namespace Nop.Web.Areas.Admin.Models.Settings;
 /// </summary>
 public partial record PrivateMessageSettingsModel : BaseNopModel, ISettingsModel
 {
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.CustomerUser.AllowPrivateMessages")]
     public bool AllowPrivateMessages { get; set; }

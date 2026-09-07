@@ -143,16 +143,16 @@ public partial class CopyProductService : ICopyProductService
     /// <param name="productCopy">New product</param>
     /// <param name="originalNewPictureIdentifiers">Identifiers of pictures</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    protected virtual async Task CopyAttributesMappingAsync(Product product, Product productCopy, Dictionary<int, int> originalNewPictureIdentifiers)
+    protected virtual async Task CopyAttributesMappingAsync(Product product, Product productCopy, Dictionary<long, long> originalNewPictureIdentifiers)
     {
-        var associatedAttributes = new Dictionary<int, int>();
-        var associatedAttributeValues = new Dictionary<int, int>();
+        var associatedAttributes = new Dictionary<long, long>();
+        var associatedAttributeValues = new Dictionary<long, long>();
 
         //attribute mapping with condition attributes
         var oldCopyWithConditionAttributes = new List<ProductAttributeMapping>();
 
         //all product attribute mapping copies
-        var productAttributeMappingCopies = new Dictionary<int, ProductAttributeMapping>();
+        var productAttributeMappingCopies = new Dictionary<long, ProductAttributeMapping>();
 
         var languages = await _languageService.GetAllLanguagesAsync(true);
 
@@ -527,10 +527,10 @@ public partial class CopyProductService : ICopyProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the identifiers of old and new pictures
     /// </returns>
-    protected virtual async Task<Dictionary<int, int>> CopyProductPicturesAsync(Product product, string newName, bool copyMultimedia, Product productCopy)
+    protected virtual async Task<Dictionary<long, long>> CopyProductPicturesAsync(Product product, string newName, bool copyMultimedia, Product productCopy)
     {
         //variable to store original and new picture identifiers
-        var originalNewPictureIdentifiers = new Dictionary<int, int>();
+        var originalNewPictureIdentifiers = new Dictionary<long, long>();
         if (!copyMultimedia)
             return originalNewPictureIdentifiers;
 

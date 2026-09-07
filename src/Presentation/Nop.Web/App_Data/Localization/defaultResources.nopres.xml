@@ -9788,18 +9788,6 @@
   <LocaleResource Name="Admin.Configuration.Settings.ShoppingCart.ShowProductImagesOnWishList.Hint">
     <Value>Determines whether product images should be displayed in customer wishlists.</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.ShoppingCart.VendorEnabled">
-    <Value>Vendor filtering</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.ShoppingCart.VendorEnabled.Hint">
-    <Value>Check to allow customers to filter shopping cart items by a specific vendor in the cart. It could be useful when you have multi-vendor configured in your store.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.ShoppingCart.VendorRequired">
-    <Value>Vendor required</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.ShoppingCart.VendorRequired.Hint">
-    <Value>Check if customers are required to choose a vendor before starting the checkout process.</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.StoreScope">
     <Value>Multi-store configuration for</Value>
   </LocaleResource>
@@ -10788,7 +10776,13 @@
   </LocaleResource>
   <LocaleResource Name="Admin.ConfigurationSteps.PaymentMethods.Configure.Title">
     <Value>Configure a payment method</Value>
-  </LocaleResource>  
+  </LocaleResource>
+  <LocaleResource Name="Admin.ConfigurationSteps.PaymentMethods.Manual.Text">
+    <Value><![CDATA[This is a special payment plugin that allows all orders to be successfully entered on the website, but it does NOT really charge a customer or make any calls to any live payment gateway. This payment method is recommended if you want to perform one of the following: <ul><li>Process all orders offline</li><li>Process them manually via another back-office system</li><li>Test the site end-to-end before going live</li></ul>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.ConfigurationSteps.PaymentMethods.Manual.Title">
+    <Value>Credit card (manual)</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.ConfigurationSteps.PaymentMethods.PayPalCommerce.Configure.Text">
     <Value>Now we’ll configure the PayPal Commerce payment method.</Value>
   </LocaleResource>
@@ -18427,9 +18421,6 @@
   <LocaleResource Name="Enums.Nop.Core.Domain.Orders.ShoppingCartType.ShoppingCart">
     <Value>Shopping cart</Value>
   </LocaleResource>
-  <LocaleResource Name="Enums.Nop.Core.Domain.Orders.ShoppingCartType.Stash">
-    <Value>Stash</Value>
-  </LocaleResource>
   <LocaleResource Name="Enums.Nop.Core.Domain.Orders.ShoppingCartType.Wishlist">
     <Value>Wishlist</Value>
   </LocaleResource>
@@ -20818,9 +20809,6 @@
   <LocaleResource Name="ShoppingCart.SelectAttribute">
     <Value>Please select {0}</Value>
   </LocaleResource>
-  <LocaleResource Name="ShoppingCart.SelectVendorToCheckout">
-    <Value>Please select a vendor before proceeding to checkout</Value>
-  </LocaleResource>
   <LocaleResource Name="ShoppingCart.SenderEmailError">
     <Value>Enter valid sender email</Value>
   </LocaleResource>
@@ -20898,12 +20886,6 @@
   </LocaleResource>
   <LocaleResource Name="ShoppingCart.UpdateCart">
     <Value>Update shopping cart</Value>
-  </LocaleResource>
-  <LocaleResource Name="ShoppingCart.VendorList">
-    <Value>Vendor</Value>
-  </LocaleResource>
-  <LocaleResource Name="ShoppingCart.VendorList.All">
-    <Value>All</Value>
   </LocaleResource>
   <LocaleResource Name="ShoppingCart.VendorName">
     <Value>Vendor name</Value>

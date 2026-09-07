@@ -39,7 +39,7 @@ public partial class PickupPluginManager : PluginManager<IPickupPointProvider>, 
     /// A task that represents the asynchronous operation
     /// The task result contains the list of active pickup point providers
     /// </returns>
-    public virtual async Task<IList<IPickupPointProvider>> LoadActivePluginsAsync(Customer customer = null, int storeId = 0, string systemName = null)
+    public virtual async Task<IList<IPickupPointProvider>> LoadActivePluginsAsync(Customer customer = null, long storeId = 0, string systemName = null)
     {
         var pickupPointProviders = await LoadActivePluginsAsync(_shippingSettings.ActivePickupPointProviderSystemNames, customer, storeId);
 
@@ -74,7 +74,7 @@ public partial class PickupPluginManager : PluginManager<IPickupPointProvider>, 
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public virtual async Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, int storeId = 0)
+    public virtual async Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, long storeId = 0)
     {
         var pickupPointProvider = await LoadPluginBySystemNameAsync(systemName, customer, storeId);
         return IsPluginActive(pickupPointProvider);

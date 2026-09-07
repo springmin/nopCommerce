@@ -14,7 +14,7 @@ public partial record CustomerBackInStockSubscriptionModel : BaseNopEntityModel
     public string StoreName { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.Customers.BackInStockSubscriptions.Product")]
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.Customers.BackInStockSubscriptions.Product")]
     public string ProductName { get; set; }

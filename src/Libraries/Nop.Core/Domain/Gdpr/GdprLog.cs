@@ -8,12 +8,12 @@ public partial class GdprLog : BaseEntity
     /// <summary>
     /// Gets or sets the customer identifier
     /// </summary>
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     /// <summary>
     /// Gets or sets the consent identifier (0 if not related to any consent)
     /// </summary>
-    public int ConsentId { get; set; }
+    public long ConsentId { get; set; }
 
     /// <summary>
     /// Gets or sets the customer info (when a customer records is already deleted)
@@ -23,7 +23,7 @@ public partial class GdprLog : BaseEntity
     /// <summary>
     /// Gets or sets the request type identifier
     /// </summary>
-    public int RequestTypeId { get; set; }
+    public long RequestTypeId { get; set; }
 
     /// <summary>
     /// Gets or sets the request details

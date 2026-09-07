@@ -10,7 +10,7 @@ public partial record AdminAreaSettingsModel : BaseNopModel, ISettingsModel
 {
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.GeneralCommon.AdminArea.UseRichEditorInMessageTemplates")]
     public bool UseRichEditorInMessageTemplates { get; set; }

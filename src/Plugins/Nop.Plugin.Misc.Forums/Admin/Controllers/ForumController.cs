@@ -249,7 +249,7 @@ public class ForumController : BasePluginController
     #region Edit
 
     [CheckPermission(ForumDefaults.Permissions.FORUMS_VIEW)]
-    public async Task<IActionResult> EditForumGroup(int id)
+    public async Task<IActionResult> EditForumGroup(long id)
     {
         //try to get a forum group with the specified id
         var forumGroup = await _forumService.GetForumGroupByIdAsync(id);
@@ -290,7 +290,7 @@ public class ForumController : BasePluginController
     }
 
     [CheckPermission(ForumDefaults.Permissions.FORUMS_VIEW)]
-    public async Task<IActionResult> EditForum(int id)
+    public async Task<IActionResult> EditForum(long id)
     {
         //try to get a forum with the specified id
         var forum = await _forumService.GetForumByIdAsync(id);
@@ -336,7 +336,7 @@ public class ForumController : BasePluginController
 
     [HttpPost]
     [CheckPermission(ForumDefaults.Permissions.FORUMS_MANAGE)]
-    public async Task<IActionResult> DeleteForumGroup(int id)
+    public async Task<IActionResult> DeleteForumGroup(long id)
     {
         //try to get a forum group with the specified id
         var forumGroup = await _forumService.GetForumGroupByIdAsync(id);
@@ -352,7 +352,7 @@ public class ForumController : BasePluginController
 
     [HttpPost]
     [CheckPermission(ForumDefaults.Permissions.FORUMS_MANAGE)]
-    public async Task<IActionResult> DeleteForum(int id)
+    public async Task<IActionResult> DeleteForum(long id)
     {
         //try to get a forum with the specified id
         var forum = await _forumService.GetForumByIdAsync(id);

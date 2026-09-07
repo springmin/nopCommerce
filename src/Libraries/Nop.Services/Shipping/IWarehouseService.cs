@@ -23,7 +23,7 @@ public partial interface IWarehouseService
     /// A task that represents the asynchronous operation
     /// The task result contains the warehouse
     /// </returns>
-    Task<Warehouse> GetWarehouseByIdAsync(int warehouseId);
+    Task<Warehouse> GetWarehouseByIdAsync(long warehouseId);
 
     /// <summary>
     /// Gets all warehouses

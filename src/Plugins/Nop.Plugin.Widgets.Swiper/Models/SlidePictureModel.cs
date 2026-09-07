@@ -13,7 +13,7 @@ public record SlidePictureModel : BaseNopModel
 
     [UIHint("Picture")]
     [NopResourceDisplayName("Plugins.Widgets.Swiper.Picture")]
-    public int PictureId { get; set; }
+    public long PictureId { get; set; }
 
     [NopResourceDisplayName("Plugins.Widgets.Swiper.TitleText")]
     public string TitleText { get; set; }

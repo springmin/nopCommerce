@@ -9,7 +9,7 @@ public partial record OrderNoteSearchModel : BaseSearchModel
 {
     #region Properties
 
-    public int OrderId { get; set; }
+    public long OrderId { get; set; }
 
     #endregion
 }

@@ -228,13 +228,13 @@ public partial class InstallationLocalizationService : IInstallationLocalization
     /// <param name="valuesToExclude">Values to exclude</param>
     /// <param name="useLocalization">Localize</param>
     /// <returns>Key-value pairs of available data providers types</returns>
-    public Dictionary<int, string> GetAvailableProviderTypes(int[] valuesToExclude = null, bool useLocalization = true)
+    public Dictionary<long, string> GetAvailableProviderTypes(int[] valuesToExclude = null, bool useLocalization = true)
     {
         return Enum.GetValues(typeof(DataProviderType))
             .Cast<DataProviderType>()
             .Where(enumValue => enumValue != DataProviderType.Unknown && (valuesToExclude == null || !valuesToExclude.Contains(Convert.ToInt32(enumValue))))
             .ToDictionary(
-                enumValue => Convert.ToInt32(enumValue),
+                enumValue => Convert.ToInt64(enumValue),
                 enumValue => useLocalization ? GetResource(enumValue.ToString()) : CommonHelper.SplitCamelCaseWord(enumValue.ToString()));
     }
 

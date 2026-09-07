@@ -66,7 +66,7 @@ public partial class BlogController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.ContentManagement.BLOG_VIEW)]
-    public virtual async Task<IActionResult> BlogPosts(int? filterByBlogPostId)
+    public virtual async Task<IActionResult> BlogPosts(long? filterByBlogPostId)
     {
         //prepare model
         var model = await _blogModelFactory.PrepareBlogContentModelAsync(new BlogContentModel(), filterByBlogPostId);
@@ -130,7 +130,7 @@ public partial class BlogController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.ContentManagement.BLOG_VIEW)]
-    public virtual async Task<IActionResult> BlogPostEdit(int id)
+    public virtual async Task<IActionResult> BlogPostEdit(long id)
     {
         //try to get a blog post with the specified id
         var blogPost = await _blogService.GetBlogPostByIdAsync(id);
@@ -185,7 +185,7 @@ public partial class BlogController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.ContentManagement.BLOG_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get a blog post with the specified id
         var blogPost = await _blogService.GetBlogPostByIdAsync(id);
@@ -208,7 +208,7 @@ public partial class BlogController : BaseAdminController
     #region Comments
 
     [CheckPermission(StandardPermission.ContentManagement.BLOG_COMMENTS_VIEW)]
-    public virtual async Task<IActionResult> BlogComments(int? filterByBlogPostId)
+    public virtual async Task<IActionResult> BlogComments(long? filterByBlogPostId)
     {
         //try to get a blog post with the specified id
         var blogPost = await _blogService.GetBlogPostByIdAsync(filterByBlogPostId ?? 0);
@@ -258,7 +258,7 @@ public partial class BlogController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.ContentManagement.BLOG_COMMENTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> CommentDelete(int id)
+    public virtual async Task<IActionResult> CommentDelete(long id)
     {
         //try to get a blog comment with the specified id
         var comment = await _blogService.GetBlogCommentByIdAsync(id)
@@ -275,7 +275,7 @@ public partial class BlogController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.ContentManagement.BLOG_COMMENTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> DeleteSelectedComments(ICollection<int> selectedIds)
+    public virtual async Task<IActionResult> DeleteSelectedComments(ICollection<long> selectedIds)
     {
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();
@@ -293,7 +293,7 @@ public partial class BlogController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.ContentManagement.BLOG_COMMENTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ApproveSelected(ICollection<int> selectedIds)
+    public virtual async Task<IActionResult> ApproveSelected(ICollection<long> selectedIds)
     {
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();
@@ -320,7 +320,7 @@ public partial class BlogController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.ContentManagement.BLOG_COMMENTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> DisapproveSelected(ICollection<int> selectedIds)
+    public virtual async Task<IActionResult> DisapproveSelected(ICollection<long> selectedIds)
     {
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();

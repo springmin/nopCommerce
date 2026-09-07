@@ -104,7 +104,7 @@ public partial record OrderDetailsModel : BaseNopEntityModel
 
         public Guid OrderItemGuid { get; set; }
         public string Sku { get; set; }
-        public int ProductId { get; set; }
+        public long ProductId { get; set; }
         public string ProductName { get; set; }
         public string ProductSeName { get; set; }
         public string UnitPrice { get; set; }
@@ -119,8 +119,8 @@ public partial record OrderDetailsModel : BaseNopEntityModel
         public string VendorName { get; set; }
 
         //downloadable product properties
-        public int DownloadId { get; set; }
-        public int LicenseId { get; set; }
+        public long DownloadId { get; set; }
+        public long LicenseId { get; set; }
     }
 
     public partial record TaxRate : BaseNopModel

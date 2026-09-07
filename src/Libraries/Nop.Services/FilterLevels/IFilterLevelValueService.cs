@@ -47,7 +47,7 @@ public partial interface IFilterLevelValueService
     /// A task that represents the asynchronous operation
     /// The task result contains the filter level value
     /// </returns>
-    Task<FilterLevelValue> GetFilterLevelValueByIdAsync(int filterLevelValueId);
+    Task<FilterLevelValue> GetFilterLevelValueByIdAsync(long filterLevelValueId);
 
     /// <summary>
     /// Gets filter level values by product identifier
@@ -57,7 +57,7 @@ public partial interface IFilterLevelValueService
     /// A task that represents the asynchronous operation
     /// The task result contains the filter level values
     /// </returns>
-    Task<IList<FilterLevelValue>> GetFilterLevelValuesByProductIdAsync(int productId);
+    Task<IList<FilterLevelValue>> GetFilterLevelValuesByProductIdAsync(long productId);
    
     /// <summary>
     /// Gets filter level values by identifier
@@ -67,7 +67,7 @@ public partial interface IFilterLevelValueService
     /// A task that represents the asynchronous operation
     /// The task result contains the filter level values
     /// </returns>
-    Task<IList<FilterLevelValue>> GetFilterLevelValuesByIdsAsync(int[] filterLevelValueIds);
+    Task<IList<FilterLevelValue>> GetFilterLevelValuesByIdsAsync(long[] filterLevelValueIds);
 
     /// <summary>
     /// Updates the filter level value
@@ -104,10 +104,10 @@ public partial interface IFilterLevelValueService
     /// A task that represents the asynchronous operation
     /// The task result contains the products collection
     /// </returns>
-    Task<IPagedList<Product>> GetProductsByFilterLevelValueIdAsync(int filterLevelValueId,
+    Task<IPagedList<Product>> GetProductsByFilterLevelValueIdAsync(long filterLevelValueId,
         int pageIndex = 0,
         int pageSize = int.MaxValue,
-        int storeId = 0,
+        long storeId = 0,
         ProductSortingEnum orderBy = ProductSortingEnum.Position);
 
     /// <summary>
@@ -120,7 +120,7 @@ public partial interface IFilterLevelValueService
     /// A task that represents the asynchronous operation
     /// The task result contains the filter level value product mapping collection
     /// </returns>
-    Task<IPagedList<FilterLevelValueProductMapping>> GetFilterLevelValueProductsByFilterLevelValueIdAsync(int filterLevelValueId,
+    Task<IPagedList<FilterLevelValueProductMapping>> GetFilterLevelValueProductsByFilterLevelValueIdAsync(long filterLevelValueId,
         int pageIndex = 0, int pageSize = int.MaxValue);
 
     /// <summary>
@@ -133,7 +133,7 @@ public partial interface IFilterLevelValueService
     /// A task that represents the asynchronous operation
     /// The task result contains the filter level value product mapping
     /// </returns>
-    Task<FilterLevelValueProductMapping> GetFilterLevelValueProductByIdAsync(int filterLevelValueProductId);
+    Task<FilterLevelValueProductMapping> GetFilterLevelValueProductByIdAsync(long filterLevelValueProductId);
 
     /// <summary>
     /// Deletes a filter level value product mapping

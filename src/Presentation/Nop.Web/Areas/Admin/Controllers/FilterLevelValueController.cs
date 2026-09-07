@@ -139,7 +139,7 @@ public partial class FilterLevelValueController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.FILTER_LEVEL_VALUE_VIEW)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         //try to get a filter level value with the specified id
         var filterLevelValue = await _filterLevelValueService.GetFilterLevelValueByIdAsync(id);
@@ -202,7 +202,7 @@ public partial class FilterLevelValueController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.FILTER_LEVEL_VALUE_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get a filter level value with the specified id
         var filterLevelValue = await _filterLevelValueService.GetFilterLevelValueByIdAsync(id);
@@ -222,7 +222,7 @@ public partial class FilterLevelValueController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.FILTER_LEVEL_VALUE_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> DeleteSelected(ICollection<int> selectedIds)
+    public virtual async Task<IActionResult> DeleteSelected(ICollection<long> selectedIds)
     {
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();
@@ -309,7 +309,7 @@ public partial class FilterLevelValueController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.FILTER_LEVEL_VALUE_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ProductDelete(int id)
+    public virtual async Task<IActionResult> ProductDelete(long id)
     {
         //try to get a filter level value product mapping with the specified id
         var filterLevelValueProduct = await _filterLevelValueService.GetFilterLevelValueProductByIdAsync(id)
@@ -321,7 +321,7 @@ public partial class FilterLevelValueController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.FILTER_LEVEL_VALUE_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ProductAddPopup(int filterLevelValueId)
+    public virtual async Task<IActionResult> ProductAddPopup(long filterLevelValueId)
     {
         //prepare model
         var model = await _filterLevelValueModelFactory.PrepareAddProductToFilterLevelValueSearchModelAsync(new AddProductToFilterLevelValueSearchModel());

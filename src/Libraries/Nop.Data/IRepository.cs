@@ -23,7 +23,7 @@ public partial interface IRepository<TEntity> where TEntity : BaseEntity
     /// A task that represents the asynchronous operation
     /// The task result contains the entity entry
     /// </returns>
-    Task<TEntity> GetByIdAsync(int? id, Func<ICacheKeyService, CacheKey> getCacheKey = null, bool includeDeleted = true, bool useShortTermCache = false);
+    Task<TEntity> GetByIdAsync(long? id, Func<ICacheKeyService, CacheKey> getCacheKey = null, bool includeDeleted = true, bool useShortTermCache = false);
 
     /// <summary>
     /// Get entity entries by identifiers
@@ -35,7 +35,7 @@ public partial interface IRepository<TEntity> where TEntity : BaseEntity
     /// A task that represents the asynchronous operation
     /// The task result contains the entity entries
     /// </returns>
-    Task<IList<TEntity>> GetByIdsAsync(IList<int> ids, Func<ICacheKeyService, CacheKey> getCacheKey = null, bool includeDeleted = true);
+    Task<IList<TEntity>> GetByIdsAsync(IList<long> ids, Func<ICacheKeyService, CacheKey> getCacheKey = null, bool includeDeleted = true);
 
     /// <summary>
     /// Get all entity entries

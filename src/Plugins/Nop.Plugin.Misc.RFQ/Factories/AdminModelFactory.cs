@@ -288,7 +288,7 @@ public class AdminModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the request a quote model
     /// </returns>
-    public async Task<RequestQuoteModel> PreparedRequestQuoteModelAsync(RequestQuote requestQuote, IDictionary<int, string> customerEmails = null)
+    public async Task<RequestQuoteModel> PreparedRequestQuoteModelAsync(RequestQuote requestQuote, IDictionary<long, string> customerEmails = null)
     {
         string email;
 
@@ -321,7 +321,7 @@ public class AdminModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the request a quote item list model
     /// </returns>
-    public async Task<List<RequestQuoteItemModel>> PrepareRequestItemListModelAsync(int requestQuoteId)
+    public async Task<List<RequestQuoteItemModel>> PrepareRequestItemListModelAsync(long requestQuoteId)
     {
         var items = await _rfqService.GetRequestQuoteItemsAsync(requestQuoteId);
         var primaryStoreCurrency = await _currencyService.GetCurrencyByIdAsync(_currencySettings.PrimaryStoreCurrencyId);
@@ -337,7 +337,7 @@ public class AdminModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the quote item list model
     /// </returns>
-    public async Task<List<QuoteItemModel>> PrepareQuoteItemListModelAsync(int quoteId)
+    public async Task<List<QuoteItemModel>> PrepareQuoteItemListModelAsync(long quoteId)
     {
         var items = await _rfqService.GetQuoteItemsAsync(quoteId);
         var primaryStoreCurrency = await _currencyService.GetCurrencyByIdAsync(_currencySettings.PrimaryStoreCurrencyId);
@@ -402,7 +402,7 @@ public class AdminModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the product search model to add to the quote
     /// </returns>
-    public async Task<ProductSearchModel> PrepareAddProductSearchModelAsync(ProductSearchModel searchModel, int entityId)
+    public async Task<ProductSearchModel> PrepareAddProductSearchModelAsync(ProductSearchModel searchModel, long entityId)
     {
         ArgumentNullException.ThrowIfNull(searchModel);
 
@@ -437,8 +437,8 @@ public class AdminModelFactory
 
         //get products
         var products = await _productService.SearchProductsAsync(showHidden: true,
-            categoryIds: new List<int> { searchModel.SearchCategoryId },
-            manufacturerIds: new List<int> { searchModel.SearchManufacturerId },
+            categoryIds: new List<long> { searchModel.SearchCategoryId },
+            manufacturerIds: new List<long> { searchModel.SearchManufacturerId },
             productType: searchModel.SearchProductTypeId > 0 ? (ProductType?)searchModel.SearchProductTypeId : null,
             keywords: searchModel.SearchProductName,
             pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
@@ -469,7 +469,7 @@ public class AdminModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the quote model
     /// </returns>
-    public async Task<QuoteModel> PreparedQuoteModelAsync(Quote quote, IDictionary<int, string> customerEmails = null)
+    public async Task<QuoteModel> PreparedQuoteModelAsync(Quote quote, IDictionary<long, string> customerEmails = null)
     {
         string email;
 

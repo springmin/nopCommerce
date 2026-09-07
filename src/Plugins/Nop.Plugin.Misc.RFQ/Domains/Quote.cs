@@ -10,7 +10,7 @@ public class Quote : BaseEntity, IAdminNote
     /// <summary>
     /// Gets or sets the customer identifier
     /// </summary>
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     /// <summary>
     /// Gets or sets the created date and time
@@ -25,7 +25,7 @@ public class Quote : BaseEntity, IAdminNote
     /// <summary>
     /// Gets or sets the quote status identifier
     /// </summary>
-    public int StatusId { get; set; }
+    public long StatusId { get; set; }
 
     /// <summary>
     /// Gets or sets the request status
@@ -39,7 +39,7 @@ public class Quote : BaseEntity, IAdminNote
     /// <summary>
     /// Gets or sets the request a quote identifier
     /// </summary>
-    public int? RequestQuoteId { get; set; }
+    public long? RequestQuoteId { get; set; }
 
     /// <summary>
     /// Gets or sets the administration notes
@@ -49,5 +49,5 @@ public class Quote : BaseEntity, IAdminNote
     /// <summary>
     /// Gets or sets the order id
     /// </summary>
-    public int? OrderId { get; set; }
+    public long? OrderId { get; set; }
 }

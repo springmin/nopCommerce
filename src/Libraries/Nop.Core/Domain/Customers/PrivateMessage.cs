@@ -8,17 +8,17 @@ public partial class PrivateMessage : BaseEntity
     /// <summary>
     /// Gets or sets the store identifier
     /// </summary>
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 
     /// <summary>
     /// Gets or sets the customer identifier who sent the message
     /// </summary>
-    public int FromCustomerId { get; set; }
+    public long FromCustomerId { get; set; }
 
     /// <summary>
     /// Gets or sets the customer identifier who should receive the message
     /// </summary>
-    public int ToCustomerId { get; set; }
+    public long ToCustomerId { get; set; }
 
     /// <summary>
     /// Gets or sets the subject

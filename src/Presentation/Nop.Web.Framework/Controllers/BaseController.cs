@@ -173,7 +173,7 @@ public abstract partial class BaseController : Controller
     /// <param name="locales">Locales</param>
     /// <param name="configure">Configure action</param>
     protected virtual async Task AddLocalesAsync<TLocalizedModelLocal>(ILanguageService languageService,
-        IList<TLocalizedModelLocal> locales, Action<TLocalizedModelLocal, int> configure) where TLocalizedModelLocal : ILocalizedLocaleModel
+        IList<TLocalizedModelLocal> locales, Action<TLocalizedModelLocal, long> configure) where TLocalizedModelLocal : ILocalizedLocaleModel
     {
         foreach (var language in await languageService.GetAllLanguagesAsync(true))
         {

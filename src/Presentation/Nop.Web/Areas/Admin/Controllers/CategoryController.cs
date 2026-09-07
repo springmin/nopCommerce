@@ -226,7 +226,7 @@ public partial class CategoryController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.CATEGORIES_VIEW)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         //try to get a category with the specified id
         var category = await _categoryService.GetCategoryByIdAsync(id);
@@ -326,7 +326,7 @@ public partial class CategoryController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.CATEGORIES_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> PreTranslate(int itemId)
+    public virtual async Task<IActionResult> PreTranslate(long itemId)
     {
         var translationModel = new TranslationModel();
 
@@ -347,7 +347,7 @@ public partial class CategoryController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.CATEGORIES_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get a category with the specified id
         var category = await _categoryService.GetCategoryByIdAsync(id);
@@ -367,7 +367,7 @@ public partial class CategoryController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.CATEGORIES_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> DeleteSelected(ICollection<int> selectedIds)
+    public virtual async Task<IActionResult> DeleteSelected(ICollection<long> selectedIds)
     {
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();
@@ -484,7 +484,7 @@ public partial class CategoryController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.CATEGORIES_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ProductDelete(int id)
+    public virtual async Task<IActionResult> ProductDelete(long id)
     {
         //try to get a product category with the specified id
         var productCategory = await _categoryService.GetProductCategoryByIdAsync(id)
@@ -496,7 +496,7 @@ public partial class CategoryController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.CATEGORIES_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ProductAddPopup(int categoryId)
+    public virtual async Task<IActionResult> ProductAddPopup(long categoryId)
     {
         //prepare model
         var model = await _categoryModelFactory.PrepareAddProductToCategorySearchModelAsync(new AddProductToCategorySearchModel());

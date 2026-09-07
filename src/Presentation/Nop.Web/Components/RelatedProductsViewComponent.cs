@@ -25,7 +25,7 @@ public partial class RelatedProductsViewComponent : NopViewComponent
         _storeMappingService = storeMappingService;
     }
 
-    public async Task<IViewComponentResult> InvokeAsync(int productId, int? productThumbPictureSize)
+    public async Task<IViewComponentResult> InvokeAsync(long productId, int? productThumbPictureSize)
     {
         //load and cache report
         var productIds = (await _productService.GetRelatedProductsByProductId1Async(productId)).Select(x => x.ProductId2).ToArray();

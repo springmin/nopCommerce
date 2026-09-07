@@ -20,10 +20,10 @@ public partial record CustomerShoppingCartSearchModel : BaseSearchModel
 
     #region Properties
 
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     [NopResourceDisplayName("Admin.ShoppingCartType.ShoppingCartType")]
-    public int ShoppingCartTypeId { get; set; }
+    public long ShoppingCartTypeId { get; set; }
 
     public IList<SelectListItem> AvailableShoppingCartTypes { get; set; }
 

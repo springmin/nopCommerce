@@ -5,7 +5,7 @@ namespace Nop.Web.Areas.Admin.Models.Settings;
 
 public partial record GpsrSettingsModel : BaseNopModel, ISettingsModel
 {
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Gpsr.Enabled")]
     public bool Enabled { get; set; }

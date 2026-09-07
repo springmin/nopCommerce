@@ -130,7 +130,7 @@ public partial class AffiliateController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Promotions.AFFILIATES_VIEW)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         //try to get an affiliate with the specified id
         var affiliate = await _affiliateService.GetAffiliateByIdAsync(id);
@@ -196,7 +196,7 @@ public partial class AffiliateController : BaseAdminController
     //delete
     [HttpPost]
     [CheckPermission(StandardPermission.Promotions.AFFILIATES_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get an affiliate with the specified id
         var affiliate = await _affiliateService.GetAffiliateByIdAsync(id);

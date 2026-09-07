@@ -176,7 +176,7 @@ public partial class ReturnRequestController : BasePublicController
         return View(model with { Result = resultText });
     }
 
-    public virtual async Task<IActionResult> ReturnRequest(int orderId, string token)
+    public virtual async Task<IActionResult> ReturnRequest(long orderId, string token)
     {
 
         var order = await _orderService.GetOrderByIdAsync(orderId);
@@ -206,7 +206,7 @@ public partial class ReturnRequestController : BasePublicController
     }
 
     [HttpPost, ActionName("ReturnRequest")]
-    public virtual async Task<IActionResult> ReturnRequestSubmit(int orderId, SubmitReturnRequestModel model, IFormCollection form)
+    public virtual async Task<IActionResult> ReturnRequestSubmit(long orderId, SubmitReturnRequestModel model, IFormCollection form)
     {
         var order = await _orderService.GetOrderByIdAsync(orderId);
         if (order == null || order.Deleted)
@@ -230,7 +230,7 @@ public partial class ReturnRequestController : BasePublicController
 
         var count = 0;
 
-        var downloadId = 0;
+        long downloadId = 0;
         if (_returnRequestSettings.ReturnRequestsAllowFiles)
         {
             var download = await _downloadService.GetDownloadByGuidAsync(model.UploadedFileGuid);

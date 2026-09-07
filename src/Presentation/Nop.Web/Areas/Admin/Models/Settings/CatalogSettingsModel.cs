@@ -25,7 +25,7 @@ public partial record CatalogSettingsModel : BaseNopModel, ISettingsModel
 
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.AllowViewUnpublishedProductPage")]
     public bool AllowViewUnpublishedProductPage { get; set; }
@@ -419,7 +419,7 @@ public partial record CatalogSettingsModel : BaseNopModel, ISettingsModel
     public bool DisplayAllPicturesOnCatalogPages_OverrideForStore { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.ProductUrlStructureType")]
-    public int ProductUrlStructureTypeId { get; set; }
+    public long ProductUrlStructureTypeId { get; set; }
     public bool ProductUrlStructureTypeId_OverrideForStore { get; set; }
     public SelectList ProductUrlStructureTypes { get; set; }
 

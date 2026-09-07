@@ -173,8 +173,8 @@ public abstract partial class BaseDataProvider
     /// <param name="fieldSelector">A field selector to apply a transform to a hash value</param>
     /// <typeparam name="TEntity">Entity type</typeparam>
     /// <returns>Dictionary</returns>
-    public virtual async Task<IDictionary<int, string>> GetFieldHashesAsync<TEntity>(Expression<Func<TEntity, bool>> predicate,
-        Expression<Func<TEntity, int>> keySelector,
+    public virtual async Task<IDictionary<long, string>> GetFieldHashesAsync<TEntity>(Expression<Func<TEntity, bool>> predicate,
+        Expression<Func<TEntity, long>> keySelector,
         Expression<Func<TEntity, object>> fieldSelector) where TEntity : BaseEntity
     {
         if (keySelector.Body is not MemberExpression { Member: PropertyInfo keyPropInfo })
@@ -187,7 +187,7 @@ public abstract partial class BaseDataProvider
             .Where(predicate)
             .Select(x => new
             {
-                Id = Sql.Property<int>(x, keyPropInfo.Name),
+                Id = Sql.Property<long>(x, keyPropInfo.Name),
                 Hash = SqlSha2(Sql.Property<object>(x, propInfo.Name))
             });
 
@@ -233,7 +233,17 @@ public abstract partial class BaseDataProvider
     public virtual async Task<TEntity> InsertEntityAsync<TEntity>(TEntity entity) where TEntity : BaseEntity
     {
         using var dataContext = CreateDataConnection();
-        entity.Id = await dataContext.InsertWithInt32IdentityAsync(entity);
+
+        //pre-assigned id strategy (e.g. Yitter): the id is generated before insert
+        if (IdGenerator.PreGenerateIds)
+        {
+            entity.Id = IdGenerator.NextId();
+            await dataContext.InsertAsync(entity);
+
+            return entity;
+        }
+
+        entity.Id = await dataContext.InsertWithInt64IdentityAsync(entity);
         return entity;
     }
 
@@ -246,7 +256,17 @@ public abstract partial class BaseDataProvider
     public virtual TEntity InsertEntity<TEntity>(TEntity entity) where TEntity : BaseEntity
     {
         using var dataContext = CreateDataConnection();
-        entity.Id = dataContext.InsertWithInt32Identity(entity);
+
+        //pre-assigned id strategy (e.g. Yitter): the id is generated before insert
+        if (IdGenerator.PreGenerateIds)
+        {
+            entity.Id = IdGenerator.NextId();
+            dataContext.Insert(entity);
+
+            return entity;
+        }
+
+        entity.Id = dataContext.InsertWithInt64Identity(entity);
         return entity;
     }
 
@@ -414,6 +434,20 @@ public abstract partial class BaseDataProvider
     public virtual async Task BulkInsertEntitiesAsync<TEntity>(IEnumerable<TEntity> entities) where TEntity : BaseEntity
     {
         using var dataContext = CreateDataConnection(LinqToDbDataProvider);
+
+        //pre-assigned id strategy (e.g. Yitter): assign ids upfront, then bulk
+        //copy with KeepIdentity so the pre-assigned ids are written as-is
+        if (IdGenerator.PreGenerateIds)
+        {
+            var entityList = entities.ToList();
+            foreach (var entity in entityList)
+                entity.Id = IdGenerator.NextId();
+
+            await dataContext.BulkCopyAsync(CreateBulkCopyOptions(), entityList);
+
+            return;
+        }
+
         await dataContext.BulkCopyAsync(CreateBulkCopyOptions(), entities.RetrieveIdentity(dataContext, useSequenceName: false));
     }
 
@@ -425,6 +459,20 @@ public abstract partial class BaseDataProvider
     public virtual void BulkInsertEntities<TEntity>(IEnumerable<TEntity> entities) where TEntity : BaseEntity
     {
         using var dataContext = CreateDataConnection(LinqToDbDataProvider);
+
+        //pre-assigned id strategy (e.g. Yitter): assign ids upfront, then bulk
+        //copy with KeepIdentity so the pre-assigned ids are written as-is
+        if (IdGenerator.PreGenerateIds)
+        {
+            var entityList = entities.ToList();
+            foreach (var entity in entityList)
+                entity.Id = IdGenerator.NextId();
+
+            dataContext.BulkCopy(CreateBulkCopyOptions(), entityList);
+
+            return;
+        }
+
         dataContext.BulkCopy(CreateBulkCopyOptions(), entities.RetrieveIdentity(dataContext, useSequenceName: false));
     }
 
@@ -536,6 +584,29 @@ public abstract partial class BaseDataProvider
     #endregion
 
     #region Properties
+
+    /// <summary>
+    /// Gets the configured entity id generator (database or pre-assigned strategy);
+    /// falls back to the database strategy when no generator is registered
+    /// </summary>
+    protected IEntityIdGenerator IdGenerator
+    {
+        get
+        {
+            try
+            {
+                return EngineContext.Current.Resolve<IEntityIdGenerator>();
+            }
+            catch
+            {
+                //not registered (e.g. unit tests without the web startup):
+                //default to the database strategy
+                return _defaultIdGenerator;
+            }
+        }
+    }
+
+    private static readonly IEntityIdGenerator _defaultIdGenerator = new DatabaseIdGenerator();
 
     /// <summary>
     /// Linq2Db data provider

@@ -86,12 +86,12 @@ public class CertificatesMigration : MigrationBase
         });
 
         //settings
-        this.SetSettingIfNotExists<AvalaraTaxSettings, int?>(settings => settings.CompanyId, (int?)null);
+        this.SetSettingIfNotExists<AvalaraTaxSettings, long?>(settings => settings.CompanyId, (long?)null);
         this.SetSettingIfNotExists<AvalaraTaxSettings, bool>(settings => settings.EnableCertificates, false);
         this.SetSettingIfNotExists<AvalaraTaxSettings, bool>(settings => settings.AutoValidateCertificate, true);
         this.SetSettingIfNotExists<AvalaraTaxSettings, bool>(settings => settings.AllowEditCustomer, true);
         this.SetSettingIfNotExists<AvalaraTaxSettings, bool>(settings => settings.DisplayNoValidCertificatesMessage, true);
-        this.SetSettingIfNotExists<AvalaraTaxSettings, List<int>>(settings => settings.CustomerRoleIds, (List<int>)null);
+        this.SetSettingIfNotExists<AvalaraTaxSettings, List<long>>(settings => settings.CustomerRoleIds, (List<long>)null);
         this.SetSettingIfNotExists<AvalaraTaxSettings, bool>(settings => settings.PreviewCertificate, false);
         this.SetSettingIfNotExists<AvalaraTaxSettings, bool>(settings => settings.UploadOnly, false);
         this.SetSettingIfNotExists<AvalaraTaxSettings, bool>(settings => settings.FillOnly, false);

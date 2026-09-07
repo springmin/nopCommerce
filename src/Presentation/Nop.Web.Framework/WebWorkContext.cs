@@ -163,7 +163,7 @@ public partial class WebWorkContext : IWorkContext
     /// A task that represents the asynchronous operation
     /// The task result contains the found language
     /// </returns>
-    protected virtual async Task<Language> GetLanguageFromRequestAsync(int storeId = 0)
+    protected virtual async Task<Language> GetLanguageFromRequestAsync(long storeId = 0)
     {
         var requestCultureFeature = _httpContextAccessor.HttpContext?.Features.Get<IRequestCultureFeature>();
         if (requestCultureFeature is null)

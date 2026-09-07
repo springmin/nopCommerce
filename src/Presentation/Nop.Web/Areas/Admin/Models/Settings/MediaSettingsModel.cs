@@ -11,7 +11,7 @@ public partial record MediaSettingsModel : BaseNopModel, ISettingsModel
 {
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Media.PicturesStoredIntoDatabase")]
     public bool PicturesStoredIntoDatabase { get; set; }
@@ -38,7 +38,7 @@ public partial record MediaSettingsModel : BaseNopModel, ISettingsModel
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Media.ProductDefaultImage")]
     [UIHint("Picture")]
-    public int ProductDefaultImageId { get; set; }
+    public long ProductDefaultImageId { get; set; }
     public bool ProductDefaultImageId_OverrideForStore { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Media.CategoryThumbPictureSize")]

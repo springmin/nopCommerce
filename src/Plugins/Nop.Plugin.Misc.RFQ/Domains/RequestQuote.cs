@@ -10,7 +10,7 @@ public class RequestQuote : BaseEntity, IAdminNote
     /// <summary>
     /// Gets or sets the customer identifier
     /// </summary>
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     /// <summary>
     /// Gets or sets the created date and time
@@ -20,12 +20,12 @@ public class RequestQuote : BaseEntity, IAdminNote
     /// <summary>
     /// Gets or sets the request status identifier
     /// </summary>
-    public int StatusId { get; set; }
+    public long StatusId { get; set; }
 
     /// <summary>
     /// Gets or sets the request a quote identifier
     /// </summary>
-    public int? QuoteId { get; set; }
+    public long? QuoteId { get; set; }
 
     /// <summary>
     /// Gets or sets the customer notes

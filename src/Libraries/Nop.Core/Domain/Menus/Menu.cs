@@ -18,7 +18,7 @@ public partial class Menu : BaseEntity, IAclSupported, IStoreMappingSupported, I
     /// <summary>
     /// Gets or sets the menu type identifier
     /// </summary>
-    public int MenuTypeId { get; set; }
+    public long MenuTypeId { get; set; }
 
     /// <summary>
     /// Gets or sets the CSS class

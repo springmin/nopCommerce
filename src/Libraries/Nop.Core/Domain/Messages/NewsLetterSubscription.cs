@@ -23,7 +23,7 @@ public partial class NewsLetterSubscription : BaseEntity
     /// <summary>
     /// Gets or sets the store identifier in which a customer has subscribed to newsletter
     /// </summary>
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 
     /// <summary>
     /// Gets or sets the date and time when subscription was created
@@ -33,10 +33,10 @@ public partial class NewsLetterSubscription : BaseEntity
     /// <summary>
     /// Gets or sets the language identifier in which a customer has subscribed to newsletter
     /// </summary>
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     /// <summary>
     /// Gets or sets the subscription type identifier in which a customer has subscribed to newsletter
     /// </summary>
-    public int TypeId { get; set; }
+    public long TypeId { get; set; }
 }

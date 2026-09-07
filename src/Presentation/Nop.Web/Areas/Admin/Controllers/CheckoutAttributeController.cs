@@ -234,7 +234,7 @@ public partial class CheckoutAttributeController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.CHECKOUT_ATTRIBUTES_VIEW)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         //try to get a checkout attribute with the specified id
         var checkoutAttribute = await _checkoutAttributeService.GetAttributeByIdAsync(id);
@@ -289,7 +289,7 @@ public partial class CheckoutAttributeController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.CHECKOUT_ATTRIBUTES_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get a checkout attribute with the specified id
         var checkoutAttribute = await _checkoutAttributeService.GetAttributeByIdAsync(id);
@@ -309,7 +309,7 @@ public partial class CheckoutAttributeController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.CHECKOUT_ATTRIBUTES_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> DeleteSelected(ICollection<int> selectedIds)
+    public virtual async Task<IActionResult> DeleteSelected(ICollection<long> selectedIds)
     {
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();
@@ -343,7 +343,7 @@ public partial class CheckoutAttributeController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.CHECKOUT_ATTRIBUTES_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ValueCreatePopup(int checkoutAttributeId)
+    public virtual async Task<IActionResult> ValueCreatePopup(long checkoutAttributeId)
     {
         //try to get a checkout attribute with the specified id
         var checkoutAttribute = await _checkoutAttributeService.GetAttributeByIdAsync(checkoutAttributeId);
@@ -406,7 +406,7 @@ public partial class CheckoutAttributeController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.CHECKOUT_ATTRIBUTES_VIEW)]
-    public virtual async Task<IActionResult> ValueEditPopup(int id)
+    public virtual async Task<IActionResult> ValueEditPopup(long id)
     {
         //try to get a checkout attribute value with the specified id
         var checkoutAttributeValue = await _checkoutAttributeService.GetAttributeValueByIdAsync(id);
@@ -479,7 +479,7 @@ public partial class CheckoutAttributeController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.CHECKOUT_ATTRIBUTES_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ValueDelete(int id)
+    public virtual async Task<IActionResult> ValueDelete(long id)
     {
         //try to get a checkout attribute value with the specified id
         var checkoutAttributeValue = await _checkoutAttributeService.GetAttributeValueByIdAsync(id)

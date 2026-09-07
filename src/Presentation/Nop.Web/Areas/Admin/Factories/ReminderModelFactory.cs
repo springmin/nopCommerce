@@ -44,7 +44,7 @@ public partial class ReminderModelFactory : IReminderModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the follow up model
     /// </returns>
-    protected virtual async Task<FollowUpModel> PrepareFollowUpModelAsync(string messageTemplateName, int storeId)
+    protected virtual async Task<FollowUpModel> PrepareFollowUpModelAsync(string messageTemplateName, long storeId)
     {
         //we use only the first message template
         var messageTemplates = await _messageTemplateService.GetMessageTemplatesByNameAsync(messageTemplateName, storeId);

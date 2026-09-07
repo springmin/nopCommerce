@@ -12,7 +12,7 @@ public partial class ResetCheckoutDataEvent
     /// </summary>
     /// <param name="customer">Customer</param>
     /// <param name="storeId">Store identifier</param>
-    public ResetCheckoutDataEvent(Customer customer, int storeId)
+    public ResetCheckoutDataEvent(Customer customer, long storeId)
     {
         Customer = customer;
         StoreId = storeId;
@@ -26,5 +26,5 @@ public partial class ResetCheckoutDataEvent
     /// <summary>
     /// Store identifier
     /// </summary>
-    public int StoreId { get; }
+    public long StoreId { get; }
 }

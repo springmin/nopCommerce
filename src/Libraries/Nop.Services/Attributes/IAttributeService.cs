@@ -28,7 +28,7 @@ public partial interface IAttributeService<TAttribute, TAttributeValue>
     /// A task that represents the asynchronous operation
     /// The task result contains the attribute
     /// </returns>
-    Task<TAttribute> GetAttributeByIdAsync(int attributeId);
+    Task<TAttribute> GetAttributeByIdAsync(long attributeId);
 
     /// <summary>
     /// Inserts a attribute
@@ -59,7 +59,7 @@ public partial interface IAttributeService<TAttribute, TAttributeValue>
     /// A task that represents the asynchronous operation
     /// The task result contains the attributes
     /// </returns>
-    Task<IList<TAttribute>> GetAttributeByIdsAsync(int[] attributeIds);
+    Task<IList<TAttribute>> GetAttributeByIdsAsync(long[] attributeIds);
 
     /// <summary>
     /// Deletes attributes
@@ -76,7 +76,7 @@ public partial interface IAttributeService<TAttribute, TAttributeValue>
     /// A task that represents the asynchronous operation
     /// The task result contains the attribute values
     /// </returns>
-    Task<IList<TAttributeValue>> GetAttributeValuesAsync(int attributeId);
+    Task<IList<TAttributeValue>> GetAttributeValuesAsync(long attributeId);
 
     /// <summary>
     /// Gets a attribute value
@@ -86,7 +86,7 @@ public partial interface IAttributeService<TAttribute, TAttributeValue>
     /// A task that represents the asynchronous operation
     /// The task result contains the attribute value
     /// </returns>
-    Task<TAttributeValue> GetAttributeValueByIdAsync(int attributeValueId);
+    Task<TAttributeValue> GetAttributeValueByIdAsync(long attributeValueId);
 
     /// <summary>
     /// Inserts a attribute value

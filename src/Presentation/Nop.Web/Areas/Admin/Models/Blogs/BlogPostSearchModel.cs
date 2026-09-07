@@ -21,7 +21,7 @@ public partial record BlogPostSearchModel : BaseSearchModel
     #region Properties
 
     [NopResourceDisplayName("Admin.ContentManagement.Blog.BlogPosts.List.SearchStore")]
-    public int SearchStoreId { get; set; }
+    public long SearchStoreId { get; set; }
     public IList<SelectListItem> AvailableStores { get; set; }
 
     public string SearchTitle { get; set; }

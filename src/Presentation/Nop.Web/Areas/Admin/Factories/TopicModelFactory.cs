@@ -139,7 +139,7 @@ public partial class TopicModelFactory : ITopicModelFactory
     /// </returns>
     public virtual async Task<TopicModel> PrepareTopicModelAsync(TopicModel model, Topic topic, bool excludeProperties = false)
     {
-        Func<TopicLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<TopicLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (topic != null)
         {

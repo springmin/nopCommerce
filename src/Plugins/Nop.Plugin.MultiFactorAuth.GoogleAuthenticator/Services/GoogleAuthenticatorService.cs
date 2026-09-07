@@ -81,7 +81,7 @@ public class GoogleAuthenticatorService
     /// </summary>
     /// <param name="configurationId">Configuration identifier</param>
     /// <returns>Configuration</returns>
-    internal async Task<GoogleAuthenticatorRecord> GetConfigurationByIdAsync(int configurationId)
+    internal async Task<GoogleAuthenticatorRecord> GetConfigurationByIdAsync(long configurationId)
     {
         if (configurationId == 0)
             return null;

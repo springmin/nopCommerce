@@ -62,7 +62,7 @@ public partial class ProductTagService : IProductTagService
     /// <param name="productId">Product identifier</param>
     /// <param name="productTagIds">Product tag identifiers</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    protected virtual async Task DeleteProductProductTagMappingAsync(int productId, IList<int> productTagIds)
+    protected virtual async Task DeleteProductProductTagMappingAsync(long productId, IList<long> productTagIds)
     {
         var mappingRecords = await _productProductTagMappingRepository.Table
             .Where(pptm => pptm.ProductId == productId && productTagIds.Contains(pptm.ProductTagId))
@@ -80,7 +80,7 @@ public partial class ProductTagService : IProductTagService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    protected virtual async Task<bool> ProductTagExistsAsync(Product product, int productTagId)
+    protected virtual async Task<bool> ProductTagExistsAsync(Product product, long productTagId)
     {
         ArgumentNullException.ThrowIfNull(product);
 
@@ -169,7 +169,7 @@ public partial class ProductTagService : IProductTagService
     /// A task that represents the asynchronous operation
     /// The task result contains the product tags
     /// </returns>
-    public virtual async Task<IList<ProductTag>> GetAllProductTagsByProductIdAsync(int productId)
+    public virtual async Task<IList<ProductTag>> GetAllProductTagsByProductIdAsync(long productId)
     {
         var key = _staticCacheManager.PrepareKeyForDefaultCache(NopCatalogDefaults.ProductTagsByProductCacheKey, productId);
 
@@ -193,7 +193,7 @@ public partial class ProductTagService : IProductTagService
     /// A task that represents the asynchronous operation
     /// The task result contains the product tag
     /// </returns>
-    public virtual async Task<ProductTag> GetProductTagByIdAsync(int productTagId)
+    public virtual async Task<ProductTag> GetProductTagByIdAsync(long productTagId)
     {
         return await _productTagRepository.GetByIdAsync(productTagId, cache => default);
     }
@@ -206,7 +206,7 @@ public partial class ProductTagService : IProductTagService
     /// A task that represents the asynchronous operation
     /// The task result contains the product tags
     /// </returns>
-    public virtual async Task<IList<ProductTag>> GetProductTagsByIdsAsync(int[] productTagIds)
+    public virtual async Task<IList<ProductTag>> GetProductTagsByIdsAsync(long[] productTagIds)
     {
         return await _productTagRepository.GetByIdsAsync(productTagIds);
     }
@@ -246,7 +246,7 @@ public partial class ProductTagService : IProductTagService
     /// A task that represents the asynchronous operation
     /// The task result contains the number of products
     /// </returns>
-    public virtual async Task<int> GetProductCountByProductTagIdAsync(int productTagId, int storeId, bool showHidden = false)
+    public virtual async Task<long> GetProductCountByProductTagIdAsync(long productTagId, long storeId, bool showHidden = false)
     {
         var dictionary = await GetProductCountAsync(storeId, showHidden);
         if (dictionary.TryGetValue(productTagId, out var value))
@@ -264,7 +264,7 @@ public partial class ProductTagService : IProductTagService
     /// A task that represents the asynchronous operation
     /// The task result contains the dictionary of "product tag ID : product count"
     /// </returns>
-    public virtual async Task<Dictionary<int, int>> GetProductCountAsync(int storeId, bool showHidden = false)
+    public virtual async Task<Dictionary<long, int>> GetProductCountAsync(long storeId, bool showHidden = false)
     {
         var customer = await _workContext.GetCurrentCustomerAsync();
         var customerRoleIds = await _customerService.GetCustomerRoleIdsAsync(customer);
@@ -317,7 +317,7 @@ public partial class ProductTagService : IProductTagService
 
         //product tags
         var existingProductTags = await GetAllProductTagsByProductIdAsync(product.Id);
-        var productTagIdsToRemove = new List<int>();
+        var productTagIdsToRemove = new List<long>();
         foreach (var existingProductTag in existingProductTags)
         {
             var found = false;

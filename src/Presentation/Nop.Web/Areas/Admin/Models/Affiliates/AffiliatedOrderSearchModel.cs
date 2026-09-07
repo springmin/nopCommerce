@@ -23,7 +23,7 @@ public partial record AffiliatedOrderSearchModel : BaseSearchModel
 
     #region Properties
 
-    public int AffliateId { get; set; }
+    public long AffliateId { get; set; }
 
     [NopResourceDisplayName("Admin.Affiliates.Orders.StartDate")]
     [UIHint("DateNullable")]
@@ -34,13 +34,13 @@ public partial record AffiliatedOrderSearchModel : BaseSearchModel
     public DateTime? EndDate { get; set; }
 
     [NopResourceDisplayName("Admin.Affiliates.Orders.OrderStatus")]
-    public int OrderStatusId { get; set; }
+    public long OrderStatusId { get; set; }
 
     [NopResourceDisplayName("Admin.Affiliates.Orders.PaymentStatus")]
-    public int PaymentStatusId { get; set; }
+    public long PaymentStatusId { get; set; }
 
     [NopResourceDisplayName("Admin.Affiliates.Orders.ShippingStatus")]
-    public int ShippingStatusId { get; set; }
+    public long ShippingStatusId { get; set; }
 
     public IList<SelectListItem> AvailableOrderStatuses { get; set; }
     public IList<SelectListItem> AvailablePaymentStatuses { get; set; }

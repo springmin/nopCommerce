@@ -20,14 +20,14 @@ public class SettingMigration : MigrationBase
             return;
 
         this.SetSettingIfNotExists<CustomerSettings, int>(settings => settings.PasswordMaxLength, 64);
-        this.SetSettingIfNotExists<CustomerSettings, int?>(settings => settings.DefaultCountryId, value: null);
+        this.SetSettingIfNotExists<CustomerSettings, long?>(settings => settings.DefaultCountryId, value: null);
 
         this.SetSettingIfNotExists<SecuritySettings, bool>(settings => settings.UseAesEncryptionAlgorithm, false);
         this.SetSettingIfNotExists<SecuritySettings, bool>(settings => settings.AllowStoreOwnerExportImportCustomersWithHashedPassword, true);
 
         //#7053
         this.SetSettingIfNotExists<SecuritySettings, bool>(settings => settings.LogHoneypotDetection, true);
-        this.SetSettingIfNotExists<AddressSettings, int?>(settings => settings.DefaultCountryId, value: null);
+        this.SetSettingIfNotExists<AddressSettings, long?>(settings => settings.DefaultCountryId, value: null);
 
         //#6682
         this.SetSettingIfNotExists<CaptchaSettings, bool>(settings => settings.ShowOnNewsletterPage, false);

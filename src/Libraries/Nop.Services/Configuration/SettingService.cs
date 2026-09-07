@@ -85,7 +85,7 @@ public partial class SettingService : ISettingService
     /// <param name="storeId">Store identifier</param>
     /// <param name="clearCache">A value indicating whether to clear cache after setting update</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    protected virtual async Task SetSettingAsync(Type type, string key, object value, int storeId = 0, bool clearCache = true)
+    protected virtual async Task SetSettingAsync(Type type, string key, object value, long storeId = 0, bool clearCache = true)
     {
         ArgumentNullException.ThrowIfNull(key);
         key = key.Trim().ToLowerInvariant();
@@ -184,7 +184,7 @@ public partial class SettingService : ISettingService
     /// A task that represents the asynchronous operation
     /// The task result contains the setting
     /// </returns>
-    public virtual async Task<Setting> GetSettingByIdAsync(int settingId)
+    public virtual async Task<Setting> GetSettingByIdAsync(long settingId)
     {
         return await _settingRepository.GetByIdAsync(settingId, cache => default);
     }
@@ -199,7 +199,7 @@ public partial class SettingService : ISettingService
     /// A task that represents the asynchronous operation
     /// The task result contains the setting
     /// </returns>
-    public virtual async Task<Setting> GetSettingAsync(string key, int storeId = 0, bool loadSharedValueIfNotFound = false)
+    public virtual async Task<Setting> GetSettingAsync(string key, long storeId = 0, bool loadSharedValueIfNotFound = false)
     {
         if (string.IsNullOrEmpty(key))
             return null;
@@ -232,7 +232,7 @@ public partial class SettingService : ISettingService
     /// The task result contains the setting value
     /// </returns>
     public virtual async Task<T> GetSettingByKeyAsync<T>(string key, T defaultValue = default,
-        int storeId = 0, bool loadSharedValueIfNotFound = false)
+        long storeId = 0, bool loadSharedValueIfNotFound = false)
     {
         if (string.IsNullOrEmpty(key))
             return defaultValue;
@@ -261,7 +261,7 @@ public partial class SettingService : ISettingService
     /// <param name="storeId">Store identifier</param>
     /// <param name="clearCache">A value indicating whether to clear cache after setting update</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task SetSettingAsync<T>(string key, T value, int storeId = 0, bool clearCache = true)
+    public virtual async Task SetSettingAsync<T>(string key, T value, long storeId = 0, bool clearCache = true)
     {
         await SetSettingAsync(typeof(T), key, value, storeId, clearCache);
     }
@@ -298,7 +298,7 @@ public partial class SettingService : ISettingService
     /// The task result contains the true -setting exists; false - does not exist
     /// </returns>
     public virtual async Task<bool> SettingExistsAsync<T, TPropType>(T settings,
-        Expression<Func<T, TPropType>> keySelector, int storeId = 0)
+        Expression<Func<T, TPropType>> keySelector, long storeId = 0)
         where T : ISettings, new()
     {
         var key = GetSettingKey(settings, keySelector);
@@ -313,7 +313,7 @@ public partial class SettingService : ISettingService
     /// <typeparam name="T">Type</typeparam>
     /// <param name="storeId">Store identifier for which settings should be loaded</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task<T> LoadSettingAsync<T>(int storeId = 0) where T : ISettings, new()
+    public virtual async Task<T> LoadSettingAsync<T>(long storeId = 0) where T : ISettings, new()
     {
         return (T)await LoadSettingAsync(typeof(T), storeId);
     }
@@ -324,7 +324,7 @@ public partial class SettingService : ISettingService
     /// <param name="type">Type</param>
     /// <param name="storeId">Store identifier for which settings should be loaded</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task<ISettings> LoadSettingAsync(Type type, int storeId = 0)
+    public virtual async Task<ISettings> LoadSettingAsync(Type type, long storeId = 0)
     {
         var settings = Activator.CreateInstance(type);
 
@@ -365,7 +365,7 @@ public partial class SettingService : ISettingService
     /// <param name="storeId">Store identifier</param>
     /// <param name="settings">Setting instance</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task SaveSettingAsync<T>(T settings, int storeId = 0) where T : ISettings, new()
+    public virtual async Task SaveSettingAsync<T>(T settings, long storeId = 0) where T : ISettings, new()
     {
         /* We do not clear cache after each setting update.
          * This behavior can increase performance because cached settings will not be cleared 
@@ -403,7 +403,7 @@ public partial class SettingService : ISettingService
     /// <returns>A task that represents the asynchronous operation</returns>
     public virtual async Task SaveSettingAsync<T, TPropType>(T settings,
         Expression<Func<T, TPropType>> keySelector,
-        int storeId = 0, bool clearCache = true) where T : ISettings, new()
+        long storeId = 0, bool clearCache = true) where T : ISettings, new()
     {
         if (keySelector.Body is not MemberExpression member)
             throw new ArgumentException($"Expression '{keySelector}' refers to a method, not a property.");
@@ -432,7 +432,7 @@ public partial class SettingService : ISettingService
     /// <returns>A task that represents the asynchronous operation</returns>
     public virtual async Task SaveSettingOverridablePerStoreAsync<T, TPropType>(T settings,
         Expression<Func<T, TPropType>> keySelector,
-        bool overrideForStore, int storeId = 0, bool clearCache = true) where T : ISettings, new()
+        bool overrideForStore, long storeId = 0, bool clearCache = true) where T : ISettings, new()
     {
         if (overrideForStore || storeId == 0)
             await SaveSettingAsync(settings, keySelector, storeId, clearCache);
@@ -468,7 +468,7 @@ public partial class SettingService : ISettingService
     /// <param name="storeId">Store ID</param>
     /// <returns>A task that represents the asynchronous operation</returns>
     public virtual async Task DeleteSettingAsync<T, TPropType>(T settings,
-        Expression<Func<T, TPropType>> keySelector, int storeId = 0) where T : ISettings, new()
+        Expression<Func<T, TPropType>> keySelector, long storeId = 0) where T : ISettings, new()
     {
         var key = GetSettingKey(settings, keySelector);
         key = key.Trim().ToLowerInvariant();

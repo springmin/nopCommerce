@@ -35,7 +35,7 @@ public partial class PriceList : BaseEntity
     /// <summary>
     ///  Gets or sets the price calculation type identifier
     /// </summary>
-    public int PriceCalculationTypeId { get; set; }
+    public long PriceCalculationTypeId { get; set; }
 
     /// <summary>
     /// Gets or sets the price calculation value (e.g. percentage or fixed amount)

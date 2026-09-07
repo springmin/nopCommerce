@@ -21,7 +21,7 @@ public partial record CampaignSearchModel : BaseSearchModel
     #region Properties
 
     [NopResourceDisplayName("Admin.Promotions.Campaigns.List.Stores")]
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
     public IList<SelectListItem> AvailableStores { get; set; }
 
     public bool HideStoresList { get; set; }

@@ -276,6 +276,22 @@ public partial class InstallationService
     protected virtual async Task<int> ImportStatesFromTxtAsync(Stream stream)
     {
         var count = 0;
+
+        //preload countries and states once and match in memory: the original
+        //per-line implementation issues 3 round-trips per row (2 queries + 1
+        //write), which is extremely slow on high-latency connections (e.g. TiDB
+        //Cloud Serverless). Batch everything instead.
+        var countries = await Table<Country>().ToListAsync();
+        var statesByCountryId = (await Table<StateProvince>().ToListAsync())
+            .GroupBy(sp => sp.CountryId)
+            .ToDictionary(g => g.Key, g => g
+                .OrderBy(sp => sp.DisplayOrder)
+                .ThenBy(sp => sp.Name)
+                .ToList());
+
+        var statesToUpdate = new List<StateProvince>();
+        var statesToInsert = new List<StateProvince>();
+
         using var reader = new StreamReader(stream);
         string line;
         while ((line = await reader.ReadLineAsync()) != null)
@@ -294,18 +310,18 @@ public partial class InstallationService
             var published = bool.Parse(tmp[3].Trim());
             var displayOrder = int.Parse(tmp[4].Trim());
 
-            var country = await Table<Country>().Where(c => c.TwoLetterIsoCode == countryTwoLetterIsoCode).FirstOrDefaultAsync();
+            var country = countries.FirstOrDefault(c => c.TwoLetterIsoCode == countryTwoLetterIsoCode);
             //country cannot be loaded. skip
             if (country == null)
                 continue;
 
-            //import
-            var states = await Table<StateProvince>()
-                .OrderBy(sp => sp.DisplayOrder)
-                .ThenBy(sp => sp.Name)
-                .Where(sp => sp.CountryId == country.Id)
-                .ToListAsync();
-            var state = states.FirstOrDefault(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+            //import: match against the preloaded states first, then against the
+            //states pending insert (keeps behaviour equivalent to the original
+            //per-line implementation, where a duplicate name would match the row
+            //just written to the database)
+            var states = statesByCountryId.TryGetValue(country.Id, out var list) ? list : new List<StateProvince>();
+            var state = states.FirstOrDefault(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                ?? statesToInsert.FirstOrDefault(x => x.CountryId == country.Id && x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 
             if (state != null)
             {
@@ -313,24 +329,28 @@ public partial class InstallationService
                 state.Published = published;
                 state.DisplayOrder = displayOrder;
 
-                await _dataProvider.UpdateEntityAsync(state);
+                statesToUpdate.Add(state);
             }
             else
             {
-                state = new StateProvince
+                statesToInsert.Add(new StateProvince
                 {
                     CountryId = country.Id,
                     Name = name,
                     Abbreviation = abbreviation,
                     Published = published,
                     DisplayOrder = displayOrder
-                };
-
-                await _dataProvider.InsertEntityAsync(state);
+                });
             }
 
             count++;
         }
+
+        if (statesToUpdate.Count > 0)
+            await _dataProvider.UpdateEntitiesAsync(statesToUpdate);
+
+        if (statesToInsert.Count > 0)
+            await _dataProvider.BulkInsertEntitiesAsync(statesToInsert);
 
         return count;
     }
@@ -1239,7 +1259,7 @@ public partial class InstallationService
     /// <param name="value">Value</param>
     /// <param name="storeId">Store identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    protected virtual async Task SetSettingAsync(Dictionary<string, IList<Setting>> allSettings, Type type, string key, object value, int storeId = 0)
+    protected virtual async Task SetSettingAsync(Dictionary<string, IList<Setting>> allSettings, Type type, string key, object value, long storeId = 0)
     {
         ArgumentNullException.ThrowIfNull(key);
         key = key.Trim().ToLowerInvariant();
@@ -1277,7 +1297,7 @@ public partial class InstallationService
     /// <param name="settings">Setting instance</param>
     /// <param name="storeId">Store identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    protected virtual async Task SaveSettingAsync<T>(Dictionary<string, IList<Setting>> allSettings, T settings, int storeId = 0) where T : ISettings, new()
+    protected virtual async Task SaveSettingAsync<T>(Dictionary<string, IList<Setting>> allSettings, T settings, long storeId = 0) where T : ISettings, new()
     {
         foreach (var prop in typeof(T).GetProperties())
         {
@@ -1603,7 +1623,7 @@ public partial class InstallationService
             TranslateFromLanguageId = (await Table<Language>().FirstAsync()).Id,
             AllowPreTranslate = false,
             GoogleApiKey = string.Empty,
-            NotTranslateLanguages = new List<int>(),
+            NotTranslateLanguages = new List<long>(),
             DeepLAuthKey = string.Empty,
             TranslationServiceId = (int)TranslationServiceType.GoogleTranslate
         });
@@ -1849,9 +1869,7 @@ public partial class InstallationService
             RoundPricesDuringCalculation = true,
             GroupTierPricesForDistinctShoppingCartItems = false,
             AllowCartItemEditing = true,
-            RenderAssociatedAttributeValueQuantity = true,
-            VendorEnabled = false,
-            VendorRequired = false,
+            RenderAssociatedAttributeValueQuantity = true
         });
 
         await SaveSettingAsync(dictionary, new OrderSettings
@@ -1955,7 +1973,7 @@ public partial class InstallationService
 
         await SaveSettingAsync(dictionary, new PaymentSettings
         {
-            ActivePaymentMethodSystemNames = ["Payments.CheckMoneyOrder"],
+            ActivePaymentMethodSystemNames = ["Payments.CheckMoneyOrder", "Payments.Manual"],
             AllowRePostingPayments = true,
             BypassPaymentMethodSelectionIfOnlyOne = true,
             ShowPaymentMethodDescriptions = true,

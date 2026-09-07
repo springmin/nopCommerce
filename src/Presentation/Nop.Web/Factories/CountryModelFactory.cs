@@ -45,7 +45,7 @@ public partial class CountryModelFactory : ICountryModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the list of identifiers and names of states and provinces
     /// </returns>
-    public virtual async Task<IList<StateProvinceModel>> GetStatesByCountryIdAsync(int countryId, bool addSelectStateItem)
+    public virtual async Task<IList<StateProvinceModel>> GetStatesByCountryIdAsync(long countryId, bool addSelectStateItem)
     {
         var country = await _countryService.GetCountryByIdAsync(countryId);
         var states =

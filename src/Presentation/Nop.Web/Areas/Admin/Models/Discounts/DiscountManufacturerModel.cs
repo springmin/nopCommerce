@@ -9,7 +9,7 @@ public partial record DiscountManufacturerModel : BaseNopEntityModel
 {
     #region Properties
 
-    public int ManufacturerId { get; set; }
+    public long ManufacturerId { get; set; }
 
     public string ManufacturerName { get; set; }
 

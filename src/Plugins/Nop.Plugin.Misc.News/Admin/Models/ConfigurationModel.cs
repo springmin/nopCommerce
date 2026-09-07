@@ -10,7 +10,7 @@ public record ConfigurationModel : BaseNopModel, ISettingsModel
 {
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Plugins.Misc.News.Configuration.Enabled")]
     public bool Enabled { get; set; }

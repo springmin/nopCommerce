@@ -12,7 +12,7 @@ public partial record SelectMenuItemProductSearchModel : BaseSearchModel
     public string SearchKeywords { get; set; }
 
     [NopResourceDisplayName("Admin.ContentManagement.Menus.MenuItems.SelectProduct.SearchStore")]
-    public int SearchStoreId { get; set; }
+    public long SearchStoreId { get; set; }
 
     public IList<SelectListItem> AvailableStores { get; set; } = new List<SelectListItem>();
 

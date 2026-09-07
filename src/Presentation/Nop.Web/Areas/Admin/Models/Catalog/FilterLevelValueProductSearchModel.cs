@@ -9,7 +9,7 @@ public partial record FilterLevelValueProductSearchModel : BaseSearchModel
 {
     #region Properties
 
-    public int FilterLevelValueId { get; set; }
+    public long FilterLevelValueId { get; set; }
 
     #endregion
 }

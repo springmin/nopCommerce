@@ -14,7 +14,7 @@ public partial interface IAclSupportedModel
     /// Gets or sets identifiers of the selected customer roles
     /// </summary>
     [NopResourceDisplayName("Admin.IAclSupportedModel.Fields.AclCustomerRoles")]
-    IList<int> SelectedCustomerRoleIds { get; set; }
+    IList<long> SelectedCustomerRoleIds { get; set; }
 
     /// <summary>
     /// Gets or sets items for the all available customer roles

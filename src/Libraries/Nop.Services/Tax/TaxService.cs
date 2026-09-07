@@ -137,7 +137,7 @@ public partial class TaxService : ITaxService
     /// A task that represents the asynchronous operation
     /// The task result contains the package for tax calculation
     /// </returns>
-    protected virtual async Task<TaxRateRequest> PrepareTaxRateRequestAsync(Product product, int taxCategoryId, Customer customer, decimal price)
+    protected virtual async Task<TaxRateRequest> PrepareTaxRateRequestAsync(Product product, long taxCategoryId, Customer customer, decimal price)
     {
         ArgumentNullException.ThrowIfNull(customer);
 
@@ -234,7 +234,7 @@ public partial class TaxService : ITaxService
     /// A task that represents the asynchronous operation
     /// The task result contains the calculated tax rate. A value indicating whether a request is taxable
     /// </returns>
-    protected virtual async Task<(decimal taxRate, bool isTaxable)> GetTaxRateAsync(Product product, int taxCategoryId,
+    protected virtual async Task<(decimal taxRate, bool isTaxable)> GetTaxRateAsync(Product product, long taxCategoryId,
         Customer customer, decimal price)
     {
         var taxRate = decimal.Zero;
@@ -445,7 +445,7 @@ public partial class TaxService : ITaxService
     /// A task that represents the asynchronous operation
     /// The task result contains the price. Tax rate
     /// </returns>
-    public virtual async Task<(decimal price, decimal taxRate)> GetProductPriceAsync(Product product, int taxCategoryId,
+    public virtual async Task<(decimal price, decimal taxRate)> GetProductPriceAsync(Product product, long taxCategoryId,
         decimal price, bool includingTax, Customer customer,
         bool priceIncludesTax)
     {

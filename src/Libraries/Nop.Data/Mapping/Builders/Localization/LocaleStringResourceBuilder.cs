@@ -20,7 +20,7 @@ public partial class LocaleStringResourceBuilder : NopEntityBuilder<LocaleString
         table
             .WithColumn(nameof(LocaleStringResource.ResourceName)).AsString(200).NotNullable()
             .WithColumn(nameof(LocaleStringResource.ResourceValue)).AsString(int.MaxValue).NotNullable()
-            .WithColumn(nameof(LocaleStringResource.LanguageId)).AsInt32().ForeignKey<Language>();
+            .WithColumn(nameof(LocaleStringResource.LanguageId)).AsInt64().ForeignKey<Language>();
     }
 
     #endregion

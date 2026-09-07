@@ -148,7 +148,7 @@ public partial class AddressAttributeController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         //try to get an address attribute with the specified id
         var addressAttribute = await _addressAttributeService.GetAttributeByIdAsync(id);
@@ -200,7 +200,7 @@ public partial class AddressAttributeController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get an address attribute with the specified id
         var addressAttribute = await _addressAttributeService.GetAttributeByIdAsync(id);
@@ -238,7 +238,7 @@ public partial class AddressAttributeController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public virtual async Task<IActionResult> ValueCreatePopup(int addressAttributeId)
+    public virtual async Task<IActionResult> ValueCreatePopup(long addressAttributeId)
     {
         //try to get an address attribute with the specified id
         var addressAttribute = await _addressAttributeService.GetAttributeByIdAsync(addressAttributeId);
@@ -286,7 +286,7 @@ public partial class AddressAttributeController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public virtual async Task<IActionResult> ValueEditPopup(int id)
+    public virtual async Task<IActionResult> ValueEditPopup(long id)
     {
         //try to get an address attribute value with the specified id
         var addressAttributeValue = await _addressAttributeService.GetAttributeValueByIdAsync(id);
@@ -344,7 +344,7 @@ public partial class AddressAttributeController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public virtual async Task<IActionResult> ValueDelete(int id)
+    public virtual async Task<IActionResult> ValueDelete(long id)
     {
         //try to get an address attribute value with the specified id
         var addressAttributeValue = await _addressAttributeService.GetAttributeValueByIdAsync(id)

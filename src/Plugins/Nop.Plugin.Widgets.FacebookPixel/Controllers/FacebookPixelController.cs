@@ -175,7 +175,7 @@ public class FacebookPixelController : BasePluginController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_WIDGETS)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         var configuration = await _facebookPixelService.GetConfigurationByIdAsync(id);
         if (configuration == null)
@@ -231,7 +231,7 @@ public class FacebookPixelController : BasePluginController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_WIDGETS)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         var configuration = await _facebookPixelService.GetConfigurationByIdAsync(id);
         if (configuration == null)
@@ -270,7 +270,7 @@ public class FacebookPixelController : BasePluginController
     //ValidateAttribute is used to force model validation
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_WIDGETS)]
-    public virtual async Task<IActionResult> CustomEventAdd(int configurationId, [Validate] CustomEventModel model)
+    public virtual async Task<IActionResult> CustomEventAdd(long configurationId, [Validate] CustomEventModel model)
     {
         if (!ModelState.IsValid)
             return ErrorJson(ModelState.SerializeErrors());
@@ -283,7 +283,7 @@ public class FacebookPixelController : BasePluginController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_WIDGETS)]
-    public virtual async Task<IActionResult> CustomEventDelete(int configurationId, string id)
+    public virtual async Task<IActionResult> CustomEventDelete(long configurationId, string id)
     {
         //save custom events configuration
         var eventName = id;

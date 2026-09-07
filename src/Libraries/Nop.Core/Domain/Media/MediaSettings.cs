@@ -125,7 +125,7 @@ public partial class MediaSettings : ISettings
     /// <summary>
     /// Gets or sets the product default image id. If 0, then default-image.png will be used
     /// </summary>
-    public int ProductDefaultImageId { get; set; }
+    public long ProductDefaultImageId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether we need to reorient images automatically

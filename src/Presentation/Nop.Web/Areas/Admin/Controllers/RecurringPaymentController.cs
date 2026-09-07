@@ -70,7 +70,7 @@ public partial class RecurringPaymentController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Orders.RECURRING_PAYMENTS_VIEW)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         //try to get a recurring payment with the specified id
         var payment = await _orderService.GetRecurringPaymentByIdAsync(id);
@@ -115,7 +115,7 @@ public partial class RecurringPaymentController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Orders.RECURRING_PAYMENTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get a recurring payment with the specified id
         var payment = await _orderService.GetRecurringPaymentByIdAsync(id);
@@ -146,7 +146,7 @@ public partial class RecurringPaymentController : BaseAdminController
     [HttpPost, ActionName("Edit")]
     [FormValueRequired("processnextpayment")]
     [CheckPermission(StandardPermission.Orders.RECURRING_PAYMENTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ProcessNextPayment(int id)
+    public virtual async Task<IActionResult> ProcessNextPayment(long id)
     {
         //try to get a recurring payment with the specified id
         var payment = await _orderService.GetRecurringPaymentByIdAsync(id);
@@ -189,7 +189,7 @@ public partial class RecurringPaymentController : BaseAdminController
     [HttpPost, ActionName("Edit")]
     [FormValueRequired("cancelpayment")]
     [CheckPermission(StandardPermission.Orders.RECURRING_PAYMENTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> CancelRecurringPayment(int id)
+    public virtual async Task<IActionResult> CancelRecurringPayment(long id)
     {
         //try to get a recurring payment with the specified id
         var payment = await _orderService.GetRecurringPaymentByIdAsync(id);

@@ -108,7 +108,7 @@ public partial class ScheduleTaskController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.System.MANAGE_SCHEDULE_TASKS)]
-    public virtual async Task<IActionResult> RunNow(int id)
+    public virtual async Task<IActionResult> RunNow(long id)
     {
         try
         {

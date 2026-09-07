@@ -61,7 +61,7 @@ public partial class Currency : BaseEntity, ILocalizedEntity, IStoreMappingSuppo
     /// <summary>
     /// Gets or sets the rounding type identifier
     /// </summary>
-    public int RoundingTypeId { get; set; }
+    public long RoundingTypeId { get; set; }
 
     /// <summary>
     /// Gets or sets the rounding type

@@ -87,11 +87,11 @@ public class SettingMigration : MigrationBase
 
         //#7388
         this.SetSettingIfNotExists<TranslationSettings, bool>(settings => settings.AllowPreTranslate, false);
-        this.SetSettingIfNotExists<TranslationSettings, int>(settings => settings.TranslateFromLanguageId, EngineContext.Current.Resolve<IRepository<Language>>().Table.First().Id);
+        this.SetSettingIfNotExists<TranslationSettings, long>(settings => settings.TranslateFromLanguageId, EngineContext.Current.Resolve<IRepository<Language>>().Table.First().Id);
         this.SetSettingIfNotExists<TranslationSettings, string>(settings => settings.GoogleApiKey, string.Empty);
         this.SetSettingIfNotExists<TranslationSettings, string>(settings => settings.DeepLAuthKey, string.Empty);
-        this.SetSettingIfNotExists<TranslationSettings, List<int>>(settings => settings.NotTranslateLanguages, []);
-        this.SetSettingIfNotExists<TranslationSettings, int>(settings => settings.TranslationServiceId, 0);
+        this.SetSettingIfNotExists<TranslationSettings, List<long>>(settings => settings.NotTranslateLanguages, []);
+        this.SetSettingIfNotExists<TranslationSettings, long>(settings => settings.TranslationServiceId, 0);
 
         //#7779
         this.SetSetting<RobotsTxtSettings, List<string>>(settings => settings.DisallowPaths, setting =>

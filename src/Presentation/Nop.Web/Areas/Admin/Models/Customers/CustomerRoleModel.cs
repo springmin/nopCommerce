@@ -45,12 +45,12 @@ public partial record CustomerRoleModel : BaseNopEntityModel
     public bool OverrideTaxDisplayType { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.CustomerRoles.Fields.DefaultTaxDisplayType")]
-    public int DefaultTaxDisplayTypeId { get; set; }
+    public long DefaultTaxDisplayTypeId { get; set; }
 
     public IList<SelectListItem> TaxDisplayTypeValues { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.CustomerRoles.Fields.PurchasedWithProduct")]
-    public int PurchasedWithProductId { get; set; }
+    public long PurchasedWithProductId { get; set; }
 
     [NopResourceDisplayName("Admin.Customers.CustomerRoles.Fields.PurchasedWithProduct")]
     public string PurchasedWithProductName { get; set; }

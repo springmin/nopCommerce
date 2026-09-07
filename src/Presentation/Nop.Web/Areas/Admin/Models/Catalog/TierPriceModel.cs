@@ -22,17 +22,17 @@ public partial record TierPriceModel : BaseNopEntityModel
 
     #region Properties
 
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.TierPrices.Fields.CustomerRole")]
-    public int CustomerRoleId { get; set; }
+    public long CustomerRoleId { get; set; }
 
     public IList<SelectListItem> AvailableCustomerRoles { get; set; }
 
     public string CustomerRole { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.TierPrices.Fields.Store")]
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 
     public IList<SelectListItem> AvailableStores { get; set; }
 

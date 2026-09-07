@@ -24,7 +24,7 @@ public record QuoteSearchModel : BaseSearchModel
     [NopResourceDisplayName("Plugins.Misc.RFQ.Fields.CustomerEmail")]
     public string CustomerEmail { get; set; }
 
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     [NopResourceDisplayName("Plugins.Misc.RFQ.CreatedOnFrom")]
     [UIHint("DateNullable")]

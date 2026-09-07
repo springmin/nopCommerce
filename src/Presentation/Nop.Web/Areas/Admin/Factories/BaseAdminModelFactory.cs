@@ -351,7 +351,7 @@ public partial class BaseAdminModelFactory : IBaseAdminModelFactory
     /// <param name="withSpecialDefaultItem">Whether to insert the first special item for the default value</param>
     /// <param name="defaultItemText">Default item text; pass null to use default value of the default item text</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task PrepareStatesAndProvincesAsync(IList<SelectListItem> items, int? countryId,
+    public virtual async Task PrepareStatesAndProvincesAsync(IList<SelectListItem> items, long? countryId,
         bool withSpecialDefaultItem = true, string defaultItemText = null)
     {
         ArgumentNullException.ThrowIfNull(items);
@@ -626,8 +626,7 @@ public partial class BaseAdminModelFactory : IBaseAdminModelFactory
         ArgumentNullException.ThrowIfNull(items);
 
         //prepare available shopping cart types
-        var availableShoppingCartTypeItems = await ShoppingCartType.ShoppingCart
-            .ToSelectListAsync(markCurrentAsSelected: false, valuesToExclude: [(int)ShoppingCartType.Stash]);
+        var availableShoppingCartTypeItems = await ShoppingCartType.ShoppingCart.ToSelectListAsync(false);
         foreach (var shoppingCartTypeItem in availableShoppingCartTypeItems)
             items.Add(shoppingCartTypeItem);
 
@@ -940,7 +939,7 @@ public partial class BaseAdminModelFactory : IBaseAdminModelFactory
 
         //insert special item for the default value
         await PrepareDefaultItemAsync(items, withSpecialDefaultItem, defaultItemText, defaultItemValue);
-    }
+    }    
 
     /// <summary>
     /// Prepare translation supported model

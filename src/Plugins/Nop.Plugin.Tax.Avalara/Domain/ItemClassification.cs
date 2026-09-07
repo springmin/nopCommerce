@@ -10,7 +10,7 @@ public class ItemClassification : BaseEntity
     /// <summary>
     /// Gets or sets the product identifier
     /// </summary>
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     /// <summary>
     /// Gets or sets the HS classification request identifier
@@ -20,7 +20,7 @@ public class ItemClassification : BaseEntity
     /// <summary>
     /// Gets or sets the country identifier
     /// </summary>
-    public int CountryId { get; set; }
+    public long CountryId { get; set; }
 
     /// <summary>
     /// Gets or sets the HS (harmonized system) code

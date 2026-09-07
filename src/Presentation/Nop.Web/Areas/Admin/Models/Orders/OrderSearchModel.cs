@@ -23,9 +23,9 @@ public partial record OrderSearchModel : BaseSearchModel
         AvailableWarehouses = new List<SelectListItem>();
         AvailablePaymentMethods = new List<SelectListItem>();
         AvailableCountries = new List<SelectListItem>();
-        OrderStatusIds = new List<int>();
-        PaymentStatusIds = new List<int>();
-        ShippingStatusIds = new List<int>();
+        OrderStatusIds = new List<long>();
+        PaymentStatusIds = new List<long>();
+        ShippingStatusIds = new List<long>();
         LicenseCheckModel = new();
     }
 
@@ -42,28 +42,28 @@ public partial record OrderSearchModel : BaseSearchModel
     public DateTime? EndDate { get; set; }
 
     [NopResourceDisplayName("Admin.Orders.List.OrderStatus")]
-    public IList<int> OrderStatusIds { get; set; }
+    public IList<long> OrderStatusIds { get; set; }
 
     [NopResourceDisplayName("Admin.Orders.List.PaymentStatus")]
-    public IList<int> PaymentStatusIds { get; set; }
+    public IList<long> PaymentStatusIds { get; set; }
 
     [NopResourceDisplayName("Admin.Orders.List.ShippingStatus")]
-    public IList<int> ShippingStatusIds { get; set; }
+    public IList<long> ShippingStatusIds { get; set; }
 
     [NopResourceDisplayName("Admin.Orders.List.PaymentMethod")]
     public string PaymentMethodSystemName { get; set; }
 
     [NopResourceDisplayName("Admin.Orders.List.Store")]
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 
     [NopResourceDisplayName("Admin.Orders.List.Vendor")]
-    public int VendorId { get; set; }
+    public long VendorId { get; set; }
 
     [NopResourceDisplayName("Admin.Orders.List.Warehouse")]
-    public int WarehouseId { get; set; }
+    public long WarehouseId { get; set; }
 
     [NopResourceDisplayName("Admin.Orders.List.Product")]
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     [NopResourceDisplayName("Admin.Orders.List.BillingEmail")]
     public string BillingEmail { get; set; }
@@ -77,7 +77,7 @@ public partial record OrderSearchModel : BaseSearchModel
     public string BillingLastName { get; set; }
 
     [NopResourceDisplayName("Admin.Orders.List.BillingCountry")]
-    public int BillingCountryId { get; set; }
+    public long BillingCountryId { get; set; }
 
     [NopResourceDisplayName("Admin.Orders.List.OrderNotes")]
     public string OrderNotes { get; set; }

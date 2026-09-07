@@ -9,7 +9,7 @@ public partial record GiftCardUsageHistorySearchModel : BaseSearchModel
 {
     #region Properties
 
-    public int GiftCardId { get; set; }
+    public long GiftCardId { get; set; }
 
     #endregion
 }

@@ -50,7 +50,7 @@ public class WidgetSwiperController : BasePluginController
 
     #region Utilities
 
-    protected virtual async Task<List<Slide>> GetSlidesForStoreAsync(int storeId)
+    protected virtual async Task<List<Slide>> GetSlidesForStoreAsync(long storeId)
     {
         var key = $"{nameof(SwiperSettings)}.{nameof(SwiperSettings.Slides)}";
 
@@ -190,7 +190,7 @@ public class WidgetSwiperController : BasePluginController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_WIDGETS)]
-    public virtual async Task<IActionResult> SlideDelete(int pictureId)
+    public virtual async Task<IActionResult> SlideDelete(long pictureId)
     {
         //load settings for a chosen store scope
         var storeScope = await _storeContext.GetActiveStoreScopeConfigurationAsync();

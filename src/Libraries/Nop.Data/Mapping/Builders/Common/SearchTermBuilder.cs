@@ -18,7 +18,7 @@ public partial class SearchTermBuilder : NopEntityBuilder<SearchTerm>
     /// <param name="table">Create table expression builder</param>
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
-        table.WithColumn(nameof(SearchTerm.CustomerId)).AsInt32().ForeignKey<Customer>();
+        table.WithColumn(nameof(SearchTerm.CustomerId)).AsInt64().ForeignKey<Customer>();
     }
 
     #endregion

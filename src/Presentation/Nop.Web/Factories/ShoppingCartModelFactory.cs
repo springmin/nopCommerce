@@ -399,7 +399,6 @@ public partial class ShoppingCartModelFactory : IShoppingCartModelFactory
             ProductSeName = await _urlRecordService.GetSeNameAsync(product),
             Quantity = sci.Quantity,
             AttributeInfo = await _productAttributeFormatter.FormatAttributesAsync(product, sci.AttributesXml),
-            VendorId = product.VendorId,
         };
 
         //allow editing?
@@ -773,49 +772,6 @@ public partial class ShoppingCartModelFactory : IShoppingCartModelFactory
         return model;
     }
 
-    /// <summary>
-    /// Prepare available vendors
-    /// </summary>
-    /// <param name="customer">Customer</param>
-    /// <param name="storeId">Store id</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the list of available vendors
-    /// </returns>
-    protected virtual async Task<List<SelectListItem>> PrepareAvailableVendorsListAsync(Customer customer, int storeId)
-    {
-        var result = new List<SelectListItem>();
-
-        var cart = await _shoppingCartService
-            .GetShoppingCartAsync(customer, [(int)ShoppingCartType.ShoppingCart, (int)ShoppingCartType.Stash], storeId);
-
-        var vendors = await cart
-            .SelectAwait(async item => await _vendorService.GetVendorByProductIdAsync(item.ProductId))
-            .ToListAsync();
-
-        if (vendors.Any(vendor => vendor is not null))
-        {
-            //check whether all items are from the same vendor
-            var distinctVendors = vendors
-                .Where(vendor => vendor is not null)
-                .DistinctBy(vendor => vendor.Id)
-                .OrderBy(vendor => vendor.DisplayOrder).ThenBy(vendor => vendor.Id)
-                .ToList();
-            if (distinctVendors.Count > 1 || vendors.Any(vendor => vendor is null))
-            {
-                result.AddRange(await distinctVendors.SelectAwait(async vendor => new SelectListItem
-                {
-                    Text = await _localizationService.GetLocalizedAsync(vendor, x => x.Name),
-                    Value = vendor.Id.ToString()
-                }).ToListAsync());
-            }
-        }
-
-        result.Insert(0, new(await _localizationService.GetResourceAsync("ShoppingCart.VendorList.All"), "0"));
-
-        return result;
-    }
-
     #endregion
 
     #region Methods
@@ -938,7 +894,6 @@ public partial class ShoppingCartModelFactory : IShoppingCartModelFactory
         model.ShowProductImages = _shoppingCartSettings.ShowProductImagesOnShoppingCart;
         model.ShowSku = _catalogSettings.ShowSkuOnProductDetailsPage;
         model.ShowVendorName = _vendorSettings.ShowVendorOnOrderDetailsPage;
-        model.ShowItemDiscount = true;
         var customer = await _workContext.GetCurrentCustomerAsync();
         var store = await _storeContext.GetCurrentStoreAsync();
         var checkoutAttributesXml = await _genericAttributeService.GetAttributeAsync<string>(customer,
@@ -994,14 +949,6 @@ public partial class ShoppingCartModelFactory : IShoppingCartModelFactory
             model.Items.Add(cartItemModel);
         }
 
-        if (_shoppingCartSettings.VendorEnabled)
-        {
-            model.SelectedVendorId = await _genericAttributeService
-                .GetAttributeAsync<int>(customer, NopCustomerDefaults.ShoppingCartVendorAttribute, store.Id);
-            model.AvailableVendors = await PrepareAvailableVendorsListAsync(customer, store.Id);
-            model.DisplayVendorList = model.AvailableVendors.Count > 1;
-        }
-
         //payment methods
         //all payment methods (do not filter by country here as it could be not specified yet)
         var paymentMethods = await (await _paymentPluginManager
@@ -1044,7 +991,7 @@ public partial class ShoppingCartModelFactory : IShoppingCartModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the wishlist model
     /// </returns>
-    public virtual async Task<WishlistModel> PrepareWishlistModelAsync(WishlistModel model, IList<ShoppingCartItem> cart, bool isEditable = true, int? list = null)
+    public virtual async Task<WishlistModel> PrepareWishlistModelAsync(WishlistModel model, IList<ShoppingCartItem> cart, bool isEditable = true, long? list = null)
     {
         ArgumentNullException.ThrowIfNull(cart);
         ArgumentNullException.ThrowIfNull(model);
@@ -1563,7 +1510,7 @@ public partial class ShoppingCartModelFactory : IShoppingCartModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the wishlist email a friend model
     /// </returns>
-    public virtual async Task<WishlistEmailAFriendModel> PrepareWishlistEmailAFriendModelAsync(WishlistEmailAFriendModel model, bool excludeProperties, int? wishlistId = null)
+    public virtual async Task<WishlistEmailAFriendModel> PrepareWishlistEmailAFriendModelAsync(WishlistEmailAFriendModel model, bool excludeProperties, long? wishlistId = null)
     {
         ArgumentNullException.ThrowIfNull(model);
 

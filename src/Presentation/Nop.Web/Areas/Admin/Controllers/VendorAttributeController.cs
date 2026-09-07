@@ -139,7 +139,7 @@ public partial class VendorAttributeController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         //try to get a vendor attribute with the specified id
         var vendorAttribute = await _vendorAttributeService.GetAttributeByIdAsync(id);
@@ -189,7 +189,7 @@ public partial class VendorAttributeController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get a vendor attribute with the specified id
         var vendorAttribute = await _vendorAttributeService.GetAttributeByIdAsync(id);
@@ -226,7 +226,7 @@ public partial class VendorAttributeController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public virtual async Task<IActionResult> ValueCreatePopup(int vendorAttributeId)
+    public virtual async Task<IActionResult> ValueCreatePopup(long vendorAttributeId)
     {
         //try to get a vendor attribute with the specified id
         var vendorAttribute = await _vendorAttributeService.GetAttributeByIdAsync(vendorAttributeId);
@@ -274,7 +274,7 @@ public partial class VendorAttributeController : BaseAdminController
 
     //edit
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public virtual async Task<IActionResult> ValueEditPopup(int id)
+    public virtual async Task<IActionResult> ValueEditPopup(long id)
     {
         //try to get a vendor attribute value with the specified id
         var vendorAttributeValue = await _vendorAttributeService.GetAttributeValueByIdAsync(id);
@@ -332,7 +332,7 @@ public partial class VendorAttributeController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public virtual async Task<IActionResult> ValueDelete(int id)
+    public virtual async Task<IActionResult> ValueDelete(long id)
     {
         //try to get a vendor attribute value with the specified id
         var value = await _vendorAttributeService.GetAttributeValueByIdAsync(id)

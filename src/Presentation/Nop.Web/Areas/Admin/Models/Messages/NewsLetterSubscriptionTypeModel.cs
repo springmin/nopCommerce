@@ -14,7 +14,7 @@ public partial record NewsLetterSubscriptionTypeModel : BaseNopEntityModel, ILoc
     public NewsLetterSubscriptionTypeModel()
     {
         Locales = new List<NewsLetterSubscriptionTypeLocalizedModel>();
-        SelectedStoreIds = new List<int>();
+        SelectedStoreIds = new List<long>();
         AvailableStores = new List<SelectListItem>();
     }
 
@@ -35,7 +35,7 @@ public partial record NewsLetterSubscriptionTypeModel : BaseNopEntityModel, ILoc
 
     //store mapping
     [NopResourceDisplayName("Admin.Promotions.NewsLetterSubscriptionType.Fields.LimitedToStores")]
-    public IList<int> SelectedStoreIds { get; set; }
+    public IList<long> SelectedStoreIds { get; set; }
 
     public IList<SelectListItem> AvailableStores { get; set; }
 

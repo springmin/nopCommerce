@@ -10,12 +10,12 @@ public partial class ProductAttributeMapping : BaseEntity, ILocalizedEntity
     /// <summary>
     /// Gets or sets the product identifier
     /// </summary>
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     /// <summary>
     /// Gets or sets the product attribute identifier
     /// </summary>
-    public int ProductAttributeId { get; set; }
+    public long ProductAttributeId { get; set; }
 
     /// <summary>
     /// Gets or sets a value a text prompt
@@ -30,7 +30,7 @@ public partial class ProductAttributeMapping : BaseEntity, ILocalizedEntity
     /// <summary>
     /// Gets or sets the attribute control type identifier
     /// </summary>
-    public int AttributeControlTypeId { get; set; }
+    public long AttributeControlTypeId { get; set; }
 
     /// <summary>
     /// Gets or sets the display order

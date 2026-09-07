@@ -66,7 +66,7 @@ public class FixedByWeightByTotalComputationMethod : BasePlugin, IShippingRateCo
     /// A task that represents the asynchronous operation
     /// The task result contains the rate
     /// </returns>
-    protected async Task<decimal> GetRateAsync(int shippingMethodId)
+    protected async Task<decimal> GetRateAsync(long shippingMethodId)
     {
         return await _settingService.GetSettingByKeyAsync<decimal>(string.Format(FixedByWeightByTotalDefaults.FIXED_RATE_SETTINGS_KEY, shippingMethodId));
     }
@@ -79,7 +79,7 @@ public class FixedByWeightByTotalComputationMethod : BasePlugin, IShippingRateCo
     /// A task that represents the asynchronous operation
     /// The task result contains the ransit days
     /// </returns>
-    protected async Task<int?> GetTransitDaysAsync(int shippingMethodId)
+    protected async Task<int?> GetTransitDaysAsync(long shippingMethodId)
     {
         return await _settingService.GetSettingByKeyAsync<int?>(string.Format(FixedByWeightByTotalDefaults.TRANSIT_DAYS_SETTINGS_KEY, shippingMethodId));
     }

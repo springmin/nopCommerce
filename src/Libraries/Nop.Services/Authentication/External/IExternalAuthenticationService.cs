@@ -27,7 +27,7 @@ public partial interface IExternalAuthenticationService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    Task<ExternalAuthenticationRecord> GetExternalAuthenticationRecordByIdAsync(int externalAuthenticationRecordId);
+    Task<ExternalAuthenticationRecord> GetExternalAuthenticationRecordByIdAsync(long externalAuthenticationRecordId);
 
     /// <summary>
     /// Get all the external authentication records by customer

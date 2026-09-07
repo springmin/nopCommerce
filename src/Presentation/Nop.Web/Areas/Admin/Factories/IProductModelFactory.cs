@@ -207,7 +207,7 @@ public partial interface IProductModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the product specification attribute model
     /// </returns>
-    Task<AddSpecificationAttributeModel> PrepareAddSpecificationAttributeModelAsync(int productId, int? specificationId);
+    Task<AddSpecificationAttributeModel> PrepareAddSpecificationAttributeModelAsync(long productId, long? specificationId);
 
     /// <summary>
     /// Prepare product tag search model

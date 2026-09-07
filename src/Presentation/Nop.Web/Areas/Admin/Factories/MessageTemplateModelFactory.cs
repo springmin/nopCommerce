@@ -163,7 +163,7 @@ public partial class MessageTemplateModelFactory : IMessageTemplateModelFactory
     public virtual async Task<MessageTemplateModel> PrepareMessageTemplateModelAsync(MessageTemplateModel model,
         MessageTemplate messageTemplate, bool excludeProperties = false)
     {
-        Func<MessageTemplateLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<MessageTemplateLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (messageTemplate != null)
         {
@@ -219,7 +219,7 @@ public partial class MessageTemplateModelFactory : IMessageTemplateModelFactory
     /// The task result contains the st message template model
     /// </returns>
     public virtual async Task<TestMessageTemplateModel> PrepareTestMessageTemplateModelAsync(TestMessageTemplateModel model,
-        MessageTemplate messageTemplate, int languageId)
+        MessageTemplate messageTemplate, long languageId)
     {
         ArgumentNullException.ThrowIfNull(model);
 

@@ -110,7 +110,7 @@ public partial class MeasureController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_SHIPPING_SETTINGS)]
-    public virtual async Task<IActionResult> WeightDelete(int id)
+    public virtual async Task<IActionResult> WeightDelete(long id)
     {
         //try to get a weight with the specified id
         var weight = await _measureService.GetMeasureWeightByIdAsync(id)
@@ -130,7 +130,7 @@ public partial class MeasureController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_SHIPPING_SETTINGS)]
-    public virtual async Task<IActionResult> MarkAsPrimaryWeight(int id)
+    public virtual async Task<IActionResult> MarkAsPrimaryWeight(long id)
     {
         //try to get a weight with the specified id
         var weight = await _measureService.GetMeasureWeightByIdAsync(id)
@@ -194,7 +194,7 @@ public partial class MeasureController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_SHIPPING_SETTINGS)]
-    public virtual async Task<IActionResult> DimensionDelete(int id)
+    public virtual async Task<IActionResult> DimensionDelete(long id)
     {
         //try to get a dimension with the specified id
         var dimension = await _measureService.GetMeasureDimensionByIdAsync(id)
@@ -214,7 +214,7 @@ public partial class MeasureController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_SHIPPING_SETTINGS)]
-    public virtual async Task<IActionResult> MarkAsPrimaryDimension(int id)
+    public virtual async Task<IActionResult> MarkAsPrimaryDimension(long id)
     {
         //try to get a dimension with the specified id
         var dimension = await _measureService.GetMeasureDimensionByIdAsync(id)

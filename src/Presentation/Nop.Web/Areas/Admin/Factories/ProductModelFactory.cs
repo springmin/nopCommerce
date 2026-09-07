@@ -825,7 +825,7 @@ public partial class ProductModelFactory : IProductModelFactory
         var currentVendor = await _workContext.GetCurrentVendorAsync();
         if (currentVendor != null)
             searchModel.SearchVendorId = currentVendor.Id;
-        var categoryIds = new List<int> { searchModel.SearchCategoryId };
+        var categoryIds = new List<long> { searchModel.SearchCategoryId };
         if (searchModel.SearchIncludeSubCategories && searchModel.SearchCategoryId > 0)
         {
             var childCategoryIds = await _categoryService.GetChildCategoryIdsAsync(parentCategoryId: searchModel.SearchCategoryId, showHidden: true);
@@ -835,7 +835,7 @@ public partial class ProductModelFactory : IProductModelFactory
         //get products
         var products = await _productService.SearchProductsAsync(showHidden: true,
             categoryIds: categoryIds,
-            manufacturerIds: new List<int> { searchModel.SearchManufacturerId },
+            manufacturerIds: new List<long> { searchModel.SearchManufacturerId },
             storeId: searchModel.SearchStoreId,
             vendorId: searchModel.SearchVendorId,
             warehouseId: searchModel.SearchWarehouseId,
@@ -889,7 +889,7 @@ public partial class ProductModelFactory : IProductModelFactory
     /// </returns>
     public virtual async Task<ProductModel> PrepareProductModelAsync(ProductModel model, Product product, bool excludeProperties = false)
     {
-        Func<ProductLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<ProductLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (product != null)
         {
@@ -1138,8 +1138,8 @@ public partial class ProductModelFactory : IProductModelFactory
 
         //get products
         var products = await _productService.SearchProductsAsync(showHidden: true,
-            categoryIds: new List<int> { searchModel.SearchCategoryId },
-            manufacturerIds: new List<int> { searchModel.SearchManufacturerId },
+            categoryIds: new List<long> { searchModel.SearchCategoryId },
+            manufacturerIds: new List<long> { searchModel.SearchManufacturerId },
             storeId: searchModel.SearchStoreId,
             vendorId: searchModel.SearchVendorId,
             productType: searchModel.SearchProductTypeId > 0 ? (ProductType?)searchModel.SearchProductTypeId : null,
@@ -1251,8 +1251,8 @@ public partial class ProductModelFactory : IProductModelFactory
 
         //get products
         var products = await _productService.SearchProductsAsync(showHidden: true,
-            categoryIds: new List<int> { searchModel.SearchCategoryId },
-            manufacturerIds: new List<int> { searchModel.SearchManufacturerId },
+            categoryIds: new List<long> { searchModel.SearchCategoryId },
+            manufacturerIds: new List<long> { searchModel.SearchManufacturerId },
             storeId: searchModel.SearchStoreId,
             vendorId: searchModel.SearchVendorId,
             productType: searchModel.SearchProductTypeId > 0 ? (ProductType?)searchModel.SearchProductTypeId : null,
@@ -1413,8 +1413,8 @@ public partial class ProductModelFactory : IProductModelFactory
 
         //get products
         var products = await _productService.SearchProductsAsync(showHidden: true,
-            categoryIds: new List<int> { searchModel.SearchCategoryId },
-            manufacturerIds: new List<int> { searchModel.SearchManufacturerId },
+            categoryIds: new List<long> { searchModel.SearchCategoryId },
+            manufacturerIds: new List<long> { searchModel.SearchManufacturerId },
             storeId: searchModel.SearchStoreId,
             vendorId: searchModel.SearchVendorId,
             productType: searchModel.SearchProductTypeId > 0 ? (ProductType?)searchModel.SearchProductTypeId : null,
@@ -1526,8 +1526,8 @@ public partial class ProductModelFactory : IProductModelFactory
 
         //get products
         var products = await _productService.SearchProductsAsync(showHidden: true,
-            categoryIds: new List<int> { searchModel.SearchCategoryId },
-            manufacturerIds: new List<int> { searchModel.SearchManufacturerId },
+            categoryIds: new List<long> { searchModel.SearchCategoryId },
+            manufacturerIds: new List<long> { searchModel.SearchManufacturerId },
             storeId: searchModel.SearchStoreId,
             vendorId: searchModel.SearchVendorId,
             productType: searchModel.SearchProductTypeId > 0 ? (ProductType?)searchModel.SearchProductTypeId : null,
@@ -1711,7 +1711,7 @@ public partial class ProductModelFactory : IProductModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the product specification attribute model
     /// </returns>
-    public virtual async Task<AddSpecificationAttributeModel> PrepareAddSpecificationAttributeModelAsync(int productId, int? specificationId)
+    public virtual async Task<AddSpecificationAttributeModel> PrepareAddSpecificationAttributeModelAsync(long productId, long? specificationId)
     {
         if (!specificationId.HasValue)
         {
@@ -1780,7 +1780,7 @@ public partial class ProductModelFactory : IProductModelFactory
         }
 
         model.Locales = await _localizedModelFactory.PrepareLocalizedModelsAsync(
-            async (AddSpecificationAttributeLocalizedModel locale, int languageId) =>
+            async (AddSpecificationAttributeLocalizedModel locale, long languageId) =>
             {
                 switch (attribute.AttributeType)
                 {
@@ -1867,7 +1867,7 @@ public partial class ProductModelFactory : IProductModelFactory
     /// </returns>
     public virtual async Task<ProductTagModel> PrepareProductTagModelAsync(ProductTagModel model, ProductTag productTag, bool excludeProperties = false)
     {
-        Func<ProductTagLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<ProductTagLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (productTag != null)
         {
@@ -2168,7 +2168,7 @@ public partial class ProductModelFactory : IProductModelFactory
     public virtual async Task<ProductAttributeMappingModel> PrepareProductAttributeMappingModelAsync(ProductAttributeMappingModel model,
         Product product, ProductAttributeMapping productAttributeMapping, bool excludeProperties = false)
     {
-        Func<ProductAttributeMappingLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<ProductAttributeMappingLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         ArgumentNullException.ThrowIfNull(product);
 
@@ -2305,7 +2305,7 @@ public partial class ProductModelFactory : IProductModelFactory
     {
         ArgumentNullException.ThrowIfNull(productAttributeMapping);
 
-        Func<ProductAttributeValueLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<ProductAttributeValueLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (productAttributeValue != null)
         {
@@ -2424,8 +2424,8 @@ public partial class ProductModelFactory : IProductModelFactory
 
         //get products
         var products = await _productService.SearchProductsAsync(showHidden: true,
-            categoryIds: new List<int> { searchModel.SearchCategoryId },
-            manufacturerIds: new List<int> { searchModel.SearchManufacturerId },
+            categoryIds: new List<long> { searchModel.SearchCategoryId },
+            manufacturerIds: new List<long> { searchModel.SearchManufacturerId },
             storeId: searchModel.SearchStoreId,
             vendorId: searchModel.SearchVendorId,
             productType: searchModel.SearchProductTypeId > 0 ? (ProductType?)searchModel.SearchProductTypeId : null,

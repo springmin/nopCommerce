@@ -20,7 +20,7 @@ public class AddOrderRewardPointsHistoryFK : ForwardOnlyMigration
         var dataSettings = DataSettingsManager.LoadSettings();
 
         //foreign keys are not supported in SQLite
-        if (dataSettings.DataProvider == DataProviderType.Unknown)
+        if (dataSettings.DataProvider is DataProviderType.Unknown or DataProviderType.Sqlite)
             return;
 
         Create.ForeignKey().FromTable(nameof(Order)).ForeignColumn(nameof(Order.RewardPointsHistoryEntryId))

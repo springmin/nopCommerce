@@ -124,7 +124,7 @@ public partial class FilterLevelValueService : IFilterLevelValueService
     /// A task that represents the asynchronous operation
     /// The task result contains the filter level value
     /// </returns>
-    public virtual async Task<FilterLevelValue> GetFilterLevelValueByIdAsync(int filterLevelValueId)
+    public virtual async Task<FilterLevelValue> GetFilterLevelValueByIdAsync(long filterLevelValueId)
     {
         return await _filterLevelValueRepository.GetByIdAsync(filterLevelValueId);
     }
@@ -137,7 +137,7 @@ public partial class FilterLevelValueService : IFilterLevelValueService
     /// A task that represents the asynchronous operation
     /// The task result contains the filter level values
     /// </returns>
-    public virtual async Task<IList<FilterLevelValue>> GetFilterLevelValuesByProductIdAsync(int productId)
+    public virtual async Task<IList<FilterLevelValue>> GetFilterLevelValuesByProductIdAsync(long productId)
     {
         var query = from flv_map in _filterLevelValueProductMappingRepository.Table
                     join flv in _filterLevelValueRepository.Table on flv_map.FilterLevelValueId equals flv.Id
@@ -156,7 +156,7 @@ public partial class FilterLevelValueService : IFilterLevelValueService
     /// A task that represents the asynchronous operation
     /// The task result contains the filter level values
     /// </returns>
-    public virtual async Task<IList<FilterLevelValue>> GetFilterLevelValuesByIdsAsync(int[] filterLevelValueIds)
+    public virtual async Task<IList<FilterLevelValue>> GetFilterLevelValuesByIdsAsync(long[] filterLevelValueIds)
     {
         return await _filterLevelValueRepository.GetByIdsAsync(filterLevelValueIds, includeDeleted: false);
     }
@@ -209,10 +209,10 @@ public partial class FilterLevelValueService : IFilterLevelValueService
     /// A task that represents the asynchronous operation
     /// The task result contains the products collection
     /// </returns>
-    public virtual async Task<IPagedList<Product>> GetProductsByFilterLevelValueIdAsync(int filterLevelValueId,
+    public virtual async Task<IPagedList<Product>> GetProductsByFilterLevelValueIdAsync(long filterLevelValueId,
         int pageIndex = 0, 
         int pageSize = int.MaxValue,
-        int storeId = 0,
+        long storeId = 0,
         ProductSortingEnum orderBy = ProductSortingEnum.Position)
     {
         if (filterLevelValueId == 0)
@@ -245,7 +245,7 @@ public partial class FilterLevelValueService : IFilterLevelValueService
     /// A task that represents the asynchronous operation
     /// The task result contains the filter level value product mapping collection
     /// </returns>
-    public virtual async Task<IPagedList<FilterLevelValueProductMapping>> GetFilterLevelValueProductsByFilterLevelValueIdAsync(int filterLevelValueId,
+    public virtual async Task<IPagedList<FilterLevelValueProductMapping>> GetFilterLevelValueProductsByFilterLevelValueIdAsync(long filterLevelValueId,
         int pageIndex = 0, int pageSize = int.MaxValue)
     {
         if (filterLevelValueId == 0)
@@ -270,7 +270,7 @@ public partial class FilterLevelValueService : IFilterLevelValueService
     /// A task that represents the asynchronous operation
     /// The task result contains the filter level value product mapping
     /// </returns>
-    public virtual async Task<FilterLevelValueProductMapping> GetFilterLevelValueProductByIdAsync(int filterLevelValueProductId)
+    public virtual async Task<FilterLevelValueProductMapping> GetFilterLevelValueProductByIdAsync(long filterLevelValueProductId)
     {
         return await _filterLevelValueProductMappingRepository.GetByIdAsync(filterLevelValueProductId);
     }

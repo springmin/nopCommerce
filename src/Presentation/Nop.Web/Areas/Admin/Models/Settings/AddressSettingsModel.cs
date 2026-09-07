@@ -20,7 +20,7 @@ public partial record AddressSettingsModel : BaseNopModel, ISettingsModel
 
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.CustomerUser.AddressFormFields.CompanyEnabled")]
     public bool CompanyEnabled { get; set; }
@@ -62,7 +62,7 @@ public partial record AddressSettingsModel : BaseNopModel, ISettingsModel
     public bool CountryEnabled { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.CustomerUser.AddressFormFields.DefaultCountry")]
-    public int? DefaultCountryId { get; set; }
+    public long? DefaultCountryId { get; set; }
     public IList<SelectListItem> AvailableCountries { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.CustomerUser.AddressFormFields.StateProvinceEnabled")]

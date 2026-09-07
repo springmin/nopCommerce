@@ -19,9 +19,9 @@ public partial record ShipmentItemModel : BaseNopEntityModel
 
     #region Properties
 
-    public int OrderItemId { get; set; }
+    public long OrderItemId { get; set; }
 
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     [NopResourceDisplayName("Admin.Orders.Shipments.Products.ProductName")]
     public string ProductName { get; set; }
@@ -64,7 +64,7 @@ public partial record ShipmentItemModel : BaseNopEntityModel
 
     public partial record WarehouseInfo : BaseNopModel
     {
-        public int WarehouseId { get; set; }
+        public long WarehouseId { get; set; }
         public string WarehouseName { get; set; }
         public int StockQuantity { get; set; }
         public int ReservedQuantity { get; set; }

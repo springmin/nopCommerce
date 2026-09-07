@@ -9,7 +9,7 @@ namespace Nop.Plugin.Misc.RFQ.Models.Customer;
 /// </summary>
 public record QuoteModel : BaseNopEntityModel
 {
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     [NopResourceDisplayName("Plugins.Misc.RFQ.Fields.CustomerEmail")]
     public string CustomerEmail { get; set; }
@@ -24,7 +24,7 @@ public record QuoteModel : BaseNopEntityModel
     public string Status { get; set; }
 
     [NopResourceDisplayName("Plugins.Misc.RFQ.Fields.Order")]
-    public int? Order { get; set; }
+    public long? Order { get; set; }
 
     public QuoteStatus StatusType { get; set; }
 

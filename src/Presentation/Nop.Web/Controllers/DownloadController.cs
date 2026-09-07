@@ -36,7 +36,7 @@ public partial class DownloadController : BasePublicController
 
     //ignore SEO friendly URLs checks
     [CheckLanguageSeoCode(ignore: true)]
-    public virtual async Task<IActionResult> Sample(int productId)
+    public virtual async Task<IActionResult> Sample(long productId)
     {
         var product = await _productService.GetProductByIdAsync(productId);
         if (product == null)
@@ -188,7 +188,7 @@ public partial class DownloadController : BasePublicController
 
     //ignore SEO friendly URLs checks
     [CheckLanguageSeoCode(ignore: true)]
-    public virtual async Task<IActionResult> GetOrderNoteFile(int orderNoteId)
+    public virtual async Task<IActionResult> GetOrderNoteFile(long orderNoteId)
     {
         var orderNote = await _orderService.GetOrderNoteByIdAsync(orderNoteId);
         if (orderNote == null)

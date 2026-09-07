@@ -96,7 +96,7 @@ public partial class TopicModelFactory : ITopicModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the view path
     /// </returns>
-    public virtual async Task<string> PrepareTemplateViewPathAsync(int topicTemplateId)
+    public virtual async Task<string> PrepareTemplateViewPathAsync(long topicTemplateId)
     {
         var template = (await _topicTemplateService.GetTopicTemplateByIdAsync(topicTemplateId) ??
                         (await _topicTemplateService.GetAllTopicTemplatesAsync()).FirstOrDefault()) ?? throw new Exception("No default template could be loaded");

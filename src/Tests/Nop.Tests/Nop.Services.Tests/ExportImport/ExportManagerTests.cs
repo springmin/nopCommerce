@@ -135,6 +135,9 @@ public class ExportManagerTests : ServiceTest
                 case int:
                     propertyValue = property.IntValue;
                     break;
+                case long:
+                    propertyValue = (long)property.IntValue;
+                    break;
                 case Guid:
                     propertyValue = property.GuidValue;
                     break;

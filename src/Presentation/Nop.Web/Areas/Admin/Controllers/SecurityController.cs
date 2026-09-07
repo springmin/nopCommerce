@@ -102,7 +102,7 @@ public partial class SecurityController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_ACL)]
-    public virtual async Task<IActionResult> PermissionEditPopup(int id)
+    public virtual async Task<IActionResult> PermissionEditPopup(long id)
     {
         var permissionRecord = await _permissionService.GetPermissionRecordByIdAsync(id);
         var model = await _securityModelFactory.PreparePermissionItemModelAsync(permissionRecord);

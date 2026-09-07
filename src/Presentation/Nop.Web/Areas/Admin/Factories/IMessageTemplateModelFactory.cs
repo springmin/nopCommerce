@@ -52,5 +52,5 @@ public partial interface IMessageTemplateModelFactory
     /// The task result contains the st message template model
     /// </returns>
     Task<TestMessageTemplateModel> PrepareTestMessageTemplateModelAsync(TestMessageTemplateModel model,
-        MessageTemplate messageTemplate, int languageId);
+        MessageTemplate messageTemplate, long languageId);
 }

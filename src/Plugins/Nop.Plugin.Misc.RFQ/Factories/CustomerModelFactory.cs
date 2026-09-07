@@ -229,7 +229,7 @@ public class CustomerModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the request a quote model
     /// </returns>
-    public async Task<RequestQuoteModel> PrepareRequestQuoteModelAsync(int requestId, RequestQuoteModel model = null)
+    public async Task<RequestQuoteModel> PrepareRequestQuoteModelAsync(long requestId, RequestQuoteModel model = null)
     {
         return await PrepareRequestQuoteModelAsync(await _rfqService.GetRequestQuoteByIdAsync(requestId), model: model);
     }
@@ -256,7 +256,7 @@ public class CustomerModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the quote model
     /// </returns>
-    public async Task<QuoteModel> PrepareQuoteModelAsync(int quoteId, QuoteModel model = null)
+    public async Task<QuoteModel> PrepareQuoteModelAsync(long quoteId, QuoteModel model = null)
     {
         return await PrepareQuoteModelAsync(await _rfqService.GetQuoteByIdAsync(quoteId), model: model);
     }

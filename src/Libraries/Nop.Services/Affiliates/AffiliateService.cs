@@ -58,7 +58,7 @@ public partial class AffiliateService : IAffiliateService
     /// A task that represents the asynchronous operation
     /// The task result contains the affiliate
     /// </returns>
-    public virtual async Task<Affiliate> GetAffiliateByIdAsync(int affiliateId)
+    public virtual async Task<Affiliate> GetAffiliateByIdAsync(long affiliateId)
     {
         return await _affiliateRepository.GetByIdAsync(affiliateId, cache => default, useShortTermCache: true);
     }

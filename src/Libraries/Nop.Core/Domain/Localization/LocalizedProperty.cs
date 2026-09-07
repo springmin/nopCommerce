@@ -8,12 +8,12 @@ public partial class LocalizedProperty : BaseEntity
     /// <summary>
     /// Gets or sets the entity identifier
     /// </summary>
-    public int EntityId { get; set; }
+    public long EntityId { get; set; }
 
     /// <summary>
     /// Gets or sets the language identifier
     /// </summary>
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     /// <summary>
     /// Gets or sets the locale key group

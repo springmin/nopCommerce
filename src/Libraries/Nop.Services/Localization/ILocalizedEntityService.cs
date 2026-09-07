@@ -19,7 +19,7 @@ public partial interface ILocalizedEntityService
     /// A task that represents the asynchronous operation
     /// The task result contains the found localized properties
     /// </returns>
-    Task<IList<LocalizedProperty>> GetEntityLocalizedPropertiesAsync(int entityId, string localeKeyGroup, string localeKey);
+    Task<IList<LocalizedProperty>> GetEntityLocalizedPropertiesAsync(long entityId, string localeKeyGroup, string localeKey);
 
     /// <summary>
     /// Find localized value
@@ -32,7 +32,7 @@ public partial interface ILocalizedEntityService
     /// A task that represents the asynchronous operation
     /// The task result contains the found localized value
     /// </returns>
-    Task<string> GetLocalizedValueAsync(int languageId, int entityId, string localeKeyGroup, string localeKey);
+    Task<string> GetLocalizedValueAsync(long languageId, long entityId, string localeKeyGroup, string localeKey);
 
     /// <summary>
     /// Save localized value
@@ -46,7 +46,7 @@ public partial interface ILocalizedEntityService
     Task SaveLocalizedValueAsync<T>(T entity,
         Expression<Func<T, string>> keySelector,
         string localeValue,
-        int languageId) where T : BaseEntity, ILocalizedEntity;
+        long languageId) where T : BaseEntity, ILocalizedEntity;
 
     /// <summary>
     /// Save localized value
@@ -61,5 +61,5 @@ public partial interface ILocalizedEntityService
     Task SaveLocalizedValueAsync<T, TPropType>(T entity,
         Expression<Func<T, TPropType>> keySelector,
         TPropType localeValue,
-        int languageId) where T : BaseEntity, ILocalizedEntity;
+        long languageId) where T : BaseEntity, ILocalizedEntity;
 }

@@ -37,7 +37,7 @@ public partial class SmsPluginManager : PluginManager<ISmsProvider>, ISmsPluginM
     /// A task that represents the asynchronous operation
     /// The task result contains the primary sms provider
     /// </returns>
-    public virtual async Task<ISmsProvider> LoadPrimaryPluginAsync(Customer customer = null, int storeId = 0)
+    public virtual async Task<ISmsProvider> LoadPrimaryPluginAsync(Customer customer = null, long storeId = 0)
     {
         if (string.IsNullOrEmpty(_messagesSettings.ActiveSmsProviderSystemName))
             return null;
@@ -65,7 +65,7 @@ public partial class SmsPluginManager : PluginManager<ISmsProvider>, ISmsPluginM
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public virtual async Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, int storeId = 0)
+    public virtual async Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, long storeId = 0)
     {
         var sendSmsMethod = await LoadPluginBySystemNameAsync(systemName, customer, storeId);
         return IsPluginActive(sendSmsMethod);

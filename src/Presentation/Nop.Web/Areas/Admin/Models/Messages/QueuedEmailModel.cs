@@ -12,7 +12,7 @@ public partial record QueuedEmailModel : BaseNopEntityModel
     #region Properties
 
     [NopResourceDisplayName("Admin.System.QueuedEmails.Fields.Id")]
-    public override int Id { get; set; }
+    public long Id { get; set; }
 
     [NopResourceDisplayName("Admin.System.QueuedEmails.Fields.Priority")]
     public string PriorityName { get; set; }
@@ -52,7 +52,7 @@ public partial record QueuedEmailModel : BaseNopEntityModel
 
     [NopResourceDisplayName("Admin.System.QueuedEmails.Fields.AttachedDownload")]
     [UIHint("Download")]
-    public int AttachedDownloadId { get; set; }
+    public long AttachedDownloadId { get; set; }
 
     [NopResourceDisplayName("Admin.System.QueuedEmails.Fields.CreatedOn")]
     public DateTime CreatedOn { get; set; }

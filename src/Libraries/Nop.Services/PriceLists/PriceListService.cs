@@ -56,7 +56,7 @@ public partial class PriceListService : IPriceListService
     /// <returns>
     /// A task that represents the asynchronous operation and contains a dictionary of all customer roles mapped by ID.
     /// </returns>
-    protected virtual async Task<IDictionary<int, CustomerRole>> GetAllCustomerRolesDictionaryAsync()
+    protected virtual async Task<IDictionary<long, CustomerRole>> GetAllCustomerRolesDictionaryAsync()
     {
         return await _staticCacheManager.GetAsync(
             _staticCacheManager.PrepareKeyForDefaultCache(NopEntityCacheDefaults<CustomerRole>.AllCacheKey),
@@ -71,7 +71,7 @@ public partial class PriceListService : IPriceListService
     /// <param name="customerIds">Customer identifiers to filter by</param>
     /// <param name="isActive">Price list is active</param>
     /// <returns>Filtered query</returns>
-    protected virtual IQueryable<PriceList> ApplyPriceListFilters(IQueryable<PriceList> query, int[] customerRoleIds = null, int[] customerIds = null, bool? isActive = null)
+    protected virtual IQueryable<PriceList> ApplyPriceListFilters(IQueryable<PriceList> query, long[] customerRoleIds = null, long[] customerIds = null, bool? isActive = null)
     {
         if (isActive.HasValue)
             query = query.Where(c => c.Active == isActive.Value);
@@ -141,7 +141,7 @@ public partial class PriceListService : IPriceListService
     /// A task that represents the asynchronous operation
     /// The task result contains the price lists
     /// </returns>
-    public virtual async Task<IList<PriceList>> GetAllPriceListsAsync(int[] customerRoleIds = null, int[] customerIds = null, bool? isActive = null)
+    public virtual async Task<IList<PriceList>> GetAllPriceListsAsync(long[] customerRoleIds = null, long[] customerIds = null, bool? isActive = null)
     {
         return await _priceListRepository.GetAllAsync(query =>
         {
@@ -161,7 +161,7 @@ public partial class PriceListService : IPriceListService
     /// A task that represents the asynchronous operation
     /// The task result contains the price lists
     /// </returns>
-    public virtual async Task<IPagedList<PriceList>> SearchPriceListsAsync(int[] customerRoleIds = null, int[] customerIds = null, bool? isActive = null,
+    public virtual async Task<IPagedList<PriceList>> SearchPriceListsAsync(long[] customerRoleIds = null, long[] customerIds = null, bool? isActive = null,
         int pageIndex = 0, int pageSize = int.MaxValue)
     {
         var priceLists = await _priceListRepository.GetAllPagedAsync(query =>
@@ -202,7 +202,7 @@ public partial class PriceListService : IPriceListService
     /// A task that represents the asynchronous operation
     /// The task result contains the customer role identifiers
     /// </returns>
-    public virtual async Task<int[]> GetCustomerRoleIdsAsync(PriceList priceList)
+    public virtual async Task<long[]> GetCustomerRoleIdsAsync(PriceList priceList)
     {
         ArgumentNullException.ThrowIfNull(priceList);
 
@@ -229,7 +229,7 @@ public partial class PriceListService : IPriceListService
     /// A task that represents the asynchronous operation
     /// The task result contains the price list
     /// </returns>
-    public virtual async Task<PriceList> GetPriceListByIdAsync(int priceListId)
+    public virtual async Task<PriceList> GetPriceListByIdAsync(long priceListId)
     {
         return await _priceListRepository.GetByIdAsync(priceListId);
     }
@@ -242,7 +242,7 @@ public partial class PriceListService : IPriceListService
     /// A task that represents the asynchronous operation
     /// The task result contains the price lists
     /// </returns>
-    public virtual async Task<IList<PriceList>> GetPriceListsByIdsAsync(int[] priceListIds)
+    public virtual async Task<IList<PriceList>> GetPriceListsByIdsAsync(long[] priceListIds)
     {
         return await _priceListRepository.GetByIdsAsync(priceListIds, _ => default);
     }
@@ -283,7 +283,7 @@ public partial class PriceListService : IPriceListService
     /// A task that represents the asynchronous operation
     /// The task result contains the price list item collection
     /// </returns>
-    public virtual async Task<IPagedList<PriceListItem>> GetPriceListItemsByPriceListIdAsync(int priceListId,
+    public virtual async Task<IPagedList<PriceListItem>> GetPriceListItemsByPriceListIdAsync(long priceListId,
         int pageIndex = 0, int pageSize = int.MaxValue)
     {
         if (priceListId == 0)
@@ -332,7 +332,7 @@ public partial class PriceListService : IPriceListService
     /// A task that represents the asynchronous operation
     /// The task result contains the price list item
     /// </returns>
-    public virtual async Task<PriceListItem> GetPriceListItemByIdAsync(int priceListItemId)
+    public virtual async Task<PriceListItem> GetPriceListItemByIdAsync(long priceListItemId)
     {
         return await _priceListItemRepository.GetByIdAsync(priceListItemId);
     }
@@ -422,7 +422,7 @@ public partial class PriceListService : IPriceListService
     /// A task that represents the asynchronous operation
     /// The task result contains the price list item collection
     /// </returns>
-    public virtual async Task<IPagedList<PriceListCustomer>> GetPriceListCustomersByPriceListIdAsync(int priceListId,
+    public virtual async Task<IPagedList<PriceListCustomer>> GetPriceListCustomersByPriceListIdAsync(long priceListId,
         int pageIndex = 0, int pageSize = int.MaxValue)
     {
         if (priceListId == 0)
@@ -446,7 +446,7 @@ public partial class PriceListService : IPriceListService
     /// A task that represents the asynchronous operation
     /// The task result contains the price list customer
     /// </returns>
-    public virtual async Task<PriceListCustomer> GetPriceListCustomerByIdAsync(int priceListCustomerId)
+    public virtual async Task<PriceListCustomer> GetPriceListCustomerByIdAsync(long priceListCustomerId)
     {
         return await _priceListCustomerRepository.GetByIdAsync(priceListCustomerId);
     }

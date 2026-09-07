@@ -61,7 +61,7 @@ public partial class AttributeService<TAttribute, TAttributeValue> : IAttributeS
     /// A task that represents the asynchronous operation
     /// The task result contains the attribute
     /// </returns>
-    public virtual async Task<TAttribute> GetAttributeByIdAsync(int attributeId)
+    public virtual async Task<TAttribute> GetAttributeByIdAsync(long attributeId)
     {
         return await _attributeRepository.GetByIdAsync(attributeId, _ => default);
     }
@@ -104,7 +104,7 @@ public partial class AttributeService<TAttribute, TAttributeValue> : IAttributeS
     /// A task that represents the asynchronous operation
     /// The task result contains the attributes
     /// </returns>
-    public virtual async Task<IList<TAttribute>> GetAttributeByIdsAsync(int[] attributeIds)
+    public virtual async Task<IList<TAttribute>> GetAttributeByIdsAsync(long[] attributeIds)
     {
         return await _attributeRepository.GetByIdsAsync(attributeIds);
     }
@@ -133,7 +133,7 @@ public partial class AttributeService<TAttribute, TAttributeValue> : IAttributeS
     /// A task that represents the asynchronous operation
     /// The task result contains the attribute values
     /// </returns>
-    public virtual async Task<IList<TAttributeValue>> GetAttributeValuesAsync(int attributeId)
+    public virtual async Task<IList<TAttributeValue>> GetAttributeValuesAsync(long attributeId)
     {
         var key = _staticCacheManager.PrepareKeyForDefaultCache(
             NopAttributeDefaults.AttributeValuesByAttributeCacheKey, typeof(TAttribute).Name, attributeId);
@@ -154,7 +154,7 @@ public partial class AttributeService<TAttribute, TAttributeValue> : IAttributeS
     /// A task that represents the asynchronous operation
     /// The task result contains the attribute value
     /// </returns>
-    public virtual async Task<TAttributeValue> GetAttributeValueByIdAsync(int attributeValueId)
+    public virtual async Task<TAttributeValue> GetAttributeValueByIdAsync(long attributeValueId)
     {
         return await _attributeValueRepository.GetByIdAsync(attributeValueId, _ => default);
     }

@@ -135,7 +135,7 @@ public partial class ReviewTypeController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         //try to get an product review type with the specified id
         var reviewType = await _reviewTypeService.GetReviewTypeByIdAsync(id);
@@ -184,7 +184,7 @@ public partial class ReviewTypeController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get an review type with the specified id
         var reviewType = await _reviewTypeService.GetReviewTypeByIdAsync(id);

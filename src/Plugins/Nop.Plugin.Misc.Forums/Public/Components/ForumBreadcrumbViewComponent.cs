@@ -23,7 +23,7 @@ public class ForumBreadcrumbViewComponent : NopViewComponent
 
     #region Methods
 
-    public async Task<IViewComponentResult> InvokeAsync(int? forumGroupId, int? forumId, int? forumTopicId)
+    public async Task<IViewComponentResult> InvokeAsync(long? forumGroupId, long? forumId, long? forumTopicId)
     {
         var model = await _forumModelFactory.PrepareForumBreadcrumbModelAsync(forumGroupId, forumId, forumTopicId);
 

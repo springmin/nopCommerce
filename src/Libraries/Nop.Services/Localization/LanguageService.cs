@@ -76,7 +76,7 @@ public partial class LanguageService : ILanguageService
     /// A task that represents the asynchronous operation
     /// The task result contains the languages
     /// </returns>
-    public virtual async Task<IList<Language>> GetAllLanguagesAsync(bool showHidden = false, int storeId = 0)
+    public virtual async Task<IList<Language>> GetAllLanguagesAsync(bool showHidden = false, long storeId = 0)
     {
         var key = _staticCacheManager.PrepareKeyForDefaultCache(NopLocalizationDefaults.LanguagesAllCacheKey, storeId, showHidden);
 
@@ -109,7 +109,7 @@ public partial class LanguageService : ILanguageService
     /// A task that represents the asynchronous operation
     /// The task result contains the language
     /// </returns>
-    public virtual async Task<Language> GetLanguageByIdAsync(int languageId)
+    public virtual async Task<Language> GetLanguageByIdAsync(long languageId)
     {
         return await _languageRepository.GetByIdAsync(languageId, cache => default);
     }

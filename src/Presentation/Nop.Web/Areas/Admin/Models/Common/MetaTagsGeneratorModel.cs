@@ -14,7 +14,7 @@ public partial record MetaTagsGeneratorModel : BaseNopModel
     {
     }
 
-    public MetaTagsGeneratorModel(IMetaTagsSupportedModel model, string entityTypeName, int languagePosition = 0, int languageId = 0)
+    public MetaTagsGeneratorModel(IMetaTagsSupportedModel model, string entityTypeName, int languagePosition = 0, long languageId = 0)
     {
         LanguageId = languageId;
         EntityType = entityTypeName;
@@ -36,8 +36,8 @@ public partial record MetaTagsGeneratorModel : BaseNopModel
     public string TitleFieldId { get; set; }
     public string TextFieldId { get; set; }
     public string EntityType { get; set; }
-    public int EntityId { get; set; }
-    public int LanguageId { get; set; }
+    public long EntityId { get; set; }
+    public long LanguageId { get; set; }
 
     public string MetaKeywordsElementId { get; set; }
     public string MetaDescriptionElementId { get; set; }

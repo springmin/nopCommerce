@@ -344,7 +344,7 @@ public partial class VendorController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Customers.VENDORS_VIEW)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         //try to get a vendor with the specified id
         var vendor = await _vendorService.GetVendorByIdAsync(id);
@@ -460,7 +460,7 @@ public partial class VendorController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Customers.VENDORS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get a vendor with the specified id
         var vendor = await _vendorService.GetVendorByIdAsync(id);
@@ -506,7 +506,7 @@ public partial class VendorController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Customers.VENDORS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> VendorNoteAdd(int vendorId, string message)
+    public virtual async Task<IActionResult> VendorNoteAdd(long vendorId, string message)
     {
         if (string.IsNullOrEmpty(message))
             return ErrorJson(await _localizationService.GetResourceAsync("Admin.Vendors.VendorNotes.Fields.Note.Validation"));
@@ -528,7 +528,7 @@ public partial class VendorController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Customers.VENDORS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> VendorNoteDelete(int id)
+    public virtual async Task<IActionResult> VendorNoteDelete(long id)
     {
         //try to get a vendor note with the specified id
         var vendorNote = await _vendorService.GetVendorNoteByIdAsync(id)

@@ -17,5 +17,5 @@ public partial interface IStoreContext
     /// Gets active store scope configuration
     /// </summary>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task<int> GetActiveStoreScopeConfigurationAsync();
+    Task<long> GetActiveStoreScopeConfigurationAsync();
 }

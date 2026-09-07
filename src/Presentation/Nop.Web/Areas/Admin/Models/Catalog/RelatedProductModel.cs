@@ -10,7 +10,7 @@ public partial record RelatedProductModel : BaseNopEntityModel
 {
     #region Properties
 
-    public int ProductId2 { get; set; }
+    public long ProductId2 { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.RelatedProducts.Fields.Product")]
     public string Product2Name { get; set; }

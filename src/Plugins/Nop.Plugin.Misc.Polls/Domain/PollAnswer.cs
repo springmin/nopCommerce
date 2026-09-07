@@ -10,7 +10,7 @@ public class PollAnswer : BaseEntity
     /// <summary>
     /// Gets or sets the poll identifier
     /// </summary>
-    public int PollId { get; set; }
+    public long PollId { get; set; }
 
     /// <summary>
     /// Gets or sets the poll answer name

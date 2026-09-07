@@ -37,7 +37,7 @@ public partial class VideoService : IVideoService
     /// A task that represents the asynchronous operation
     /// The task result contains the video
     /// </returns>
-    public virtual async Task<Video> GetVideoByIdAsync(int videoId)
+    public virtual async Task<Video> GetVideoByIdAsync(long videoId)
     {
         return await _videoRepository.GetByIdAsync(videoId, cache => default);
     }
@@ -50,7 +50,7 @@ public partial class VideoService : IVideoService
     /// A task that represents the asynchronous operation
     /// The task result contains the videos
     /// </returns>
-    public virtual async Task<IList<Video>> GetVideosByProductIdAsync(int productId)
+    public virtual async Task<IList<Video>> GetVideosByProductIdAsync(long productId)
     {
         if (productId == 0)
             return new List<Video>();

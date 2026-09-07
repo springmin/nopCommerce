@@ -3,6 +3,7 @@ using System.Data;
 using System.Linq.Expressions;
 using System.Reflection;
 using FluentMigrator;
+using Microsoft.Extensions.DependencyInjection;
 using FluentMigrator.Builders.Alter.Table;
 using FluentMigrator.Builders.Create.Table;
 using FluentMigrator.Infrastructure.Extensions;
@@ -10,6 +11,7 @@ using FluentMigrator.Model;
 using FluentMigrator.Runner;
 using LinqToDB.Mapping;
 using Nop.Core;
+using Nop.Core.Configuration;
 using Nop.Core.Infrastructure;
 using Nop.Data.Mapping;
 using Nop.Data.Mapping.Builders;
@@ -58,6 +60,21 @@ public static class FluentMigratorExtensions
 
     #endregion
 
+    #region Utilities
+
+    /// <summary>
+    /// Gets a value indicating whether the configured id strategy pre-assigns
+    /// identifiers (in which case table id columns are created without identity)
+    /// </summary>
+    private static bool IsPreGeneratedIdMode()
+    {
+        var config = Singleton<AppSettings>.Instance?.Get<IdGenerationConfig>();
+
+        return config?.IdGenerationMode is (int)IdGenerationMode.Yitter or (int)IdGenerationMode.Tinyid;
+    }
+
+    #endregion
+
     /// <summary>
     /// Adds database support for migrations
     /// </summary>
@@ -66,7 +83,7 @@ public static class FluentMigratorExtensions
     public static IMigrationRunnerBuilder AddNopDbEngines(this IMigrationRunnerBuilder builder)
     {
         if (!DataSettingsManager.IsDatabaseInstalled())
-            return builder.AddSqlServer().AddMySql8().AddPostgres15_0();
+            return builder.AddSqlServer().AddMySql8().AddPostgres15_0().UseNopSqliteGenerator().AddOracle();
 
         var dataSettings = DataSettingsManager.LoadSettings();
 
@@ -75,8 +92,33 @@ public static class FluentMigratorExtensions
             DataProviderType.MySql => builder.AddMySql8(),
             DataProviderType.SqlServer => builder.AddSqlServer(),
             DataProviderType.PostgreSQL => builder.AddPostgres15_0(),
+            DataProviderType.Sqlite => builder.UseNopSqliteGenerator(),
+            DataProviderType.Tidb => builder.AddMySql8(),
+            DataProviderType.Oracle => builder.AddOracle(),
+            DataProviderType.OpenGauss or DataProviderType.GaussDB => builder.AddPostgres15_0(),
             _ => throw new NotImplementedException(),
         };
+    }
+
+    /// <summary>
+    /// Adds database support for SQLite using the nopCommerce generator, which tolerates
+    /// ALTER COLUMN expressions (SQLite does not support altering a column).
+    /// </summary>
+    private static IMigrationRunnerBuilder UseNopSqliteGenerator(this IMigrationRunnerBuilder builder)
+    {
+        builder.AddSQLite();
+        //custom generator/processor tolerate ALTER COLUMN expressions (SQLite does not
+        //support altering a column; the schema is created with the final types)
+        builder.Services.AddSingleton<FluentMigrator.IMigrationGenerator, Nop.Data.Migrations.NopSqliteGenerator>();
+        builder.Services.AddScoped<FluentMigrator.IMigrationProcessor>(sp => new Nop.Data.Migrations.NopSqliteProcessor(
+            sp.GetRequiredService<FluentMigrator.Runner.Processors.SQLite.SQLiteDbFactory>(),
+            sp.GetRequiredService<FluentMigrator.Runner.Generators.SQLite.SQLiteGenerator>(),
+            sp.GetRequiredService<Microsoft.Extensions.Logging.ILogger<FluentMigrator.Runner.Processors.SQLite.SQLiteProcessor>>(),
+            sp.GetRequiredService<Microsoft.Extensions.Options.IOptionsSnapshot<FluentMigrator.Runner.Processors.ProcessorOptions>>(),
+            sp.GetRequiredService<FluentMigrator.Runner.Initialization.IConnectionStringAccessor>(),
+            sp,
+            new FluentMigrator.Runner.Generators.SQLite.SQLiteQuoter()));
+        return builder;
     }
 
     /// <summary>
@@ -201,14 +243,14 @@ public static class FluentMigratorExtensions
 
         if (migration.Schema.Table(tableName).Column(columnName).Exists())
         {
-            rez = migration.Alter.Table(tableName).AlterColumn(columnName).AsInt32();
+            rez = migration.Alter.Table(tableName).AlterColumn(columnName).AsInt64();
         }
         else
         {
             var primaryTableName = NameCompatibilityManager.GetTableName(typeof(TPrimary));
             var primaryColumnName = nameof(BaseEntity.Id);
 
-            rez = migration.Alter.Table(tableName).AddColumn(columnName).AsInt32().Indexed().ForeignKey(primaryTableName, primaryColumnName).OnDelete(onDelete);
+            rez = migration.Alter.Table(tableName).AddColumn(columnName).AsInt64().Indexed().ForeignKey(primaryTableName, primaryColumnName).OnDelete(onDelete);
         }
 
         return rez;
@@ -260,8 +302,10 @@ public static class FluentMigratorExtensions
             var pk = new ColumnDefinition
             {
                 Name = nameof(BaseEntity.Id),
-                Type = DbType.Int32,
-                IsIdentity = true,
+                Type = DbType.Int64,
+                //when the configured id strategy pre-assigns ids (e.g. Yitter),
+                //the id column must not be auto-increment
+                IsIdentity = !IsPreGeneratedIdMode(),
                 TableName = NameCompatibilityManager.GetTableName(type),
                 ModificationType = ColumnModificationType.Create,
                 IsPrimaryKey = true

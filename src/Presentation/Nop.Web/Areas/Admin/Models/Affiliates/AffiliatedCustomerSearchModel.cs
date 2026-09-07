@@ -9,7 +9,7 @@ public partial record AffiliatedCustomerSearchModel : BaseSearchModel
 {
     #region Properties
 
-    public int AffliateId { get; set; }
+    public long AffliateId { get; set; }
 
     #endregion
 }

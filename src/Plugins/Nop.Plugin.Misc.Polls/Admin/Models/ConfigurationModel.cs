@@ -8,7 +8,7 @@ namespace Nop.Plugin.Misc.Polls.Admin.Models;
 /// </summary>
 public record ConfigurationModel : BaseNopModel, ISettingsModel
 {
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Plugins.Misc.Polls.Configuration.Enabled")]
     public bool Enabled { get; set; }

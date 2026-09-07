@@ -29,7 +29,7 @@ public partial class InstallationService
     /// A task that represents the asynchronous operation
     /// The task result contains the identifier of inserted picture
     /// </returns>
-    protected virtual async Task<int> InsertProductPictureAsync(Product product, string fileName, int displayOrder = 1)
+    protected virtual async Task<long> InsertProductPictureAsync(Product product, string fileName, int displayOrder = 1)
     {
         var pictureId = await InsertPictureAsync(fileName, product.Name);
 
@@ -50,7 +50,7 @@ public partial class InstallationService
     /// <param name="specAttributeName">The spec attribute name</param>
     /// <param name="specAttributeOptionName">The spec attribute option name</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    protected virtual async Task<int> GetSpecificationAttributeOptionIdAsync(string specAttributeName, string specAttributeOptionName)
+    protected virtual async Task<long> GetSpecificationAttributeOptionIdAsync(string specAttributeName, string specAttributeOptionName)
     {
         var specificationAttribute = await Table<SpecificationAttribute>()
             .SingleAsync(sa => sa.Name == specAttributeName);
@@ -97,16 +97,16 @@ public partial class InstallationService
         //products
         var allProducts = new List<Product>();
 
-        var productTemplates = new Dictionary<string, int>();
-        var taxCategories = new Dictionary<string, int>();
-        var categories = new Dictionary<string, int>();
-        var manufacturers = new Dictionary<string, int>();
-        var productAttributes = new Dictionary<string, int>();
-        var productAvailabilityRanges = new Dictionary<string, int>();
-        var deliveryDates = new Dictionary<string, int>();
-        var products = new Dictionary<string, int>();
+        var productTemplates = new Dictionary<string, long>();
+        var taxCategories = new Dictionary<string, long>();
+        var categories = new Dictionary<string, long>();
+        var manufacturers = new Dictionary<string, long>();
+        var productAttributes = new Dictionary<string, long>();
+        var productAvailabilityRanges = new Dictionary<string, long>();
+        var deliveryDates = new Dictionary<string, long>();
+        var products = new Dictionary<string, long>();
 
-        async Task<int> getAndSaveId(Dictionary<string, int> dict, string key, Func<string, Task<int>> foo)
+        async Task<long> getAndSaveId(Dictionary<string, long> dict, string key, Func<string, Task<long>> foo)
         {
             if (string.IsNullOrEmpty(key))
                 return 0;
@@ -120,50 +120,50 @@ public partial class InstallationService
             return id;
         }
 
-        async Task<int> getProductTemplate(string templateName)
+        async Task<long> getProductTemplate(string templateName)
         {
             return await getAndSaveId(productTemplates, templateName,
                 async tName => await GetFirstEntityIdAsync<ProductTemplate>(pt => pt.Name == tName) ??
                     throw new Exception($"\"{tName}\" template could not be loaded"));
         }
 
-        async Task<int> getTaxCategoryId(string taxCategoryName)
+        async Task<long> getTaxCategoryId(string taxCategoryName)
         {
             return await getAndSaveId(taxCategories, taxCategoryName, async tcName => await GetFirstEntityIdAsync<TaxCategory>(tc => tc.Name == tcName) ??
                 throw new Exception($"\"{tcName}\" tax category could not be loaded"));
         }
 
-        async Task<int> getCategoryId(string categoryName)
+        async Task<long> getCategoryId(string categoryName)
         {
             return await getAndSaveId(categories, categoryName, async cName => await GetFirstEntityIdAsync<Category>(c => c.Name == cName) ??
                 throw new Exception($"\"{cName}\" category could not be loaded"));
         }
 
-        async Task<int> getManufacturerId(string manufacturerName)
+        async Task<long> getManufacturerId(string manufacturerName)
         {
             return await getAndSaveId(manufacturers, manufacturerName, async mName => await GetFirstEntityIdAsync<Manufacturer>(m => m.Name == mName) ??
                 throw new Exception($"\"{mName}\" manufacturer could not be loaded"));
         }
 
-        async Task<int> getProductAttributeId(string productAttributeName)
+        async Task<long> getProductAttributeId(string productAttributeName)
         {
             return await getAndSaveId(productAttributes, productAttributeName, async paName => await GetFirstEntityIdAsync<ProductAttribute>(pa => pa.Name == paName) ??
                 throw new Exception($"\"{paName}\" product attribute could not be loaded"));
         }
 
-        async Task<int> getProductAvailabilityRangeId(string productAvailabilityRangeName)
+        async Task<long> getProductAvailabilityRangeId(string productAvailabilityRangeName)
         {
             return await getAndSaveId(productAvailabilityRanges, productAvailabilityRangeName, async parName => await GetFirstEntityIdAsync<ProductAvailabilityRange>(par => par.Name == parName) ??
                 throw new Exception($"\"{parName}\" product availability range could not be loaded"));
         }
 
-        async Task<int> getDeliveryDateId(string deliveryDateName)
+        async Task<long> getDeliveryDateId(string deliveryDateName)
         {
             return await getAndSaveId(deliveryDates, deliveryDateName, async ddName => await GetFirstEntityIdAsync<DeliveryDate>(dd => dd.Name == ddName) ??
                 throw new Exception($"\"{ddName}\" delivery date could not be loaded"));
         }
 
-        async Task<int> getProductId(string productSku)
+        async Task<long> getProductId(string productSku)
         {
             return await getAndSaveId(products, productSku, async sku => await GetFirstEntityIdAsync<Product>(p => p.Sku == sku) ??
                 throw new Exception($"Product with SKU = \"{sku}\" could not be loaded"));
@@ -174,7 +174,7 @@ public partial class InstallationService
 
         var sampleDownloadsPath = _fileProvider.GetAbsolutePath(NopInstallationDefaults.SampleImagesPath);
 
-        async Task insertProduct(SampleProducts.SampleProduct sample, int parentGroupedProductId = 0)
+        async Task insertProduct(SampleProducts.SampleProduct sample, long parentGroupedProductId = 0)
         {
             var product = new Product
             {

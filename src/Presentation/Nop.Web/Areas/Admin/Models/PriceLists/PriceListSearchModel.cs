@@ -13,7 +13,7 @@ public partial record PriceListSearchModel : BaseSearchModel, IAclSupportedModel
 
     public PriceListSearchModel()
     {
-        SelectedCustomerRoleIds = new List<int>();
+        SelectedCustomerRoleIds = new List<long>();
         AvailableCustomerRoles = new List<SelectListItem>();
         AvailableActiveValues = new List<SelectListItem>();
     }
@@ -23,7 +23,7 @@ public partial record PriceListSearchModel : BaseSearchModel, IAclSupportedModel
     #region Properties
 
     [NopResourceDisplayName("Admin.Catalog.PriceLists.List.CustomerRoles")]
-    public IList<int> SelectedCustomerRoleIds { get; set; }
+    public IList<long> SelectedCustomerRoleIds { get; set; }
 
     public IList<SelectListItem> AvailableCustomerRoles { get; set; }
 

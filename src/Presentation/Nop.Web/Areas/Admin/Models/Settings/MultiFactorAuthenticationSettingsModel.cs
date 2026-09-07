@@ -10,7 +10,7 @@ public partial record MultiFactorAuthenticationSettingsModel : BaseNopModel, ISe
 {
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.CustomerUser.ForceMultifactorAuthentication")]
     public bool ForceMultifactorAuthentication { get; set; }

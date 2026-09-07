@@ -27,7 +27,7 @@ public partial record GiftCardSearchModel : BaseSearchModel
     public string RecipientName { get; set; }
 
     [NopResourceDisplayName("Admin.GiftCards.List.Activated")]
-    public int ActivatedId { get; set; }
+    public long ActivatedId { get; set; }
 
     [NopResourceDisplayName("Admin.GiftCards.List.Activated")]
     public IList<SelectListItem> ActivatedList { get; set; }

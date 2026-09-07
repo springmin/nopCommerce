@@ -34,6 +34,7 @@ using Nop.Core.Http;
 using Nop.Core.Infrastructure;
 using Nop.Data;
 using Nop.Data.Configuration;
+using Nop.Data.DataProviders;
 using Nop.Data.Migrations;
 using Nop.Services.Affiliates;
 using Nop.Services.ArtificialIntelligence;
@@ -562,6 +563,10 @@ public partial class BaseNopTest
         services.AddTransient<Web.Factories.ITopicModelFactory, Web.Factories.TopicModelFactory>();
         services.AddTransient<Web.Factories.IVendorModelFactory, Web.Factories.VendorModelFactory>();
 
+        //entity id generator: a switchable test implementation so tests can compare
+        //the database-identity strategy with the yitter pre-assigned strategy
+        services.AddSingleton<IEntityIdGenerator>(new TestEntityIdGenerator());
+
         _serviceProvider = services.BuildServiceProvider();
 
         EngineContext.Replace(new NopTestEngine(_serviceProvider));
@@ -614,6 +619,59 @@ public partial class BaseNopTest
     }
 
     #region Nested classes
+
+    /// <summary>
+    /// A switchable id generator for tests: lets tests compare the database-identity
+    /// strategy (default) with the yitter pre-assigned strategy
+    /// </summary>
+    public class TestEntityIdGenerator : IEntityIdGenerator
+    {
+        private YitterIdGenerator _yitter;
+        private TinyidIdGenerator _tinyid;
+
+        /// <summary>
+        /// Gets a value indicating whether identifiers are pre-assigned before insert
+        /// </summary>
+        public bool PreGenerateIds => _yitter != null || _tinyid != null;
+
+        /// <summary>
+        /// Switches to the database-identity strategy
+        /// </summary>
+        public void UseDatabase()
+        {
+            _yitter = null;
+            _tinyid = null;
+        }
+
+        /// <summary>
+        /// Switches to the yitter pre-assigned strategy
+        /// </summary>
+        public void UseYitter(IdGenerationConfig config)
+        {
+            _tinyid = null;
+            _yitter = new YitterIdGenerator(config);
+        }
+
+        /// <summary>
+        /// Switches to the tinyid segment strategy
+        /// </summary>
+        public void UseTinyid(IdGenerationConfig config)
+        {
+            _yitter = null;
+            _tinyid = new TinyidIdGenerator(config);
+        }
+
+        /// <summary>
+        /// Generates the next identifier
+        /// </summary>
+        public long NextId()
+        {
+            if (_tinyid != null)
+                return _tinyid.NextId();
+
+            return _yitter?.NextId() ?? throw new NopException("Database mode does not pre-generate ids");
+        }
+    }
 
     protected class NopTestUrlHelper : UrlHelperBase
     {

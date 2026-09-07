@@ -164,7 +164,7 @@ public partial class DiscountService : IDiscountService
     /// A task that represents the asynchronous operation
     /// The task result contains the discount
     /// </returns>
-    public virtual async Task<Discount> GetDiscountByIdAsync(int discountId)
+    public virtual async Task<Discount> GetDiscountByIdAsync(long discountId)
     {
         return await _discountRepository.GetByIdAsync(discountId, cache => default);
     }
@@ -186,7 +186,7 @@ public partial class DiscountService : IDiscountService
     /// </returns>
     public virtual async Task<IList<Discount>> GetAllDiscountsAsync(DiscountType? discountType = null,
         string couponCode = null, string discountName = null, bool showHidden = false,
-        DateTime? startDateUtc = null, DateTime? endDateUtc = null, bool? isActive = true, int vendorId = 0)
+        DateTime? startDateUtc = null, DateTime? endDateUtc = null, bool? isActive = true, long vendorId = 0)
     {
         //we load all discounts, and filter them using "discountType" and dates later (in memory)
         //we do it because we know that this method is invoked several times per HTTP request with distinct "discountType" parameter and date filters
@@ -394,7 +394,7 @@ public partial class DiscountService : IDiscountService
     /// A task that represents the asynchronous operation
     /// The task result contains the requirements
     /// </returns>
-    public virtual async Task<IList<DiscountRequirement>> GetAllDiscountRequirementsAsync(int discountId = 0, bool topLevelOnly = false)
+    public virtual async Task<IList<DiscountRequirement>> GetAllDiscountRequirementsAsync(long discountId = 0, bool topLevelOnly = false)
     {
         return await _discountRequirementRepository.GetAllAsync(query =>
         {
@@ -417,7 +417,7 @@ public partial class DiscountService : IDiscountService
     /// </summary>
     /// <param name="discountRequirementId">Discount requirement identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task<DiscountRequirement> GetDiscountRequirementByIdAsync(int discountRequirementId)
+    public virtual async Task<DiscountRequirement> GetDiscountRequirementByIdAsync(long discountRequirementId)
     {
         return await _discountRequirementRepository.GetByIdAsync(discountRequirementId, cache => default);
     }
@@ -628,7 +628,7 @@ public partial class DiscountService : IDiscountService
     /// A task that represents the asynchronous operation
     /// The task result contains the discount usage history
     /// </returns>
-    public virtual async Task<DiscountUsageHistory> GetDiscountUsageHistoryByIdAsync(int discountUsageHistoryId)
+    public virtual async Task<DiscountUsageHistory> GetDiscountUsageHistoryByIdAsync(long discountUsageHistoryId)
     {
         return await _discountUsageHistoryRepository.GetByIdAsync(discountUsageHistoryId);
     }
@@ -646,8 +646,8 @@ public partial class DiscountService : IDiscountService
     /// A task that represents the asynchronous operation
     /// The task result contains the discount usage history records
     /// </returns>
-    public virtual async Task<IPagedList<DiscountUsageHistory>> GetAllDiscountUsageHistoryAsync(int? discountId = null,
-        int? customerId = null, int? orderId = null, bool includeCancelledOrders = true, int pageIndex = 0, int pageSize = int.MaxValue)
+    public virtual async Task<IPagedList<DiscountUsageHistory>> GetAllDiscountUsageHistoryAsync(long? discountId = null,
+        long? customerId = null, long? orderId = null, bool includeCancelledOrders = true, int pageIndex = 0, int pageSize = int.MaxValue)
     {
         return await _discountUsageHistoryRepository.GetAllPagedAsync(query =>
         {

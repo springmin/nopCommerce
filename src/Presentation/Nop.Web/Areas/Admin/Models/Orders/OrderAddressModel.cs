@@ -16,7 +16,7 @@ public partial record OrderAddressModel : BaseNopModel
 
     #region Properties
 
-    public int OrderId { get; set; }
+    public long OrderId { get; set; }
 
     public AddressModel Address { get; set; }
 

@@ -10,9 +10,9 @@ public partial record ManufacturerProductModel : BaseNopEntityModel
 {
     #region Properties
 
-    public int ManufacturerId { get; set; }
+    public long ManufacturerId { get; set; }
 
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Manufacturers.Products.Fields.Product")]
     public string ProductName { get; set; }

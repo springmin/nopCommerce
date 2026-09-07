@@ -25,12 +25,12 @@ public partial record ManufacturerModel : BaseNopEntityModel, IAclSupportedModel
         AvailableManufacturerTemplates = new List<SelectListItem>();
 
         AvailableDiscounts = new List<SelectListItem>();
-        SelectedDiscountIds = new List<int>();
+        SelectedDiscountIds = new List<long>();
 
-        SelectedCustomerRoleIds = new List<int>();
+        SelectedCustomerRoleIds = new List<long>();
         AvailableCustomerRoles = new List<SelectListItem>();
 
-        SelectedStoreIds = new List<int>();
+        SelectedStoreIds = new List<long>();
         AvailableStores = new List<SelectListItem>();
 
         ManufacturerProductSearchModel = new ManufacturerProductSearchModel();
@@ -47,7 +47,7 @@ public partial record ManufacturerModel : BaseNopEntityModel, IAclSupportedModel
     public string Description { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Manufacturers.Fields.ManufacturerTemplate")]
-    public int ManufacturerTemplateId { get; set; }
+    public long ManufacturerTemplateId { get; set; }
 
     public IList<SelectListItem> AvailableManufacturerTemplates { get; set; }
 
@@ -65,7 +65,7 @@ public partial record ManufacturerModel : BaseNopEntityModel, IAclSupportedModel
 
     [UIHint("Picture")]
     [NopResourceDisplayName("Admin.Catalog.Manufacturers.Fields.Picture")]
-    public int PictureId { get; set; }
+    public long PictureId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Manufacturers.Fields.PageSize")]
     public int PageSize { get; set; }
@@ -99,18 +99,18 @@ public partial record ManufacturerModel : BaseNopEntityModel, IAclSupportedModel
 
     public IList<ManufacturerLocalizedModel> Locales { get; set; }
 
-    public IList<int> SelectedCustomerRoleIds { get; set; }
+    public IList<long> SelectedCustomerRoleIds { get; set; }
     public IList<SelectListItem> AvailableCustomerRoles { get; set; }
 
     //store mapping
     [NopResourceDisplayName("Admin.Catalog.Manufacturers.Fields.LimitedToStores")]
-    public IList<int> SelectedStoreIds { get; set; }
+    public IList<long> SelectedStoreIds { get; set; }
 
     public IList<SelectListItem> AvailableStores { get; set; }
 
     //discounts
     [NopResourceDisplayName("Admin.Catalog.Manufacturers.Fields.Discounts")]
-    public IList<int> SelectedDiscountIds { get; set; }
+    public IList<long> SelectedDiscountIds { get; set; }
 
     public IList<SelectListItem> AvailableDiscounts { get; set; }
 
@@ -140,7 +140,7 @@ public partial record ManufacturerModel : BaseNopEntityModel, IAclSupportedModel
 
 public partial record ManufacturerLocalizedModel : ILocalizedLocaleModel, IMetaTagsSupportedModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Manufacturers.Fields.Name")]
     public string Name { get; set; }

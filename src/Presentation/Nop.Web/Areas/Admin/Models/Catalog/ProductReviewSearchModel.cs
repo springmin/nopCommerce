@@ -34,13 +34,13 @@ public partial record ProductReviewSearchModel : BaseSearchModel
     public string SearchText { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.ProductReviews.List.SearchStore")]
-    public int SearchStoreId { get; set; }
+    public long SearchStoreId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.ProductReviews.List.SearchProduct")]
-    public int SearchProductId { get; set; }
+    public long SearchProductId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.ProductReviews.List.SearchApproved")]
-    public int SearchApprovedId { get; set; }
+    public long SearchApprovedId { get; set; }
 
     //vendor
     public bool IsLoggedInAsVendor { get; set; }

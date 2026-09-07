@@ -147,9 +147,9 @@ public partial class PaymentController : BaseAdminController
             var countryIdsToRestrict = (!StringValues.IsNullOrEmpty(form[formKey])
                     ? form[formKey].ToString().Split(_separator, StringSplitOptions.RemoveEmptyEntries).ToList()
                     : new List<string>())
-                .Select(x => Convert.ToInt32(x)).ToList();
+                .Select(x => Convert.ToInt64(x)).ToList();
 
-            var newCountryIds = new List<int>();
+            var newCountryIds = new List<long>();
             foreach (var c in countries)
             {
                 if (countryIdsToRestrict.Contains(c.Id))

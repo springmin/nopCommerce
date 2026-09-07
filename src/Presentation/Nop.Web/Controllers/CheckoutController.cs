@@ -308,7 +308,7 @@ public partial class CheckoutController : BasePublicController
         }
     }
 
-    protected virtual async Task<JsonResult> DeleteAddressAsync(int addressId, Func<IList<ShoppingCartItem>, Task<JsonResult>> getResult)
+    protected virtual async Task<JsonResult> DeleteAddressAsync(long addressId, Func<IList<ShoppingCartItem>, Task<JsonResult>> getResult)
     {
         try
         {
@@ -377,7 +377,7 @@ public partial class CheckoutController : BasePublicController
             return RedirectToRoute(NopRouteNames.General.CART);
 
         //reset checkout data
-        await _shoppingCartService.ResetCheckoutDataAsync(customer, store.Id);
+        await _customerService.ResetCheckoutDataAsync(customer, store.Id);
 
         //validation (cart)
         var checkoutAttributesXml = await _genericAttributeService.GetAttributeAsync<string>(customer,
@@ -411,7 +411,7 @@ public partial class CheckoutController : BasePublicController
         return RedirectToRoute(NopRouteNames.Standard.CHECKOUT_BILLING_ADDRESS);
     }
 
-    public virtual async Task<IActionResult> Completed(int? orderId)
+    public virtual async Task<IActionResult> Completed(long? orderId)
     {
         //validation
         var customer = await _workContext.GetCurrentCustomerAsync();
@@ -447,7 +447,7 @@ public partial class CheckoutController : BasePublicController
     /// Get specified Address by addresId
     /// </summary>
     /// <param name="addressId"></param>
-    public virtual async Task<IActionResult> GetAddressById(int addressId)
+    public virtual async Task<IActionResult> GetAddressById(long addressId)
     {
         var customer = await _workContext.GetCurrentCustomerAsync();
         Address address = null;
@@ -514,7 +514,7 @@ public partial class CheckoutController : BasePublicController
     /// </summary>
     /// <param name="addressId"></param>
     /// <param name="opc"></param>
-    public virtual async Task<IActionResult> DeleteEditBillingAddress(int addressId, bool opc = false)
+    public virtual async Task<IActionResult> DeleteEditBillingAddress(long addressId, bool opc = false)
     {
         return await DeleteAddressAsync(addressId, async (cart) =>
         {
@@ -540,7 +540,7 @@ public partial class CheckoutController : BasePublicController
     /// </summary>
     /// <param name="addressId"></param>
     /// <param name="opc"></param>
-    public virtual async Task<IActionResult> DeleteEditShippingAddress(int addressId, bool opc = false)
+    public virtual async Task<IActionResult> DeleteEditShippingAddress(long addressId, bool opc = false)
     {
         return await DeleteAddressAsync(addressId, async (cart) =>
         {
@@ -641,7 +641,7 @@ public partial class CheckoutController : BasePublicController
         return View(model);
     }
 
-    public virtual async Task<IActionResult> SelectBillingAddress(int addressId, bool shipToSameAddress = false)
+    public virtual async Task<IActionResult> SelectBillingAddress(long addressId, bool shipToSameAddress = false)
     {
         //validation
         if (_orderSettings.CheckoutDisabled)
@@ -798,7 +798,7 @@ public partial class CheckoutController : BasePublicController
         return View(model);
     }
 
-    public virtual async Task<IActionResult> SelectShippingAddress(int addressId)
+    public virtual async Task<IActionResult> SelectShippingAddress(long addressId)
     {
         //validation
         if (_orderSettings.CheckoutDisabled)
@@ -1079,7 +1079,7 @@ public partial class CheckoutController : BasePublicController
         }
 
         //filter by country
-        var filterByCountryId = 0;
+        long filterByCountryId = 0;
         if (_addressSettings.CountryEnabled)
             filterByCountryId = (await _customerService.GetCustomerBillingAddressAsync(customer))?.CountryId ?? 0;
 
@@ -1405,7 +1405,7 @@ public partial class CheckoutController : BasePublicController
         if (isPaymentWorkflowRequired)
         {
             //filter by country
-            var filterByCountryId = 0;
+            long filterByCountryId = 0;
             if (_addressSettings.CountryEnabled)
                 filterByCountryId = (await _customerService.GetCustomerBillingAddressAsync(customer))?.CountryId ?? 0;
 

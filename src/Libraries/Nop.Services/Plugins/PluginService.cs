@@ -126,7 +126,7 @@ public partial class PluginService : IPluginService
     /// <param name="pluginDescriptor">Plugin descriptor to check</param>
     /// <param name="storeId">Store identifier</param>
     /// <returns>Result of check</returns>
-    protected virtual bool FilterByStore(PluginDescriptor pluginDescriptor, int storeId)
+    protected virtual bool FilterByStore(PluginDescriptor pluginDescriptor, long storeId)
     {
         ArgumentNullException.ThrowIfNull(pluginDescriptor);
 
@@ -223,7 +223,7 @@ public partial class PluginService : IPluginService
     /// The task result contains the plugin descriptors
     /// </returns>
     public virtual async Task<IList<PluginDescriptor>> GetPluginDescriptorsAsync<TPlugin>(LoadPluginsMode loadMode = LoadPluginsMode.InstalledOnly,
-        Customer customer = null, int storeId = 0, string group = null, string dependsOnSystemName = "", string friendlyName = null, string author = null) where TPlugin : class, IPlugin
+        Customer customer = null, long storeId = 0, string group = null, string dependsOnSystemName = "", string friendlyName = null, string author = null) where TPlugin : class, IPlugin
     {
         var pluginDescriptors = _pluginsInfo.PluginDescriptors.Select(p => p.pluginDescriptor).ToList();
 
@@ -263,7 +263,7 @@ public partial class PluginService : IPluginService
     /// </returns>
     public virtual async Task<PluginDescriptor> GetPluginDescriptorBySystemNameAsync<TPlugin>(string systemName,
         LoadPluginsMode loadMode = LoadPluginsMode.InstalledOnly,
-        Customer customer = null, int storeId = 0, string @group = null) where TPlugin : class, IPlugin
+        Customer customer = null, long storeId = 0, string @group = null) where TPlugin : class, IPlugin
     {
         return (await GetPluginDescriptorsAsync<TPlugin>(loadMode, customer, storeId, group))
             .FirstOrDefault(descriptor => descriptor.SystemName.Equals(systemName));
@@ -283,7 +283,7 @@ public partial class PluginService : IPluginService
     /// </returns>
     public virtual async Task<IList<TPlugin>> GetPluginsAsync<TPlugin>(
         LoadPluginsMode loadMode = LoadPluginsMode.InstalledOnly,
-        Customer customer = null, int storeId = 0, string @group = null) where TPlugin : class, IPlugin
+        Customer customer = null, long storeId = 0, string @group = null) where TPlugin : class, IPlugin
     {
         return (await GetPluginDescriptorsAsync<TPlugin>(loadMode, customer, storeId, group))
             .Select(descriptor => descriptor.Instance<TPlugin>()).ToList();

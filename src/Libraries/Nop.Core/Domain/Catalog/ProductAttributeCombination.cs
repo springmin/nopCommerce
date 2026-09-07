@@ -10,7 +10,7 @@ public partial class ProductAttributeCombination : BaseEntity
     /// <summary>
     /// Gets or sets the product identifier
     /// </summary>
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     /// <summary>
     /// Gets or sets the attributes
@@ -56,4 +56,13 @@ public partial class ProductAttributeCombination : BaseEntity
     /// Gets or sets the minimum stock quantity
     /// </summary>
     public int MinStockQuantity { get; set; }
+
+    /// <summary>
+    /// The field is not used since 4.70 and is left only for the update process
+    /// use the <see cref="ProductAttributeCombinationPicture"/> instead
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false)]
+    [Obsolete("The field is not used since 4.70 and is left only for the update process use the ProductAttributeCombinationPicture instead")]
+    public long? PictureId { get; set; }
 }

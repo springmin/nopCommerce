@@ -5,7 +5,7 @@ namespace Nop.Plugin.Widgets.Jotform.Models;
 
 public record ConfigurationModel : BaseNopModel
 {
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Plugins.Widgets.Jotform.Enabled")]
     public bool Enabled { get; set; }

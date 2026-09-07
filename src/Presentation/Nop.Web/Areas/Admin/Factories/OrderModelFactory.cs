@@ -1263,8 +1263,8 @@ public partial class OrderModelFactory : IOrderModelFactory
 
         //get products
         var products = await _productService.SearchProductsAsync(showHidden: true,
-            categoryIds: new List<int> { searchModel.SearchCategoryId },
-            manufacturerIds: new List<int> { searchModel.SearchManufacturerId },
+            categoryIds: new List<long> { searchModel.SearchCategoryId },
+            manufacturerIds: new List<long> { searchModel.SearchManufacturerId },
             productType: searchModel.SearchProductTypeId > 0 ? (ProductType?)searchModel.SearchProductTypeId : null,
             keywords: searchModel.SearchProductName,
             pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
@@ -1811,8 +1811,8 @@ public partial class OrderModelFactory : IOrderModelFactory
         var orderIncompleteReportModels = new List<OrderIncompleteReportModel>();
 
         //not paid
-        var orderStatuses = Enum.GetValues(typeof(OrderStatus)).Cast<int>().Where(os => os != (int)OrderStatus.Cancelled).ToList();
-        var paymentStatuses = new List<int> { (int)PaymentStatus.Pending };
+        var orderStatuses = Enum.GetValues(typeof(OrderStatus)).Cast<int>().Select(x => (long)x).Where(os => os != (long)OrderStatus.Cancelled).ToList();
+        var paymentStatuses = new List<long> { (int)PaymentStatus.Pending };
         var psPending = await _orderReportService.GetOrderAverageReportLineAsync(psIds: paymentStatuses, osIds: orderStatuses);
         var httpContext = _httpContextAccessor.HttpContext;
         orderIncompleteReportModels.Add(new OrderIncompleteReportModel
@@ -1828,7 +1828,7 @@ public partial class OrderModelFactory : IOrderModelFactory
         });
 
         //not shipped
-        var shippingStatuses = new List<int> { (int)ShippingStatus.NotYetShipped };
+        var shippingStatuses = new List<long> { (int)ShippingStatus.NotYetShipped };
         var ssPending = await _orderReportService.GetOrderAverageReportLineAsync(osIds: orderStatuses, ssIds: shippingStatuses);
         orderIncompleteReportModels.Add(new OrderIncompleteReportModel
         {

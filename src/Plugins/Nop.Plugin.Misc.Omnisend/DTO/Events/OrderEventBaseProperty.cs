@@ -12,7 +12,7 @@ public abstract class OrderEventBaseProperty
     [JsonProperty("lineItems")] public IList<OrderProductItem> LineItems { get; set; }
     [JsonProperty("note")] public string Note { get; set; }
     [JsonProperty("orderID")] public string OrderId { get; set; }
-    [JsonProperty("orderNumber")] public int OrderNumber { get; set; }
+    [JsonProperty("orderNumber")] public long OrderNumber { get; set; }
     [JsonProperty("orderStatusURL")] public string OrderStatusURL { get; set; }
     [JsonProperty("paymentMethod")] public string PaymentMethod { get; set; }
     [JsonProperty("paymentStatus")] public string PaymentStatus { get; set; }

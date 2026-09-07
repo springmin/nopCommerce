@@ -11,17 +11,17 @@ public partial class ProductAttributeValue : BaseEntity, ILocalizedEntity
     /// <summary>
     /// Gets or sets the product attribute mapping identifier
     /// </summary>
-    public int ProductAttributeMappingId { get; set; }
+    public long ProductAttributeMappingId { get; set; }
 
     /// <summary>
     /// Gets or sets the attribute value type identifier
     /// </summary>
-    public int AttributeValueTypeId { get; set; }
+    public long AttributeValueTypeId { get; set; }
 
     /// <summary>
     /// Gets or sets the associated product identifier (used only with AttributeValueType.AssociatedToProduct)
     /// </summary>
-    public int AssociatedProductId { get; set; }
+    public long AssociatedProductId { get; set; }
 
     /// <summary>
     /// Gets or sets the product attribute name
@@ -36,7 +36,7 @@ public partial class ProductAttributeValue : BaseEntity, ILocalizedEntity
     /// <summary>
     /// Gets or sets the picture ID for image square (used with "Image squares" attribute type)
     /// </summary>
-    public int ImageSquaresPictureId { get; set; }
+    public long ImageSquaresPictureId { get; set; }
 
     /// <summary>
     /// Gets or sets the price adjustment (used only with AttributeValueType.Simple)
@@ -86,4 +86,13 @@ public partial class ProductAttributeValue : BaseEntity, ILocalizedEntity
         get => (AttributeValueType)AttributeValueTypeId;
         set => AttributeValueTypeId = (int)value;
     }
+
+    /// <summary>
+    /// The field is not used since 4.70 and is left only for the update process
+    /// use the <see cref="ProductAttributeValuePicture"/> instead
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false)]
+    [Obsolete("The field is not used since 4.70 and is left only for the update process use the ProductAttributeValuePicture instead")]
+    public long? PictureId { get; set; }
 }

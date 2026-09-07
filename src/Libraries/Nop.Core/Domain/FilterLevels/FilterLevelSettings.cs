@@ -9,7 +9,7 @@ public partial class FilterLevelSettings : ISettings
 {
     public FilterLevelSettings()
     {
-        FilterLevelEnumDisabled = new List<int>();
+        FilterLevelEnumDisabled = new List<long>();
     }
 
     /// <summary>
@@ -30,5 +30,5 @@ public partial class FilterLevelSettings : ISettings
     /// <summary>
     /// Gets or sets a list of disabled values of FilterLevelEnum
     /// </summary>
-    public List<int> FilterLevelEnumDisabled { get; set; }
+    public List<long> FilterLevelEnumDisabled { get; set; }
 }

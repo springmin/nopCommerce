@@ -27,7 +27,7 @@ public record ConfigurationModel : BaseNopModel
 
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Plugins.Misc.Brevo.Fields.ApiKey")]
     public string ApiKey { get; set; }
@@ -61,7 +61,7 @@ public record ConfigurationModel : BaseNopModel
     public string StoreOwnerPhoneNumber { get; set; }
 
     [NopResourceDisplayName("Plugins.Misc.Brevo.Fields.CampaignList")]
-    public int CampaignListId { get; set; }
+    public long CampaignListId { get; set; }
 
     [NopResourceDisplayName("Plugins.Misc.Brevo.Fields.CampaignSenderName")]
     public string CampaignSenderName { get; set; }

@@ -13,7 +13,7 @@ public partial record WishlistModel : BaseNopModel
         Warnings = new List<string>();
     }
 
-    public int? ListId { get; set; }
+    public long? ListId { get; set; }
 
     public Guid CustomerGuid { get; set; }
     public string CustomerFullname { get; set; }
@@ -55,7 +55,7 @@ public partial record WishlistModel : BaseNopModel
 
         public PictureModel Picture { get; set; }
 
-        public int ProductId { get; set; }
+        public long ProductId { get; set; }
 
         public string ProductName { get; set; }
 

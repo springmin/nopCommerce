@@ -189,7 +189,7 @@ public partial class PriceCalculationService : IPriceCalculationService
             var discountCategoryIds = await _categoryService.GetAppliedCategoryIdsAsync(discount, customer);
 
             //compare with categories of this product
-            var productCategoryIds = new List<int>();
+            var productCategoryIds = new List<long>();
             if (discountCategoryIds.Any())
             {
                 productCategoryIds = (await _categoryService
@@ -235,7 +235,7 @@ public partial class PriceCalculationService : IPriceCalculationService
             var discountManufacturerIds = await _manufacturerService.GetAppliedManufacturerIdsAsync(discount, customer);
 
             //compare with manufacturers of this product
-            var productManufacturerIds = new List<int>();
+            var productManufacturerIds = new List<long>();
             if (discountManufacturerIds.Any())
             {
                 productManufacturerIds =

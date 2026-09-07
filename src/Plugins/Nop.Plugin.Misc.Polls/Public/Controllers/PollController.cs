@@ -45,7 +45,7 @@ public class PollController : BasePublicController
     #region Methods
 
     [HttpPost]
-    public async Task<IActionResult> Vote(int pollAnswerId)
+    public async Task<IActionResult> Vote(long pollAnswerId)
     {
         var pollAnswer = await _pollService.GetPollAnswerByIdAsync(pollAnswerId);
         if (pollAnswer == null)

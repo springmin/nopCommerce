@@ -36,9 +36,9 @@ public partial interface IProductReviewService
     /// A task that represents the asynchronous operation
     /// The task result contains the reviews
     /// </returns>
-    Task<IPagedList<ProductReview>> GetAllProductReviewsAsync(int customerId = 0, bool? approved = null,
+    Task<IPagedList<ProductReview>> GetAllProductReviewsAsync(long customerId = 0, bool? approved = null,
         DateTime? fromUtc = null, DateTime? toUtc = null,
-        string message = null, int storeId = 0, int productId = 0, int vendorId = 0, bool showHidden = false,
+        string message = null, long storeId = 0, long productId = 0, long vendorId = 0, bool showHidden = false,
         int pageIndex = 0, int pageSize = int.MaxValue);
 
     /// <summary>
@@ -49,7 +49,7 @@ public partial interface IProductReviewService
     /// A task that represents the asynchronous operation
     /// The task result contains the product review
     /// </returns>
-    Task<ProductReview> GetProductReviewByIdAsync(int productReviewId);
+    Task<ProductReview> GetProductReviewByIdAsync(long productReviewId);
 
     /// <summary>
     /// Get product reviews by identifiers
@@ -59,7 +59,7 @@ public partial interface IProductReviewService
     /// A task that represents the asynchronous operation
     /// The task result contains the product reviews
     /// </returns>
-    Task<IList<ProductReview>> GetProductReviewsByIdsAsync(int[] productReviewIds);
+    Task<IList<ProductReview>> GetProductReviewsByIdsAsync(long[] productReviewIds);
 
     /// <summary>
     /// Inserts a product review
@@ -117,7 +117,7 @@ public partial interface IProductReviewService
     /// A task that represents the asynchronous operation
     /// The task result contains the 
     /// </returns>
-    Task<bool> CanAddReviewAsync(int productId, int storeId = 0);
+    Task<bool> CanAddReviewAsync(long productId, long storeId = 0);
 
     /// <summary>
     /// Update product review totals

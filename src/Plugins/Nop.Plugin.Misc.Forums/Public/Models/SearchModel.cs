@@ -9,7 +9,7 @@ public record SearchModel : BaseNopModel
 
     public bool ShowAdvancedSearch { get; set; }
     public string SearchTerms { get; set; }
-    public int? ForumId { get; set; }
+    public long? ForumId { get; set; }
     public int? Within { get; set; }
     public int? LimitDays { get; set; }
     public int TopicPageSize { get; set; }

@@ -10,7 +10,7 @@ public partial record VendorNoteModel : BaseNopEntityModel
 {
     #region Properties
 
-    public int VendorId { get; set; }
+    public long VendorId { get; set; }
 
     [NopResourceDisplayName("Admin.Vendors.VendorNotes.Fields.Note")]
     public string Note { get; set; }

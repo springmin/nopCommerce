@@ -19,7 +19,7 @@ public partial record ContactFormAttributeValueModel : BaseNopEntityModel, ILoca
 
     #region Properties
 
-    public int AttributeId { get; set; }
+    public long AttributeId { get; set; }
 
     [NopResourceDisplayName("Admin.Common.ContactFormAttributes.Values.Fields.Name")]
     public string Name { get; set; }
@@ -37,7 +37,7 @@ public partial record ContactFormAttributeValueModel : BaseNopEntityModel, ILoca
 
 public partial record ContactFormAttributeValueLocalizedModel : ILocalizedLocaleModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Common.ContactFormAttributes.Values.Fields.Name")]
     public string Name { get; set; }

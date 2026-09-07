@@ -37,7 +37,7 @@ public class AddressValidationController : BaseController
     #region Methods
 
     [HttpPost]
-    public async Task<IActionResult> UseValidatedAddress(int addressId, bool isNewAddress)
+    public async Task<IActionResult> UseValidatedAddress(long addressId, bool isNewAddress)
     {
         //try to get an address by the passed identifier
         var address = await _addressService.GetAddressByIdAsync(addressId);

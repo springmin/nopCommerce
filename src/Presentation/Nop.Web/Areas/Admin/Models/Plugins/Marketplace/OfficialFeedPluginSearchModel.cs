@@ -26,13 +26,13 @@ public partial record OfficialFeedPluginSearchModel : BaseSearchModel
     public string SearchName { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Plugins.OfficialFeed.Version")]
-    public int SearchVersionId { get; set; }
+    public long SearchVersionId { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Plugins.OfficialFeed.Category")]
-    public int SearchCategoryId { get; set; }
+    public long SearchCategoryId { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Plugins.OfficialFeed.Price")]
-    public int SearchPriceId { get; set; }
+    public long SearchPriceId { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Plugins.OfficialFeed.Version")]
     public IList<SelectListItem> AvailableVersions { get; set; }

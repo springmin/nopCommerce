@@ -15,10 +15,10 @@ public partial record MenuModel : BaseNopEntityModel, IAclSupportedModel, IStore
     {
         AvailableMenuTypes = new List<SelectListItem>();
 
-        SelectedStoreIds = new List<int>();
+        SelectedStoreIds = new List<long>();
         AvailableStores = new List<SelectListItem>();
 
-        SelectedCustomerRoleIds = new List<int>();
+        SelectedCustomerRoleIds = new List<long>();
         AvailableCustomerRoles = new List<SelectListItem>();
 
         MenuItemSearchModel = new();
@@ -33,7 +33,7 @@ public partial record MenuModel : BaseNopEntityModel, IAclSupportedModel, IStore
     public string Name { get; set; }
 
     [NopResourceDisplayName("Admin.ContentManagement.Menus.Fields.MenuType")]
-    public int MenuTypeId { get; set; }
+    public long MenuTypeId { get; set; }
     public string MenuTypeName { get; set; }
     public IList<SelectListItem> AvailableMenuTypes { get; set; }
 
@@ -50,10 +50,10 @@ public partial record MenuModel : BaseNopEntityModel, IAclSupportedModel, IStore
     public bool Published { get; set; }
 
     [NopResourceDisplayName("Admin.ContentManagement.Menus.Fields.LimitedToStores")]
-    public IList<int> SelectedStoreIds { get; set; }
+    public IList<long> SelectedStoreIds { get; set; }
     public IList<SelectListItem> AvailableStores { get; set; }
 
-    public IList<int> SelectedCustomerRoleIds { get; set; }
+    public IList<long> SelectedCustomerRoleIds { get; set; }
     public IList<SelectListItem> AvailableCustomerRoles { get; set; }
 
     public MenuItemSearchModel MenuItemSearchModel { get; set; }
@@ -65,7 +65,7 @@ public partial record MenuModel : BaseNopEntityModel, IAclSupportedModel, IStore
 
 public partial record MenuLocalizedModel : ILocalizedLocaleModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.ContentManagement.Menus.Fields.Name")]
     public string Name { get; set; }

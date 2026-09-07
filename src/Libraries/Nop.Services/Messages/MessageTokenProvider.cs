@@ -543,7 +543,7 @@ public partial class MessageTokenProvider : IMessageTokenProvider
     /// A task that represents the asynchronous operation
     /// The task result contains the hTML table of products
     /// </returns>
-    protected virtual async Task<string> ProductListToHtmlTableAsync(Order order, int languageId, int vendorId)
+    protected virtual async Task<string> ProductListToHtmlTableAsync(Order order, long languageId, long vendorId)
     {
         var language = await _languageService.GetLanguageByIdAsync(languageId);
 
@@ -871,7 +871,7 @@ public partial class MessageTokenProvider : IMessageTokenProvider
     /// A task that represents the asynchronous operation
     /// The task result contains the hTML table of products
     /// </returns>
-    protected virtual async Task<string> ProductListToHtmlTableAsync(Shipment shipment, int languageId)
+    protected virtual async Task<string> ProductListToHtmlTableAsync(Shipment shipment, long languageId)
     {
         var sb = new StringBuilder();
         sb.AppendLine("<table border=\"0\" style=\"width:100%;\">");
@@ -954,7 +954,7 @@ public partial class MessageTokenProvider : IMessageTokenProvider
     /// A task that represents the asynchronous operation
     /// The task result contains the generated URL
     /// </returns>
-    protected virtual async Task<string> RouteUrlAsync(int storeId = 0, string routeName = null, object routeValues = null)
+    protected virtual async Task<string> RouteUrlAsync(long storeId = 0, string routeName = null, object routeValues = null)
     {
         try
         {
@@ -1029,7 +1029,7 @@ public partial class MessageTokenProvider : IMessageTokenProvider
     /// <param name="emailAccount">Email account</param>
     /// <param name="languageId">Language identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task AddStoreTokensAsync(IList<Token> tokens, Store store, EmailAccount emailAccount, int languageId)
+    public virtual async Task AddStoreTokensAsync(IList<Token> tokens, Store store, EmailAccount emailAccount, long languageId)
     {
         ArgumentNullException.ThrowIfNull(emailAccount);
 
@@ -1063,7 +1063,7 @@ public partial class MessageTokenProvider : IMessageTokenProvider
     /// <param name="languageId">Language identifier</param>
     /// <param name="vendorId">Vendor identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task AddOrderTokensAsync(IList<Token> tokens, Order order, int languageId, int vendorId = 0)
+    public virtual async Task AddOrderTokensAsync(IList<Token> tokens, Order order, long languageId, long vendorId = 0)
     {
         //lambda expression for choosing correct order address
         async Task<Address> orderAddress(Order o) => await _addressService.GetAddressByIdAsync((o.PickupInStore ? o.PickupAddressId : o.ShippingAddressId) ?? 0);
@@ -1185,7 +1185,7 @@ public partial class MessageTokenProvider : IMessageTokenProvider
     /// <param name="shipment">Shipment item</param>
     /// <param name="languageId">Language identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task AddShipmentTokensAsync(IList<Token> tokens, Shipment shipment, int languageId)
+    public virtual async Task AddShipmentTokensAsync(IList<Token> tokens, Shipment shipment, long languageId)
     {
         tokens.Add(new Token("Shipment.ShipmentNumber", shipment.Id));
         tokens.Add(new Token("Shipment.TrackingNumber", shipment.TrackingNumber));
@@ -1254,7 +1254,7 @@ public partial class MessageTokenProvider : IMessageTokenProvider
     /// <param name="orderItem">Order item</param>
     /// <param name="languageId">Language identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task AddReturnRequestTokensAsync(IList<Token> tokens, ReturnRequest returnRequest, Order order, OrderItem orderItem, int languageId)
+    public virtual async Task AddReturnRequestTokensAsync(IList<Token> tokens, ReturnRequest returnRequest, Order order, OrderItem orderItem, long languageId)
     {
         if (orderItem != null)
         { 
@@ -1292,7 +1292,7 @@ public partial class MessageTokenProvider : IMessageTokenProvider
     /// <param name="giftCard">Gift card</param>
     /// <param name="languageId">Language identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task AddGiftCardTokensAsync(IList<Token> tokens, GiftCard giftCard, int languageId)
+    public virtual async Task AddGiftCardTokensAsync(IList<Token> tokens, GiftCard giftCard, long languageId)
     {
         tokens.Add(new Token("GiftCard.SenderName", giftCard.SenderName));
         tokens.Add(new Token("GiftCard.SenderEmail", giftCard.SenderEmail));
@@ -1318,7 +1318,7 @@ public partial class MessageTokenProvider : IMessageTokenProvider
     /// <param name="tokens">List of already added tokens</param>
     /// <param name="customerId">Customer identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task AddCustomerTokensAsync(IList<Token> tokens, int customerId)
+    public virtual async Task AddCustomerTokensAsync(IList<Token> tokens, long customerId)
     {
         if (customerId <= 0)
             throw new ArgumentOutOfRangeException(nameof(customerId));
@@ -1440,7 +1440,7 @@ public partial class MessageTokenProvider : IMessageTokenProvider
     /// <param name="product">Product</param>
     /// <param name="languageId">Language identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task AddProductTokensAsync(IList<Token> tokens, Product product, int languageId)
+    public virtual async Task AddProductTokensAsync(IList<Token> tokens, Product product, long languageId)
     {
         tokens.Add(new Token("Product.ID", product.Id));
         tokens.Add(new Token("Product.Name", await _localizationService.GetLocalizedAsync(product, x => x.Name, languageId)));
@@ -1463,7 +1463,7 @@ public partial class MessageTokenProvider : IMessageTokenProvider
     /// <param name="combination">Product attribute combination</param>
     /// <param name="languageId">Language identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task AddAttributeCombinationTokensAsync(IList<Token> tokens, ProductAttributeCombination combination, int languageId)
+    public virtual async Task AddAttributeCombinationTokensAsync(IList<Token> tokens, ProductAttributeCombination combination, long languageId)
     {
         //attributes
         //we cannot inject IProductAttributeFormatter into constructor because it'll cause circular references.
@@ -1529,7 +1529,7 @@ public partial class MessageTokenProvider : IMessageTokenProvider
     /// <param name="cart">Shopping cart</param>
     /// <param name="languageId">Language identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task AddShoppingCartTokensAsync(IList<Token> tokens, IList<ShoppingCartItem> cart, int languageId)
+    public virtual async Task AddShoppingCartTokensAsync(IList<Token> tokens, IList<ShoppingCartItem> cart, long languageId)
     {
         ArgumentNullException.ThrowIfNull(tokens);
         ArgumentNullException.ThrowIfNull(cart);

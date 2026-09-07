@@ -16,8 +16,8 @@ public record CustomerForumSubscriptionsModel : BaseNopModel
 
     public record ForumSubscriptionModel : BaseNopEntityModel
     {
-        public int ForumId { get; set; }
-        public int ForumTopicId { get; set; }
+        public long ForumId { get; set; }
+        public long ForumTopicId { get; set; }
         public bool TopicSubscription { get; set; }
         public string Title { get; set; }
         public string Slug { get; set; }

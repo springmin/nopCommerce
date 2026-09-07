@@ -8,10 +8,10 @@ public partial class PermissionRecordCustomerRoleMapping : BaseEntity
     /// <summary>
     /// Gets or sets the permission record identifier
     /// </summary>
-    public int PermissionRecordId { get; set; }
+    public long PermissionRecordId { get; set; }
 
     /// <summary>
     /// Gets or sets the customer role identifier
     /// </summary>
-    public int CustomerRoleId { get; set; }
+    public long CustomerRoleId { get; set; }
 }

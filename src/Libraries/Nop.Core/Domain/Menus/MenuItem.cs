@@ -22,12 +22,12 @@ public partial class MenuItem : BaseEntity, IAclSupported, IStoreMappingSupporte
     /// <summary>
     /// Gets or sets the menu item type identifier
     /// </summary>
-    public int MenuItemTypeId { get; set; }
+    public long MenuItemTypeId { get; set; }
 
     /// <summary>
     /// Gets or sets the identifier of the related entity
     /// </summary>
-    public int? EntityId { get; set; }
+    public long? EntityId { get; set; }
 
     /// <summary>
     /// Gets or sets the number of sub-items for entity item in the grid view
@@ -52,7 +52,7 @@ public partial class MenuItem : BaseEntity, IAclSupported, IStoreMappingSupporte
     /// <summary>
     /// Gets or sets the template identifier
     /// </summary>
-    public int TemplateId { get; set; }
+    public long TemplateId { get; set; }
 
     /// <summary>
     /// Gets or sets the display order
@@ -82,12 +82,12 @@ public partial class MenuItem : BaseEntity, IAclSupported, IStoreMappingSupporte
     /// <summary>
     /// Gets or sets the identifier of the parent menu item
     /// </summary>
-    public int ParentId { get; set; }
+    public long ParentId { get; set; }
 
     /// <summary>
     /// Gets or sets the menu identifier
     /// </summary>
-    public int MenuId { get; set; }
+    public long MenuId { get; set; }
 
     /// <summary>
     /// Gets or sets the menu item type

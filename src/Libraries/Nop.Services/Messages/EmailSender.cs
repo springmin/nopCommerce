@@ -127,7 +127,7 @@ public partial class EmailSender : IEmailSender
         string replyTo = null, string replyToName = null,
         IEnumerable<string> bcc = null, IEnumerable<string> cc = null,
         string attachmentFilePath = null, string attachmentFileName = null,
-        int attachedDownloadId = 0, IDictionary<string, string> headers = null)
+        long attachedDownloadId = 0, IDictionary<string, string> headers = null)
     {
         var message = new MimeMessage();
 

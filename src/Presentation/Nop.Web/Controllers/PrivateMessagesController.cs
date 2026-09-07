@@ -161,7 +161,7 @@ public partial class PrivateMessagesController : BasePublicController
         return RedirectToRoute(NopRouteNames.Standard.PRIVATE_MESSAGES, new { tab = "sent" });
     }
 
-    public virtual async Task<IActionResult> SendPM(int toCustomerId, int? replyToMessageId)
+    public virtual async Task<IActionResult> SendPM(long toCustomerId, long? replyToMessageId)
     {
         if (!_privateMessageSettings.AllowPrivateMessages)
             return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
@@ -265,7 +265,7 @@ public partial class PrivateMessagesController : BasePublicController
 
                 //Email notification
                 if (_privateMessageSettings.NotifyAboutPrivateMessages)
-                    await _workflowMessageService.SendPrivateMessageNotificationAsync(privateMessage, toCustomer.LanguageId ?? 0);
+                    await _workflowMessageService.SendPrivateMessageNotificationAsync(privateMessage, (await _workContext.GetWorkingLanguageAsync())?.Id ?? 0);
 
                 //activity log
                 await _customerActivityService.InsertActivityAsync("PublicStore.SendPM",
@@ -283,7 +283,7 @@ public partial class PrivateMessagesController : BasePublicController
         return View(model);
     }
 
-    public virtual async Task<IActionResult> ViewPM(int privateMessageId)
+    public virtual async Task<IActionResult> ViewPM(long privateMessageId)
     {
         if (!_privateMessageSettings.AllowPrivateMessages)
         {
@@ -319,7 +319,7 @@ public partial class PrivateMessagesController : BasePublicController
         return View(model);
     }
 
-    public virtual async Task<IActionResult> DeletePM(int privateMessageId)
+    public virtual async Task<IActionResult> DeletePM(long privateMessageId)
     {
         if (!_privateMessageSettings.AllowPrivateMessages)
         {

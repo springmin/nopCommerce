@@ -11,7 +11,7 @@ public record ConfigurationModel : BaseNopModel, ISettingsModel
 {
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Plugins.Misc.Forums.Configuration.ForumsEnabled")]
     public bool ForumsEnabled { get; set; }

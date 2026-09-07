@@ -31,7 +31,7 @@ public partial interface IMenuService
     /// </returns>
     Task<IPagedList<Menu>> GetAllMenusAsync(
         MenuType? menuType = null,
-        int storeId = 0,
+        long storeId = 0,
         bool showHidden = false,
         int pageIndex = 0,
         int pageSize = int.MaxValue);
@@ -44,7 +44,7 @@ public partial interface IMenuService
     /// A task that represents the asynchronous operation
     /// The task result contains a menu
     /// </returns>
-    Task<Menu> GetMenuByIdAsync(int menuId);
+    Task<Menu> GetMenuByIdAsync(long menuId);
 
     /// <summary>
     /// Insert a menu
@@ -80,7 +80,7 @@ public partial interface IMenuService
     /// <returns>
     /// Menu items limited in depth
     /// </returns>
-    IEnumerable<MenuItem> FilterMenuItemsByDepth(IEnumerable<MenuItem> menuItems, int parentId = 0, int depthLimit = 1);
+    IEnumerable<MenuItem> FilterMenuItemsByDepth(IEnumerable<MenuItem> menuItems, long parentId = 0, int depthLimit = 1);
 
     /// <summary>
     /// Gets a menu item by identifier
@@ -90,7 +90,7 @@ public partial interface IMenuService
     /// A task that represents the asynchronous operation
     /// The task result contains a menu item
     /// </returns>
-    Task<MenuItem> GetMenuItemByIdAsync(int menuItemId);
+    Task<MenuItem> GetMenuItemByIdAsync(long menuItemId);
 
     /// <summary>
     /// Insert a menu item
@@ -122,9 +122,9 @@ public partial interface IMenuService
     /// The task result contains menu items
     /// </returns>
     Task<IPagedList<MenuItem>> GetAllMenuItemsAsync(
-        int menuId = 0,
-        int parentMenuItemId = 0,
-        int storeId = 0,
+        long menuId = 0,
+        long parentMenuItemId = 0,
+        long storeId = 0,
         int depth = 0,
         bool treeSorting = false,
         bool showHidden = false,

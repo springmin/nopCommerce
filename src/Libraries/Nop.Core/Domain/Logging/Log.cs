@@ -8,7 +8,7 @@ public partial class Log : BaseEntity
     /// <summary>
     /// Gets or sets the log level identifier
     /// </summary>
-    public int LogLevelId { get; set; }
+    public long LogLevelId { get; set; }
 
     /// <summary>
     /// Gets or sets the short message
@@ -28,7 +28,7 @@ public partial class Log : BaseEntity
     /// <summary>
     /// Gets or sets the customer identifier
     /// </summary>
-    public int? CustomerId { get; set; }
+    public long? CustomerId { get; set; }
 
     /// <summary>
     /// Gets or sets the page URL

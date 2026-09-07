@@ -10,8 +10,8 @@ public partial class CatalogSettings : ISettings
 {
     public CatalogSettings()
     {
-        ProductSortingEnumDisabled = new List<int>();
-        ProductSortingEnumDisplayOrder = new Dictionary<int, int>();
+        ProductSortingEnumDisabled = new List<long>();
+        ProductSortingEnumDisplayOrder = new Dictionary<long, int>();
     }
 
     /// <summary>
@@ -473,12 +473,12 @@ public partial class CatalogSettings : ISettings
     /// <summary>
     /// Gets or sets a list of disabled values of ProductSortingEnum
     /// </summary>
-    public List<int> ProductSortingEnumDisabled { get; set; }
+    public List<long> ProductSortingEnumDisabled { get; set; }
 
     /// <summary>
     /// Gets or sets a display order of ProductSortingEnum values 
     /// </summary>
-    public Dictionary<int, int> ProductSortingEnumDisplayOrder { get; set; }
+    public Dictionary<long, int> ProductSortingEnumDisplayOrder { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the products need to be exported/imported with their attributes
@@ -604,7 +604,7 @@ public partial class CatalogSettings : ISettings
     /// Gets or sets the identifier of product URL structure type (e.g. '/category-seo-name/product-seo-name' or '/product-seo-name')
     /// </summary>
     /// <remarks>We have ProductUrlStructureType enum, but we use int value here so that it can be overridden in third-party plugins</remarks>
-    public int ProductUrlStructureTypeId { get; set; }
+    public long ProductUrlStructureTypeId { get; set; }
 
     /// <summary>
     /// Gets or sets an system name of active search provider

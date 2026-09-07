@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Globalization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
 using Nop.Core.Domain.Orders;
@@ -145,7 +146,7 @@ public class RfqAdminController : BasePluginController
 
     [CheckPermission(RfqPermissionConfigManager.ADMIN_ACCESS_RFQ)]
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_VIEW)]
-    public async Task<IActionResult> AddProductDetails(int productId, int quoteId)
+    public async Task<IActionResult> AddProductDetails(long productId, long quoteId)
     {
         var quote = await _rfqService.GetQuoteByIdAsync(quoteId)
             ?? throw new ArgumentException("No quote found with the specified id");
@@ -162,13 +163,13 @@ public class RfqAdminController : BasePluginController
     [HttpPost]
     [CheckPermission(RfqPermissionConfigManager.ADMIN_ACCESS_RFQ)]
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_VIEW)]
-    public async Task<IActionResult> AddProductDetails(int quoteId, int productId, IFormCollection form)
+    public async Task<IActionResult> AddProductDetails(long quoteId, long productId, IFormCollection form)
     {
         var product = await _productService.GetProductByIdAsync(productId)
             ?? throw new ArgumentException("No product found with the specified id");
 
         //basic properties
-        _ = decimal.TryParse(form["UnitPriceInclTax"], out var unitPriceInclTax);
+        _ = decimal.TryParse(form["UnitPriceInclTax"], NumberStyles.Any, CultureInfo.InvariantCulture, out var unitPriceInclTax);
         _ = int.TryParse(form["Quantity"], out var quantity);
 
         //warnings
@@ -214,7 +215,7 @@ public class RfqAdminController : BasePluginController
     }
 
     [HttpPost]
-    public async Task<IActionResult> ProductDetailsAttributeChange(int productId, bool validateAttributeConditions, IFormCollection form)
+    public async Task<IActionResult> ProductDetailsAttributeChange(long productId, bool validateAttributeConditions, IFormCollection form)
     {
         var product = await _productService.GetProductByIdAsync(productId);
         if (product == null)
@@ -224,8 +225,8 @@ public class RfqAdminController : BasePluginController
         var attributeXml = await _productAttributeParser.ParseProductAttributesAsync(product, form, errors);
 
         //conditional attributes
-        var enabledAttributeMappingIds = new List<int>();
-        var disabledAttributeMappingIds = new List<int>();
+        var enabledAttributeMappingIds = new List<long>();
+        var disabledAttributeMappingIds = new List<long>();
 
         if (validateAttributeConditions)
         {
@@ -288,7 +289,7 @@ public class RfqAdminController : BasePluginController
     }
 
     [CheckPermission(RfqPermissionConfigManager.ADMIN_ACCESS_RFQ)]
-    public async Task<IActionResult> AdminRequest(int id)
+    public async Task<IActionResult> AdminRequest(long id)
     {
         if (id <= 0)
             return RedirectToAction("AdminRequests");
@@ -335,7 +336,7 @@ public class RfqAdminController : BasePluginController
     [HttpPost, ActionName("AdminRequest")]
     [FormValueRequired(FormValueRequirement.StartsWith, "btnSave")]
     [CheckPermission(RfqPermissionConfigManager.ADMIN_ACCESS_RFQ)]
-    public async Task<IActionResult> EditRequestItem(int id, IFormCollection form)
+    public async Task<IActionResult> EditRequestItem(long id, IFormCollection form)
     {
         if (id <= 0)
             return RedirectToAction("AdminRequests");
@@ -346,7 +347,7 @@ public class RfqAdminController : BasePluginController
             return RedirectToAction("AdminRequests");
 
         //get request a quote item identifier
-        var requestQuoteItemId = 0;
+        long requestQuoteItemId = 0;
 
         var saveButtonId = form
             .FirstOrDefault(p => p.Key.StartsWith("btnSave", StringComparison.InvariantCultureIgnoreCase)).Key;
@@ -358,7 +359,7 @@ public class RfqAdminController : BasePluginController
             return await AdminRequest(id);
 
         int.TryParse(form[$"quantity{requestQuoteItemId}"], out var requestedQty);
-        decimal.TryParse(form[$"unitPrice{requestQuoteItemId}"], out var requestedUnitPrice);
+        decimal.TryParse(form[$"unitPrice{requestQuoteItemId}"], NumberStyles.Any, CultureInfo.InvariantCulture, out var requestedUnitPrice);
 
         await _rfqService.UpdateRequestQuoteItemAsync(requestQuoteItemId, requestedQty, requestedUnitPrice);
 
@@ -376,7 +377,7 @@ public class RfqAdminController : BasePluginController
     [HttpPost, ActionName("AdminRequest")]
     [FormValueRequired(FormValueRequirement.StartsWith, "btnDelete")]
     [CheckPermission(RfqPermissionConfigManager.ADMIN_ACCESS_RFQ)]
-    public async Task<IActionResult> DeleteRequestItem(int id, IFormCollection form)
+    public async Task<IActionResult> DeleteRequestItem(long id, IFormCollection form)
     {
         if (id <= 0)
             return RedirectToAction("AdminRequests");
@@ -387,7 +388,7 @@ public class RfqAdminController : BasePluginController
             return RedirectToAction("AdminRequests");
 
         //get request a quote item identifier
-        var requestQuoteItemId = 0;
+        long requestQuoteItemId = 0;
 
         var deleteButtonId = form
             .FirstOrDefault(p => p.Key.StartsWith("btnDelete", StringComparison.InvariantCultureIgnoreCase)).Key;
@@ -437,7 +438,7 @@ public class RfqAdminController : BasePluginController
 
     [HttpPost]
     [CheckPermission(RfqPermissionConfigManager.ADMIN_ACCESS_RFQ)]
-    public async Task<IActionResult> DeleteSelectedRequests(ICollection<int> selectedIds)
+    public async Task<IActionResult> DeleteSelectedRequests(ICollection<long> selectedIds)
     {
         await _rfqService.DeleteRequestsQuoteByIdsAsync(selectedIds);
 
@@ -461,7 +462,7 @@ public class RfqAdminController : BasePluginController
     #region Quote
 
     [CheckPermission(RfqPermissionConfigManager.ADMIN_ACCESS_RFQ)]
-    public async Task<IActionResult> PdfDocument(int quoteId)
+    public async Task<IActionResult> PdfDocument(long quoteId)
     {
         var quote = await _rfqService.GetQuoteByIdAsync(quoteId);
 
@@ -486,7 +487,7 @@ public class RfqAdminController : BasePluginController
     }
 
     [CheckPermission(RfqPermissionConfigManager.ADMIN_ACCESS_RFQ)]
-    public async Task<IActionResult> AdminQuote(int id)
+    public async Task<IActionResult> AdminQuote(long id)
     {
         if (id <= 0)
             return RedirectToAction("AdminQuotes");
@@ -522,7 +523,7 @@ public class RfqAdminController : BasePluginController
 
     [HttpPost]
     [CheckPermission(RfqPermissionConfigManager.ADMIN_ACCESS_RFQ)]
-    public async Task<IActionResult> DeleteSelectedQuotes(ICollection<int> selectedIds)
+    public async Task<IActionResult> DeleteSelectedQuotes(ICollection<long> selectedIds)
     {
         await _rfqService.DeleteQuotesByIdsAsync(selectedIds);
 
@@ -543,7 +544,7 @@ public class RfqAdminController : BasePluginController
 
     [CheckPermission(RfqPermissionConfigManager.ADMIN_ACCESS_RFQ)]
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_VIEW)]
-    public async Task<IActionResult> AddProductToQuote(int quoteId)
+    public async Task<IActionResult> AddProductToQuote(long quoteId)
     {
         var quote = await _rfqService.GetQuoteByIdAsync(quoteId);
 
@@ -630,7 +631,7 @@ public class RfqAdminController : BasePluginController
     [HttpPost, ActionName("AdminQuote")]
     [FormValueRequired(FormValueRequirement.StartsWith, "btnSave")]
     [CheckPermission(RfqPermissionConfigManager.ADMIN_ACCESS_RFQ)]
-    public async Task<IActionResult> EditQuoteItem(int id, IFormCollection form)
+    public async Task<IActionResult> EditQuoteItem(long id, IFormCollection form)
     {
         if (id <= 0)
             return RedirectToAction("AdminQuotes");
@@ -641,7 +642,7 @@ public class RfqAdminController : BasePluginController
             return RedirectToAction("AdminQuotes");
 
         //get the quote item identifier
-        var quoteItemId = 0;
+        long quoteItemId = 0;
 
         var saveButtonId = form
             .FirstOrDefault(p => p.Key.StartsWith("btnSave", StringComparison.InvariantCultureIgnoreCase)).Key;
@@ -653,7 +654,7 @@ public class RfqAdminController : BasePluginController
             return await AdminQuote(id);
 
         int.TryParse(form[$"quantity{quoteItemId}"], out var offeredQty);
-        decimal.TryParse(form[$"unitPrice{quoteItemId}"], out var offeredUnitPrice);
+        decimal.TryParse(form[$"unitPrice{quoteItemId}"], NumberStyles.Any, CultureInfo.InvariantCulture, out var offeredUnitPrice);
 
         await _rfqService.UpdateQuoteItemAsync(quoteItemId, offeredQty, offeredUnitPrice);
 
@@ -671,7 +672,7 @@ public class RfqAdminController : BasePluginController
     [HttpPost, ActionName("AdminQuote")]
     [FormValueRequired(FormValueRequirement.StartsWith, "btnDelete")]
     [CheckPermission(RfqPermissionConfigManager.ADMIN_ACCESS_RFQ)]
-    public async Task<IActionResult> DeleteQuoteItem(int id, IFormCollection form)
+    public async Task<IActionResult> DeleteQuoteItem(long id, IFormCollection form)
     {
         if (id <= 0)
             return RedirectToAction("AdminQuotes");
@@ -682,7 +683,7 @@ public class RfqAdminController : BasePluginController
             return RedirectToAction("AdminQuotes");
 
         //get the quote item identifier
-        var quoteItemId = 0;
+        long quoteItemId = 0;
 
         var deleteButtonId = form
             .FirstOrDefault(p => p.Key.StartsWith("btnDelete", StringComparison.InvariantCultureIgnoreCase)).Key;

@@ -17,7 +17,7 @@
 
 @section left
 {
-    @await Component.InvokeAsync(typeof(CustomerNavigationViewComponent), new { selectedTabId = RfqDefaults.QuotesTabId })
+    @await Component.InvokeAsync(typeof(CustomerNavigationViewComponent), new { selectedTabId = (long)RfqDefaults.QuotesTabId })
 }
 
 <div class="page account-page request-list-page">

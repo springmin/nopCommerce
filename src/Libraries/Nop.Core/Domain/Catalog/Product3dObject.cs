@@ -13,12 +13,12 @@ public partial class Product3dObject : BaseEntity
     /// <summary>
     /// Gets or sets the product identifier
     /// </summary>
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     /// <summary>
     /// Gets or sets the picture identifier associated with the 3D object
     /// </summary>
-    public int? PreviewPictureId { get; set; }
+    public long? PreviewPictureId { get; set; }
 
     /// <summary>
     /// Gets or sets the alternative text for the 3D object

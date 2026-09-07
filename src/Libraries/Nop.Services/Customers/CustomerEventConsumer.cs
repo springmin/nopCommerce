@@ -43,7 +43,7 @@ public partial class CustomerEventConsumer : IConsumer<CustomerChangeWorkingLang
     /// </summary>
     /// <param name="customerId">The customer identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    protected virtual async Task UpdateShoppingCartLastActivityDateAsync(int customerId)
+    protected virtual async Task UpdateShoppingCartLastActivityDateAsync(long customerId)
     {
         if (customerId <= 0)
             return;

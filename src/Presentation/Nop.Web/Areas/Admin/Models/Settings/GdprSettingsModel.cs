@@ -19,7 +19,7 @@ public partial record GdprSettingsModel : BaseNopModel, ISettingsModel
 
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Gdpr.GdprEnabled")]
     public bool GdprEnabled { get; set; }

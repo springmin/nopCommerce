@@ -17,7 +17,7 @@ public partial interface ISettingService
     /// A task that represents the asynchronous operation
     /// The task result contains the setting
     /// </returns>
-    Task<Setting> GetSettingByIdAsync(int settingId);
+    Task<Setting> GetSettingByIdAsync(long settingId);
 
     /// <summary>
     /// Deletes a setting
@@ -43,7 +43,7 @@ public partial interface ISettingService
     /// A task that represents the asynchronous operation
     /// The task result contains the setting
     /// </returns>
-    Task<Setting> GetSettingAsync(string key, int storeId = 0, bool loadSharedValueIfNotFound = false);
+    Task<Setting> GetSettingAsync(string key, long storeId = 0, bool loadSharedValueIfNotFound = false);
 
     /// <summary>
     /// Get setting value by key
@@ -58,7 +58,7 @@ public partial interface ISettingService
     /// The task result contains the setting value
     /// </returns>
     Task<T> GetSettingByKeyAsync<T>(string key, T defaultValue = default,
-        int storeId = 0, bool loadSharedValueIfNotFound = false);
+        long storeId = 0, bool loadSharedValueIfNotFound = false);
 
     /// <summary>
     /// Set setting value
@@ -69,7 +69,7 @@ public partial interface ISettingService
     /// <param name="storeId">Store identifier</param>
     /// <param name="clearCache">A value indicating whether to clear cache after setting update</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task SetSettingAsync<T>(string key, T value, int storeId = 0, bool clearCache = true);
+    Task SetSettingAsync<T>(string key, T value, long storeId = 0, bool clearCache = true);
 
     /// <summary>
     /// Gets all settings
@@ -93,7 +93,7 @@ public partial interface ISettingService
     /// The task result contains the true -setting exists; false - does not exist
     /// </returns>
     Task<bool> SettingExistsAsync<T, TPropType>(T settings,
-        Expression<Func<T, TPropType>> keySelector, int storeId = 0)
+        Expression<Func<T, TPropType>> keySelector, long storeId = 0)
         where T : ISettings, new();
 
     /// <summary>
@@ -102,7 +102,7 @@ public partial interface ISettingService
     /// <typeparam name="T">Type</typeparam>
     /// <param name="storeId">Store identifier for which settings should be loaded</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task<T> LoadSettingAsync<T>(int storeId = 0) where T : ISettings, new();
+    Task<T> LoadSettingAsync<T>(long storeId = 0) where T : ISettings, new();
 
     /// <summary>
     /// Load settings
@@ -110,7 +110,7 @@ public partial interface ISettingService
     /// <param name="type">Type</param>
     /// <param name="storeId">Store identifier for which settings should be loaded</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task<ISettings> LoadSettingAsync(Type type, int storeId = 0);
+    Task<ISettings> LoadSettingAsync(Type type, long storeId = 0);
 
     /// <summary>
     /// Save settings object
@@ -119,7 +119,7 @@ public partial interface ISettingService
     /// <param name="storeId">Store identifier</param>
     /// <param name="settings">Setting instance</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task SaveSettingAsync<T>(T settings, int storeId = 0) where T : ISettings, new();
+    Task SaveSettingAsync<T>(T settings, long storeId = 0) where T : ISettings, new();
 
     /// <summary>
     /// Save settings object
@@ -133,7 +133,7 @@ public partial interface ISettingService
     /// <returns>A task that represents the asynchronous operation</returns>
     Task SaveSettingAsync<T, TPropType>(T settings,
         Expression<Func<T, TPropType>> keySelector,
-        int storeId = 0, bool clearCache = true) where T : ISettings, new();
+        long storeId = 0, bool clearCache = true) where T : ISettings, new();
 
     /// <summary>
     /// Save settings object (per store). If the setting is not overridden per store then it'll be delete
@@ -148,7 +148,7 @@ public partial interface ISettingService
     /// <returns>A task that represents the asynchronous operation</returns>
     Task SaveSettingOverridablePerStoreAsync<T, TPropType>(T settings,
         Expression<Func<T, TPropType>> keySelector,
-        bool overrideForStore, int storeId = 0, bool clearCache = true) where T : ISettings, new();
+        bool overrideForStore, long storeId = 0, bool clearCache = true) where T : ISettings, new();
 
     /// <summary>
     /// Adds a setting
@@ -183,7 +183,7 @@ public partial interface ISettingService
     /// <param name="storeId">Store ID</param>
     /// <returns>A task that represents the asynchronous operation</returns>
     Task DeleteSettingAsync<T, TPropType>(T settings,
-        Expression<Func<T, TPropType>> keySelector, int storeId = 0) where T : ISettings, new();
+        Expression<Func<T, TPropType>> keySelector, long storeId = 0) where T : ISettings, new();
 
     /// <summary>
     /// Clear cache

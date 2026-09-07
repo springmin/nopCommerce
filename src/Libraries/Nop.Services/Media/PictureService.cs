@@ -86,7 +86,7 @@ public partial class PictureService : IPictureService
     /// A task that represents the asynchronous operation
     /// The task result contains the picture binary
     /// </returns>
-    protected virtual async Task<byte[]> LoadPictureFromFileAsync(int pictureId, string mimeType)
+    protected virtual async Task<byte[]> LoadPictureFromFileAsync(long pictureId, string mimeType)
     {
         var lastPart = await GetFileExtensionFromMimeTypeAsync(mimeType);
         var fileName = $"{pictureId:0000000}_0.{lastPart}";
@@ -102,7 +102,7 @@ public partial class PictureService : IPictureService
     /// <param name="pictureBinary">Picture binary</param>
     /// <param name="mimeType">MIME type</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    protected virtual async Task SavePictureInFileAsync(int pictureId, byte[] pictureBinary, string mimeType)
+    protected virtual async Task SavePictureInFileAsync(long pictureId, byte[] pictureBinary, string mimeType)
     {
         var lastPart = await GetFileExtensionFromMimeTypeAsync(mimeType);
         var fileName = $"{pictureId:0000000}_0.{lastPart}";
@@ -313,7 +313,7 @@ public partial class PictureService : IPictureService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of pictures
     /// </returns>
-    protected virtual async Task<IList<Picture>> GetPicturesByIdsAsync(int[] pictureIds)
+    protected virtual async Task<IList<Picture>> GetPicturesByIdsAsync(long[] pictureIds)
     {
         return await _pictureRepository.GetByIdsAsync(pictureIds, cache => default);
     }
@@ -333,7 +333,7 @@ public partial class PictureService : IPictureService
                 using (var surface = new SKCanvas(bitmap))
                 {
                     surface.RotateDegrees(180, bitmap.Width / 2f, bitmap.Height / 2f);
-                    surface.DrawBitmap(bitmap.Copy(), 0, 0, SKSamplingOptions.Default);
+                    surface.DrawBitmap(bitmap.Copy(), 0, 0);
                 }
                 return bitmap;
             case SKEncodedOrigin.RightTop:
@@ -342,7 +342,7 @@ public partial class PictureService : IPictureService
                 {
                     surface.Translate(rotated.Width, 0);
                     surface.RotateDegrees(90);
-                    surface.DrawBitmap(bitmap, 0, 0, SKSamplingOptions.Default);
+                    surface.DrawBitmap(bitmap, 0, 0);
                 }
                 return rotated;
             case SKEncodedOrigin.LeftBottom:
@@ -351,7 +351,7 @@ public partial class PictureService : IPictureService
                 {
                     surface.Translate(0, rotated.Height);
                     surface.RotateDegrees(270);
-                    surface.DrawBitmap(bitmap, 0, 0, SKSamplingOptions.Default);
+                    surface.DrawBitmap(bitmap, 0, 0);
                 }
                 return rotated;
             default:
@@ -492,7 +492,7 @@ public partial class PictureService : IPictureService
     /// A task that represents the asynchronous operation
     /// The task result contains the picture URL
     /// </returns>
-    public virtual async Task<string> GetPictureUrlAsync(int pictureId,
+    public virtual async Task<string> GetPictureUrlAsync(long pictureId,
         int targetSize = 0,
         bool showDefaultPicture = true,
         string storeLocation = null,
@@ -682,7 +682,7 @@ public partial class PictureService : IPictureService
     /// A task that represents the asynchronous operation
     /// The task result contains the picture
     /// </returns>
-    public virtual async Task<Picture> GetPictureByIdAsync(int pictureId)
+    public virtual async Task<Picture> GetPictureByIdAsync(long pictureId)
     {
         return await _pictureRepository.GetByIdAsync(pictureId, cache => default);
     }
@@ -738,7 +738,7 @@ public partial class PictureService : IPictureService
     /// A task that represents the asynchronous operation
     /// The task result contains the pictures
     /// </returns>
-    public virtual async Task<IList<Picture>> GetPicturesByProductIdAsync(int productId, int recordsToReturn = 0)
+    public virtual async Task<IList<Picture>> GetPicturesByProductIdAsync(long productId, int recordsToReturn = 0)
     {
         if (productId == 0)
             return new List<Picture>();
@@ -883,7 +883,7 @@ public partial class PictureService : IPictureService
     /// A task that represents the asynchronous operation
     /// The task result contains the picture
     /// </returns>
-    public virtual async Task<Picture> UpdatePictureAsync(int pictureId, byte[] pictureBinary, string mimeType,
+    public virtual async Task<Picture> UpdatePictureAsync(long pictureId, byte[] pictureBinary, string mimeType,
         string seoFilename, string altAttribute = null, string titleAttribute = null,
         bool isNew = true, bool validateBinary = true)
     {
@@ -955,7 +955,7 @@ public partial class PictureService : IPictureService
     /// A task that represents the asynchronous operation
     /// The task result contains the picture binary
     /// </returns>
-    public virtual async Task<PictureBinary> GetPictureBinaryByPictureIdAsync(int pictureId)
+    public virtual async Task<PictureBinary> GetPictureBinaryByPictureIdAsync(long pictureId)
     {
         return await _pictureBinaryRepository.Table
             .FirstOrDefaultAsync(pb => pb.PictureId == pictureId);
@@ -970,7 +970,7 @@ public partial class PictureService : IPictureService
     /// A task that represents the asynchronous operation
     /// The task result contains the picture
     /// </returns>
-    public virtual async Task<Picture> SetSeoFilenameAsync(int pictureId, string seoFilename)
+    public virtual async Task<Picture> SetSeoFilenameAsync(long pictureId, string seoFilename)
     {
         var picture = await GetPictureByIdAsync(pictureId) ?? throw new ArgumentException("No picture found with the specified id");
 
@@ -1006,33 +1006,15 @@ public partial class PictureService : IPictureService
         try
         {
             SKBitmap image;
-            var isSvg = mimeType?.Equals("image/svg+xml", StringComparison.OrdinalIgnoreCase) == true;
 
-            if (isSvg)
+            if (_mediaSettings.AutoOrientImage)
             {
                 using var input = new MemoryStream(pictureBinary);
-                using var svg = new SKSvg();
-                svg.Load(input);
-
-                var width = (int)svg.Picture.CullRect.Width;
-                var height = (int)svg.Picture.CullRect.Height;
-
-                image = new SKBitmap(width, height);
-                using var canvas = new SKCanvas(image);
-                canvas.Clear(SKColors.Transparent);
-                canvas.DrawPicture(svg.Picture);
+                using var codec = SKCodec.Create(input);
+                image = AutoOrient(SKBitmap.Decode(codec), codec.EncodedOrigin);
             }
             else
-            {
-                if (_mediaSettings.AutoOrientImage)
-                {
-                    using var input = new MemoryStream(pictureBinary);
-                    using var codec = SKCodec.Create(input);
-                    image = AutoOrient(SKBitmap.Decode(codec), codec.EncodedOrigin);
-                }
-                else
-                    image = SKBitmap.Decode(pictureBinary);
-            }
+                image = SKBitmap.Decode(pictureBinary);
 
             //resize the image in accordance with the maximum size
             if (Math.Max(image.Height, image.Width) <= _mediaSettings.MaximumImageSize)

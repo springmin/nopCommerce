@@ -21,7 +21,7 @@ public partial class ReturnRequestBuilder : NopEntityBuilder<ReturnRequest>
         table
             .WithColumn(nameof(ReturnRequest.ReasonForReturn)).AsString(int.MaxValue).NotNullable()
             .WithColumn(nameof(ReturnRequest.RequestedAction)).AsString(int.MaxValue).NotNullable()
-            .WithColumn(nameof(ReturnRequest.CustomerId)).AsInt32().ForeignKey<Customer>();
+            .WithColumn(nameof(ReturnRequest.CustomerId)).AsInt64().ForeignKey<Customer>();
     }
 
     #endregion

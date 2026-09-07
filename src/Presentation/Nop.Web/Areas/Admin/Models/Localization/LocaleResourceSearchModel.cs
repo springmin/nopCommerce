@@ -19,7 +19,7 @@ public partial record LocaleResourceSearchModel : BaseSearchModel
 
     #region Properties
 
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Languages.Resources.SearchResourceName")]
     public string SearchResourceName { get; set; }

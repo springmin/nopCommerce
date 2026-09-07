@@ -142,7 +142,7 @@ public partial class OrderController : BaseAdminController
         return order != null && await HasAccessToOrderAsync(order.Id);
     }
 
-    protected virtual async Task<bool> HasAccessToOrderAsync(int orderId)
+    protected virtual async Task<bool> HasAccessToOrderAsync(long orderId)
     {
         if (orderId == 0)
             return false;
@@ -184,7 +184,7 @@ public partial class OrderController : BaseAdminController
         return await HasAccessToOrderAsync(shipment.OrderId);
     }
 
-    protected virtual async Task LogEditOrderAsync(int orderId)
+    protected virtual async Task LogEditOrderAsync(long orderId)
     {
         var order = await _orderService.GetOrderByIdAsync(orderId);
 
@@ -202,7 +202,7 @@ public partial class OrderController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Orders.ORDERS_VIEW)]
-    public virtual async Task<IActionResult> List(List<int> orderStatuses = null, List<int> paymentStatuses = null, List<int> shippingStatuses = null)
+    public virtual async Task<IActionResult> List(List<long> orderStatuses = null, List<long> paymentStatuses = null, List<long> shippingStatuses = null)
     {
         //prepare model
         var model = await _orderModelFactory.PrepareOrderSearchModelAsync(new OrderSearchModel
@@ -278,7 +278,7 @@ public partial class OrderController : BaseAdminController
             ? model.ShippingStatusIds.ToList()
             : null;
 
-        var filterByProductId = 0;
+        long filterByProductId = 0;
         var product = await _productService.GetProductByIdAsync(model.ProductId);
         if (product != null && (currentVendor == null || product.VendorId == currentVendor.Id))
             filterByProductId = model.ProductId;
@@ -328,7 +328,7 @@ public partial class OrderController : BaseAdminController
         {
             var ids = selectedIds
                 .Split(_separator, StringSplitOptions.RemoveEmptyEntries)
-                .Select(x => Convert.ToInt32(x))
+                .Select(x => Convert.ToInt64(x))
                 .ToArray();
             orders.AddRange(await (await _orderService.GetOrdersByIdsAsync(ids))
                 .WhereAwait(HasAccessToOrderAsync).ToListAsync());
@@ -372,7 +372,7 @@ public partial class OrderController : BaseAdminController
             ? model.ShippingStatusIds.ToList()
             : null;
 
-        var filterByProductId = 0;
+        long filterByProductId = 0;
         var product = await _productService.GetProductByIdAsync(model.ProductId);
         if (product != null && (currentVendor == null || product.VendorId == currentVendor.Id))
             filterByProductId = model.ProductId;
@@ -422,7 +422,7 @@ public partial class OrderController : BaseAdminController
         {
             var ids = selectedIds
                 .Split(_separator, StringSplitOptions.RemoveEmptyEntries)
-                .Select(x => Convert.ToInt32(x))
+                .Select(x => Convert.ToInt64(x))
                 .ToArray();
             orders.AddRange(await (await _orderService.GetOrdersByIdsAsync(ids)).WhereAwait(HasAccessToOrderAsync).ToListAsync());
         }
@@ -479,7 +479,7 @@ public partial class OrderController : BaseAdminController
     [HttpPost, ActionName("Edit")]
     [FormValueRequired("cancelorder")]
     [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> CancelOrder(int id)
+    public virtual async Task<IActionResult> CancelOrder(long id)
     {
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
@@ -520,7 +520,7 @@ public partial class OrderController : BaseAdminController
     [HttpPost, ActionName("Edit")]
     [FormValueRequired("captureorder")]
     [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> CaptureOrder(int id)
+    public virtual async Task<IActionResult> CaptureOrder(long id)
     {
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
@@ -564,7 +564,7 @@ public partial class OrderController : BaseAdminController
     [HttpPost, ActionName("Edit")]
     [FormValueRequired("markorderaspaid")]
     [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> MarkOrderAsPaid(int id)
+    public virtual async Task<IActionResult> MarkOrderAsPaid(long id)
     {
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
@@ -605,7 +605,7 @@ public partial class OrderController : BaseAdminController
     [HttpPost, ActionName("Edit")]
     [FormValueRequired("refundorder")]
     [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> RefundOrder(int id)
+    public virtual async Task<IActionResult> RefundOrder(long id)
     {
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
@@ -649,7 +649,7 @@ public partial class OrderController : BaseAdminController
     [HttpPost, ActionName("Edit")]
     [FormValueRequired("refundorderoffline")]
     [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> RefundOrderOffline(int id)
+    public virtual async Task<IActionResult> RefundOrderOffline(long id)
     {
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
@@ -690,7 +690,7 @@ public partial class OrderController : BaseAdminController
     [HttpPost, ActionName("Edit")]
     [FormValueRequired("voidorder")]
     [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> VoidOrder(int id)
+    public virtual async Task<IActionResult> VoidOrder(long id)
     {
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
@@ -734,7 +734,7 @@ public partial class OrderController : BaseAdminController
     [HttpPost, ActionName("Edit")]
     [FormValueRequired("voidorderoffline")]
     [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> VoidOrderOffline(int id)
+    public virtual async Task<IActionResult> VoidOrderOffline(long id)
     {
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
@@ -773,7 +773,7 @@ public partial class OrderController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> PartiallyRefundOrderPopup(int id, bool online)
+    public virtual async Task<IActionResult> PartiallyRefundOrderPopup(long id, bool online)
     {
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
@@ -802,7 +802,7 @@ public partial class OrderController : BaseAdminController
     [HttpPost]
     [FormValueRequired("partialrefundorder")]
     [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> PartiallyRefundOrderPopup(int id, bool online, OrderModel model)
+    public virtual async Task<IActionResult> PartiallyRefundOrderPopup(long id, bool online, OrderModel model)
     {
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
@@ -873,7 +873,7 @@ public partial class OrderController : BaseAdminController
     [HttpPost, ActionName("Edit")]
     [FormValueRequired("btnSaveOrderStatus")]
     [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ChangeOrderStatus(int id, OrderModel model)
+    public virtual async Task<IActionResult> ChangeOrderStatus(long id, OrderModel model)
     {
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
@@ -931,7 +931,7 @@ public partial class OrderController : BaseAdminController
     #region Edit, delete
 
     [CheckPermission(StandardPermission.Orders.ORDERS_VIEW)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
@@ -959,7 +959,7 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
@@ -980,7 +980,7 @@ public partial class OrderController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Orders.ORDERS_VIEW)]
-    public virtual async Task<IActionResult> PdfInvoice(int orderId)
+    public virtual async Task<IActionResult> PdfInvoice(long orderId)
     {
         //a vendor should have access only to their orders
         if (!await HasAccessToOrderAsync(orderId))
@@ -1026,7 +1026,7 @@ public partial class OrderController : BaseAdminController
             ? model.ShippingStatusIds.ToList()
             : null;
 
-        var filterByProductId = 0;
+        long filterByProductId = 0;
         var product = await _productService.GetProductByIdAsync(model.ProductId);
         if (product != null && (currentVendor == null || product.VendorId == currentVendor.Id))
             filterByProductId = model.ProductId;
@@ -1082,7 +1082,7 @@ public partial class OrderController : BaseAdminController
         {
             var ids = selectedIds
                 .Split(_separator, StringSplitOptions.RemoveEmptyEntries)
-                .Select(x => Convert.ToInt32(x))
+                .Select(x => Convert.ToInt64(x))
                 .ToArray();
             orders.AddRange(await _orderService.GetOrdersByIdsAsync(ids));
         }
@@ -1113,7 +1113,7 @@ public partial class OrderController : BaseAdminController
     //currently we use this method on the add product to order details pages
     [HttpPost]
     [CheckPermission(StandardPermission.Orders.ORDERS_VIEW)]
-    public virtual async Task<IActionResult> ProductDetails_AttributeChange(int productId, bool validateAttributeConditions, IFormCollection form)
+    public virtual async Task<IActionResult> ProductDetails_AttributeChange(long productId, bool validateAttributeConditions, IFormCollection form)
     {
         var product = await _productService.GetProductByIdAsync(productId);
         if (product == null)
@@ -1123,8 +1123,8 @@ public partial class OrderController : BaseAdminController
         var attributeXml = await _productAttributeParser.ParseProductAttributesAsync(product, form, errors);
 
         //conditional attributes
-        var enabledAttributeMappingIds = new List<int>();
-        var disabledAttributeMappingIds = new List<int>();
+        var enabledAttributeMappingIds = new List<long>();
+        var disabledAttributeMappingIds = new List<long>();
         if (validateAttributeConditions)
         {
             var attributes = await _productAttributeService.GetProductAttributeMappingsByProductIdAsync(product.Id);
@@ -1152,7 +1152,7 @@ public partial class OrderController : BaseAdminController
     [HttpPost, ActionName("Edit")]
     [FormValueRequired("btnSaveOrderTotals")]
     [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> EditOrderTotals(int id, OrderModel model)
+    public virtual async Task<IActionResult> EditOrderTotals(long id, OrderModel model)
     {
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
@@ -1194,7 +1194,7 @@ public partial class OrderController : BaseAdminController
     [HttpPost, ActionName("Edit")]
     [FormValueRequired("save-shipping-method")]
     [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> EditShippingMethod(int id, OrderModel model)
+    public virtual async Task<IActionResult> EditShippingMethod(long id, OrderModel model)
     {
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
@@ -1228,7 +1228,7 @@ public partial class OrderController : BaseAdminController
     [HttpPost, ActionName("Edit")]
     [FormValueRequired(FormValueRequirement.StartsWith, "btnSaveOrderItem")]
     [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> EditOrderItem(int id, IFormCollection form)
+    public virtual async Task<IActionResult> EditOrderItem(long id, IFormCollection form)
     {
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
@@ -1240,7 +1240,7 @@ public partial class OrderController : BaseAdminController
             return RedirectToAction("Edit", new { id = order.Id });
 
         //get order item identifier
-        var orderItemId = 0;
+        long orderItemId = 0;
         foreach (var formValue in form.Keys)
         {
             if (formValue.StartsWith("btnSaveOrderItem", StringComparison.InvariantCultureIgnoreCase))
@@ -1250,19 +1250,19 @@ public partial class OrderController : BaseAdminController
         var orderItem = await _orderService.GetOrderItemByIdAsync(orderItemId)
             ?? throw new ArgumentException("No order item found with the specified id");
 
-        if (!decimal.TryParse(form["pvUnitPriceInclTax" + orderItemId], out var unitPriceInclTax))
+        if (!decimal.TryParse(form["pvUnitPriceInclTax" + orderItemId], NumberStyles.Any, CultureInfo.InvariantCulture, out var unitPriceInclTax))
             unitPriceInclTax = orderItem.UnitPriceInclTax;
-        if (!decimal.TryParse(form["pvUnitPriceExclTax" + orderItemId], out var unitPriceExclTax))
+        if (!decimal.TryParse(form["pvUnitPriceExclTax" + orderItemId], NumberStyles.Any, CultureInfo.InvariantCulture, out var unitPriceExclTax))
             unitPriceExclTax = orderItem.UnitPriceExclTax;
         if (!int.TryParse(form["pvQuantity" + orderItemId], out var quantity))
             quantity = orderItem.Quantity;
-        if (!decimal.TryParse(form["pvDiscountInclTax" + orderItemId], out var discountInclTax))
+        if (!decimal.TryParse(form["pvDiscountInclTax" + orderItemId], NumberStyles.Any, CultureInfo.InvariantCulture, out var discountInclTax))
             discountInclTax = orderItem.DiscountAmountInclTax;
-        if (!decimal.TryParse(form["pvDiscountExclTax" + orderItemId], out var discountExclTax))
+        if (!decimal.TryParse(form["pvDiscountExclTax" + orderItemId], NumberStyles.Any, CultureInfo.InvariantCulture, out var discountExclTax))
             discountExclTax = orderItem.DiscountAmountExclTax;
-        if (!decimal.TryParse(form["pvPriceInclTax" + orderItemId], out var priceInclTax))
+        if (!decimal.TryParse(form["pvPriceInclTax" + orderItemId], NumberStyles.Any, CultureInfo.InvariantCulture, out var priceInclTax))
             priceInclTax = orderItem.PriceInclTax;
-        if (!decimal.TryParse(form["pvPriceExclTax" + orderItemId], out var priceExclTax))
+        if (!decimal.TryParse(form["pvPriceExclTax" + orderItemId], NumberStyles.Any, CultureInfo.InvariantCulture, out var priceExclTax))
             priceExclTax = orderItem.PriceExclTax;
 
         var product = await _productService.GetProductByIdAsync(orderItem.ProductId);
@@ -1333,7 +1333,7 @@ public partial class OrderController : BaseAdminController
     [HttpPost, ActionName("Edit")]
     [FormValueRequired(FormValueRequirement.StartsWith, "btnDeleteOrderItem")]
     [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> DeleteOrderItem(int id, IFormCollection form)
+    public virtual async Task<IActionResult> DeleteOrderItem(long id, IFormCollection form)
     {
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
@@ -1345,7 +1345,7 @@ public partial class OrderController : BaseAdminController
             return RedirectToAction("Edit", new { id = order.Id });
 
         //get order item identifier
-        var orderItemId = 0;
+        long orderItemId = 0;
         foreach (var formValue in form.Keys)
         {
             if (formValue.StartsWith("btnDeleteOrderItem", StringComparison.InvariantCultureIgnoreCase))
@@ -1401,7 +1401,7 @@ public partial class OrderController : BaseAdminController
     [HttpPost, ActionName("Edit")]
     [FormValueRequired(FormValueRequirement.StartsWith, "btnResetDownloadCount")]
     [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ResetDownloadCount(int id, IFormCollection form)
+    public virtual async Task<IActionResult> ResetDownloadCount(long id, IFormCollection form)
     {
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
@@ -1409,7 +1409,7 @@ public partial class OrderController : BaseAdminController
             return RedirectToAction("List");
 
         //get order item identifier
-        var orderItemId = 0;
+        long orderItemId = 0;
         foreach (var formValue in form.Keys)
         {
             if (formValue.StartsWith("btnResetDownloadCount", StringComparison.InvariantCultureIgnoreCase))
@@ -1436,7 +1436,7 @@ public partial class OrderController : BaseAdminController
     [HttpPost, ActionName("Edit")]
     [FormValueRequired(FormValueRequirement.StartsWith, "btnPvActivateDownload")]
     [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ActivateDownloadItem(int id, IFormCollection form)
+    public virtual async Task<IActionResult> ActivateDownloadItem(long id, IFormCollection form)
     {
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
@@ -1444,7 +1444,7 @@ public partial class OrderController : BaseAdminController
             return RedirectToAction("List");
 
         //get order item identifier
-        var orderItemId = 0;
+        long orderItemId = 0;
         foreach (var formValue in form.Keys)
         {
             if (formValue.StartsWith("btnPvActivateDownload", StringComparison.InvariantCultureIgnoreCase))
@@ -1470,7 +1470,7 @@ public partial class OrderController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> UploadLicenseFilePopup(int id, int orderItemId)
+    public virtual async Task<IActionResult> UploadLicenseFilePopup(long id, long orderItemId)
     {
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
@@ -1561,7 +1561,7 @@ public partial class OrderController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> AddProductToOrder(int orderId)
+    public virtual async Task<IActionResult> AddProductToOrder(long orderId)
     {
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(orderId);
@@ -1597,7 +1597,7 @@ public partial class OrderController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> AddProductToOrderDetails(int orderId, int productId)
+    public virtual async Task<IActionResult> AddProductToOrderDetails(long orderId, long productId)
     {
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(orderId)
@@ -1619,7 +1619,7 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> AddProductToOrderDetails(int orderId, int productId, AddProductToOrderModel model, IFormCollection form)
+    public virtual async Task<IActionResult> AddProductToOrderDetails(long orderId, long productId, AddProductToOrderModel model, IFormCollection form)
     {
         //a vendor does not have access to this functionality
         if (await _workContext.GetCurrentVendorAsync() != null)
@@ -1762,7 +1762,7 @@ public partial class OrderController : BaseAdminController
     #region Addresses
 
     [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> AddressEdit(int addressId, int orderId)
+    public virtual async Task<IActionResult> AddressEdit(long addressId, long orderId)
     {
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(orderId);
@@ -1905,7 +1905,7 @@ public partial class OrderController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Orders.SHIPMENTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> AddShipment(int id)
+    public virtual async Task<IActionResult> AddShipment(long id)
     {
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
@@ -1974,7 +1974,7 @@ public partial class OrderController : BaseAdminController
                 }
             }
 
-            var warehouseId = 0;
+            long warehouseId = 0;
             if (product.ManageInventoryMethod == ManageInventoryMethod.ManageStock &&
                 product.UseMultipleWarehouses)
             {
@@ -1984,7 +1984,7 @@ public partial class OrderController : BaseAdminController
                 {
                     if (formKey.Equals($"warehouse_{orderItem.Id}", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        _ = int.TryParse(form[formKey], out warehouseId);
+                        _ = long.TryParse(form[formKey].ToString(), out warehouseId);
                         break;
                     }
                 }
@@ -2071,7 +2071,7 @@ public partial class OrderController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Orders.SHIPMENTS_VIEW)]
-    public virtual async Task<IActionResult> ShipmentDetails(int id)
+    public virtual async Task<IActionResult> ShipmentDetails(long id)
     {
         //try to get a shipment with the specified id
         var shipment = await _shipmentService.GetShipmentByIdAsync(id);
@@ -2090,7 +2090,7 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Orders.SHIPMENTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> DeleteShipment(int id)
+    public virtual async Task<IActionResult> DeleteShipment(long id)
     {
         //try to get a shipment with the specified id
         var shipment = await _shipmentService.GetShipmentByIdAsync(id);
@@ -2180,7 +2180,7 @@ public partial class OrderController : BaseAdminController
     [HttpPost, ActionName("ShipmentDetails")]
     [FormValueRequired("setasshipped")]
     [CheckPermission(StandardPermission.Orders.SHIPMENTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> SetAsShipped(int id)
+    public virtual async Task<IActionResult> SetAsShipped(long id)
     {
         //try to get a shipment with the specified id
         var shipment = await _shipmentService.GetShipmentByIdAsync(id);
@@ -2239,7 +2239,7 @@ public partial class OrderController : BaseAdminController
     [HttpPost, ActionName("ShipmentDetails")]
     [FormValueRequired("setasreadyforpickup")]
     [CheckPermission(StandardPermission.Orders.SHIPMENTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> SetAsReadyForPickup(int id)
+    public virtual async Task<IActionResult> SetAsReadyForPickup(long id)
     {
         //try to get a shipment with the specified id
         var shipment = await _shipmentService.GetShipmentByIdAsync(id);
@@ -2297,7 +2297,7 @@ public partial class OrderController : BaseAdminController
     [HttpPost, ActionName("ShipmentDetails")]
     [FormValueRequired("setasdelivered")]
     [CheckPermission(StandardPermission.Orders.SHIPMENTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> SetAsDelivered(int id)
+    public virtual async Task<IActionResult> SetAsDelivered(long id)
     {
         //try to get a shipment with the specified id
         var shipment = await _shipmentService.GetShipmentByIdAsync(id);
@@ -2354,7 +2354,7 @@ public partial class OrderController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Orders.SHIPMENTS_VIEW)]
-    public virtual async Task<IActionResult> PdfPackagingSlip(int shipmentId)
+    public virtual async Task<IActionResult> PdfPackagingSlip(long shipmentId)
     {
         //try to get a shipment with the specified id
         var shipment = await _shipmentService.GetShipmentByIdAsync(shipmentId);
@@ -2388,7 +2388,7 @@ public partial class OrderController : BaseAdminController
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
-        var vendorId = 0;
+        long vendorId = 0;
         if (currentVendor != null)
             vendorId = currentVendor.Id;
 
@@ -2439,7 +2439,7 @@ public partial class OrderController : BaseAdminController
         {
             var ids = selectedIds
                 .Split(_separator, StringSplitOptions.RemoveEmptyEntries)
-                .Select(x => Convert.ToInt32(x))
+                .Select(x => Convert.ToInt64(x))
                 .ToArray();
             shipments.AddRange(await _shipmentService.GetShipmentsByIdsAsync(ids));
         }
@@ -2467,7 +2467,7 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Orders.SHIPMENTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> SetAsShippedSelected(ICollection<int> selectedIds)
+    public virtual async Task<IActionResult> SetAsShippedSelected(ICollection<long> selectedIds)
     {
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();
@@ -2495,7 +2495,7 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Orders.SHIPMENTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> SetAsReadyForPickupSelected(ICollection<int> selectedIds)
+    public virtual async Task<IActionResult> SetAsReadyForPickupSelected(ICollection<long> selectedIds)
     {
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();
@@ -2523,7 +2523,7 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Orders.SHIPMENTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> SetAsDeliveredSelected(ICollection<int> selectedIds)
+    public virtual async Task<IActionResult> SetAsDeliveredSelected(ICollection<long> selectedIds)
     {
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();
@@ -2572,7 +2572,7 @@ public partial class OrderController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> OrderNoteAdd(int orderId, int downloadId, bool displayToCustomer, string message)
+    public virtual async Task<IActionResult> OrderNoteAdd(long orderId, long downloadId, bool displayToCustomer, string message)
     {
         if (string.IsNullOrEmpty(message))
             return ErrorJson(await _localizationService.GetResourceAsync("Admin.Orders.OrderNotes.Fields.Note.Validation"));
@@ -2601,7 +2601,7 @@ public partial class OrderController : BaseAdminController
         if (displayToCustomer)
         {
             //email
-            await _workflowMessageService.SendNewOrderNoteAddedCustomerNotificationAsync(orderNote, order.CustomerLanguageId);
+            await _workflowMessageService.SendNewOrderNoteAddedCustomerNotificationAsync(orderNote, (await _workContext.GetWorkingLanguageAsync()).Id);
         }
 
         return Json(new { Result = true });
@@ -2609,7 +2609,7 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> OrderNoteDelete(int id, int orderId)
+    public virtual async Task<IActionResult> OrderNoteDelete(long id, long orderId)
     {
         //try to get an order with the specified id
         _ = await _orderService.GetOrderByIdAsync(orderId)

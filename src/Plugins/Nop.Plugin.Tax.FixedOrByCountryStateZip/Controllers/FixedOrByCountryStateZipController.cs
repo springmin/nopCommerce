@@ -216,7 +216,7 @@ public class FixedOrByCountryStateZipController : BasePluginController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_TAX_SETTINGS)]
-    public async Task<IActionResult> DeleteRateByCountryStateZip(int id)
+    public async Task<IActionResult> DeleteRateByCountryStateZip(long id)
     {
         var taxRate = await _taxRateService.GetTaxRateByIdAsync(id);
         if (taxRate != null)

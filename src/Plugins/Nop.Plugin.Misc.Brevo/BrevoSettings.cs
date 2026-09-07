@@ -15,7 +15,7 @@ public class BrevoSettings : ISettings
     /// <summary>
     /// Gets or sets the identifier of unsubscribe event webhook
     /// </summary>
-    public int UnsubscribeWebhookId { get; set; }
+    public long UnsubscribeWebhookId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether partner value already set
@@ -40,7 +40,7 @@ public class BrevoSettings : ISettings
     /// <summary>
     /// Gets or sets the identifier of email account (for transactional emails)
     /// </summary>
-    public int EmailAccountId { get; set; }
+    public long EmailAccountId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether to use SMS notifications
@@ -75,5 +75,5 @@ public class BrevoSettings : ISettings
     /// <summary>
     /// Gets or sets the collection of subscription type and Brevo list mappings
     /// </summary>
-    public Dictionary<int, int> SubscriptionTypeMappings { get; set; } = new();
+    public Dictionary<long, long> SubscriptionTypeMappings { get; set; } = new();
 }

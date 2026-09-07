@@ -34,7 +34,7 @@ public partial class LocalizedModelFactory : ILocalizedModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the list of localized model
     /// </returns>
-    public virtual async Task<IList<T>> PrepareLocalizedModelsAsync<T>(Func<T, int, Task> configure = null) where T : ILocalizedLocaleModel
+    public virtual async Task<IList<T>> PrepareLocalizedModelsAsync<T>(Func<T, long, Task> configure = null) where T : ILocalizedLocaleModel
     {
         //get all available languages
         var availableLanguages = await _languageService.GetAllLanguagesAsync(true);

@@ -18,7 +18,7 @@ public partial interface IPaymentPluginManager : IPluginManager<IPaymentMethod>
     /// A task that represents the asynchronous operation
     /// The task result contains the list of active payment methods
     /// </returns>
-    Task<IList<IPaymentMethod>> LoadActivePluginsAsync(Customer customer = null, int storeId = 0, int countryId = 0);
+    Task<IList<IPaymentMethod>> LoadActivePluginsAsync(Customer customer = null, long storeId = 0, long countryId = 0);
 
     /// <summary>
     /// Check whether the passed payment method is active
@@ -37,7 +37,7 @@ public partial interface IPaymentPluginManager : IPluginManager<IPaymentMethod>
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, int storeId = 0);
+    Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, long storeId = 0);
 
     /// <summary>
     /// Get countries in which the passed payment method is not allowed
@@ -47,7 +47,7 @@ public partial interface IPaymentPluginManager : IPluginManager<IPaymentMethod>
     /// A task that represents the asynchronous operation
     /// The task result contains the list of country identifiers
     /// </returns>
-    Task<IList<int>> GetRestrictedCountryIdsAsync(IPaymentMethod paymentMethod);
+    Task<IList<long>> GetRestrictedCountryIdsAsync(IPaymentMethod paymentMethod);
 
     /// <summary>
     /// Save countries in which the passed payment method is not allowed
@@ -55,5 +55,5 @@ public partial interface IPaymentPluginManager : IPluginManager<IPaymentMethod>
     /// <param name="paymentMethod">Payment method</param>
     /// <param name="countryIds">List of country identifiers</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task SaveRestrictedCountriesAsync(IPaymentMethod paymentMethod, IList<int> countryIds);
+    Task SaveRestrictedCountriesAsync(IPaymentMethod paymentMethod, IList<long> countryIds);
 }

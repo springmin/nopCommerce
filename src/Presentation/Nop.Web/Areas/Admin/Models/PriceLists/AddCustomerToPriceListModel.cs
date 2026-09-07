@@ -11,15 +11,15 @@ public partial record AddCustomerToPriceListModel : BaseNopModel
 
     public AddCustomerToPriceListModel()
     {
-        SelectedCustomerIds = new List<int>();
+        SelectedCustomerIds = new List<long>();
     }
     #endregion
 
     #region Properties
 
-    public int PriceListId { get; set; }
+    public long PriceListId { get; set; }
 
-    public IList<int> SelectedCustomerIds { get; set; }
+    public IList<long> SelectedCustomerIds { get; set; }
 
     #endregion
 }

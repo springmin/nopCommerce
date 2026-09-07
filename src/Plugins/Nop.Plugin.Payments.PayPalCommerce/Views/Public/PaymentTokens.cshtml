@@ -9,7 +9,7 @@
 
 @section left
 {
-    @(await Component.InvokeAsync(typeof(CustomerNavigationViewComponent), new { selectedTabId = PayPalCommerceDefaults.PaymentTokensMenuTab }))
+    @(await Component.InvokeAsync(typeof(CustomerNavigationViewComponent), new { selectedTabId = (long)PayPalCommerceDefaults.PaymentTokensMenuTab }))
 }
 
 <div class="page account-page order-list-page">

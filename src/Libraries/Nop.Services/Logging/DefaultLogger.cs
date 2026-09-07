@@ -180,7 +180,7 @@ public partial class DefaultLogger : ILogger
     /// A task that represents the asynchronous operation
     /// The task result contains the log item
     /// </returns>
-    public virtual async Task<Log> GetLogByIdAsync(int logId)
+    public virtual async Task<Log> GetLogByIdAsync(long logId)
     {
         return await _logRepository.GetByIdAsync(logId);
     }
@@ -193,7 +193,7 @@ public partial class DefaultLogger : ILogger
     /// A task that represents the asynchronous operation
     /// The task result contains the log items
     /// </returns>
-    public virtual async Task<IList<Log>> GetLogByIdsAsync(int[] logIds)
+    public virtual async Task<IList<Log>> GetLogByIdsAsync(long[] logIds)
     {
         return await _logRepository.GetByIdsAsync(logIds);
     }

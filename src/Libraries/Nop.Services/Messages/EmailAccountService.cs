@@ -109,7 +109,7 @@ public partial class EmailAccountService : IEmailAccountService
     /// A task that represents the asynchronous operation
     /// The task result contains the email account
     /// </returns>
-    public virtual async Task<EmailAccount> GetEmailAccountByIdAsync(int emailAccountId)
+    public virtual async Task<EmailAccount> GetEmailAccountByIdAsync(long emailAccountId)
     {
         return await _emailAccountRepository.GetByIdAsync(emailAccountId, cache => default);
     }

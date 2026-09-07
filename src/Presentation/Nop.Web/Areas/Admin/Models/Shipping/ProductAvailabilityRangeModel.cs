@@ -32,7 +32,7 @@ public partial record ProductAvailabilityRangeModel : BaseNopEntityModel, ILocal
 
 public partial record ProductAvailabilityRangeLocalizedModel : ILocalizedLocaleModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Shipping.ProductAvailabilityRanges.Fields.Name")]
     public string Name { get; set; }

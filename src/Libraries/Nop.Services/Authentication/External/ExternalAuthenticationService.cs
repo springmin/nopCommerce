@@ -298,7 +298,7 @@ public partial class ExternalAuthenticationService : IExternalAuthenticationServ
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public virtual async Task<ExternalAuthenticationRecord> GetExternalAuthenticationRecordByIdAsync(int externalAuthenticationRecordId)
+    public virtual async Task<ExternalAuthenticationRecord> GetExternalAuthenticationRecordByIdAsync(long externalAuthenticationRecordId)
     {
         return await _externalAuthenticationRecordRepository.GetByIdAsync(externalAuthenticationRecordId, cache => default, useShortTermCache: true);
     }

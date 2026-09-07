@@ -12,13 +12,13 @@ public partial record ArtificialIntelligenceSettingsModel : BaseNopModel, ISetti
 {
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.ArtificialIntelligence.Enable")]
     public bool Enabled { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.ArtificialIntelligence.ProviderType")]
-    public int ProviderTypeId { get; set; }
+    public long ProviderTypeId { get; set; }
     public IList<SelectListItem> AvailableProviderType { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.ArtificialIntelligence.GeminiApiKey")]

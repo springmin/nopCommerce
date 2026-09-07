@@ -117,7 +117,7 @@ public partial class CustomerRoleController : BaseAdminController
 
     [CheckPermission(StandardPermission.Customers.CUSTOMER_ROLES_VIEW)]
     [CheckPermission(StandardPermission.Configuration.MANAGE_ACL)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         //try to get a customer role with the specified id
         var customerRole = await _customerService.GetCustomerRoleByIdAsync(id);
@@ -182,7 +182,7 @@ public partial class CustomerRoleController : BaseAdminController
     [HttpPost]
     [CheckPermission(StandardPermission.Customers.CUSTOMER_ROLES_CREATE_EDIT_DELETE)]
     [CheckPermission(StandardPermission.Configuration.MANAGE_ACL)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get a customer role with the specified id
         var customerRole = await _customerService.GetCustomerRoleByIdAsync(id);

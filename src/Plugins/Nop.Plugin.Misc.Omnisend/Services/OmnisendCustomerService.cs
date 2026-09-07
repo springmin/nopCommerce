@@ -72,7 +72,7 @@ public class OmnisendCustomerService
     /// </summary>
     /// <param name="customer">Customer</param>
     /// <param name="billingAddressId">billing address identifier</param>
-    public async Task<string> GetEmailAsync(Customer customer, int? billingAddressId = null)
+    public async Task<string> GetEmailAsync(Customer customer, long? billingAddressId = null)
     {
         var email = !string.IsNullOrEmpty(customer.Email)
             ? customer.Email

@@ -18,7 +18,7 @@ public partial interface IPickupPluginManager : IPluginManager<IPickupPointProvi
     /// A task that represents the asynchronous operation
     /// The task result contains the list of active pickup point providers
     /// </returns>
-    Task<IList<IPickupPointProvider>> LoadActivePluginsAsync(Customer customer = null, int storeId = 0, string systemName = null);
+    Task<IList<IPickupPointProvider>> LoadActivePluginsAsync(Customer customer = null, long storeId = 0, string systemName = null);
 
     /// <summary>
     /// Check whether the passed pickup point provider is active
@@ -37,5 +37,5 @@ public partial interface IPickupPluginManager : IPluginManager<IPickupPointProvi
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, int storeId = 0);
+    Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, long storeId = 0);
 }

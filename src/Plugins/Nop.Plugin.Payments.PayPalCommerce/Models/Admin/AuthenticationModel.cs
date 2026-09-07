@@ -9,7 +9,7 @@ public record AuthenticationModel : BaseNopModel
 {
     #region Properties
 
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 
     public string SharedId { get; set; }
 

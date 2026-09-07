@@ -144,7 +144,7 @@ public class FacebookAuthenticationController : BasePluginController
         return await _externalAuthenticationService.AuthenticateAsync(authenticationParameters, returnUrl);
     }
 
-    public async Task<IActionResult> DataDeletionStatusCheck(int earId)
+    public async Task<IActionResult> DataDeletionStatusCheck(long earId)
     {
         var externalAuthenticationRecord = await _externalAuthenticationService.GetExternalAuthenticationRecordByIdAsync(earId);
         if (externalAuthenticationRecord is not null)

@@ -26,13 +26,13 @@ public partial record AddProductToOrderSearchModel : BaseSearchModel
     public string SearchProductName { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.List.SearchCategory")]
-    public int SearchCategoryId { get; set; }
+    public long SearchCategoryId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.List.SearchManufacturer")]
-    public int SearchManufacturerId { get; set; }
+    public long SearchManufacturerId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.List.SearchProductType")]
-    public int SearchProductTypeId { get; set; }
+    public long SearchProductTypeId { get; set; }
 
     public IList<SelectListItem> AvailableCategories { get; set; }
 
@@ -40,7 +40,7 @@ public partial record AddProductToOrderSearchModel : BaseSearchModel
 
     public IList<SelectListItem> AvailableProductTypes { get; set; }
 
-    public int OrderId { get; set; }
+    public long OrderId { get; set; }
 
     #endregion
 }

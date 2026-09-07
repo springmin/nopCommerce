@@ -111,7 +111,7 @@ public partial class ReturnRequestController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Orders.RETURN_REQUESTS_VIEW)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         //try to get a return request with the specified id
         var returnRequest = await _returnRequestService.GetReturnRequestByIdAsync(id);
@@ -208,7 +208,7 @@ public partial class ReturnRequestController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Orders.RETURN_REQUESTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get a return request with the specified id
         var returnRequest = await _returnRequestService.GetReturnRequestByIdAsync(id);
@@ -284,7 +284,7 @@ public partial class ReturnRequestController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public virtual async Task<IActionResult> ReturnRequestReasonEdit(int id)
+    public virtual async Task<IActionResult> ReturnRequestReasonEdit(long id)
     {
         //try to get a return request reason with the specified id
         var returnRequestReason = await _returnRequestService.GetReturnRequestReasonByIdAsync(id);
@@ -331,7 +331,7 @@ public partial class ReturnRequestController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public virtual async Task<IActionResult> ReturnRequestReasonDelete(int id)
+    public virtual async Task<IActionResult> ReturnRequestReasonDelete(long id)
     {
         //try to get a return request reason with the specified id
         var returnRequestReason = await _returnRequestService.GetReturnRequestReasonByIdAsync(id)
@@ -404,7 +404,7 @@ public partial class ReturnRequestController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public virtual async Task<IActionResult> ReturnRequestActionEdit(int id)
+    public virtual async Task<IActionResult> ReturnRequestActionEdit(long id)
     {
         //try to get a return request action with the specified id
         var returnRequestAction = await _returnRequestService.GetReturnRequestActionByIdAsync(id);
@@ -451,7 +451,7 @@ public partial class ReturnRequestController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public virtual async Task<IActionResult> ReturnRequestActionDelete(int id)
+    public virtual async Task<IActionResult> ReturnRequestActionDelete(long id)
     {
         //try to get a return request action with the specified id
         var returnRequestAction = await _returnRequestService.GetReturnRequestActionByIdAsync(id)

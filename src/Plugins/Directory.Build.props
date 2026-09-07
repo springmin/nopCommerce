@@ -1,0 +1,28 @@
+<Project>
+  <!--
+    OpenHarmony build fixes for nopCommerce plugins:
+
+    1) ASP.NET Core FrameworkReference: plugins are plain Microsoft.NET.Sdk
+       projects that reference Nop.Web.Framework (also plain SDK). The
+       Microsoft.AspNetCore.App FrameworkReference flows transitively from
+       Nop.Web (Sdk.Web), but that propagation is unreliable through
+       non-Web-SDK projects, so the plugin compiler never receives the full
+       AspNetCore reference set (ViewFeatures/Mvc.Core/Routing). Declare it
+       explicitly.
+
+    2) Core library ProjectReferences: the transitive project-reference flow
+       from Nop.Web.Framework -> Nop.Core/Nop.Data/Nop.Services is not
+       propagated into a plugin's restore/compile graph on this SDK, so the
+       plugin cannot see Nop.* types. Reference the libraries explicitly.
+  -->
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <ProjectReference Include="$(MSBuildThisFileDirectory)../Libraries/Nop.Core/Nop.Core.csproj" />
+    <ProjectReference Include="$(MSBuildThisFileDirectory)../Libraries/Nop.Data/Nop.Data.csproj" />
+    <ProjectReference Include="$(MSBuildThisFileDirectory)../Libraries/Nop.Services/Nop.Services.csproj" />
+    <ProjectReference Include="$(MSBuildThisFileDirectory)../Presentation/Nop.Web.Framework/Nop.Web.Framework.csproj" />
+    <!-- FluentValidation is used directly by many plugins (AbstractValidator<T>) but only
+         flows transitively from Nop.Services/Nop.Web.Framework, which does not propagate here. -->
+    <PackageReference Include="FluentValidation" Version="12.1.1" />
+  </ItemGroup>
+</Project>

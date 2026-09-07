@@ -66,7 +66,7 @@ public partial interface IPictureService
     /// A task that represents the asynchronous operation
     /// The task result contains the picture URL
     /// </returns>
-    Task<string> GetPictureUrlAsync(int pictureId,
+    Task<string> GetPictureUrlAsync(long pictureId,
         int targetSize = 0,
         bool showDefaultPicture = true,
         string storeLocation = null,
@@ -98,7 +98,7 @@ public partial interface IPictureService
     /// A task that represents the asynchronous operation
     /// The task result contains the picture
     /// </returns>
-    Task<Picture> GetPictureByIdAsync(int pictureId);
+    Task<Picture> GetPictureByIdAsync(long pictureId);
 
     /// <summary>
     /// Deletes a picture
@@ -128,7 +128,7 @@ public partial interface IPictureService
     /// A task that represents the asynchronous operation
     /// The task result contains the pictures
     /// </returns>
-    Task<IList<Picture>> GetPicturesByProductIdAsync(int productId, int recordsToReturn = 0);
+    Task<IList<Picture>> GetPicturesByProductIdAsync(long productId, int recordsToReturn = 0);
 
     /// <summary>
     /// Inserts a picture
@@ -175,7 +175,7 @@ public partial interface IPictureService
     /// A task that represents the asynchronous operation
     /// The task result contains the picture
     /// </returns>
-    Task<Picture> UpdatePictureAsync(int pictureId, byte[] pictureBinary, string mimeType,
+    Task<Picture> UpdatePictureAsync(long pictureId, byte[] pictureBinary, string mimeType,
         string seoFilename, string altAttribute = null, string titleAttribute = null,
         bool isNew = true, bool validateBinary = true);
 
@@ -198,7 +198,7 @@ public partial interface IPictureService
     /// A task that represents the asynchronous operation
     /// The task result contains the picture
     /// </returns>
-    Task<Picture> SetSeoFilenameAsync(int pictureId, string seoFilename);
+    Task<Picture> SetSeoFilenameAsync(long pictureId, string seoFilename);
 
     /// <summary>
     /// Validates input picture dimensions
@@ -251,7 +251,7 @@ public partial interface IPictureService
     /// A task that represents the asynchronous operation
     /// The task result contains the picture binary
     /// </returns>
-    Task<PictureBinary> GetPictureBinaryByPictureIdAsync(int pictureId);
+    Task<PictureBinary> GetPictureBinaryByPictureIdAsync(long pictureId);
 
     /// <summary>
     /// Convert image from SVG format to PNG

@@ -11,7 +11,7 @@ public record NewsLetterSubscriptionMapModel : BaseNopModel
     /// <summary>
     /// Gets or sets the type identifier
     /// </summary>
-    public int TypeId { get; set; }
+    public long TypeId { get; set; }
 
     /// <summary>
     /// Gets or sets the name of the list
@@ -22,5 +22,5 @@ public record NewsLetterSubscriptionMapModel : BaseNopModel
     /// <summary>
     /// Gets or sets the list identifier
     /// </summary>
-    public int ListId { get; set; }
+    public long ListId { get; set; }
 }

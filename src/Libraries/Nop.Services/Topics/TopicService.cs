@@ -65,7 +65,7 @@ public partial class TopicService : ITopicService
     /// A task that represents the asynchronous operation
     /// The task result contains the topic
     /// </returns>
-    public virtual async Task<Topic> GetTopicByIdAsync(int topicId)
+    public virtual async Task<Topic> GetTopicByIdAsync(long topicId)
     {
         return await _topicRepository.GetByIdAsync(topicId, cache => default);
     }
@@ -79,7 +79,7 @@ public partial class TopicService : ITopicService
     /// A task that represents the asynchronous operation
     /// The task result contains the topic
     /// </returns>
-    public virtual async Task<Topic> GetTopicBySystemNameAsync(string systemName, int storeId = 0)
+    public virtual async Task<Topic> GetTopicBySystemNameAsync(string systemName, long storeId = 0)
     {
         if (string.IsNullOrEmpty(systemName))
             return null;
@@ -120,7 +120,7 @@ public partial class TopicService : ITopicService
     /// A task that represents the asynchronous operation
     /// The task result contains the topics
     /// </returns>
-    public virtual async Task<IList<Topic>> GetAllTopicsAsync(int storeId, bool ignoreAcl = false, bool showHidden = false)
+    public virtual async Task<IList<Topic>> GetAllTopicsAsync(long storeId, bool ignoreAcl = false, bool showHidden = false)
     {
         var customer = await _workContext.GetCurrentCustomerAsync();
         var customerRoleIds = await _customerService.GetCustomerRoleIdsAsync(customer);
@@ -167,7 +167,7 @@ public partial class TopicService : ITopicService
     /// A task that represents the asynchronous operation
     /// The task result contains the topics
     /// </returns>
-    public virtual async Task<IList<Topic>> GetAllTopicsAsync(int storeId, string keywords,
+    public virtual async Task<IList<Topic>> GetAllTopicsAsync(long storeId, string keywords,
         bool ignoreAcl = false, bool showHidden = false)
     {
         var topics = await GetAllTopicsAsync(storeId,

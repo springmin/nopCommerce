@@ -59,7 +59,7 @@ public partial class BlogService : IBlogService
     /// A task that represents the asynchronous operation
     /// The task result contains the blog post
     /// </returns>
-    public virtual async Task<BlogPost> GetBlogPostByIdAsync(int blogPostId)
+    public virtual async Task<BlogPost> GetBlogPostByIdAsync(long blogPostId)
     {
         return await _blogPostRepository.GetByIdAsync(blogPostId, cache => default, useShortTermCache: true);
     }
@@ -79,7 +79,7 @@ public partial class BlogService : IBlogService
     /// A task that represents the asynchronous operation
     /// The task result contains the blog posts
     /// </returns>
-    public virtual async Task<IPagedList<BlogPost>> GetAllBlogPostsAsync(int storeId = 0, int languageId = 0,
+    public virtual async Task<IPagedList<BlogPost>> GetAllBlogPostsAsync(long storeId = 0, long languageId = 0,
         DateTime? dateFrom = null, DateTime? dateTo = null,
         int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false, string title = null)
     {
@@ -128,8 +128,8 @@ public partial class BlogService : IBlogService
     /// A task that represents the asynchronous operation
     /// The task result contains the blog posts
     /// </returns>
-    public virtual async Task<IPagedList<BlogPost>> GetAllBlogPostsByTagAsync(int storeId = 0,
-        int languageId = 0, string tag = "",
+    public virtual async Task<IPagedList<BlogPost>> GetAllBlogPostsByTagAsync(long storeId = 0,
+        long languageId = 0, string tag = "",
         int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false)
     {
         tag = tag.Trim();
@@ -159,7 +159,7 @@ public partial class BlogService : IBlogService
     /// A task that represents the asynchronous operation
     /// The task result contains the blog post tags
     /// </returns>
-    public virtual async Task<IList<BlogPostTag>> GetAllBlogPostTagsAsync(int storeId, int languageId, bool showHidden = false)
+    public virtual async Task<IList<BlogPostTag>> GetAllBlogPostTagsAsync(long storeId, long languageId, bool showHidden = false)
     {
         var cacheKey = _staticCacheManager.PrepareKeyForDefaultCache(NopBlogsDefaults.BlogTagsCacheKey, languageId, storeId, showHidden);
 
@@ -297,7 +297,7 @@ public partial class BlogService : IBlogService
     /// A task that represents the asynchronous operation
     /// The task result contains the comments
     /// </returns>
-    public virtual async Task<IList<BlogComment>> GetAllCommentsAsync(int customerId = 0, int storeId = 0, int? blogPostId = null,
+    public virtual async Task<IList<BlogComment>> GetAllCommentsAsync(long customerId = 0, long storeId = 0, long? blogPostId = null,
         bool? approved = null, DateTime? fromUtc = null, DateTime? toUtc = null, string commentText = null)
     {
         return await _blogCommentRepository.GetAllAsync(query =>
@@ -337,7 +337,7 @@ public partial class BlogService : IBlogService
     /// A task that represents the asynchronous operation
     /// The task result contains the blog comment
     /// </returns>
-    public virtual async Task<BlogComment> GetBlogCommentByIdAsync(int blogCommentId)
+    public virtual async Task<BlogComment> GetBlogCommentByIdAsync(long blogCommentId)
     {
         return await _blogCommentRepository.GetByIdAsync(blogCommentId, cache => default, useShortTermCache: true);
     }
@@ -350,7 +350,7 @@ public partial class BlogService : IBlogService
     /// A task that represents the asynchronous operation
     /// The task result contains the blog comments
     /// </returns>
-    public virtual async Task<IList<BlogComment>> GetBlogCommentsByIdsAsync(int[] commentIds)
+    public virtual async Task<IList<BlogComment>> GetBlogCommentsByIdsAsync(long[] commentIds)
     {
         return await _blogCommentRepository.GetByIdsAsync(commentIds);
     }
@@ -365,7 +365,7 @@ public partial class BlogService : IBlogService
     /// A task that represents the asynchronous operation
     /// The task result contains the number of blog comments
     /// </returns>
-    public virtual async Task<int> GetBlogCommentsCountAsync(BlogPost blogPost, int storeId = 0, bool? isApproved = null)
+    public virtual async Task<int> GetBlogCommentsCountAsync(BlogPost blogPost, long storeId = 0, bool? isApproved = null)
     {
         var query = _blogCommentRepository.Table.Where(comment => comment.BlogPostId == blogPost.Id);
 

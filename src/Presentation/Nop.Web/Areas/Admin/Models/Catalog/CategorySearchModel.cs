@@ -25,12 +25,12 @@ public partial record CategorySearchModel : BaseSearchModel
     public string SearchCategoryName { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Categories.List.SearchPublished")]
-    public int SearchPublishedId { get; set; }
+    public long SearchPublishedId { get; set; }
 
     public IList<SelectListItem> AvailablePublishedOptions { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Categories.List.SearchStore")]
-    public int SearchStoreId { get; set; }
+    public long SearchStoreId { get; set; }
 
     public IList<SelectListItem> AvailableStores { get; set; }
 

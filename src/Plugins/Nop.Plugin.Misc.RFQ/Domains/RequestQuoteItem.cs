@@ -10,7 +10,7 @@ public class RequestQuoteItem : BaseEntity, IAdminNote
     /// <summary>
     /// Gets or sets the product identifier
     /// </summary>
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     /// <summary>
     /// Gets or sets the product attributes in XML format
@@ -40,5 +40,5 @@ public class RequestQuoteItem : BaseEntity, IAdminNote
     /// <summary>
     /// Gets or sets the request quote identifier
     /// </summary>
-    public int RequestQuoteId { get; set; }
+    public long RequestQuoteId { get; set; }
 }

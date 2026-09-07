@@ -17,7 +17,7 @@ public partial record MessageTemplateModel : BaseNopEntityModel, ILocalizedModel
         Locales = new List<MessageTemplateLocalizedModel>();
         AvailableEmailAccounts = new List<SelectListItem>();
 
-        SelectedStoreIds = new List<int>();
+        SelectedStoreIds = new List<long>();
         AvailableStores = new List<SelectListItem>();
     }
 
@@ -50,7 +50,7 @@ public partial record MessageTemplateModel : BaseNopEntityModel, ILocalizedModel
     [UIHint("Int32Nullable")]
     public int? DelayBeforeSend { get; set; }
 
-    public int DelayPeriodId { get; set; }
+    public long DelayPeriodId { get; set; }
 
     [NopResourceDisplayName("Admin.ContentManagement.MessageTemplates.Fields.AllowDirectReply")]
     public bool AllowDirectReply { get; set; }
@@ -58,16 +58,16 @@ public partial record MessageTemplateModel : BaseNopEntityModel, ILocalizedModel
     public bool HasAttachedDownload { get; set; }
     [NopResourceDisplayName("Admin.ContentManagement.MessageTemplates.Fields.AttachedDownload")]
     [UIHint("Download")]
-    public int AttachedDownloadId { get; set; }
+    public long AttachedDownloadId { get; set; }
 
     [NopResourceDisplayName("Admin.ContentManagement.MessageTemplates.Fields.EmailAccount")]
-    public int EmailAccountId { get; set; }
+    public long EmailAccountId { get; set; }
 
     public IList<SelectListItem> AvailableEmailAccounts { get; set; }
 
     //store mapping
     [NopResourceDisplayName("Admin.ContentManagement.MessageTemplates.Fields.LimitedToStores")]
-    public IList<int> SelectedStoreIds { get; set; }
+    public IList<long> SelectedStoreIds { get; set; }
 
     public IList<SelectListItem> AvailableStores { get; set; }
 
@@ -87,7 +87,7 @@ public partial record MessageTemplateLocalizedModel : ILocalizedLocaleModel
         AvailableEmailAccounts = new List<SelectListItem>();
     }
 
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.ContentManagement.MessageTemplates.Fields.BccEmailAddresses")]
     public string BccEmailAddresses { get; set; }
@@ -99,6 +99,6 @@ public partial record MessageTemplateLocalizedModel : ILocalizedLocaleModel
     public string Body { get; set; }
 
     [NopResourceDisplayName("Admin.ContentManagement.MessageTemplates.Fields.EmailAccount")]
-    public int EmailAccountId { get; set; }
+    public long EmailAccountId { get; set; }
     public IList<SelectListItem> AvailableEmailAccounts { get; set; }
 }

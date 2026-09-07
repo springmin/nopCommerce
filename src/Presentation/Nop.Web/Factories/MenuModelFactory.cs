@@ -241,7 +241,7 @@ public partial class MenuModelFactory : IMenuModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the picture model
     /// </returns>
-    protected virtual async Task<PictureModel> PreparePictureModelAsync(int pictureId, string title, string alternateText)
+    protected virtual async Task<PictureModel> PreparePictureModelAsync(long pictureId, string title, string alternateText)
     {
         var picture = await _pictureService.GetPictureByIdAsync(pictureId);
         (var fullSizeImageUrl, picture) = await _pictureService.GetPictureUrlAsync(picture);

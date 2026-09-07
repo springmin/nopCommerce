@@ -31,7 +31,7 @@ public partial record GeneralCommonSettingsModel : BaseNopModel, ISettingsModel
 
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     public StoreInformationSettingsModel StoreInformationSettings { get; set; }
 

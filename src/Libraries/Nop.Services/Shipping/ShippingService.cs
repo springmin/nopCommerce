@@ -330,7 +330,9 @@ public partial class ShippingService : IShippingService
             }
 
             //set dimensions as cube root of volume
-            width = length = height = Convert.ToDecimal(Math.Pow(Convert.ToDouble(totalVolume), 1.0 / 3.0));
+            //(round to 4 decimal places: Math.Pow works in double and can produce
+            //values like 3.9999999999999996 for a perfect cube, e.g. 64 ^ (1/3))
+            width = length = height = Math.Round(Convert.ToDecimal(Math.Pow(Convert.ToDouble(totalVolume), 1.0 / 3.0)), 4);
 
             //sometimes we have products with sizes like 1x1x20
             //that's why let's ensure that a maximum dimension is always preserved
@@ -379,7 +381,7 @@ public partial class ShippingService : IShippingService
     /// The task result contains the shipment packages (requests). Value indicating whether shipping is done from multiple locations (warehouses)
     /// </returns>
     public virtual async Task<(IList<GetShippingOptionRequest> shipmentPackages, bool shippingFromMultipleLocations)> CreateShippingOptionRequestsAsync(IList<ShoppingCartItem> cart,
-        Address shippingAddress, int storeId)
+        Address shippingAddress, long storeId)
     {
         //if we always ship from the default shipping origin, then there's only one request
         //if we ship from warehouses ("ShippingSettings.UseWarehouseLocation" enabled),
@@ -387,7 +389,7 @@ public partial class ShippingService : IShippingService
 
         //key - warehouse identifier (0 - default shipping origin)
         //value - request
-        var requests = new Dictionary<int, GetShippingOptionRequest>();
+        var requests = new Dictionary<long, GetShippingOptionRequest>();
 
         //a list of requests with products which should be shipped separately
         var separateRequests = new List<GetShippingOptionRequest>();
@@ -531,7 +533,7 @@ public partial class ShippingService : IShippingService
     /// </returns>
     public virtual async Task<GetShippingOptionResponse> GetShippingOptionsAsync(IList<ShoppingCartItem> cart,
         Address shippingAddress, Customer customer = null, string allowedShippingRateComputationMethodSystemName = "",
-        int storeId = 0)
+        long storeId = 0)
     {
         ArgumentNullException.ThrowIfNull(cart);
 
@@ -636,7 +638,7 @@ public partial class ShippingService : IShippingService
     /// The task result contains the pickup points
     /// </returns>
     public virtual async Task<GetPickupPointsResponse> GetPickupPointsAsync(IList<ShoppingCartItem> cart, Address address,
-        Customer customer = null, string providerSystemName = null, int storeId = 0)
+        Customer customer = null, string providerSystemName = null, long storeId = 0)
     {
         var result = new GetPickupPointsResponse();
 

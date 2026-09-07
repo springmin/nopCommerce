@@ -29,13 +29,13 @@ public partial record AddressModel : BaseNopEntityModel
     public string Company { get; set; }
 
     [NopResourceDisplayName("Admin.Address.Fields.Country")]
-    public int? CountryId { get; set; }
+    public long? CountryId { get; set; }
 
     [NopResourceDisplayName("Admin.Address.Fields.Country")]
     public string CountryName { get; set; }
 
     [NopResourceDisplayName("Admin.Address.Fields.StateProvince")]
-    public int? StateProvinceId { get; set; }
+    public long? StateProvinceId { get; set; }
 
     [NopResourceDisplayName("Admin.Address.Fields.StateProvince")]
     public string StateProvinceName { get; set; }

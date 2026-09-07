@@ -29,7 +29,7 @@ public static class TierPriceExtensions
     /// <param name="source">Tier prices</param>
     /// <param name="customerRoleIds">Customer role identifiers</param>
     /// <returns>Filtered tier prices</returns>
-    public static IEnumerable<TierPrice> FilterByCustomerRole(this IEnumerable<TierPrice> source, int[] customerRoleIds)
+    public static IEnumerable<TierPrice> FilterByCustomerRole(this IEnumerable<TierPrice> source, long[] customerRoleIds)
     {
         ArgumentNullException.ThrowIfNull(source);
 

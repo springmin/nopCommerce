@@ -141,7 +141,7 @@ public partial class TaxController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_TAX_SETTINGS)]
-    public virtual async Task<IActionResult> CategoryDelete(int id)
+    public virtual async Task<IActionResult> CategoryDelete(long id)
     {
         //try to get a tax category with the specified id
         var taxCategory = await _taxCategoryService.GetTaxCategoryByIdAsync(id)

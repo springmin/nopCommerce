@@ -14,7 +14,7 @@ public partial record TranslationSettingsModel : BaseNopModel, ISettingsModel
     public TranslationSettingsModel()
     {
         AvailableLanguages = new List<SelectListItem>();
-        NotTranslateLanguages = new List<int>();
+        NotTranslateLanguages = new List<long>();
         AvailableTranslationService = new List<SelectListItem>();
     }
 
@@ -22,15 +22,15 @@ public partial record TranslationSettingsModel : BaseNopModel, ISettingsModel
 
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.GeneralCommon.AllowPreTranslate")]
     public bool AllowPreTranslate { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.GeneralCommon.TranslateFromLanguage")]
-    public int TranslateFromLanguageId { get; set; }
+    public long TranslateFromLanguageId { get; set; }
     [NopResourceDisplayName("Admin.Configuration.Settings.GeneralCommon.NotTranslateLanguages")]
-    public IList<int> NotTranslateLanguages { get; set; }
+    public IList<long> NotTranslateLanguages { get; set; }
     public IList<SelectListItem> AvailableLanguages { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.GeneralCommon.GoogleTranslateApiKey")]
@@ -40,7 +40,7 @@ public partial record TranslationSettingsModel : BaseNopModel, ISettingsModel
     public string DeepLAuthKey { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.GeneralCommon.TranslationService")]
-    public int TranslationServiceId { get; set; }
+    public long TranslationServiceId { get; set; }
     public IList<SelectListItem> AvailableTranslationService { get; set; }
 
     #endregion

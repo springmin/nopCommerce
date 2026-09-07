@@ -20,9 +20,9 @@ public partial class BlogCommentBuilder : NopEntityBuilder<BlogComment>
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(BlogComment.StoreId)).AsInt32().ForeignKey<Store>()
-            .WithColumn(nameof(BlogComment.CustomerId)).AsInt32().ForeignKey<Customer>()
-            .WithColumn(nameof(BlogComment.BlogPostId)).AsInt32().ForeignKey<BlogPost>();
+            .WithColumn(nameof(BlogComment.StoreId)).AsInt64().ForeignKey<Store>()
+            .WithColumn(nameof(BlogComment.CustomerId)).AsInt64().ForeignKey<Customer>()
+            .WithColumn(nameof(BlogComment.BlogPostId)).AsInt64().ForeignKey<BlogPost>();
     }
 
     #endregion

@@ -48,7 +48,7 @@ public partial class AclEventConsumer : IConsumer<ModelPreparedEvent<BaseNopMode
     protected readonly IProductService _productService;
     protected readonly ITopicService _topicService;
 
-    private static readonly Dictionary<string, IList<int>> _tempData = new(comparer: StringComparer.InvariantCultureIgnoreCase);
+    private static readonly Dictionary<string, IList<long>> _tempData = new(comparer: StringComparer.InvariantCultureIgnoreCase);
 
     #endregion
 

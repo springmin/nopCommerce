@@ -16,7 +16,7 @@ public partial interface IVendorService
     /// A task that represents the asynchronous operation
     /// The task result contains the vendor
     /// </returns>
-    Task<Vendor> GetVendorByIdAsync(int vendorId);
+    Task<Vendor> GetVendorByIdAsync(long vendorId);
 
     /// <summary>
     /// Gets a vendors by product identifiers
@@ -26,7 +26,7 @@ public partial interface IVendorService
     /// A task that represents the asynchronous operation
     /// The task result contains the vendors
     /// </returns>
-    Task<IList<Vendor>> GetVendorsByProductIdsAsync(int[] productIds);
+    Task<IList<Vendor>> GetVendorsByProductIdsAsync(long[] productIds);
 
     /// <summary>
     /// Gets a vendors by customers identifiers
@@ -36,7 +36,7 @@ public partial interface IVendorService
     /// A task that represents the asynchronous operation
     /// The task result contains the vendors
     /// </returns>
-    Task<IList<Vendor>> GetVendorsByCustomerIdsAsync(int[] customerIds);
+    Task<IList<Vendor>> GetVendorsByCustomerIdsAsync(long[] customerIds);
 
     /// <summary>
     /// Gets a vendor by product identifier
@@ -46,7 +46,7 @@ public partial interface IVendorService
     /// A task that represents the asynchronous operation
     /// The task result contains the vendor
     /// </returns>
-    Task<Vendor> GetVendorByProductIdAsync(int productId);
+    Task<Vendor> GetVendorByProductIdAsync(long productId);
 
     /// <summary>
     /// Delete a vendor
@@ -91,7 +91,7 @@ public partial interface IVendorService
     /// A task that represents the asynchronous operation
     /// The task result contains the vendor note
     /// </returns>
-    Task<VendorNote> GetVendorNoteByIdAsync(int vendorNoteId);
+    Task<VendorNote> GetVendorNoteByIdAsync(long vendorNoteId);
 
     /// <summary>
     /// Gets all vendor notes
@@ -103,7 +103,7 @@ public partial interface IVendorService
     /// A task that represents the asynchronous operation
     /// The task result contains the vendor notes
     /// </returns>
-    Task<IPagedList<VendorNote>> GetVendorNotesByVendorAsync(int vendorId, int pageIndex = 0, int pageSize = int.MaxValue);
+    Task<IPagedList<VendorNote>> GetVendorNotesByVendorAsync(long vendorId, int pageIndex = 0, int pageSize = int.MaxValue);
 
     /// <summary>
     /// Deletes a vendor note

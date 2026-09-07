@@ -21,7 +21,7 @@ public partial class ProductAttributeCombinationBuilder : NopEntityBuilder<Produ
             .WithColumn(nameof(ProductAttributeCombination.Sku)).AsString(400).Nullable()
             .WithColumn(nameof(ProductAttributeCombination.ManufacturerPartNumber)).AsString(400).Nullable()
             .WithColumn(nameof(ProductAttributeCombination.Gtin)).AsString(400).Nullable()
-            .WithColumn(nameof(ProductAttributeCombination.ProductId)).AsInt32().ForeignKey<Product>();
+            .WithColumn(nameof(ProductAttributeCombination.ProductId)).AsInt64().ForeignKey<Product>();
     }
 
     #endregion

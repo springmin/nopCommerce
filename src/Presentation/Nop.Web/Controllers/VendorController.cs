@@ -114,7 +114,7 @@ public partial class VendorController : BasePublicController
                     var ctrlAttributes = form[controlId];
                     if (!StringValues.IsNullOrEmpty(ctrlAttributes))
                     {
-                        var selectedAttributeId = int.Parse(ctrlAttributes);
+                        var selectedAttributeId = long.Parse(ctrlAttributes);
                         if (selectedAttributeId > 0)
                         {
                             attributesXml = _vendorAttributeParser.AddAttribute(attributesXml,
@@ -131,7 +131,7 @@ public partial class VendorController : BasePublicController
                         foreach (var item in cblAttributes.ToString().Split(_separator, StringSplitOptions.RemoveEmptyEntries)
                                 )
                         {
-                            var selectedAttributeId = int.Parse(item);
+                            var selectedAttributeId = long.Parse(item);
                             if (selectedAttributeId > 0)
                             {
                                 attributesXml = _vendorAttributeParser.AddAttribute(attributesXml,
@@ -215,7 +215,7 @@ public partial class VendorController : BasePublicController
         if (_captchaSettings.Enabled && _captchaSettings.ShowOnApplyVendorPage && !captchaValid)
             ModelState.AddModelError("", await _localizationService.GetResourceAsync("Common.WrongCaptchaMessage"));
 
-        var pictureId = 0;
+        long pictureId = 0;
 
         if (uploadedFile != null && !string.IsNullOrEmpty(uploadedFile.FileName))
         {

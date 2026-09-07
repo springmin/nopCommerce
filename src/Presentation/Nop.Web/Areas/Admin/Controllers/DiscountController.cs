@@ -142,7 +142,7 @@ public partial class DiscountController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Promotions.DISCOUNTS_VIEW)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         //try to get a discount with the specified id
         var discount = await _discountService.GetDiscountByIdAsync(id);
@@ -220,7 +220,7 @@ public partial class DiscountController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Promotions.DISCOUNTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get a discount with the specified id
         var discount = await _discountService.GetDiscountByIdAsync(id);
@@ -251,7 +251,7 @@ public partial class DiscountController : BaseAdminController
     #region Discount requirements
 
     [CheckPermission(StandardPermission.Promotions.DISCOUNTS_VIEW)]
-    public virtual async Task<IActionResult> GetDiscountRequirementConfigurationUrl(string systemName, int discountId, int? discountRequirementId)
+    public virtual async Task<IActionResult> GetDiscountRequirementConfigurationUrl(string systemName, long discountId, long? discountRequirementId)
     {
         ArgumentException.ThrowIfNullOrEmpty(systemName);
 
@@ -267,8 +267,8 @@ public partial class DiscountController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Promotions.DISCOUNTS_VIEW)]
-    public virtual async Task<IActionResult> GetDiscountRequirements(int discountId, int discountRequirementId,
-        int? parentId, int? interactionTypeId, bool deleteRequirement)
+    public virtual async Task<IActionResult> GetDiscountRequirements(long discountId, long discountRequirementId,
+        long? parentId, long? interactionTypeId, bool deleteRequirement)
     {
         var requirements = new List<DiscountRequirementRuleModel>();
 
@@ -354,7 +354,7 @@ public partial class DiscountController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Promotions.DISCOUNTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> AddNewGroup(int discountId, string name)
+    public virtual async Task<IActionResult> AddNewGroup(long discountId, string name)
     {
         var discount = await _discountService.GetDiscountByIdAsync(discountId) ?? throw new ArgumentException("Discount could not be loaded");
 
@@ -396,7 +396,7 @@ public partial class DiscountController : BaseAdminController
     }
 
     //action displaying notification (warning) to a store owner that entered coupon code already exists
-    public virtual async Task<IActionResult> CouponCodeReservedWarning(int discountId, string couponCode)
+    public virtual async Task<IActionResult> CouponCodeReservedWarning(long discountId, string couponCode)
     {
         if (string.IsNullOrEmpty(couponCode))
             return Json(new { Result = string.Empty });
@@ -430,7 +430,7 @@ public partial class DiscountController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Promotions.DISCOUNTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ProductDelete(int discountId, int productId)
+    public virtual async Task<IActionResult> ProductDelete(long discountId, long productId)
     {
         //try to get a discount with the specified id
         var discount = await _discountService.GetDiscountByIdAsync(discountId)
@@ -450,7 +450,7 @@ public partial class DiscountController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Promotions.DISCOUNTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ProductAddPopup(int discountId)
+    public virtual async Task<IActionResult> ProductAddPopup(long discountId)
     {
         //prepare model
         var model = await _discountModelFactory.PrepareAddProductToDiscountSearchModelAsync(new AddProductToDiscountSearchModel());
@@ -513,7 +513,7 @@ public partial class DiscountController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Promotions.DISCOUNTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> CategoryDelete(int discountId, int categoryId)
+    public virtual async Task<IActionResult> CategoryDelete(long discountId, long categoryId)
     {
         //try to get a discount with the specified id
         var discount = await _discountService.GetDiscountByIdAsync(discountId)
@@ -533,7 +533,7 @@ public partial class DiscountController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Promotions.DISCOUNTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> CategoryAddPopup(int discountId)
+    public virtual async Task<IActionResult> CategoryAddPopup(long discountId)
     {
         //prepare model
         var model = await _discountModelFactory.PrepareAddCategoryToDiscountSearchModelAsync(new AddCategoryToDiscountSearchModel());
@@ -596,7 +596,7 @@ public partial class DiscountController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Promotions.DISCOUNTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ManufacturerDelete(int discountId, int manufacturerId)
+    public virtual async Task<IActionResult> ManufacturerDelete(long discountId, long manufacturerId)
     {
         //try to get a discount with the specified id
         var discount = await _discountService.GetDiscountByIdAsync(discountId)
@@ -616,7 +616,7 @@ public partial class DiscountController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Promotions.DISCOUNTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ManufacturerAddPopup(int discountId)
+    public virtual async Task<IActionResult> ManufacturerAddPopup(long discountId)
     {
         //prepare model
         var model = await _discountModelFactory.PrepareAddManufacturerToDiscountSearchModelAsync(new AddManufacturerToDiscountSearchModel());
@@ -680,7 +680,7 @@ public partial class DiscountController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Promotions.DISCOUNTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> UsageHistoryDelete(int discountId, int id)
+    public virtual async Task<IActionResult> UsageHistoryDelete(long discountId, long id)
     {
         //try to get a discount with the specified id
         _ = await _discountService.GetDiscountByIdAsync(discountId)

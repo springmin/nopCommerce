@@ -43,8 +43,8 @@ public partial class PaymentPluginManager : PluginManager<IPaymentMethod>, IPaym
     /// A task that represents the asynchronous operation
     /// The task result contains the list of active payment methods
     /// </returns>
-    public virtual async Task<IList<IPaymentMethod>> LoadActivePluginsAsync(Customer customer = null, int storeId = 0,
-        int countryId = 0)
+    public virtual async Task<IList<IPaymentMethod>> LoadActivePluginsAsync(Customer customer = null, long storeId = 0,
+        long countryId = 0)
     {
         var paymentMethods = await LoadActivePluginsAsync(_paymentSettings.ActivePaymentMethodSystemNames, customer, storeId);
 
@@ -75,7 +75,7 @@ public partial class PaymentPluginManager : PluginManager<IPaymentMethod>, IPaym
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public virtual async Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, int storeId = 0)
+    public virtual async Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, long storeId = 0)
     {
         var paymentMethod = await LoadPluginBySystemNameAsync(systemName, customer, storeId);
         return IsPluginActive(paymentMethod);
@@ -89,13 +89,13 @@ public partial class PaymentPluginManager : PluginManager<IPaymentMethod>, IPaym
     /// A task that represents the asynchronous operation
     /// The task result contains the list of country identifiers
     /// </returns>
-    public virtual async Task<IList<int>> GetRestrictedCountryIdsAsync(IPaymentMethod paymentMethod)
+    public virtual async Task<IList<long>> GetRestrictedCountryIdsAsync(IPaymentMethod paymentMethod)
     {
         ArgumentNullException.ThrowIfNull(paymentMethod);
 
         var settingKey = string.Format(NopPaymentDefaults.RestrictedCountriesSettingName, paymentMethod.PluginDescriptor.SystemName);
 
-        return await _settingService.GetSettingByKeyAsync<List<int>>(settingKey) ?? new List<int>();
+        return await _settingService.GetSettingByKeyAsync<List<long>>(settingKey) ?? new List<long>();
     }
 
     /// <summary>
@@ -104,7 +104,7 @@ public partial class PaymentPluginManager : PluginManager<IPaymentMethod>, IPaym
     /// <param name="paymentMethod">Payment method</param>
     /// <param name="countryIds">List of country identifiers</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task SaveRestrictedCountriesAsync(IPaymentMethod paymentMethod, IList<int> countryIds)
+    public virtual async Task SaveRestrictedCountriesAsync(IPaymentMethod paymentMethod, IList<long> countryIds)
     {
         ArgumentNullException.ThrowIfNull(paymentMethod);
 

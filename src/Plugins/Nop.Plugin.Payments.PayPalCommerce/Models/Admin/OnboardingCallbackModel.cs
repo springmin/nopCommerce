@@ -9,7 +9,7 @@ public record OnboardingCallbackModel : BaseNopModel
 {
     #region Properties
 
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 
     public string MerchantIdInPayPal { get; set; }
 

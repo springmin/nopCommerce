@@ -580,7 +580,7 @@ public partial class CustomerModelFactory : ICustomerModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the register result model
     /// </returns>
-    public virtual async Task<RegisterResultModel> PrepareRegisterResultModelAsync(int resultId, string returnUrl)
+    public virtual async Task<RegisterResultModel> PrepareRegisterResultModelAsync(long resultId, string returnUrl)
     {
         var resultText = (UserRegistrationType)resultId switch
         {
@@ -609,7 +609,7 @@ public partial class CustomerModelFactory : ICustomerModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the phone verification model
     /// </returns>
-    public virtual async Task<PhoneVerificationModel> PreparePhoneVerificationModelAsync(int typeId, string returnUrl)
+    public virtual async Task<PhoneVerificationModel> PreparePhoneVerificationModelAsync(long typeId, string returnUrl)
     {
         var customer = await _workContext.GetCurrentCustomerAsync();
         var model = new PhoneVerificationModel
@@ -644,7 +644,7 @@ public partial class CustomerModelFactory : ICustomerModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the customer navigation model
     /// </returns>
-    public virtual async Task<CustomerNavigationModel> PrepareCustomerNavigationModelAsync(int selectedTabId = 0)
+    public virtual async Task<CustomerNavigationModel> PrepareCustomerNavigationModelAsync(long selectedTabId = 0)
     {
         var model = new CustomerNavigationModel();
 

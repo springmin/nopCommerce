@@ -13,7 +13,7 @@ public class NewsItem : BaseEntity, ISlugSupported, IStoreMappingSupported, IMet
     /// <summary>
     /// Gets or sets the language identifier
     /// </summary>
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     /// <summary>
     /// Gets or sets the news title

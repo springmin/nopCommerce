@@ -9,14 +9,14 @@ public partial record CategoryNavigationModel : BaseNopModel
         Categories = new List<CategorySimpleModel>();
     }
 
-    public int CurrentCategoryId { get; set; }
+    public long CurrentCategoryId { get; set; }
     public List<CategorySimpleModel> Categories { get; set; }
 
     #region Nested classes
 
     public partial record CategoryLineModel : BaseNopModel
     {
-        public int CurrentCategoryId { get; set; }
+        public long CurrentCategoryId { get; set; }
         public CategorySimpleModel Category { get; set; }
     }
 

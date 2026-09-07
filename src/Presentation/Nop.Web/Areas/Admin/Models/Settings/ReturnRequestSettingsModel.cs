@@ -6,7 +6,7 @@ namespace Nop.Web.Areas.Admin.Models.Settings;
 
 public partial record ReturnRequestSettingsModel : BaseNopModel, ISettingsModel
 {
-    public int ActiveStoreScopeConfiguration {  get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Order.ReturnRequestsEnabled")]
     public bool ReturnRequestsEnabled { get; set; }

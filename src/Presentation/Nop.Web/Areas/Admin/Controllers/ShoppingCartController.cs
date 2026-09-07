@@ -71,7 +71,7 @@ public partial class ShoppingCartController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Orders.CURRENT_CARTS_MANAGE)]
-    public virtual async Task<IActionResult> DeleteItem(int id)
+    public virtual async Task<IActionResult> DeleteItem(long id)
     {
         await _shoppingCartService.DeleteShoppingCartItemAsync(id);
 

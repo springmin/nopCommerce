@@ -24,31 +24,31 @@ public partial class BBCodeHelper
 
     #region Utilities
     
-    [GeneratedRegex(@"\[b\](.+?)\[/b\]", RegexOptions.IgnoreCase | RegexOptions.Compiled, "en-US")]
+    [GeneratedRegex(@"\[b\](.+?)\[/b\]", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
     private static partial Regex RegexBold();
 
-    [GeneratedRegex(@"\[i\](.+?)\[/i\]", RegexOptions.IgnoreCase | RegexOptions.Compiled, "en-US")]
+    [GeneratedRegex(@"\[i\](.+?)\[/i\]", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
     private static partial Regex RegexItalic();
 
-    [GeneratedRegex(@"\[u\](.+?)\[/u\]", RegexOptions.IgnoreCase | RegexOptions.Compiled, "en-US")]
+    [GeneratedRegex(@"\[u\](.+?)\[/u\]", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
     private static partial Regex RegexUnderLine();
 
-    [GeneratedRegex(@"\[url\=(https?:.+?)\]([^\]]+)\[/url\]", RegexOptions.IgnoreCase | RegexOptions.Compiled, "en-US")]
+    [GeneratedRegex(@"\[url\=(https?:.+?)\]([^\]]+)\[/url\]", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
     private static partial Regex RegexUrl1();
 
-    [GeneratedRegex(@"\[url\](https?:.+?)\[/url\]", RegexOptions.IgnoreCase | RegexOptions.Compiled, "en-US")]
+    [GeneratedRegex(@"\[url\](https?:.+?)\[/url\]", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
     private static partial Regex RegexUrl2();
 
-    [GeneratedRegex(@"\[quote=(.+?)\](.+?)\[/quote\]", RegexOptions.IgnoreCase | RegexOptions.Compiled, "en-US")]
+    [GeneratedRegex(@"\[quote=(.+?)\](.+?)\[/quote\]", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
     private static partial Regex RegexQuote();
 
-    [GeneratedRegex(@"\[img\](.+?)\[/img\]", RegexOptions.IgnoreCase | RegexOptions.Compiled, "en-US")]
+    [GeneratedRegex(@"\[img\](.+?)\[/img\]", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
     private static partial Regex RegexImg();
 
-    [GeneratedRegex(@"\[quote=(.+?)\]", RegexOptions.IgnoreCase | RegexOptions.Compiled, "en-US")]
+    [GeneratedRegex(@"\[quote=(.+?)\]", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
     private static partial Regex RegexRemoveQuotes1();
 
-    [GeneratedRegex(@"\[/quote\]", RegexOptions.IgnoreCase | RegexOptions.Compiled, "en-US")]
+    [GeneratedRegex(@"\[/quote\]", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
     private static partial Regex RegexRemoveQuotes2();
 
     #endregion

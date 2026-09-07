@@ -1,26 +1,24 @@
-﻿using FluentMigrator;
+using FluentMigrator;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
 using Nop.Data.Extensions;
+using Nop.Data.Mapping;
 
 namespace Nop.Data.Migrations.UpgradeTo500;
 
 [NopSchemaMigration("2026-03-01 00:00:01", "SearchTerm migration")]
 public class SearchTermMigration : ForwardOnlyMigration
 {
-    private readonly INopDataProvider _dataProvider;
-
-    public SearchTermMigration(INopDataProvider dataProvider)
-    {
-        _dataProvider = dataProvider;
-    }
-
     /// <summary>
     /// Collect the UP migration expressions
     /// </summary>
     public override void Up()
     {
-        _dataProvider.TruncateAsync<SearchTerm>();
+        //truncate via the migration's own connection (same transaction). Using a second
+        //connection here (e.g. the data provider) races with the migration transaction and
+        //SQLite reports 'database is locked'
+        var tableName = NameCompatibilityManager.GetTableName(typeof(SearchTerm));
+        Execute.Sql($"DELETE FROM \"{tableName}\"");
 
         this.DeleteColumnsIfExists<SearchTerm>(["Count"]);
 

@@ -19,7 +19,7 @@ public partial class StoreMappingBuilder : NopEntityBuilder<StoreMapping>
     {
         table
             .WithColumn(nameof(StoreMapping.EntityName)).AsString(400).NotNullable()
-            .WithColumn(nameof(StoreMapping.StoreId)).AsInt32().ForeignKey<Store>();
+            .WithColumn(nameof(StoreMapping.StoreId)).AsInt64().ForeignKey<Store>();
     }
 
     #endregion

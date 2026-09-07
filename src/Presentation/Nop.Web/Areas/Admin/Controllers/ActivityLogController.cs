@@ -61,7 +61,7 @@ public partial class ActivityLogController : BaseAdminController
         //get identifiers of selected activity types
         var selectedActivityTypesIds = form["checkbox_activity_types"]
             .SelectMany(value => value.Split(_separator, StringSplitOptions.RemoveEmptyEntries))
-            .Select(idString => int.TryParse(idString, out var id) ? id : 0)
+            .Select(idString => long.TryParse(idString, out long id) ? id : 0)
             .Distinct().ToList();
 
         //update activity types
@@ -98,7 +98,7 @@ public partial class ActivityLogController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Customers.ACTIVITY_LOG_DELETE)]
-    public virtual async Task<IActionResult> ActivityLogDelete(int id)
+    public virtual async Task<IActionResult> ActivityLogDelete(long id)
     {
         //try to get a log item with the specified id
         var logItem = await _customerActivityService.GetActivityByIdAsync(id)

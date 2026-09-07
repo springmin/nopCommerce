@@ -29,23 +29,23 @@ public partial record NewsLetterSubscriptionSearchModel : BaseSearchModel
     public string SearchEmail { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.NewsLetterSubscriptions.List.SearchStore")]
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 
     public IList<SelectListItem> AvailableStores { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.NewsLetterSubscriptions.List.SearchActive")]
-    public int ActiveId { get; set; }
+    public long ActiveId { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.NewsLetterSubscriptions.List.SearchActive")]
     public IList<SelectListItem> ActiveList { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.NewsLetterSubscriptions.List.CustomerRoles")]
-    public int CustomerRoleId { get; set; }
+    public long CustomerRoleId { get; set; }
 
     public IList<SelectListItem> AvailableCustomerRoles { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.NewsLetterSubscriptions.List.SubscriptionTypes")]
-    public int SubscriptionTypeId { get; set; }
+    public long SubscriptionTypeId { get; set; }
     public IList<SelectListItem> AvailableSubscriptionTypes { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.NewsLetterSubscriptions.List.StartDate")]

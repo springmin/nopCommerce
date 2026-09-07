@@ -11,7 +11,7 @@ public record SyncRecordModel : BaseNopEntityModel
 
     public bool Active { get; set; }
 
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     public string ProductName { get; set; }
 

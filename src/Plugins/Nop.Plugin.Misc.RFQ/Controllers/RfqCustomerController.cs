@@ -181,7 +181,7 @@ public class RfqCustomerController : BasePublicController
 
     #region Requests
 
-    public async Task<IActionResult> CustomerRequest(int? requestId = null)
+    public async Task<IActionResult> CustomerRequest(long? requestId = null)
     {
         var customer = await _workContext.GetCurrentCustomerAsync();
 
@@ -376,7 +376,7 @@ public class RfqCustomerController : BasePublicController
         return View("~/Plugins/Misc.RFQ/Views/CustomerQuotes.cshtml", model);
     }
 
-    public async Task<IActionResult> CustomerQuote(int quoteId)
+    public async Task<IActionResult> CustomerQuote(long quoteId)
     {
         var result = await CheckCustomerPermissionAsync(await _workContext.GetCurrentCustomerAsync());
 
@@ -452,7 +452,7 @@ public class RfqCustomerController : BasePublicController
     }
 
     [CheckLanguageSeoCode(ignore: true)]
-    public async Task<IActionResult> PdfDocument(int quoteId)
+    public async Task<IActionResult> PdfDocument(long quoteId)
     {
         if (!_rfqSettings.AllowCustomerGenerateQuotePdf)
             return RedirectToRoute(RfqDefaults.CustomerQuoteRouteName, new { quoteId });

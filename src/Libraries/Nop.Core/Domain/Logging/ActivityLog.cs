@@ -8,12 +8,12 @@ public partial class ActivityLog : BaseEntity
     /// <summary>
     /// Gets or sets the activity log type identifier
     /// </summary>
-    public int ActivityLogTypeId { get; set; }
+    public long ActivityLogTypeId { get; set; }
 
     /// <summary>
     /// Gets or sets the entity identifier
     /// </summary>
-    public int? EntityId { get; set; }
+    public long? EntityId { get; set; }
 
     /// <summary>
     /// Gets or sets the entity name
@@ -23,7 +23,7 @@ public partial class ActivityLog : BaseEntity
     /// <summary>
     /// Gets or sets the customer identifier
     /// </summary>
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     /// <summary>
     /// Gets or sets the activity comment

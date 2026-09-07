@@ -13,7 +13,7 @@ public partial record OnlineCustomerSearchModel : BaseSearchModel, IAclSupported
 
     public OnlineCustomerSearchModel()
     {
-        SelectedCustomerRoleIds = new List<int>();
+        SelectedCustomerRoleIds = new List<long>();
         AvailableCustomerRoles = new List<SelectListItem>();
     }
 
@@ -22,7 +22,7 @@ public partial record OnlineCustomerSearchModel : BaseSearchModel, IAclSupported
     #region Properties
 
     [NopResourceDisplayName("Admin.Customers.Customers.List.CustomerRoles")]
-    public IList<int> SelectedCustomerRoleIds { get; set; }
+    public IList<long> SelectedCustomerRoleIds { get; set; }
 
     public IList<SelectListItem> AvailableCustomerRoles { get; set; }
 

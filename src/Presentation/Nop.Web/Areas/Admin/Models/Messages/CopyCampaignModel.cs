@@ -10,7 +10,7 @@ public partial record CopyCampaignModel : BaseNopModel
 {
     #region Properties
 
-    public int OriginalCampaignId { get; set; }
+    public long OriginalCampaignId { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.Campaigns.Copy.Name")]
     public string Name { get; set; }

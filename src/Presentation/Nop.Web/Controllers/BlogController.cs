@@ -116,7 +116,7 @@ public partial class BlogController : BasePublicController
     }
 
     [CheckLanguageSeoCode(ignore: true)]
-    public virtual async Task<IActionResult> ListRss(int languageId)
+    public virtual async Task<IActionResult> ListRss(long languageId)
     {
         var store = await _storeContext.GetCurrentStoreAsync();
         var feed = new RssFeed(
@@ -139,7 +139,7 @@ public partial class BlogController : BasePublicController
         return new RssActionResult(feed, _webHelper.GetThisPageUrl(false));
     }
 
-    public virtual async Task<IActionResult> BlogPost(int blogPostId)
+    public virtual async Task<IActionResult> BlogPost(long blogPostId)
     {
         if (!_blogSettings.Enabled)
             return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
@@ -171,7 +171,7 @@ public partial class BlogController : BasePublicController
 
     [HttpPost]
     [ValidateCaptcha]
-    public virtual async Task<IActionResult> BlogCommentAdd(int blogPostId, BlogPostModel model, bool captchaValid)
+    public virtual async Task<IActionResult> BlogCommentAdd(long blogPostId, BlogPostModel model, bool captchaValid)
     {
         if (!_blogSettings.Enabled)
             return RedirectToRoute(NopRouteNames.General.HOMEPAGE);

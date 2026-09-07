@@ -54,7 +54,7 @@ public class ItemClassificationMigration : MigrationBase
 
         //settings
         this.SetSettingIfNotExists<AvalaraTaxSettings, bool>(settings => settings.UseItemClassification, false);
-        this.SetSettingIfNotExists<AvalaraTaxSettings, List<int>>(settings => settings.SelectedCountryIds, (List<int>)null);
+        this.SetSettingIfNotExists<AvalaraTaxSettings, List<long>>(settings => settings.SelectedCountryIds, (List<long>)null);
     }
 
     /// <summary>

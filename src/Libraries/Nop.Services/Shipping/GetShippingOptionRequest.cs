@@ -76,7 +76,7 @@ public partial class GetShippingOptionRequest
     /// <summary>
     /// Limit to store (identifier)
     /// </summary>
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 
     #endregion
 

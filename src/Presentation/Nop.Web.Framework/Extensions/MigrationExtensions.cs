@@ -192,7 +192,7 @@ public static partial class MigrationExtensions
     /// <param name="_">Migration</param>
     /// <param name="resourceNames">Resource names</param>
     /// <param name="languageId">Language identifier; pass null to delete the passed resources from all languages</param>
-    public static void DeleteLocaleResources(this IMigration _, IList<string> resourceNames, int? languageId = null)
+    public static void DeleteLocaleResources(this IMigration _, IList<string> resourceNames, long? languageId = null)
     {
         var syncCodeHelper = EngineContext.Current.Resolve<ISyncCodeHelper>();
         var staticCacheManager = EngineContext.Current.Resolve<IStaticCacheManager>();
@@ -305,7 +305,7 @@ public static partial class MigrationExtensions
     /// <param name="loadSharedValueIfNotFound">A value indicating whether a shared (for all stores) value should be loaded if a value specific for a certain is not found</param>
     /// <returns>Setting value</returns>
     public static T GetSettingByKey<T>(this IMigration _, string key, T defaultValue = default,
-        int storeId = 0, bool loadSharedValueIfNotFound = false)
+        long storeId = 0, bool loadSharedValueIfNotFound = false)
     {
         if (string.IsNullOrEmpty(key))
             return defaultValue;

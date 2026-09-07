@@ -206,7 +206,9 @@ public class PriceCalculationServiceTests : ServiceTest
     [TestCase(12.00, 12.00, RoundingType.Rounding1Up)]
     public void CanRound(decimal valueToRounding, decimal roundedValue, RoundingType roundingType)
     {
-        _priceCalcService.Round(valueToRounding, roundingType).Should().Be(roundedValue);
+        //the expected values come from double literals converted to decimal, and
+        //Math.Round is exact since .NET 11, so compare with a small tolerance
+        _priceCalcService.Round(valueToRounding, roundingType).Should().BeApproximately(roundedValue, 0.000001m);
     }
 
     #endregion

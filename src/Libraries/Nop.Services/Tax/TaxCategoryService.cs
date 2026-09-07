@@ -62,7 +62,7 @@ public partial class TaxCategoryService : ITaxCategoryService
     /// A task that represents the asynchronous operation
     /// The task result contains the ax category
     /// </returns>
-    public virtual async Task<TaxCategory> GetTaxCategoryByIdAsync(int taxCategoryId)
+    public virtual async Task<TaxCategory> GetTaxCategoryByIdAsync(long taxCategoryId)
     {
         return await _taxCategoryRepository.GetByIdAsync(taxCategoryId, cache => default);
     }

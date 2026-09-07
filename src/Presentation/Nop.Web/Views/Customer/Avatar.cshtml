@@ -10,7 +10,7 @@
 }
 @section left
 {
-    @await Component.InvokeAsync(typeof(CustomerNavigationViewComponent), new { selectedTabId = CustomerNavigationEnum.Avatar })
+    @await Component.InvokeAsync(typeof(CustomerNavigationViewComponent), new { selectedTabId = (long)CustomerNavigationEnum.Avatar })
 }
 
 <form asp-route="@NopRouteNames.Standard.CUSTOMER_AVATAR" method="post" enctype="multipart/form-data">

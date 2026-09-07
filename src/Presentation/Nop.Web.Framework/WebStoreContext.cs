@@ -23,7 +23,7 @@ public partial class WebStoreContext : IStoreContext
     protected readonly IStoreService _storeService;
 
     protected Store _cachedStore;
-    protected int? _cachedActiveStoreScopeConfiguration;
+    protected long? _cachedActiveStoreScopeConfiguration;
 
     #endregion
 
@@ -75,7 +75,7 @@ public partial class WebStoreContext : IStoreContext
     /// Gets active store scope configuration
     /// </summary>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task<int> GetActiveStoreScopeConfigurationAsync()
+    public virtual async Task<long> GetActiveStoreScopeConfigurationAsync()
     {
         if (_cachedActiveStoreScopeConfiguration.HasValue)
             return _cachedActiveStoreScopeConfiguration.Value;
@@ -88,7 +88,7 @@ public partial class WebStoreContext : IStoreContext
 
             //try to get store identifier from attributes
             var storeId = await _genericAttributeService
-                .GetAttributeAsync<int>(currentCustomer, NopCustomerDefaults.AdminAreaStoreScopeConfigurationAttribute);
+                .GetAttributeAsync<long>(currentCustomer, NopCustomerDefaults.AdminAreaStoreScopeConfigurationAttribute);
 
             _cachedActiveStoreScopeConfiguration = (await _storeService.GetStoreByIdAsync(storeId))?.Id ?? 0;
         }

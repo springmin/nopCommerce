@@ -4,7 +4,7 @@ namespace Nop.Web.Models.Profile;
 
 public partial record ProfileInfoModel : BaseNopModel
 {
-    public int CustomerProfileId { get; set; }
+    public long CustomerProfileId { get; set; }
 
     public string AvatarUrl { get; set; }
 

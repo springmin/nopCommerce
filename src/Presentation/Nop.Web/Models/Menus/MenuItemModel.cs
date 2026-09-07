@@ -14,14 +14,14 @@ public partial record MenuItemModel : BaseNopEntityModel
     public string Title { get; set; }
     public string Url { get; set; }
     public string CssClass { get; set; }
-    public int? ParentId { get; set; }
+    public long? ParentId { get; set; }
     public PictureModel Picture { get; set; }
     public int NumberOfSubItemsPerGridElement { get; set; }
     public int NumberOfItemsPerGridRow { get; set; }
     public int MaximumNumberEntities { get; set; }
     public MenuItemType MenuItemType { get; set; }
     public MenuItemTemplate Template { get; set; }
-    public int EntityId { get; set; }
+    public long EntityId { get; set; }
     public List<MenuItemModel> ChildrenItems { get; set; } = new();
 
     #endregion

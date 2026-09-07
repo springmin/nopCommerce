@@ -4,7 +4,7 @@ namespace Nop.Web.Models.Catalog;
 
 public partial record VendorProductReviewsListModel : BaseNopModel
 {
-    public int VendorId { get; set; }
+    public long VendorId { get; set; }
     public string VendorName { get; set; }
     public string VendorUrl { get; set; }
     public VendorReviewsPagingFilteringModel PagingFilteringContext { get; set; } = new();

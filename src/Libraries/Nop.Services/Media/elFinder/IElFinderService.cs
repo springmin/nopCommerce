@@ -12,5 +12,5 @@ public partial interface IElFinderService
     /// </summary>
     /// <param name="storeId">Store identifier</param>
     /// <returns>Connector</returns>
-    Connector GetConnector(int storeId);
+    Connector GetConnector(long storeId);
 }

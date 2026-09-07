@@ -230,7 +230,7 @@ public partial class PluginModelFactory : IPluginModelFactory
     /// </returns>
     public virtual async Task<PluginModel> PreparePluginModelAsync(PluginModel model, PluginDescriptor pluginDescriptor, bool excludeProperties = false)
     {
-        Func<PluginLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<PluginLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (pluginDescriptor != null)
         {
@@ -348,7 +348,7 @@ public partial class PluginModelFactory : IPluginModelFactory
         //get plugins
         var plugins = await _officialFeedManager.GetAllPluginsAsync(categoryId: searchModel.SearchCategoryId,
             versionId: searchModel.SearchVersionId,
-            price: searchModel.SearchPriceId,
+            price: (int)searchModel.SearchPriceId,
             searchTerm: searchModel.SearchName,
             pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
 

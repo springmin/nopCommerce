@@ -21,7 +21,7 @@ public record NewsCommentSearchModel : BaseSearchModel
 
     #region Properties
 
-    public int? NewsItemId { get; set; }
+    public long? NewsItemId { get; set; }
 
     [NopResourceDisplayName("Plugins.Misc.News.Comments.List.CreatedOnFrom")]
     [UIHint("DateNullable")]
@@ -35,7 +35,7 @@ public record NewsCommentSearchModel : BaseSearchModel
     public string SearchText { get; set; }
 
     [NopResourceDisplayName("Plugins.Misc.News.Comments.List.SearchApproved")]
-    public int SearchApprovedId { get; set; }
+    public long SearchApprovedId { get; set; }
 
     public IList<SelectListItem> AvailableApprovedOptions { get; set; }
 

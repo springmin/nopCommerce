@@ -34,7 +34,7 @@ public partial class DownloadService : IDownloadService
     /// A task that represents the asynchronous operation
     /// The task result contains the download
     /// </returns>
-    public virtual async Task<Download> GetDownloadByIdAsync(int downloadId)
+    public virtual async Task<Download> GetDownloadByIdAsync(long downloadId)
     {
         return await _downloadRepository.GetByIdAsync(downloadId);
     }

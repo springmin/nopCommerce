@@ -15,7 +15,7 @@ public partial interface IVideoService
     /// A task that represents the asynchronous operation
     /// The task result contains the video
     /// </returns>
-    Task<Video> GetVideoByIdAsync(int videoId);
+    Task<Video> GetVideoByIdAsync(long videoId);
 
     /// <summary>
     /// Gets videos by product identifier
@@ -25,7 +25,7 @@ public partial interface IVideoService
     /// A task that represents the asynchronous operation
     /// The task result contains the videos
     /// </returns>
-    Task<IList<Video>> GetVideosByProductIdAsync(int productId);
+    Task<IList<Video>> GetVideosByProductIdAsync(long productId);
 
     /// <summary>
     /// Inserts a video

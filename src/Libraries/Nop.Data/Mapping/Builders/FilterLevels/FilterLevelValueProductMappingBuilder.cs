@@ -19,8 +19,8 @@ public partial class FilterLevelValueProductMappingBuilder : NopEntityBuilder<Fi
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(FilterLevelValueProductMapping.FilterLevelValueId)).AsInt32().ForeignKey<FilterLevelValue>()
-            .WithColumn(nameof(FilterLevelValueProductMapping.ProductId)).AsInt32().ForeignKey<Product>();
+            .WithColumn(nameof(FilterLevelValueProductMapping.FilterLevelValueId)).AsInt64().ForeignKey<FilterLevelValue>()
+            .WithColumn(nameof(FilterLevelValueProductMapping.ProductId)).AsInt64().ForeignKey<Product>();
     }
 
     #endregion

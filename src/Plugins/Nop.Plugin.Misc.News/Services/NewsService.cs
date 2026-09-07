@@ -150,7 +150,7 @@ public class NewsService
     /// A task that represents the asynchronous operation
     /// The task result contains the news
     /// </returns>
-    public async Task<NewsItem> GetNewsByIdAsync(int newsId)
+    public async Task<NewsItem> GetNewsByIdAsync(long newsId)
     {
         return await _newsItemRepository.GetByIdAsync(newsId, cache => default);
     }
@@ -163,7 +163,7 @@ public class NewsService
     /// A task that represents the asynchronous operation
     /// The task result contains the news
     /// </returns>
-    public async Task<IList<NewsItem>> GetNewsByIdsAsync(int[] newsIds)
+    public async Task<IList<NewsItem>> GetNewsByIdsAsync(long[] newsIds)
     {
         return await _newsItemRepository.GetByIdsAsync(newsIds);
     }
@@ -181,7 +181,7 @@ public class NewsService
     /// A task that represents the asynchronous operation
     /// The task result contains the news items
     /// </returns>
-    public async Task<IPagedList<NewsItem>> GetAllNewsAsync(int languageId = 0, int storeId = 0,
+    public async Task<IPagedList<NewsItem>> GetAllNewsAsync(long languageId = 0, long storeId = 0,
         int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false, string title = null)
     {
         var news = await _newsItemRepository.GetAllPagedAsync(async query =>
@@ -269,7 +269,7 @@ public class NewsService
     /// A task that represents the asynchronous operation
     /// The task result contains the comments
     /// </returns>
-    public async Task<IList<NewsComment>> GetAllCommentsAsync(int customerId = 0, int storeId = 0, int? newsItemId = null,
+    public async Task<IList<NewsComment>> GetAllCommentsAsync(long customerId = 0, long storeId = 0, long? newsItemId = null,
         bool? approved = null, DateTime? fromUtc = null, DateTime? toUtc = null, string commentText = null)
     {
         return await _newsCommentRepository.GetAllAsync(query =>
@@ -309,7 +309,7 @@ public class NewsService
     /// A task that represents the asynchronous operation
     /// The task result contains the news comment
     /// </returns>
-    public async Task<NewsComment> GetNewsCommentByIdAsync(int newsCommentId)
+    public async Task<NewsComment> GetNewsCommentByIdAsync(long newsCommentId)
     {
         return await _newsCommentRepository.GetByIdAsync(newsCommentId, cache => default, useShortTermCache: true);
     }
@@ -322,7 +322,7 @@ public class NewsService
     /// A task that represents the asynchronous operation
     /// The task result contains the news comments
     /// </returns>
-    public async Task<IList<NewsComment>> GetNewsCommentsByIdsAsync(int[] commentIds)
+    public async Task<IList<NewsComment>> GetNewsCommentsByIdsAsync(long[] commentIds)
     {
         return await _newsCommentRepository.GetByIdsAsync(commentIds);
     }
@@ -337,7 +337,7 @@ public class NewsService
     /// A task that represents the asynchronous operation
     /// The task result contains the number of news comments
     /// </returns>
-    public async Task<int> GetNewsCommentsCountAsync(NewsItem newsItem, int storeId = 0, bool? isApproved = null)
+    public async Task<int> GetNewsCommentsCountAsync(NewsItem newsItem, long storeId = 0, bool? isApproved = null)
     {
         var query = _newsCommentRepository.Table.Where(comment => comment.NewsItemId == newsItem.Id);
 
@@ -408,7 +408,7 @@ public class NewsService
     /// A task that represents the asynchronous operation
     /// The task result contains the queued email identifier
     /// </returns>
-    public async Task<IList<int>> SendNewsCommentStoreOwnerNotificationMessageAsync(NewsComment newsComment, int languageId)
+    public async Task<IList<long>> SendNewsCommentStoreOwnerNotificationMessageAsync(NewsComment newsComment, long languageId)
     {
         ArgumentNullException.ThrowIfNull(newsComment);
 

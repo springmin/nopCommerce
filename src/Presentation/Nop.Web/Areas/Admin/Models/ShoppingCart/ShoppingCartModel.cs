@@ -11,7 +11,7 @@ public partial record ShoppingCartModel : BaseNopModel
     #region Properties
 
     [NopResourceDisplayName("Admin.CurrentCarts.Customer")]
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     [NopResourceDisplayName("Admin.CurrentCarts.Customer")]
     public string CustomerEmail { get; set; }

@@ -90,7 +90,7 @@ public class NewsController : BasePublicController
     }
 
     [CheckLanguageSeoCode(ignore: true)]
-    public async Task<IActionResult> ListRss(int languageId)
+    public async Task<IActionResult> ListRss(long languageId)
     {
         var store = await _storeContext.GetCurrentStoreAsync();
         var feed = new RssFeed(
@@ -113,7 +113,7 @@ public class NewsController : BasePublicController
         return new RssActionResult(feed, _webHelper.GetThisPageUrl(false));
     }
 
-    public async Task<IActionResult> NewsItem(int newsItemId)
+    public async Task<IActionResult> NewsItem(long newsItemId)
     {
         if (!_newsSettings.Enabled)
             return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
@@ -147,7 +147,7 @@ public class NewsController : BasePublicController
 
     [HttpPost]
     [ValidateCaptcha]
-    public async Task<IActionResult> NewsCommentAdd(int newsItemId, NewsItemModel model, bool captchaValid)
+    public async Task<IActionResult> NewsCommentAdd(long newsItemId, NewsItemModel model, bool captchaValid)
     {
         if (!_newsSettings.Enabled)
             return RedirectToRoute(NopRouteNames.General.HOMEPAGE);

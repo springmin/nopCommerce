@@ -19,7 +19,7 @@ public partial record Product3dObjectModel : BaseNopEntityModel
 
     [UIHint("Picture")]
     [NopResourceDisplayName("Admin.Catalog.Products.Multimedia.Object3d.Fields.Preview")]
-    public int PreviewPictureId { get; set; }
+    public long PreviewPictureId { get; set; }
     public string PictureUrl { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Multimedia.Object3d.Fields.AltAttribute")]

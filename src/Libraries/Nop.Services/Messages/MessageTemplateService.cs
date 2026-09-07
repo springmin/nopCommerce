@@ -82,7 +82,7 @@ public partial class MessageTemplateService : IMessageTemplateService
     /// A task that represents the asynchronous operation
     /// The task result contains the message template
     /// </returns>
-    public virtual async Task<MessageTemplate> GetMessageTemplateByIdAsync(int messageTemplateId)
+    public virtual async Task<MessageTemplate> GetMessageTemplateByIdAsync(long messageTemplateId)
     {
         return await _messageTemplateRepository.GetByIdAsync(messageTemplateId, cache => default);
     }
@@ -96,7 +96,7 @@ public partial class MessageTemplateService : IMessageTemplateService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of message templates
     /// </returns>
-    public virtual async Task<IList<MessageTemplate>> GetMessageTemplatesByNameAsync(string messageTemplateName, int? storeId = null)
+    public virtual async Task<IList<MessageTemplate>> GetMessageTemplatesByNameAsync(string messageTemplateName, long? storeId = null)
     {
         if (string.IsNullOrWhiteSpace(messageTemplateName))
             throw new ArgumentException(nameof(messageTemplateName));
@@ -127,7 +127,7 @@ public partial class MessageTemplateService : IMessageTemplateService
     /// A task that represents the asynchronous operation
     /// The task result contains the message template list
     /// </returns>
-    public virtual async Task<IList<MessageTemplate>> GetAllMessageTemplatesAsync(int storeId, string keywords = null, bool? isActive = null, int emailAccountId = 0)
+    public virtual async Task<IList<MessageTemplate>> GetAllMessageTemplatesAsync(long storeId, string keywords = null, bool? isActive = null, long emailAccountId = 0)
     {
         var messageTemplates = await _messageTemplateRepository.GetAllAsync(async query =>
         {

@@ -9,7 +9,7 @@ public partial record ShipmentItemSearchModel : BaseSearchModel
 {
     #region Properties
 
-    public int ShipmentId { get; set; }
+    public long ShipmentId { get; set; }
 
     #endregion
 }

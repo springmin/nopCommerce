@@ -296,7 +296,7 @@ public partial class ImportManager : IImportManager
     /// A task that represents the asynchronous operation
     /// The task result contains the image or null if the image has not changed
     /// </returns>
-    protected virtual async Task<Picture> LoadPictureAsync(string picturePath, string name, int? picId = null)
+    protected virtual async Task<Picture> LoadPictureAsync(string picturePath, string name, long? picId = null)
     {
         if (string.IsNullOrEmpty(picturePath) || !_fileProvider.FileExists(picturePath))
             return null;
@@ -414,7 +414,7 @@ public partial class ImportManager : IImportManager
         var allProductPictureIds = productsImagesIds.SelectMany(p => p.Value);
 
         var allPicturesHashes = allProductPictureIds.Any() ? await _dataProvider.GetFieldHashesAsync<PictureBinary>(p => allProductPictureIds.Contains(p.PictureId),
-            p => p.PictureId, p => p.BinaryData) : new Dictionary<int, string>();
+            p => p.PictureId, p => p.BinaryData) : new Dictionary<long, string>();
 
         foreach (var product in productPictureMetadata)
         {
@@ -444,7 +444,7 @@ public partial class ImportManager : IImportManager
                             ExportImportDefaults.ImageHashAlgorithm,
                             trimByteCount);
 
-                        var imagesIds = productsImagesIds.TryGetValue(product.ProductItem.Id, out var value) ? value : Array.Empty<int>();
+                        var imagesIds = productsImagesIds.TryGetValue(product.ProductItem.Id, out var value) ? value : Array.Empty<long>();
 
                         pictureAlreadyExists = allPicturesHashes.Where(p => imagesIds.Contains(p.Key))
                             .Select(p => p.Value)
@@ -594,7 +594,7 @@ public partial class ImportManager : IImportManager
             var limitedToStoresList = tempProperty.StringValue;
 
             var importedStores = category.LimitedToStores ? limitedToStoresList.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
-                .Select(x => allStores.FirstOrDefault(store => store.Name == x.Trim())?.Id ?? int.Parse(x.Trim())).ToList() : new List<int>();
+                .Select(x => allStores.FirstOrDefault(store => store.Name == x.Trim())?.Id ?? long.Parse(x.Trim())).ToList() : new List<long>();
 
             await _storeMappingService.SaveStoreMappingsAsync(category, importedStores);
         }
@@ -817,9 +817,9 @@ public partial class ImportManager : IImportManager
 
         var productAttributeMapping = (await _productAttributeService.GetProductAttributeMappingsByProductIdAsync(lastLoadedProduct.Id))
             .FirstOrDefault(pam => pam.ProductAttributeId == productAttributeId);
-        var pictureIds = new List<int>();
+        var pictureIds = new List<long>();
         if (!string.IsNullOrWhiteSpace(pictureIdsStr))
-            pictureIds = Array.ConvertAll(pictureIdsStr.Split(new[] { ';', ' ' }, StringSplitOptions.RemoveEmptyEntries), int.Parse).ToList();
+            pictureIds = Array.ConvertAll(pictureIdsStr.Split(new[] { ';', ' ' }, StringSplitOptions.RemoveEmptyEntries), long.Parse).ToList();
 
         if (productAttributeMapping == null)
         {
@@ -998,7 +998,7 @@ public partial class ImportManager : IImportManager
 
         var attributeTypeId = specificationAttributeManager.GetDefaultProperty("AttributeType").IntValue;
         var allowFiltering = specificationAttributeManager.GetDefaultProperty("AllowFiltering").BooleanValue;
-        var specificationAttributeOptionId = specificationAttributeManager.GetDefaultProperty("SpecificationAttributeOptionId").IntValue;
+        long specificationAttributeOptionId = specificationAttributeManager.GetDefaultProperty("SpecificationAttributeOptionId").IntValue;
         var productId = lastLoadedProduct.Id;
         var customValue = specificationAttributeManager.GetDefaultProperty("CustomValue").StringValue;
         var displayOrder = specificationAttributeManager.GetDefaultProperty("DisplayOrder").IntValue;
@@ -1304,8 +1304,8 @@ public partial class ImportManager : IImportManager
                 .ToSelectList(p => (p as MeasureWeight)?.Name ?? string.Empty));
         }
 
-        var allAttributeIds = new List<int>();
-        var allSpecificationAttributeOptionIds = new List<int>();
+        var allAttributeIds = new List<long>();
+        var allSpecificationAttributeOptionIds = new List<long>();
 
         var attributeIdCellNum = 1 + ExportImportDefaults.ProductAdditionalInfoCellOffset;
         var specificationAttributeOptionIdCellNum =
@@ -1962,7 +1962,7 @@ public partial class ImportManager : IImportManager
             var customer = await _customerService.GetCustomerByGuidAsync(customerGuid) ??
                            await _customerService.GetCustomerByEmailAsync(manager.GetDefaultProperty("Email").StringValue);
 
-            int? avatarPictureId = null;
+            long? avatarPictureId = null;
             string password = null;
             string passwordSalt = null;
 
@@ -1977,7 +1977,7 @@ public partial class ImportManager : IImportManager
                 };
             }
 
-            var rolesToSave = new List<int>();
+            var rolesToSave = new List<long>();
 
             foreach (var property in manager.GetDefaultProperties)
             {
@@ -2231,7 +2231,7 @@ public partial class ImportManager : IImportManager
                 .ToDictionaryAsync(async (c, _) =>
                 {
                     var keyName = await _categoryService.GetFormattedBreadCrumbAsync(c, allCategoryList);
-                    return new CategoryKey(keyName, c, c.LimitedToStores ? (await _storeMappingService.GetStoresIdsWithAccessAsync(c)).ToList() : new List<int>());
+                    return new CategoryKey(keyName, c, c.LimitedToStores ? (await _storeMappingService.GetStoresIdsWithAccessAsync(c)).ToList() : new List<long>());
                 });
         }
         catch (ArgumentException)
@@ -2673,11 +2673,11 @@ public partial class ImportManager : IImportManager
                 var categoryList = tempProperty.StringValue;
 
                 //category mappings
-                var categories = isNew || !allProductsCategoryIds.ContainsKey(product.Id) ? Array.Empty<int>() : allProductsCategoryIds[product.Id];
+                var categories = isNew || !allProductsCategoryIds.ContainsKey(product.Id) ? Array.Empty<long>() : allProductsCategoryIds[product.Id];
 
                 var storesIds = product.LimitedToStores
                     ? (await _storeMappingService.GetStoresIdsWithAccessAsync(product)).ToList()
-                    : new List<int>();
+                    : new List<long>();
 
                 var importedCategories = await categoryList.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
                     .Select(categoryName => new CategoryKey(categoryName, storesIds: storesIds))
@@ -2727,7 +2727,7 @@ public partial class ImportManager : IImportManager
                 var manufacturerList = tempProperty.StringValue;
 
                 //manufacturer mappings
-                var manufacturers = isNew || !allProductsManufacturerIds.ContainsKey(product.Id) ? Array.Empty<int>() : allProductsManufacturerIds[product.Id];
+                var manufacturers = isNew || !allProductsManufacturerIds.ContainsKey(product.Id) ? Array.Empty<long>() : allProductsManufacturerIds[product.Id];
 
                 var importedManufacturers = await manufacturerList
                     .Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
@@ -2777,7 +2777,7 @@ public partial class ImportManager : IImportManager
                 var productTags = tempProperty.StringValue.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToList();
 
                 //searching existing product tags by their id
-                var productTagIds = productTags.Where(pt => int.TryParse(pt, out var _)).Select(int.Parse);
+                var productTagIds = productTags.Where(pt => int.TryParse(pt, out var _)).Select(long.Parse);
 
                 var productTagsByIds = (await _productTagService.GetAllProductTagsByProductIdAsync(product.Id)).Where(pt => productTagIds.Contains(pt.Id)).ToList();
 
@@ -2794,7 +2794,7 @@ public partial class ImportManager : IImportManager
                 var limitedToStoresList = tempProperty.StringValue;
 
                 var importedStores = product.LimitedToStores ? limitedToStoresList.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(x => allStores.FirstOrDefault(store => store.Name == x.Trim())?.Id ?? int.Parse(x.Trim())).ToList() : new List<int>();
+                    .Select(x => allStores.FirstOrDefault(store => store.Name == x.Trim())?.Id ?? long.Parse(x.Trim())).ToList() : new List<long>();
 
                 await _storeMappingService.SaveStoreMappingsAsync(product, importedStores);
             }
@@ -2916,12 +2916,12 @@ public partial class ImportManager : IImportManager
 
                 //"typeId" field specified
                 var typeId = defaultTypeId;
-                if (tmp.Length >= 3 && !int.TryParse(tmp[2].Trim(), out typeId))
+                if (tmp.Length >= 3 && !long.TryParse(tmp[2].Trim(), out typeId))
                     continue;
 
                 //"storeId" field specified
                 var storeId = store.Id;
-                if (tmp.Length >= 4 && !int.TryParse(tmp[3].Trim(), out storeId))
+                if (tmp.Length >= 4 && !long.TryParse(tmp[3].Trim(), out storeId))
                     continue;
 
                 //"languageId" field specified
@@ -3742,8 +3742,8 @@ public partial class ImportManager : IImportManager
 
             priceList ??= new PriceList();
 
-            var rolesToSave = new List<int>();
-            var customersToSave = new List<int>();
+            var rolesToSave = new List<long>();
+            var customersToSave = new List<long>();
 
             foreach (var property in metadata.Manager.GetDefaultProperties)
             {
@@ -3876,14 +3876,14 @@ public partial class ImportManager : IImportManager
 
     protected partial class CategoryKey
     {
-        public CategoryKey(string key, Category category = null, List<int> storesIds = null)
+        public CategoryKey(string key, Category category = null, List<long> storesIds = null)
         {
             Key = key.Trim();
-            StoresIds = storesIds ?? new List<int>();
+            StoresIds = storesIds ?? new List<long>();
             Category = category;
         }
 
-        public List<int> StoresIds { get; }
+        public List<long> StoresIds { get; }
 
         public Category Category { get; }
 

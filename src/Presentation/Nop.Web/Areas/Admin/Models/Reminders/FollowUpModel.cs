@@ -16,5 +16,5 @@ public partial record FollowUpModel : BaseNopModel
     [NopResourceDisplayName("Admin.Promotions.Reminder.FollowUp.DelayBeforeSend")]
     public int DelayBeforeSend { get; set; }
 
-    public int DelayPeriodId { get; set; }
+    public long DelayPeriodId { get; set; }
 }

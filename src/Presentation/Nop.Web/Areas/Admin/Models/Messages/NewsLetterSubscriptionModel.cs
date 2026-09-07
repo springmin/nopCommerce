@@ -30,7 +30,7 @@ public partial record NewsLetterSubscriptionModel : BaseNopEntityModel
     public string SubscriptionTypeName { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.NewsLetterSubscription.Fields.SubscriptionType")]
-    public int SelectedNewsLetterSubscriptionTypeId { get; set; }
+    public long SelectedNewsLetterSubscriptionTypeId { get; set; }
     public IList<SelectListItem> AvailableNewsLetterSubscriptionTypes { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.NewsLetterSubscription.Fields.Active")]
@@ -41,13 +41,13 @@ public partial record NewsLetterSubscriptionModel : BaseNopEntityModel
     public IList<SelectListItem> AvailableNewsLetterSubscriptionStores { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.NewsLetterSubscription.Fields.Store")]
-    public int SelectedNewsLetterSubscriptionStoreId { get; set; }
+    public long SelectedNewsLetterSubscriptionStoreId { get; set; }
 
     public string LanguageName { get; set; }
     public IList<SelectListItem> AvailableNewsLetterSubscriptionLanguages { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.NewsLetterSubscription.Fields.Language")]
-    public int SelectedNewsLetterSubscriptionLanguageId { get; set; }
+    public long SelectedNewsLetterSubscriptionLanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Promotions.NewsLetterSubscription.Fields.CreatedOn")]
     public string CreatedOn { get; set; }

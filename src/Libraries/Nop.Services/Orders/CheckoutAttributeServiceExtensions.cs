@@ -20,7 +20,7 @@ public static partial class CheckoutAttributeServiceExtensions
     /// A task that represents the asynchronous operation
     /// The task result contains the checkout attributes
     /// </returns>
-    public static async Task<IList<CheckoutAttribute>> GetAllAttributesAsync(this IAttributeService<CheckoutAttribute, CheckoutAttributeValue> service, IStaticCacheManager staticCacheManager, IStoreMappingService storeMappingService, int storeId = 0, bool excludeShippableAttributes = false)
+    public static async Task<IList<CheckoutAttribute>> GetAllAttributesAsync(this IAttributeService<CheckoutAttribute, CheckoutAttributeValue> service, IStaticCacheManager staticCacheManager, IStoreMappingService storeMappingService, long storeId = 0, bool excludeShippableAttributes = false)
     {
         var key = staticCacheManager.PrepareKeyForDefaultCache(NopOrderDefaults.CheckoutAttributesAllCacheKey, storeId, excludeShippableAttributes);
 

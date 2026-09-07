@@ -1004,10 +1004,8 @@ public partial class CustomerModelFactory : ICustomerModelFactory
         ArgumentNullException.ThrowIfNull(customer);
 
         //get customer shopping cart
-        var shoppingCartTypes = new List<int> { searchModel.ShoppingCartTypeId };
-        if (searchModel.ShoppingCartTypeId == (int)ShoppingCartType.ShoppingCart)
-            shoppingCartTypes.Add((int)ShoppingCartType.Stash);
-        var shoppingCart = (await _shoppingCartService.GetShoppingCartAsync(customer, shoppingCartTypes, customWishlistId: 0))
+        var shoppingCart = (await _shoppingCartService
+            .GetShoppingCartAsync(customer, (ShoppingCartType)searchModel.ShoppingCartTypeId, customWishlistId: 0))
             .ToPagedList(searchModel);
         var customWishlists = shoppingCart.Any(item => item.ShoppingCartType == ShoppingCartType.Wishlist)
             ? await _customWishlistService.GetAllCustomWishlistsAsync(customer.Id)
@@ -1236,7 +1234,7 @@ public partial class CustomerModelFactory : ICustomerModelFactory
     {
         ArgumentNullException.ThrowIfNull(searchModel);
 
-        var customerId = 0;
+        long customerId = 0;
         var customerInfo = "";
         if (!string.IsNullOrEmpty(searchModel.SearchEmail))
         {

@@ -41,7 +41,7 @@ public partial record ProductAttributeModel : BaseNopEntityModel, ITranslationSu
 
 public partial record ProductAttributeLocalizedModel : ILocalizedLocaleModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Attributes.ProductAttributes.Fields.Name")]
     public string Name { get; set; }

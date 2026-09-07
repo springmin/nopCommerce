@@ -26,12 +26,12 @@ public partial interface ICompareProductsService
     /// </summary>
     /// <param name="productId">Product identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task RemoveProductFromCompareListAsync(int productId);
+    Task RemoveProductFromCompareListAsync(long productId);
 
     /// <summary>
     /// Adds a product to a "compare products" list
     /// </summary>
     /// <param name="productId">Product identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task AddProductToCompareListAsync(int productId);
+    Task AddProductToCompareListAsync(long productId);
 }

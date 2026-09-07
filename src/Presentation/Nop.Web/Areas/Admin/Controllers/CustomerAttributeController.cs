@@ -143,7 +143,7 @@ public partial class CustomerAttributeController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         //try to get a customer attribute with the specified id
         var customerAttribute = await _customerAttributeService.GetAttributeByIdAsync(id);
@@ -190,7 +190,7 @@ public partial class CustomerAttributeController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         var customerAttribute = await _customerAttributeService.GetAttributeByIdAsync(id);
         await _customerAttributeService.DeleteAttributeAsync(customerAttribute);
@@ -223,7 +223,7 @@ public partial class CustomerAttributeController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public virtual async Task<IActionResult> ValueCreatePopup(int customerAttributeId)
+    public virtual async Task<IActionResult> ValueCreatePopup(long customerAttributeId)
     {
         //try to get a customer attribute with the specified id
         var customerAttribute = await _customerAttributeService.GetAttributeByIdAsync(customerAttributeId);
@@ -270,7 +270,7 @@ public partial class CustomerAttributeController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public virtual async Task<IActionResult> ValueEditPopup(int id)
+    public virtual async Task<IActionResult> ValueEditPopup(long id)
     {
         //try to get a customer attribute value with the specified id
         var customerAttributeValue = await _customerAttributeService.GetAttributeValueByIdAsync(id);
@@ -328,7 +328,7 @@ public partial class CustomerAttributeController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public virtual async Task<IActionResult> ValueDelete(int id)
+    public virtual async Task<IActionResult> ValueDelete(long id)
     {
         //try to get a customer attribute value with the specified id
         var customerAttributeValue = await _customerAttributeService.GetAttributeValueByIdAsync(id)

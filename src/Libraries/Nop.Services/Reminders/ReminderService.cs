@@ -34,7 +34,7 @@ public partial class ReminderService : IReminderService
     /// <param name="delayBeforeSend">Delay before sending message</param>
     /// <param name="delayPeriod">Period of message delay</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task UpdateFollowUpAsync(string templateName, int storeId, bool enabled, int delayBeforeSend, MessageDelayPeriod delayPeriod)
+    public virtual async Task UpdateFollowUpAsync(string templateName, long storeId, bool enabled, int delayBeforeSend, MessageDelayPeriod delayPeriod)
     {
         ArgumentException.ThrowIfNullOrEmpty(templateName);
 

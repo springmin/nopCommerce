@@ -32,13 +32,13 @@ public partial record CountryReportSearchModel : BaseSearchModel
     public DateTime? EndDate { get; set; }
 
     [NopResourceDisplayName("Admin.Reports.Sales.Country.OrderStatus")]
-    public int OrderStatusId { get; set; }
+    public long OrderStatusId { get; set; }
 
     [NopResourceDisplayName("Admin.Reports.Sales.Country.PaymentStatus")]
-    public int PaymentStatusId { get; set; }
+    public long PaymentStatusId { get; set; }
 
     [NopResourceDisplayName("Admin.Reports.Sales.Country.SearchStore")]
-    public int SearchStoreId { get; set; }
+    public long SearchStoreId { get; set; }
 
     public IList<SelectListItem> AvailableOrderStatuses { get; set; }
 

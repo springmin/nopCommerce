@@ -52,7 +52,7 @@ public partial class MeasureService : IMeasureService
     /// A task that represents the asynchronous operation
     /// The task result contains the measure dimension
     /// </returns>
-    public virtual async Task<MeasureDimension> GetMeasureDimensionByIdAsync(int measureDimensionId)
+    public virtual async Task<MeasureDimension> GetMeasureDimensionByIdAsync(long measureDimensionId)
     {
         return await _measureDimensionRepository.GetByIdAsync(measureDimensionId, cache => default);
     }
@@ -227,7 +227,7 @@ public partial class MeasureService : IMeasureService
     /// A task that represents the asynchronous operation
     /// The task result contains the measure weight
     /// </returns>
-    public virtual async Task<MeasureWeight> GetMeasureWeightByIdAsync(int measureWeightId)
+    public virtual async Task<MeasureWeight> GetMeasureWeightByIdAsync(long measureWeightId)
     {
         return await _measureWeightRepository.GetByIdAsync(measureWeightId, cache => default);
     }

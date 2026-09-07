@@ -75,7 +75,7 @@ public class PayPalCommerceController : BasePluginController
     /// A task that represents the asynchronous operation
     /// The task result contains the plugin settings; store id
     /// </returns>
-    private async Task<(PayPalCommerceSettings Settings, int StoreId)> LoadSettingsAsync(int? storeId = null)
+    private async Task<(PayPalCommerceSettings Settings, long StoreId)> LoadSettingsAsync(long? storeId = null)
     {
         storeId ??= await _storeContext.GetActiveStoreScopeConfigurationAsync();
         var settings = await _settingService.LoadSettingAsync<PayPalCommerceSettings>(storeId ?? 0);
@@ -109,7 +109,7 @@ public class PayPalCommerceController : BasePluginController
     /// <param name="overrideForStore">Whether to overridde this setting for the passed store</param>
     /// <returns>A task that represents the asynchronous operation</returns>
     private async Task SaveSettingAsync<TPropType>(PayPalCommerceSettings settings,
-        Expression<Func<PayPalCommerceSettings, TPropType>> keySelector, int storeId, bool? overrideForStore = null)
+        Expression<Func<PayPalCommerceSettings, TPropType>> keySelector, long storeId, bool? overrideForStore = null)
     {
         //save overridden settings
         await _settingService.SaveSettingOverridablePerStoreAsync(settings, keySelector, overrideForStore ?? true, storeId, false);
@@ -156,7 +156,7 @@ public class PayPalCommerceController : BasePluginController
     /// A task that represents the asynchronous operation
     /// The task result contains the merchant model
     /// </returns>
-    private async Task<MerchantModel> CheckMerchantStatusAsync(PayPalCommerceSettings settings, int storeId)
+    private async Task<MerchantModel> CheckMerchantStatusAsync(PayPalCommerceSettings settings, long storeId)
     {
         //no need to check the status when credentials were manually set
         if (string.IsNullOrEmpty(settings.MerchantGuid) || settings.SetCredentialsManually)
@@ -212,7 +212,7 @@ public class PayPalCommerceController : BasePluginController
     /// <param name="settings">Plugin settings</param>
     /// <param name="storeId">Store id</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    private async Task SetCredentialsManuallyAsync(ConfigurationModel model, PayPalCommerceSettings settings, int storeId)
+    private async Task SetCredentialsManuallyAsync(ConfigurationModel model, PayPalCommerceSettings settings, long storeId)
     {
         if (!model.SetCredentialsManually)
             return;
@@ -238,7 +238,7 @@ public class PayPalCommerceController : BasePluginController
     /// <param name="settings">Plugin settings</param>
     /// <param name="storeId">Store id</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    private async Task EnsureWebhookCreatedAsync(PayPalCommerceSettings settings, int storeId)
+    private async Task EnsureWebhookCreatedAsync(PayPalCommerceSettings settings, long storeId)
     {
         if (!PayPalCommerceServiceManager.IsConfigured(settings))
             return;

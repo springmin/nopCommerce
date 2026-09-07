@@ -20,13 +20,13 @@ public partial record RecurringPaymentModel : BaseNopEntityModel
     #region Properties
 
     [NopResourceDisplayName("Admin.RecurringPayments.Fields.ID")]
-    public override int Id { get; set; }
+    public long Id { get; set; }
 
     [NopResourceDisplayName("Admin.RecurringPayments.Fields.CycleLength")]
     public int CycleLength { get; set; }
 
     [NopResourceDisplayName("Admin.RecurringPayments.Fields.CyclePeriod")]
-    public int CyclePeriodId { get; set; }
+    public long CyclePeriodId { get; set; }
 
     [NopResourceDisplayName("Admin.RecurringPayments.Fields.CyclePeriod")]
     public string CyclePeriodStr { get; set; }
@@ -47,10 +47,10 @@ public partial record RecurringPaymentModel : BaseNopEntityModel
     public int CyclesRemaining { get; set; }
 
     [NopResourceDisplayName("Admin.RecurringPayments.Fields.InitialOrder")]
-    public int InitialOrderId { get; set; }
+    public long InitialOrderId { get; set; }
 
     [NopResourceDisplayName("Admin.RecurringPayments.Fields.Customer")]
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     [NopResourceDisplayName("Admin.RecurringPayments.Fields.Customer")]
     public string CustomerEmail { get; set; }

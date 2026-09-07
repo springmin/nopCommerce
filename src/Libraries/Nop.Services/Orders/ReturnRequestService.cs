@@ -60,7 +60,7 @@ public partial class ReturnRequestService : IReturnRequestService
     /// A task that represents the asynchronous operation
     /// The task result contains the return request
     /// </returns>
-    public virtual async Task<ReturnRequest> GetReturnRequestByIdAsync(int returnRequestId)
+    public virtual async Task<ReturnRequest> GetReturnRequestByIdAsync(long returnRequestId)
     {
         return await _returnRequestRepository.GetByIdAsync(returnRequestId);
     }
@@ -82,8 +82,8 @@ public partial class ReturnRequestService : IReturnRequestService
     /// A task that represents the asynchronous operation
     /// The task result contains the return requests
     /// </returns>
-    public virtual async Task<IPagedList<ReturnRequest>> SearchReturnRequestsAsync(int storeId = 0, int customerId = 0,
-        int orderItemId = 0, string customNumber = "", ReturnRequestStatus? rs = null, DateTime? createdFromUtc = null,
+    public virtual async Task<IPagedList<ReturnRequest>> SearchReturnRequestsAsync(long storeId = 0, long customerId = 0,
+        long orderItemId = 0, string customNumber = "", ReturnRequestStatus? rs = null, DateTime? createdFromUtc = null,
         DateTime? createdToUtc = null, int pageIndex = 0, int pageSize = int.MaxValue, bool getOnlyTotalCount = false)
     {
         var query = _returnRequestRepository.Table;
@@ -120,7 +120,7 @@ public partial class ReturnRequestService : IReturnRequestService
     /// </summary>
     /// <param name="orderId">The order identifier</param>
     /// <returns>The <see cref="Task"/> containing the <see cref="ReturnRequestAvailability"/></returns>
-    public virtual async Task<ReturnRequestAvailability> GetReturnRequestAvailabilityAsync(int orderId)
+    public virtual async Task<ReturnRequestAvailability> GetReturnRequestAvailabilityAsync(long orderId)
     {
         var result = new ReturnRequestAvailability();
 
@@ -197,7 +197,7 @@ public partial class ReturnRequestService : IReturnRequestService
     /// A task that represents the asynchronous operation
     /// The task result contains the return request action
     /// </returns>
-    public virtual async Task<ReturnRequestAction> GetReturnRequestActionByIdAsync(int returnRequestActionId)
+    public virtual async Task<ReturnRequestAction> GetReturnRequestActionByIdAsync(long returnRequestActionId)
     {
         return await _returnRequestActionRepository.GetByIdAsync(returnRequestActionId, cache => default);
     }
@@ -277,7 +277,7 @@ public partial class ReturnRequestService : IReturnRequestService
     /// A task that represents the asynchronous operation
     /// The task result contains the return request reason
     /// </returns>
-    public virtual async Task<ReturnRequestReason> GetReturnRequestReasonByIdAsync(int returnRequestReasonId)
+    public virtual async Task<ReturnRequestReason> GetReturnRequestReasonByIdAsync(long returnRequestReasonId)
     {
         return await _returnRequestReasonRepository.GetByIdAsync(returnRequestReasonId, cache => default);
     }

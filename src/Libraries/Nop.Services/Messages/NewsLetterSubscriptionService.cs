@@ -147,7 +147,7 @@ public partial class NewsLetterSubscriptionService : INewsLetterSubscriptionServ
     /// A task that represents the asynchronous operation
     /// The task result contains the newsletter subscription
     /// </returns>
-    public virtual async Task<NewsLetterSubscription> GetNewsLetterSubscriptionByIdAsync(int newsLetterSubscriptionId)
+    public virtual async Task<NewsLetterSubscription> GetNewsLetterSubscriptionByIdAsync(long newsLetterSubscriptionId)
     {
         return await _subscriptionRepository.GetByIdAsync(newsLetterSubscriptionId, cache => default, useShortTermCache: true);
     }
@@ -186,7 +186,7 @@ public partial class NewsLetterSubscriptionService : INewsLetterSubscriptionServ
     /// The task result contains the newsletter subscriptions
     /// </returns>
     public virtual async Task<IList<NewsLetterSubscription>> GetNewsLetterSubscriptionsByEmailAsync(string email,
-        int storeId = 0, int subscriptionTypeId = 0, bool? isActive = null)
+        long storeId = 0, long subscriptionTypeId = 0, bool? isActive = null)
     {
         email = email?.Trim();
         if (!CommonHelper.IsValidEmail(email))
@@ -234,7 +234,7 @@ public partial class NewsLetterSubscriptionService : INewsLetterSubscriptionServ
     /// </returns>
     public virtual async Task<IPagedList<NewsLetterSubscription>> GetAllNewsLetterSubscriptionsAsync(string email = null,
         DateTime? createdFromUtc = null, DateTime? createdToUtc = null,
-        int storeId = 0, bool? isActive = null, int customerRoleId = 0, int subscriptionTypeId = 0,
+        long storeId = 0, bool? isActive = null, long customerRoleId = 0, long subscriptionTypeId = 0,
         int pageIndex = 0, int pageSize = int.MaxValue)
     {
         if (customerRoleId == 0)

@@ -120,7 +120,7 @@ public partial class MenuModelFactory : IMenuModelFactory
     /// <returns>
     /// A task that represents the asynchronous operation
     /// </returns>
-    protected virtual async Task InitMenuItemModelEntityIdAsync(MenuItemModel model, int entityId)
+    protected virtual async Task InitMenuItemModelEntityIdAsync(MenuItemModel model, long entityId)
     {
         ArgumentOutOfRangeException.ThrowIfZero(entityId);
 
@@ -211,9 +211,9 @@ public partial class MenuModelFactory : IMenuModelFactory
         foreach (var item in availableParents)
             menuItemsToAdd.Add(new SelectListItem { Value = item.Id.ToString(), Text = await GetMenuItemBreadcrumbAsync(item, items) });
 
-        int childrenLevels(IEnumerable<MenuItem> elements, int parentId, HashSet<int> visited = null)
+        int childrenLevels(IEnumerable<MenuItem> elements, long parentId, HashSet<long> visited = null)
         {
-            visited ??= new HashSet<int>();
+            visited ??= new HashSet<long>();
 
             if (!visited.Add(parentId))
                 return 0;
@@ -322,7 +322,7 @@ public partial class MenuModelFactory : IMenuModelFactory
     /// </returns>
     public virtual async Task<MenuModel> PrepareMenuModelAsync(MenuModel model, Menu menu, bool excludeProperties = false)
     {
-        Func<MenuLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<MenuLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (menu != null)
         {
@@ -415,7 +415,7 @@ public partial class MenuModelFactory : IMenuModelFactory
     public virtual async Task<MenuItemModel> PrepareMenuItemModelAsync(Menu menu, MenuItemModel model, MenuItem menuItem, bool excludeProperties = false)
     {
         ArgumentNullException.ThrowIfNull(menu);
-        Func<MenuItemLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<MenuItemLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (menuItem != null)
         {
@@ -428,7 +428,7 @@ public partial class MenuModelFactory : IMenuModelFactory
                 locale.Title = await _localizationService.GetLocalizedAsync(menuItem, entity => entity.Title, languageId, false, false);
             };
 
-            if (menuItem.EntityId is int entityId && entityId > 0)
+            if (menuItem.EntityId is long entityId && entityId > 0)
                 await InitMenuItemModelEntityIdAsync(model, entityId);
         }
         else

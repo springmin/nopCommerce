@@ -42,7 +42,7 @@ public partial record VendorModel : BaseNopEntityModel, ILocalizedModel<VendorLo
 
     [UIHint("Picture")]
     [NopResourceDisplayName("Admin.Vendors.Fields.Picture")]
-    public int PictureId { get; set; }
+    public long PictureId { get; set; }
 
     [NopResourceDisplayName("Admin.Vendors.Fields.AdminComment")]
     public string AdminComment { get; set; }
@@ -77,7 +77,7 @@ public partial record VendorModel : BaseNopEntityModel, ILocalizedModel<VendorLo
     public string PageSizeOptions { get; set; }
 
     [NopResourceDisplayName("Admin.Vendors.Fields.PmCustomerId")]
-    public int? PmCustomerId { get; set; }
+    public long? PmCustomerId { get; set; }
     public string PmCustomerInfo { get; set; }
 
     [NopResourceDisplayName("Admin.Vendors.Fields.PriceRangeFiltering")]
@@ -144,7 +144,7 @@ public partial record VendorModel : BaseNopEntityModel, ILocalizedModel<VendorLo
 
 public partial record VendorLocalizedModel : ILocalizedLocaleModel, IMetaTagsSupportedModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Vendors.Fields.Name")]
     public string Name { get; set; }

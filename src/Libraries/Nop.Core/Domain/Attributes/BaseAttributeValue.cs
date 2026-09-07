@@ -25,5 +25,5 @@ public abstract partial class BaseAttributeValue : BaseEntity, ILocalizedEntity
     /// <summary>
     /// Gets or sets the attribute identifier
     /// </summary>
-    public int AttributeId { get; set; }
+    public long AttributeId { get; set; }
 }

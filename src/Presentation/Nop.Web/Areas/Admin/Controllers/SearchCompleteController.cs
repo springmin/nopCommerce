@@ -42,7 +42,7 @@ public partial class SearchCompleteController : BaseAdminController
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
-        var vendorId = 0;
+        long vendorId = 0;
         if (currentVendor != null)
             vendorId = currentVendor.Id;
 

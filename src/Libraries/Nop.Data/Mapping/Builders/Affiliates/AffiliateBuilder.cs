@@ -20,7 +20,7 @@ public partial class AffiliateBuilder : NopEntityBuilder<Affiliate>
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(Affiliate.AddressId)).AsInt32().ForeignKey<Address>().OnDelete(Rule.None);
+            .WithColumn(nameof(Affiliate.AddressId)).AsInt64().ForeignKey<Address>().OnDelete(Rule.None);
     }
 
     #endregion

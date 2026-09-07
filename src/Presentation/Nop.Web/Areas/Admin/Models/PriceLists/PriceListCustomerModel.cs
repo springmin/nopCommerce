@@ -10,9 +10,9 @@ public partial record PriceListCustomerModel : BaseNopEntityModel
 {
     #region Properties
 
-    public int PriceListId { get; set; }
+    public long PriceListId { get; set; }
 
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.PriceList.Customers.Fields.Customer")]
     public string CustomerEmail { get; set; }

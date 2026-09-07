@@ -36,7 +36,7 @@ public partial interface IMessageTemplateService
     /// A task that represents the asynchronous operation
     /// The task result contains the message template
     /// </returns>
-    Task<MessageTemplate> GetMessageTemplateByIdAsync(int messageTemplateId);
+    Task<MessageTemplate> GetMessageTemplateByIdAsync(long messageTemplateId);
 
     /// <summary>
     /// Gets message templates by the name
@@ -47,7 +47,7 @@ public partial interface IMessageTemplateService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of message templates
     /// </returns>
-    Task<IList<MessageTemplate>> GetMessageTemplatesByNameAsync(string messageTemplateName, int? storeId = null);
+    Task<IList<MessageTemplate>> GetMessageTemplatesByNameAsync(string messageTemplateName, long? storeId = null);
 
     /// <summary>
     /// Gets all message templates
@@ -60,7 +60,7 @@ public partial interface IMessageTemplateService
     /// A task that represents the asynchronous operation
     /// The task result contains the message template list
     /// </returns>
-    Task<IList<MessageTemplate>> GetAllMessageTemplatesAsync(int storeId, string keywords = null, bool? isActive = null, int emailAccountId = 0);
+    Task<IList<MessageTemplate>> GetAllMessageTemplatesAsync(long storeId, string keywords = null, bool? isActive = null, long emailAccountId = 0);
 
     /// <summary>
     /// Create a copy of message template with all depended data

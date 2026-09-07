@@ -15,10 +15,10 @@ public partial record ProductAttributeConditionModel : BaseNopModel
     public bool EnableCondition { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Condition.Attributes")]
-    public int SelectedProductAttributeId { get; set; }
+    public long SelectedProductAttributeId { get; set; }
     public IList<ProductAttributeModel> ProductAttributes { get; set; }
 
-    public int ProductAttributeMappingId { get; set; }
+    public long ProductAttributeMappingId { get; set; }
 
     #region Nested classes
 
@@ -29,7 +29,7 @@ public partial record ProductAttributeConditionModel : BaseNopModel
             Values = new List<ProductAttributeValueModel>();
         }
 
-        public int ProductAttributeId { get; set; }
+        public long ProductAttributeId { get; set; }
 
         public string Name { get; set; }
 

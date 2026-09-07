@@ -45,7 +45,7 @@ public partial class TopicController : BasePublicController
 
     #region Methods
 
-    public virtual async Task<IActionResult> TopicDetails(int topicId)
+    public virtual async Task<IActionResult> TopicDetails(long topicId)
     {
         var topic = await _topicService.GetTopicByIdAsync(topicId);
 
@@ -92,7 +92,7 @@ public partial class TopicController : BasePublicController
     }
 
     [HttpPost]
-    public virtual async Task<IActionResult> Authenticate(int id, string password)
+    public virtual async Task<IActionResult> Authenticate(long id, string password)
     {
         var authResult = new AuthenticatedTopicModel();
         var topic = await _topicService.GetTopicByIdAsync(id);

@@ -9,7 +9,7 @@ public record ForumSearchModel : BaseSearchModel
 {
     #region Properties
 
-    public int ForumGroupId { get; set; }
+    public long ForumGroupId { get; set; }
 
     #endregion
 }

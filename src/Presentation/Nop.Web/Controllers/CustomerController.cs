@@ -272,7 +272,7 @@ public partial class CustomerController : BasePublicController
                     var ctrlAttributes = form[controlId];
                     if (!StringValues.IsNullOrEmpty(ctrlAttributes))
                     {
-                        var selectedAttributeId = int.Parse(ctrlAttributes);
+                        var selectedAttributeId = long.Parse(ctrlAttributes);
                         if (selectedAttributeId > 0)
                         {
                             attributesXml = _customerAttributeParser.AddAttribute(attributesXml,
@@ -288,7 +288,7 @@ public partial class CustomerController : BasePublicController
                     {
                         foreach (var item in cblAttributes.ToString().Split(_separator, StringSplitOptions.RemoveEmptyEntries))
                         {
-                            var selectedAttributeId = int.Parse(item);
+                            var selectedAttributeId = long.Parse(item);
                             if (selectedAttributeId > 0)
                             {
                                 attributesXml = _customerAttributeParser.AddAttribute(attributesXml,
@@ -1340,7 +1340,7 @@ public partial class CustomerController : BasePublicController
 
     //available even when navigation is not allowed
     [CheckAccessPublicStore(ignore: true)]
-    public virtual async Task<IActionResult> RegisterResult(int resultId, string returnUrl)
+    public virtual async Task<IActionResult> RegisterResult(long resultId, string returnUrl)
     {
         if (string.IsNullOrEmpty(returnUrl) || !Url.IsLocalUrl(returnUrl))
             returnUrl = Url.RouteUrl(NopRouteNames.General.HOMEPAGE);
@@ -1351,7 +1351,7 @@ public partial class CustomerController : BasePublicController
 
     //available even when navigation is not allowed
     [CheckAccessPublicStore(ignore: true)]
-    public virtual async Task<IActionResult> OtpPhoneVerification(int typeId, string returnUrl, string phone)
+    public virtual async Task<IActionResult> OtpPhoneVerification(long typeId, string returnUrl, string phone)
     {
         switch (typeId)
         {
@@ -1699,7 +1699,7 @@ public partial class CustomerController : BasePublicController
     }
 
     [HttpPost]
-    public virtual async Task<IActionResult> RemoveExternalAssociation(int id)
+    public virtual async Task<IActionResult> RemoveExternalAssociation(long id)
     {
         var currentCustomer = await _workContext.GetCurrentCustomerAsync();
 
@@ -1785,7 +1785,7 @@ public partial class CustomerController : BasePublicController
     }
 
     [HttpPost]
-    public virtual async Task<IActionResult> AddressDelete(int addressId)
+    public virtual async Task<IActionResult> AddressDelete(long addressId)
     {
         var customer = await _workContext.GetCurrentCustomerAsync();
         if (!await _customerService.IsRegisteredAsync(customer))
@@ -1868,7 +1868,7 @@ public partial class CustomerController : BasePublicController
         return View(model);
     }
 
-    public virtual async Task<IActionResult> AddressEdit(int addressId)
+    public virtual async Task<IActionResult> AddressEdit(long addressId)
     {
         var customer = await _workContext.GetCurrentCustomerAsync();
         if (!await _customerService.IsRegisteredAsync(customer))
@@ -2085,7 +2085,7 @@ public partial class CustomerController : BasePublicController
                         customerAvatar = await _pictureService.InsertPictureAsync(customerPictureBinary, contentType, null);
                 }
 
-                var customerAvatarId = 0;
+                long customerAvatarId = 0;
                 if (customerAvatar != null)
                     customerAvatarId = customerAvatar.Id;
 

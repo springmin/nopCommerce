@@ -29,7 +29,7 @@ public partial interface ISitemapModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the sitemap model with sitemap.xml as string
     /// </returns>
-    Task<SitemapXmlModel> PrepareSitemapXmlModelAsync(int id = 0);
+    Task<SitemapXmlModel> PrepareSitemapXmlModelAsync(long id = 0);
 
     /// <summary>
     /// Return localized URLs
@@ -56,6 +56,6 @@ public partial interface ISitemapModelFactory
     /// The task result contains the localized sitemap URL models
     /// </returns>
     Task<SitemapUrlModel> PrepareLocalizedSitemapUrlAsync<TEntity>(TEntity entity,
-        DateTime? dateTimeUpdatedOn = null, UpdateFrequency updateFreq = UpdateFrequency.Weekly, int? languageId = null)
+        DateTime? dateTimeUpdatedOn = null, UpdateFrequency updateFreq = UpdateFrequency.Weekly, long? languageId = null)
         where TEntity : BaseEntity, ISlugSupported;
 }

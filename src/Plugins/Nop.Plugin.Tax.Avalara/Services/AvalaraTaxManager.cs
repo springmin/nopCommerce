@@ -294,7 +294,7 @@ public class AvalaraTaxManager : IDisposable
     /// <param name="order">Order</param>
     /// <param name="storeId">Store id</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    protected async Task PrepareOrderAddressesAsync(Customer customer, Order order, int storeId)
+    protected async Task PrepareOrderAddressesAsync(Customer customer, Order order, long storeId)
     {
         order.BillingAddressId = customer.BillingAddressId ?? 0;
         order.ShippingAddressId = customer.ShippingAddressId;
@@ -393,7 +393,7 @@ public class AvalaraTaxManager : IDisposable
     /// A task that represents the asynchronous operation
     /// The task result contains the list of item lines
     /// </returns>
-    protected async Task<List<LineItemModel>> GetItemLinesAsync(Order order, IList<OrderItem> orderItems, int? countryId)
+    protected async Task<List<LineItemModel>> GetItemLinesAsync(Order order, IList<OrderItem> orderItems, long? countryId)
     {
         //get purchased products details
         var items = await CreateLinesForOrderItemsAsync(order, orderItems, countryId);
@@ -423,7 +423,7 @@ public class AvalaraTaxManager : IDisposable
     /// A task that represents the asynchronous operation
     /// The task result contains the collection of item lines
     /// </returns>
-    protected async Task<List<LineItemModel>> CreateLinesForOrderItemsAsync(Order order, IList<OrderItem> orderItems, int? countryId)
+    protected async Task<List<LineItemModel>> CreateLinesForOrderItemsAsync(Order order, IList<OrderItem> orderItems, long? countryId)
     {
         var itemsClassification = countryId > 0
             ? (await _itemClassificationService.GetItemClassificationAsync(countryId)).ToList()
@@ -747,7 +747,7 @@ public class AvalaraTaxManager : IDisposable
     /// A task that represents the asynchronous operation
     /// The task result contains the customer details
     /// </returns>
-    protected async Task<CustomerModel> CreateOrUpdateCustomerAsync(Customer customer, int companyId, bool customerExists)
+    protected async Task<CustomerModel> CreateOrUpdateCustomerAsync(Customer customer, long companyId, bool customerExists)
     {
         var defaultAddress = new Address
         {
@@ -761,7 +761,7 @@ public class AvalaraTaxManager : IDisposable
         var address = await MapAddressAsync(defaultAddress);
         var model = new CustomerModel
         {
-            companyId = companyId,
+            companyId = (int)companyId,
             customerCode = customer.Id.ToString(),
             alternateId = customer.CustomerGuid.ToString().ToLowerInvariant(),
             name = await _customerService.GetCustomerFullNameAsync(customer),
@@ -775,8 +775,8 @@ public class AvalaraTaxManager : IDisposable
         };
 
         var customerDetails = customerExists
-            ? await ServiceClient.UpdateCustomerAsync(companyId, customer.Id.ToString(), model)
-            : (await ServiceClient.CreateCustomersAsync(companyId, [model]))?.FirstOrDefault();
+            ? await ServiceClient.UpdateCustomerAsync((int)companyId, customer.Id.ToString(), model)
+            : (await ServiceClient.CreateCustomersAsync((int)companyId, [model]))?.FirstOrDefault();
 
         return customerDetails;
     }
@@ -1083,7 +1083,7 @@ public class AvalaraTaxManager : IDisposable
             var existingItemCodes = items.value?.Select(item => item.itemCode).ToList() ?? new List<string>();
 
             //prepare exported items
-            var productIds = selectedIds?.Split(_separator, StringSplitOptions.RemoveEmptyEntries).Select(id => Convert.ToInt32(id)).ToArray();
+            var productIds = selectedIds?.Split(_separator, StringSplitOptions.RemoveEmptyEntries).Select(id => Convert.ToInt64(id)).ToArray();
             var exportedItems = new List<ItemModel>();
             foreach (var product in await _productService.GetProductsByIdsAsync(productIds))
             {
@@ -1525,8 +1525,8 @@ public class AvalaraTaxManager : IDisposable
                 throw new NopException("Company not selected");
 
             var provisionStatus = request
-                ? await ServiceClient.RequestCertificateSetupAsync(_avalaraTaxSettings.CompanyId.Value)
-                : await ServiceClient.GetCertificateSetupAsync(_avalaraTaxSettings.CompanyId.Value)
+                ? await ServiceClient.RequestCertificateSetupAsync((int)_avalaraTaxSettings.CompanyId.Value)
+                : await ServiceClient.GetCertificateSetupAsync((int)_avalaraTaxSettings.CompanyId.Value)
                 ?? throw new NopException("Failed to get certificate setup status");
 
             if (provisionStatus.status == CertCaptureProvisionStatus.NotProvisioned)
@@ -1556,14 +1556,14 @@ public class AvalaraTaxManager : IDisposable
             try
             {
                 customerExists = await ServiceClient
-                    .GetCustomerAsync(_avalaraTaxSettings.CompanyId.Value, customer.Id.ToString(), null) is not null;
+                    .GetCustomerAsync((int)_avalaraTaxSettings.CompanyId.Value, customer.Id.ToString(), null) is not null;
             }
             catch { }
             if (!customerExists)
                 await CreateOrUpdateCustomerAsync(customer, _avalaraTaxSettings.CompanyId.Value, customerExists);
 
             var model = new CreateECommerceTokenInputModel { customerNumber = customer.Id.ToString() };
-            return (await ServiceClient.CreateECommerceTokenAsync(_avalaraTaxSettings.CompanyId.Value, model))?.token
+            return (await ServiceClient.CreateECommerceTokenAsync((int)_avalaraTaxSettings.CompanyId.Value, model))?.token
                 ?? throw new NopException("Failed to get token");
         })).Result;
     }
@@ -1606,7 +1606,7 @@ public class AvalaraTaxManager : IDisposable
             try
             {
                 customerExists = await ServiceClient
-                    .GetCustomerAsync(_avalaraTaxSettings.CompanyId.Value, customer.Id.ToString(), null) is not null;
+                    .GetCustomerAsync((int)_avalaraTaxSettings.CompanyId.Value, customer.Id.ToString(), null) is not null;
             }
             catch { }
 
@@ -1623,14 +1623,14 @@ public class AvalaraTaxManager : IDisposable
     /// A task that represents the asynchronous operation
     /// The task result contains the customer details
     /// </returns>
-    public async Task<CustomerModel> DeleteCustomerAsync(int customerId)
+    public async Task<CustomerModel> DeleteCustomerAsync(long customerId)
     {
         return (await HandleFunctionAsync(async () =>
         {
             if (_avalaraTaxSettings.CompanyId is null)
                 throw new NopException("Company not selected");
 
-            return await ServiceClient.DeleteCustomerAsync(_avalaraTaxSettings.CompanyId.Value, customerId.ToString())
+            return await ServiceClient.DeleteCustomerAsync((int)_avalaraTaxSettings.CompanyId.Value, customerId.ToString())
                 ?? throw new NopException("Failed to delete customer");
         })).Result;
     }
@@ -1644,7 +1644,7 @@ public class AvalaraTaxManager : IDisposable
     /// A task that represents the asynchronous operation
     /// The task result contains the list of certificates
     /// </returns>
-    public async Task<CertificateModel> GetValidCertificatesAsync(Customer customer, int storeId)
+    public async Task<CertificateModel> GetValidCertificatesAsync(Customer customer, long storeId)
     {
         return (await HandleFunctionAsync(async () =>
         {
@@ -1659,7 +1659,7 @@ public class AvalaraTaxManager : IDisposable
 
             //check exemption status
             var exemptionStatus = await ServiceClient
-                .ListValidCertificatesForCustomerAsync(_avalaraTaxSettings.CompanyId.Value, customer.Id.ToString(), shipTo.country, shipTo.region)
+                .ListValidCertificatesForCustomerAsync((int)_avalaraTaxSettings.CompanyId.Value, customer.Id.ToString(), shipTo.country, shipTo.region)
                 ?? throw new NopException("Failed to get customer's certificates");
 
             var exempt = string.Equals(exemptionStatus.status, "Exempt", StringComparison.InvariantCultureIgnoreCase);
@@ -1683,7 +1683,7 @@ public class AvalaraTaxManager : IDisposable
                 throw new NopException("Company not selected");
 
             var certificates = await ServiceClient
-                .ListCertificatesForCustomerAsync(_avalaraTaxSettings.CompanyId.Value, customer.Id.ToString(), null, null, null, null, null)
+                .ListCertificatesForCustomerAsync((int)_avalaraTaxSettings.CompanyId.Value, customer.Id.ToString(), null, null, null, null, null)
                 ?? throw new NopException("Failed to get customer's certificates");
 
             return certificates.value;
@@ -1698,7 +1698,7 @@ public class AvalaraTaxManager : IDisposable
     /// A task that represents the asynchronous operation
     /// The task result contains the file details
     /// </returns>
-    public async Task<FileResult> DownloadCertificateAsync(int certificateId)
+    public async Task<FileResult> DownloadCertificateAsync(long certificateId)
     {
         return (await HandleFunctionAsync(() =>
         {
@@ -1706,7 +1706,7 @@ public class AvalaraTaxManager : IDisposable
                 throw new NopException("Company not selected");
 
             var file = ServiceClient
-                .DownloadCertificateImage(_avalaraTaxSettings.CompanyId.Value, certificateId, null, CertificatePreviewType.Pdf)
+                .DownloadCertificateImage((int)_avalaraTaxSettings.CompanyId.Value, (int)certificateId, null, CertificatePreviewType.Pdf)
                 ?? throw new NopException("Failed to download certificate");
 
             return Task.FromResult(file);
@@ -1734,7 +1734,7 @@ public class AvalaraTaxManager : IDisposable
                 new() { deliveryMethod = CertificateRequestDeliveryMethod.Download }
             };
             var invitation = (await ServiceClient
-                .CreateCertExpressInvitationAsync(_avalaraTaxSettings.CompanyId.Value, customer.Id.ToString(), invitationModel))
+                .CreateCertExpressInvitationAsync((int)_avalaraTaxSettings.CompanyId.Value, customer.Id.ToString(), invitationModel))
                 ?.FirstOrDefault()?.invitation
                 ?? throw new NopException("Failed to get invitation");
 

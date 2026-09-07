@@ -281,7 +281,7 @@ public partial class ShippingController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_SHIPPING_SETTINGS)]
-    public virtual async Task<IActionResult> EditMethod(int id)
+    public virtual async Task<IActionResult> EditMethod(long id)
     {
         //try to get a shipping method with the specified id
         var shippingMethod = await _shippingMethodsService.GetShippingMethodByIdAsync(id);
@@ -325,7 +325,7 @@ public partial class ShippingController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_SHIPPING_SETTINGS)]
-    public virtual async Task<IActionResult> DeleteMethod(int id)
+    public virtual async Task<IActionResult> DeleteMethod(long id)
     {
         //try to get a shipping method with the specified id
         var shippingMethod = await _shippingMethodsService.GetShippingMethodByIdAsync(id);
@@ -400,7 +400,7 @@ public partial class ShippingController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_SHIPPING_SETTINGS)]
-    public virtual async Task<IActionResult> EditDeliveryDate(int id)
+    public virtual async Task<IActionResult> EditDeliveryDate(long id)
     {
         //try to get a delivery date with the specified id
         var deliveryDate = await _dateRangeService.GetDeliveryDateByIdAsync(id);
@@ -444,7 +444,7 @@ public partial class ShippingController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_SHIPPING_SETTINGS)]
-    public virtual async Task<IActionResult> DeleteDeliveryDate(int id)
+    public virtual async Task<IActionResult> DeleteDeliveryDate(long id)
     {
         //try to get a delivery date with the specified id
         var deliveryDate = await _dateRangeService.GetDeliveryDateByIdAsync(id);
@@ -506,7 +506,7 @@ public partial class ShippingController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_SHIPPING_SETTINGS)]
-    public virtual async Task<IActionResult> EditProductAvailabilityRange(int id)
+    public virtual async Task<IActionResult> EditProductAvailabilityRange(long id)
     {
         //try to get a product availability range with the specified id
         var productAvailabilityRange = await _dateRangeService.GetProductAvailabilityRangeByIdAsync(id);
@@ -550,7 +550,7 @@ public partial class ShippingController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_SHIPPING_SETTINGS)]
-    public virtual async Task<IActionResult> DeleteProductAvailabilityRange(int id)
+    public virtual async Task<IActionResult> DeleteProductAvailabilityRange(long id)
     {
         //try to get a product availability range with the specified id
         var productAvailabilityRange = await _dateRangeService.GetProductAvailabilityRangeByIdAsync(id);
@@ -629,7 +629,7 @@ public partial class ShippingController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_SHIPPING_SETTINGS)]
-    public virtual async Task<IActionResult> EditWarehouse(int id)
+    public virtual async Task<IActionResult> EditWarehouse(long id)
     {
         //try to get a warehouse with the specified id
         var warehouse = await _warehouseService.GetWarehouseByIdAsync(id);
@@ -689,7 +689,7 @@ public partial class ShippingController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_SHIPPING_SETTINGS)]
-    public virtual async Task<IActionResult> DeleteWarehouse(int id)
+    public virtual async Task<IActionResult> DeleteWarehouse(long id)
     {
         //try to get a warehouse with the specified id
         var warehouse = await _warehouseService.GetWarehouseByIdAsync(id);
@@ -736,9 +736,9 @@ public partial class ShippingController : BaseAdminController
             var formKey = "restrict_" + shippingMethod.Id;
             var countryIdsToRestrict = !StringValues.IsNullOrEmpty(form[formKey])
                 ? form[formKey].ToString().Split(_separator, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(int.Parse)
+                    .Select(long.Parse)
                     .ToList()
-                : new List<int>();
+                : new List<long>();
 
             foreach (var country in countries)
             {

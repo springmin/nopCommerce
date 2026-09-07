@@ -224,7 +224,7 @@ public partial class ManufacturerController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.MANUFACTURER_VIEW)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         //try to get a manufacturer with the specified id
         var manufacturer = await _manufacturerService.GetManufacturerByIdAsync(id);
@@ -315,7 +315,7 @@ public partial class ManufacturerController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.MANUFACTURER_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> PreTranslate(int itemId)
+    public virtual async Task<IActionResult> PreTranslate(long itemId)
     {
         var translationModel = new TranslationModel();
 
@@ -336,7 +336,7 @@ public partial class ManufacturerController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.MANUFACTURER_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get a manufacturer with the specified id
         var manufacturer = await _manufacturerService.GetManufacturerByIdAsync(id);
@@ -356,7 +356,7 @@ public partial class ManufacturerController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.MANUFACTURER_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> DeleteSelected(ICollection<int> selectedIds)
+    public virtual async Task<IActionResult> DeleteSelected(ICollection<long> selectedIds)
     {
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();
@@ -472,7 +472,7 @@ public partial class ManufacturerController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Catalog.MANUFACTURER_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ProductDelete(int id)
+    public virtual async Task<IActionResult> ProductDelete(long id)
     {
 
         //try to get a product manufacturer with the specified id
@@ -485,7 +485,7 @@ public partial class ManufacturerController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.MANUFACTURER_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> ProductAddPopup(int manufacturerId)
+    public virtual async Task<IActionResult> ProductAddPopup(long manufacturerId)
     {
         //prepare model
         var model = await _manufacturerModelFactory.PrepareAddProductToManufacturerSearchModelAsync(new AddProductToManufacturerSearchModel());

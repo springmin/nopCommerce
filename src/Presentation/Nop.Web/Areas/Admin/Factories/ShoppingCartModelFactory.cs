@@ -144,10 +144,7 @@ public partial class ShoppingCartModelFactory : IShoppingCartModelFactory
         ArgumentNullException.ThrowIfNull(searchModel);
 
         //get customers with shopping carts
-        var shoppingCartTypes = new List<int> { (int)searchModel.ShoppingCartType };
-        if (searchModel.ShoppingCartType == ShoppingCartType.ShoppingCart)
-            shoppingCartTypes.Add((int)ShoppingCartType.Stash);
-        var customers = await _customerService.GetCustomersWithShoppingCartsAsync(shoppingCartTypes,
+        var customers = await _customerService.GetCustomersWithShoppingCartsAsync(searchModel.ShoppingCartType,
             storeId: searchModel.StoreId,
             productId: searchModel.ProductId,
             createdFromUtc: searchModel.StartDate,
@@ -170,13 +167,9 @@ public partial class ShoppingCartModelFactory : IShoppingCartModelFactory
                 shoppingCartModel.CustomerEmail = (await _customerService.IsRegisteredAsync(customer))
                     ? customer.Email
                     : await _localizationService.GetResourceAsync("Admin.Customers.Guest");
-
                 shoppingCartModel.TotalItems = (await _shoppingCartService
-                    .GetShoppingCartAsync(customer, shoppingCartTypes,
-                        storeId: searchModel.StoreId,
-                        productId: searchModel.ProductId,
-                        createdFromUtc: searchModel.StartDate,
-                        createdToUtc: searchModel.EndDate))
+                        .GetShoppingCartAsync(customer, shoppingCartType: searchModel.ShoppingCartType,
+                            storeId: searchModel.StoreId, productId: searchModel.ProductId, createdFromUtc: searchModel.StartDate, createdToUtc: searchModel.EndDate))
                     .Sum(item => item.Quantity);
 
                 return shoppingCartModel;

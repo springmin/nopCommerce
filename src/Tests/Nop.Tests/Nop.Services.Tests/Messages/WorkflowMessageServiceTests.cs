@@ -23,7 +23,7 @@ public class WorkflowMessageServiceTests : ServiceTest
 {
     private readonly IWorkflowMessageService _workflowMessageService;
 
-    private readonly List<int> _notActiveTempletes = new();
+    private readonly List<long> _notActiveTempletes = new();
     private readonly IMessageTemplateService _messageTemplateService;
     private Customer _customer;
     private readonly IRepository<QueuedEmail> _queuedEmailRepository;
@@ -126,7 +126,7 @@ public class WorkflowMessageServiceTests : ServiceTest
         await _queuedEmailRepository.TruncateAsync();
     }
 
-    protected async Task CheckData(Func<Task<IList<int>>> func)
+    protected async Task CheckData(Func<Task<IList<long>>> func)
     {
         var queuedEmails = await _queuedEmailRepository.GetAllAsync(query => query);
         queuedEmails.Count.Should().Be(0);

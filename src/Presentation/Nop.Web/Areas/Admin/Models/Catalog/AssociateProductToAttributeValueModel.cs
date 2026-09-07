@@ -9,7 +9,7 @@ public partial record AssociateProductToAttributeValueModel : BaseNopModel
 {
     #region Properties
 
-    public int AssociatedToProductId { get; set; }
+    public long AssociatedToProductId { get; set; }
 
     #endregion
 }

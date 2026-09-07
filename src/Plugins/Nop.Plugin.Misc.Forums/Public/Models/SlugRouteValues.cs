@@ -10,7 +10,7 @@ public record SlugRouteValues : BaseRouteValues
 {
     #region Properties
 
-    public int Id { get; set; }
+    public long Id { get; set; }
     public string Slug { get; set; }
 
     #endregion

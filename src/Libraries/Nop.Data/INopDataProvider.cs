@@ -191,7 +191,7 @@ public partial interface INopDataProvider
     /// A task that represents the asynchronous operation
     /// The task result contains the integer identity; null if cannot get the result
     /// </returns>
-    Task<int?> GetTableIdentAsync<TEntity>() where TEntity : BaseEntity;
+    Task<long?> GetTableIdentAsync<TEntity>() where TEntity : BaseEntity;
 
     /// <summary>
     /// Checks if the specified database exists, returns true if database exists
@@ -255,7 +255,7 @@ public partial interface INopDataProvider
     /// <typeparam name="TEntity">Entity</typeparam>
     /// <param name="ident">Identity value</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task SetTableIdentAsync<TEntity>(int ident) where TEntity : BaseEntity;
+    Task SetTableIdentAsync<TEntity>(long ident) where TEntity : BaseEntity;
 
     /// <summary>
     /// Get hash values of a stored entity field
@@ -265,8 +265,8 @@ public partial interface INopDataProvider
     /// <param name="fieldSelector">A field selector to apply a transform to a hash value</param>
     /// <typeparam name="TEntity">Entity type</typeparam>
     /// <returns>Dictionary</returns>
-    Task<IDictionary<int, string>> GetFieldHashesAsync<TEntity>(Expression<Func<TEntity, bool>> predicate,
-        Expression<Func<TEntity, int>> keySelector,
+    Task<IDictionary<long, string>> GetFieldHashesAsync<TEntity>(Expression<Func<TEntity, bool>> predicate,
+        Expression<Func<TEntity, long>> keySelector,
         Expression<Func<TEntity, object>> fieldSelector) where TEntity : BaseEntity;
 
     /// <summary>

@@ -36,29 +36,29 @@ public partial record ProductModel : BaseNopEntityModel,
         AvailableDeliveryDates = new List<SelectListItem>();
         AvailableProductAvailabilityRanges = new List<SelectListItem>();
         AvailableWarehouses = new List<SelectListItem>();
-        ProductsTypesSupportedByProductTemplates = new Dictionary<int, IList<SelectListItem>>();
+        ProductsTypesSupportedByProductTemplates = new Dictionary<long, IList<SelectListItem>>();
 
         AvailableVendors = new List<SelectListItem>();
 
-        SelectedStoreIds = new List<int>();
+        SelectedStoreIds = new List<long>();
         AvailableStores = new List<SelectListItem>();
 
-        SelectedManufacturerIds = new List<int>();
+        SelectedManufacturerIds = new List<long>();
         AvailableManufacturers = new List<SelectListItem>();
 
-        SelectedCategoryIds = new List<int>();
+        SelectedCategoryIds = new List<long>();
         AvailableCategories = new List<SelectListItem>();
 
-        SelectedCustomerRoleIds = new List<int>();
+        SelectedCustomerRoleIds = new List<long>();
         AvailableCustomerRoles = new List<SelectListItem>();
 
-        SelectedDiscountIds = new List<int>();
+        SelectedDiscountIds = new List<long>();
         AvailableDiscounts = new List<SelectListItem>();
 
         AvailableProductTags = new List<SelectListItem>();
         SelectedProductTags = new List<string>();
 
-        SelectedPriceListIds = new List<int>();
+        SelectedPriceListIds = new List<long>();
         AvailablePriceLists = new List<SelectListItem>();
 
         RelatedProductSearchModel = new RelatedProductSearchModel();
@@ -84,13 +84,13 @@ public partial record ProductModel : BaseNopEntityModel,
     public string PictureThumbnailUrl { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.ProductType")]
-    public int ProductTypeId { get; set; }
+    public long ProductTypeId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.ProductType")]
     public string ProductTypeName { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.AssociatedToProductName")]
-    public int AssociatedToProductId { get; set; }
+    public long AssociatedToProductId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.AssociatedToProductName")]
     public string AssociatedToProductName { get; set; }
@@ -99,11 +99,11 @@ public partial record ProductModel : BaseNopEntityModel,
     public bool VisibleIndividually { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.ProductTemplate")]
-    public int ProductTemplateId { get; set; }
+    public long ProductTemplateId { get; set; }
     public IList<SelectListItem> AvailableProductTemplates { get; set; }
 
     //<product type ID, list of supported product template IDs>
-    public Dictionary<int, IList<SelectListItem>> ProductsTypesSupportedByProductTemplates { get; set; }
+    public Dictionary<long, IList<SelectListItem>> ProductsTypesSupportedByProductTemplates { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.Name")]
     public string Name { get; set; }
@@ -153,7 +153,7 @@ public partial record ProductModel : BaseNopEntityModel,
     public bool IsGiftCard { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.GiftCardType")]
-    public int GiftCardTypeId { get; set; }
+    public long GiftCardTypeId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.OverriddenGiftCardAmount")]
     [UIHint("DecimalNullable")]
@@ -173,7 +173,7 @@ public partial record ProductModel : BaseNopEntityModel,
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.Download")]
     [UIHint("Download")]
-    public int DownloadId { get; set; }
+    public long DownloadId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.UnlimitedDownloads")]
     public bool UnlimitedDownloads { get; set; }
@@ -186,14 +186,14 @@ public partial record ProductModel : BaseNopEntityModel,
     public int? DownloadExpirationDays { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.DownloadActivationType")]
-    public int DownloadActivationTypeId { get; set; }
+    public long DownloadActivationTypeId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.HasSampleDownload")]
     public bool HasSampleDownload { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.SampleDownload")]
     [UIHint("Download")]
-    public int SampleDownloadId { get; set; }
+    public long SampleDownloadId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.HasUserAgreement")]
     public bool HasUserAgreement { get; set; }
@@ -208,7 +208,7 @@ public partial record ProductModel : BaseNopEntityModel,
     public int RecurringCycleLength { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.RecurringCyclePeriod")]
-    public int RecurringCyclePeriodId { get; set; }
+    public long RecurringCyclePeriodId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.RecurringTotalCycles")]
     public int RecurringTotalCycles { get; set; }
@@ -220,7 +220,7 @@ public partial record ProductModel : BaseNopEntityModel,
     public int RentalPriceLength { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.RentalPricePeriod")]
-    public int RentalPricePeriodId { get; set; }
+    public long RentalPricePeriodId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.IsShipEnabled")]
     public bool IsShipEnabled { get; set; }
@@ -235,28 +235,28 @@ public partial record ProductModel : BaseNopEntityModel,
     public decimal AdditionalShippingCharge { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.DeliveryDate")]
-    public int DeliveryDateId { get; set; }
+    public long DeliveryDateId { get; set; }
     public IList<SelectListItem> AvailableDeliveryDates { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.IsTaxExempt")]
     public bool IsTaxExempt { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.TaxCategory")]
-    public int TaxCategoryId { get; set; }
+    public long TaxCategoryId { get; set; }
     public IList<SelectListItem> AvailableTaxCategories { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.ManageInventoryMethod")]
-    public int ManageInventoryMethodId { get; set; }
+    public long ManageInventoryMethodId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.ProductAvailabilityRange")]
-    public int ProductAvailabilityRangeId { get; set; }
+    public long ProductAvailabilityRangeId { get; set; }
     public IList<SelectListItem> AvailableProductAvailabilityRanges { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.UseMultipleWarehouses")]
     public bool UseMultipleWarehouses { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.Warehouse")]
-    public int WarehouseId { get; set; }
+    public long WarehouseId { get; set; }
     public IList<SelectListItem> AvailableWarehouses { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.StockQuantity")]
@@ -277,13 +277,13 @@ public partial record ProductModel : BaseNopEntityModel,
     public int MinStockQuantity { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.LowStockActivity")]
-    public int LowStockActivityId { get; set; }
+    public long LowStockActivityId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.NotifyAdminForQuantityBelow")]
     public int NotifyAdminForQuantityBelow { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.BackorderMode")]
-    public int BackorderModeId { get; set; }
+    public long BackorderModeId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.AllowBackInStockSubscriptions")]
     public bool AllowBackInStockSubscriptions { get; set; }
@@ -356,14 +356,14 @@ public partial record ProductModel : BaseNopEntityModel,
     public decimal BasepriceAmount { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.BasepriceUnit")]
-    public int BasepriceUnitId { get; set; }
+    public long BasepriceUnitId { get; set; }
     public IList<SelectListItem> AvailableBasepriceUnits { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.BasepriceBaseAmount")]
     public decimal BasepriceBaseAmount { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.BasepriceBaseUnit")]
-    public int BasepriceBaseUnitId { get; set; }
+    public long BasepriceBaseUnitId { get; set; }
     public IList<SelectListItem> AvailableBasepriceBaseUnits { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.MarkAsNew")]
@@ -411,39 +411,39 @@ public partial record ProductModel : BaseNopEntityModel,
 
     public IList<ProductLocalizedModel> Locales { get; set; }
 
-    public IList<int> SelectedCustomerRoleIds { get; set; }
+    public IList<long> SelectedCustomerRoleIds { get; set; }
     public IList<SelectListItem> AvailableCustomerRoles { get; set; }
 
     //store mapping
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.LimitedToStores")]
-    public IList<int> SelectedStoreIds { get; set; }
+    public IList<long> SelectedStoreIds { get; set; }
     public IList<SelectListItem> AvailableStores { get; set; }
 
     //categories
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.Categories")]
-    public IList<int> SelectedCategoryIds { get; set; }
+    public IList<long> SelectedCategoryIds { get; set; }
     public IList<SelectListItem> AvailableCategories { get; set; }
 
     //manufacturers
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.Manufacturers")]
-    public IList<int> SelectedManufacturerIds { get; set; }
+    public IList<long> SelectedManufacturerIds { get; set; }
     public IList<SelectListItem> AvailableManufacturers { get; set; }
 
     //vendors
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.Vendor")]
-    public int VendorId { get; set; }
+    public long VendorId { get; set; }
     public IList<SelectListItem> AvailableVendors { get; set; }
 
     //discounts
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.Discounts")]
-    public IList<int> SelectedDiscountIds { get; set; }
+    public IList<long> SelectedDiscountIds { get; set; }
     public IList<SelectListItem> AvailableDiscounts { get; set; }
 
     //price lists
     public IList<SelectListItem> AvailablePriceLists { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.PriceLists")]
-    public IList<int> SelectedPriceListIds { get; set; }
+    public IList<long> SelectedPriceListIds { get; set; }
 
     //vendor
     public bool IsLoggedInAsVendor { get; set; }
@@ -510,7 +510,7 @@ public partial record ProductModel : BaseNopEntityModel,
 
 public partial record ProductLocalizedModel : ILocalizedLocaleModel, IMetaTagsSupportedModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.Fields.Name")]
     public string Name { get; set; }

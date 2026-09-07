@@ -21,7 +21,7 @@ public partial class MenuItemBuilder : NopEntityBuilder<MenuItem>
             .WithColumn(nameof(MenuItem.Title)).AsString(400).Nullable()
             .WithColumn(nameof(MenuItem.CssClass)).AsString(400).Nullable()
             .WithColumn(nameof(MenuItem.RouteName)).AsString(400).Nullable()
-            .WithColumn(nameof(MenuItem.MenuId)).AsInt32().ForeignKey<Menu>();
+            .WithColumn(nameof(MenuItem.MenuId)).AsInt64().ForeignKey<Menu>();
     }
 
     #endregion

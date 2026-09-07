@@ -8,7 +8,7 @@ public partial class LowStockProductReportLine
     /// <summary>
     /// Product Id
     /// </summary>
-    public int Id { get; set; }
+    public long Id { get; set; }
 
     /// <summary>
     /// Product Name

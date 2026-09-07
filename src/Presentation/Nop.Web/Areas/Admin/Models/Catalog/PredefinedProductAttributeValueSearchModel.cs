@@ -9,7 +9,7 @@ public partial record PredefinedProductAttributeValueSearchModel : BaseSearchMod
 {
     #region Properties
 
-    public int ProductAttributeId { get; set; }
+    public long ProductAttributeId { get; set; }
 
     #endregion
 }

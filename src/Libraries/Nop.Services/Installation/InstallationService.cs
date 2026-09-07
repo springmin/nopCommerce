@@ -50,7 +50,7 @@ public partial class InstallationService : IInstallationService
     /// </summary>
     /// <returns>A task that represents the asynchronous operation
     /// The task result contains the identifier of default customer</returns>
-    protected virtual async Task<int> GetDefaultCustomerIdAsync()
+    protected virtual async Task<long> GetDefaultCustomerIdAsync()
     {
         if (_defaultCustomerId.HasValue)
             return _defaultCustomerId.Value;
@@ -80,7 +80,7 @@ public partial class InstallationService : IInstallationService
     /// <param name="predicate">A function to test each element for a condition</param>
     /// <returns>A task that represents the asynchronous operation
     /// The task result contains the entity identifier or null, if entity is not exists</returns>
-    protected virtual async Task<int?> GetFirstEntityIdAsync<TEntity>(Expression<Func<TEntity, bool>> predicate = null) where TEntity : BaseEntity
+    protected virtual async Task<long?> GetFirstEntityIdAsync<TEntity>(Expression<Func<TEntity, bool>> predicate = null) where TEntity : BaseEntity
     {
         var entity = await Table<TEntity>().FirstOrDefaultAsync(predicate ?? (_ => true));
 
@@ -95,7 +95,7 @@ public partial class InstallationService : IInstallationService
     /// A task that represents the asynchronous operation
     /// The task result contains the entity entry
     /// </returns>
-    protected virtual async Task<TEntity> GetByIdAsync<TEntity>(int? id) where TEntity : BaseEntity
+    protected virtual async Task<TEntity> GetByIdAsync<TEntity>(long? id) where TEntity : BaseEntity
     {
         if (!id.HasValue || id == 0)
             return null;

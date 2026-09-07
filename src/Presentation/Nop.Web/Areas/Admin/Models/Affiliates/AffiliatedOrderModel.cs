@@ -10,7 +10,7 @@ public partial record AffiliatedOrderModel : BaseNopEntityModel
 {
     #region Properties
 
-    public override int Id { get; set; }
+    public long Id { get; set; }
 
     [NopResourceDisplayName("Admin.Affiliates.Orders.CustomOrderNumber")]
     public string CustomOrderNumber { get; set; }
@@ -18,7 +18,7 @@ public partial record AffiliatedOrderModel : BaseNopEntityModel
     [NopResourceDisplayName("Admin.Affiliates.Orders.OrderStatus")]
     public string OrderStatus { get; set; }
     [NopResourceDisplayName("Admin.Affiliates.Orders.OrderStatus")]
-    public int OrderStatusId { get; set; }
+    public long OrderStatusId { get; set; }
 
     [NopResourceDisplayName("Admin.Affiliates.Orders.PaymentStatus")]
     public string PaymentStatus { get; set; }

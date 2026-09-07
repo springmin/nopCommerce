@@ -75,7 +75,7 @@ public class PayPalCommerceModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the payment info model
     /// </returns>
-    public async Task<PaymentInfoModel> PreparePaymentInfoModelAsync(ButtonPlacement placement, int? productId = null)
+    public async Task<PaymentInfoModel> PreparePaymentInfoModelAsync(ButtonPlacement placement, long? productId = null)
     {
         var (((scriptUrl, clientToken, userToken), (email, name), (messageConfig, amount), (isRecurring, isShippable)), _) = await _serviceManager
             .PreparePaymentDetailsAsync(_settings, placement, productId);
@@ -135,7 +135,7 @@ public class PayPalCommerceModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the check result; error message if exists
     /// </returns>
-    public async Task<(bool ShippingIsRequired, string Error)> CheckShippingIsRequiredAsync(int? productId)
+    public async Task<(bool ShippingIsRequired, string Error)> CheckShippingIsRequiredAsync(long? productId)
     {
         return await _serviceManager.CheckShippingIsRequiredAsync(productId);
     }
@@ -152,7 +152,7 @@ public class PayPalCommerceModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the order model
     /// </returns>
-    public async Task<OrderModel> PrepareOrderModelAsync(ButtonPlacement placement, string orderId, string paymentSource, int? cardId, bool saveCard)
+    public async Task<OrderModel> PrepareOrderModelAsync(ButtonPlacement placement, string orderId, string paymentSource, long? cardId, bool saveCard)
     {
         var model = new OrderModel();
         (model.CheckoutIsEnabled, model.LoginIsRequired, _) = await _serviceManager.CheckoutIsEnabledAsync();
@@ -569,7 +569,7 @@ public class PayPalCommerceModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the payment token list model
     /// </returns>
-    public async Task<PaymentTokenListModel> PreparePaymentTokenListModelAsync(int? deleteTokenId = null, int? defaultTokenId = null)
+    public async Task<PaymentTokenListModel> PreparePaymentTokenListModelAsync(long? deleteTokenId = null, long? defaultTokenId = null)
     {
         var model = new PaymentTokenListModel();
 

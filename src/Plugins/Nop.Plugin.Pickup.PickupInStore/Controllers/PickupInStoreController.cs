@@ -150,7 +150,7 @@ public class PickupInStoreController : BasePluginController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_SHIPPING_SETTINGS)]
-    public async Task<IActionResult> Edit(int id)
+    public async Task<IActionResult> Edit(long id)
     {
         var pickupPoint = await _storePickupPointService.GetStorePickupPointByIdAsync(id);
         if (pickupPoint == null)
@@ -248,7 +248,7 @@ public class PickupInStoreController : BasePluginController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_SHIPPING_SETTINGS)]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(long id)
     {
         var pickupPoint = await _storePickupPointService.GetStorePickupPointByIdAsync(id);
         if (pickupPoint == null)

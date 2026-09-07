@@ -308,7 +308,7 @@ public class ForumModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the active discussions model
     /// </returns>
-    public async Task<ActiveDiscussionsModel> PrepareActiveDiscussionsModelAsync(int forumId, int page)
+    public async Task<ActiveDiscussionsModel> PrepareActiveDiscussionsModelAsync(long forumId, int page)
     {
         var model = new ActiveDiscussionsModel
         {
@@ -915,7 +915,7 @@ public class ForumModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the forum breadcrumb model
     /// </returns>
-    public async Task<ForumBreadcrumbModel> PrepareForumBreadcrumbModelAsync(int? forumGroupId, int? forumId, int? forumTopicId)
+    public async Task<ForumBreadcrumbModel> PrepareForumBreadcrumbModelAsync(long? forumGroupId, long? forumId, long? forumTopicId)
     {
         var model = new ForumBreadcrumbModel();
 

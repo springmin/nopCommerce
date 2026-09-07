@@ -10,7 +10,7 @@ public record ConfigurationModel : BaseNopModel, ILocalizedModel<ConfigurationMo
         Locales = new List<ConfigurationLocalizedModel>();
     }
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Plugins.Payment.CheckMoneyOrder.DescriptionText")]
     public string DescriptionText { get; set; }
@@ -34,7 +34,7 @@ public record ConfigurationModel : BaseNopModel, ILocalizedModel<ConfigurationMo
 
     public class ConfigurationLocalizedModel : ILocalizedLocaleModel
     {
-        public int LanguageId { get; set; }
+        public long LanguageId { get; set; }
 
         [NopResourceDisplayName("Plugins.Payment.CheckMoneyOrder.DescriptionText")]
         public string DescriptionText { get; set; }

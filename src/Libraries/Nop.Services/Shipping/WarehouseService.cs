@@ -48,7 +48,7 @@ public partial class WarehouseService : IWarehouseService
     /// A task that represents the asynchronous operation
     /// The task result contains the warehouse
     /// </returns>
-    public virtual async Task<Warehouse> GetWarehouseByIdAsync(int warehouseId)
+    public virtual async Task<Warehouse> GetWarehouseByIdAsync(long warehouseId)
     {
         return await _warehouseRepository.GetByIdAsync(warehouseId, _ => default);
     }

@@ -8,12 +8,12 @@ public partial class ProductManufacturer : BaseEntity
     /// <summary>
     /// Gets or sets the product identifier
     /// </summary>
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     /// <summary>
     /// Gets or sets the manufacturer identifier
     /// </summary>
-    public int ManufacturerId { get; set; }
+    public long ManufacturerId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the product is featured

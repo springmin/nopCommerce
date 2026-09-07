@@ -12,7 +12,7 @@ public class CrudData<TEntity> where TEntity : BaseEntity
 
     public Func<TEntity, Task> Update { get; set; }
 
-    public Func<int, Task<TEntity>> GetById { get; set; }
+    public Func<long, Task<TEntity>> GetById { get; set; }
 
     public Func<TEntity, TEntity, bool> IsEqual { get; set; }
 

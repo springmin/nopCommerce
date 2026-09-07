@@ -10,7 +10,7 @@ public partial class PdfSettings : ISettings
     /// <summary>
     /// PDF logo picture identifier
     /// </summary>
-    public int LogoPictureId { get; set; }
+    public long LogoPictureId { get; set; }
 
     /// <summary>
     /// Gets or sets whether letter page size is enabled

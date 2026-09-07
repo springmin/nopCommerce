@@ -26,13 +26,13 @@ public partial record MessageTemplateSearchModel : BaseSearchModel
     public string SearchKeywords { get; set; }
 
     [NopResourceDisplayName("Admin.ContentManagement.MessageTemplates.List.SearchStore")]
-    public int SearchStoreId { get; set; }
+    public long SearchStoreId { get; set; }
 
     [NopResourceDisplayName("Admin.ContentManagement.MessageTemplates.List.IsActive")]
-    public int IsActiveId { get; set; }
+    public long IsActiveId { get; set; }
 
     [NopResourceDisplayName("Admin.ContentManagement.MessageTemplates.List.SearchEmailAccount")]
-    public int EmailAccountId { get; set; }
+    public long EmailAccountId { get; set; }
   
     public IList<SelectListItem> AvailableStores { get; set; }
 

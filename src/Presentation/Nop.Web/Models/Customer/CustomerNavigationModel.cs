@@ -11,7 +11,7 @@ public partial record CustomerNavigationModel : BaseNopModel
 
     public IList<CustomerNavigationItemModel> CustomerNavigationItems { get; set; }
 
-    public int SelectedTab { get; set; }
+    public long SelectedTab { get; set; }
 }
 
 public partial record CustomerNavigationItemModel : BaseNopModel

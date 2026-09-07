@@ -420,7 +420,7 @@ public class OmnisendEventsService
         return productItem;
     }
 
-    private async Task<AddressItem> GetAddressItemDataAsync(int? addressId)
+    private async Task<AddressItem> GetAddressItemDataAsync(long? addressId)
     {
         var address = await _addressService.GetAddressByIdAsync(addressId ?? 0);
 

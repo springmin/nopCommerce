@@ -28,7 +28,7 @@ public partial record CustomerUserSettingsModel : BaseNopModel, ISettingsModel
 
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     public CustomerSettingsModel CustomerSettings { get; set; }
 

@@ -9,10 +9,10 @@ public record EditForumTopicModel : BaseNopEntityModel
     #region Properties
 
     public bool IsEdit { get; set; }
-    public int ForumId { get; set; }
+    public long ForumId { get; set; }
     public string ForumName { get; set; }
     public string ForumSeName { get; set; }
-    public int TopicTypeId { get; set; }
+    public long TopicTypeId { get; set; }
     public EditorType ForumEditor { get; set; }
     public string Subject { get; set; }
     public string Text { get; set; }

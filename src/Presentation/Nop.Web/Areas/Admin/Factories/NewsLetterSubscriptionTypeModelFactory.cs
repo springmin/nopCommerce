@@ -95,7 +95,7 @@ public partial class NewsLetterSubscriptionTypeModelFactory : INewsLetterSubscri
     public virtual async Task<NewsLetterSubscriptionTypeModel> PrepareNewsLetterSubscriptionTypeModelAsync(NewsLetterSubscriptionTypeModel model,
         NewsLetterSubscriptionType subscriptionType, bool excludeProperties = false)
     {
-        Func<NewsLetterSubscriptionTypeLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<NewsLetterSubscriptionTypeLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (subscriptionType != null)
         {

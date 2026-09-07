@@ -6,7 +6,7 @@ namespace Nop.Web.Models.Common;
 
 public partial record ContactVendorModel : BaseNopModel
 {
-    public int VendorId { get; set; }
+    public long VendorId { get; set; }
     public string VendorName { get; set; }
 
     [DataType(DataType.EmailAddress)]

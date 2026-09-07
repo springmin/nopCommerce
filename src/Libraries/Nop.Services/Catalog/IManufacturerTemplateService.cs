@@ -31,7 +31,7 @@ public partial interface IManufacturerTemplateService
     /// A task that represents the asynchronous operation
     /// The task result contains the manufacturer template
     /// </returns>
-    Task<ManufacturerTemplate> GetManufacturerTemplateByIdAsync(int manufacturerTemplateId);
+    Task<ManufacturerTemplate> GetManufacturerTemplateByIdAsync(long manufacturerTemplateId);
 
     /// <summary>
     /// Inserts manufacturer template

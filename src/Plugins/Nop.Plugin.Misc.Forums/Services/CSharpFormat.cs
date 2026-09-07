@@ -98,7 +98,7 @@ public partial class CSharpFormat
     [GeneratedRegex(@"\w+|-\w+|#\w+|@@\w+|#(?:\\(?:s|w)(?:\*|\+)?\w+)+|@\\w\*+")]
     private static partial Regex RegexKeywordAndPreprocessor();
 
-    [GeneratedRegex(@"\[code\](?<inner>(.*?))\[/code\]", RegexOptions.IgnoreCase | RegexOptions.Compiled, "en-US")]
+    [GeneratedRegex(@"\[code\](?<inner>(.*?))\[/code\]", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
     private static partial Regex RegexCode();
 
     /// <summary>

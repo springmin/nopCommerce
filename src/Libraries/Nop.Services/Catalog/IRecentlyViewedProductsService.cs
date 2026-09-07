@@ -22,5 +22,5 @@ public partial interface IRecentlyViewedProductsService
     /// </summary>
     /// <param name="productId">Product identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task AddProductToRecentlyViewedListAsync(int productId);
+    Task AddProductToRecentlyViewedListAsync(long productId);
 }

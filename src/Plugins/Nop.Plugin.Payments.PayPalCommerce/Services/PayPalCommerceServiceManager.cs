@@ -219,7 +219,7 @@ public class PayPalCommerceServiceManager
     /// A task that represents the asynchronous operation
     /// The task result contains the amount value
     /// </returns>
-    private async Task<string> PrepareMessagesAmountAsync(ButtonPlacement placement, Customer customer, string currencyCode, int? productId)
+    private async Task<string> PrepareMessagesAmountAsync(ButtonPlacement placement, Customer customer, string currencyCode, long? productId)
     {
         //cache result during HTTP request
         return await _shortTermCacheManager.GetAsync(async () =>
@@ -1091,7 +1091,7 @@ public class PayPalCommerceServiceManager
     /// A task that represents the asynchronous operation
     /// The task result contains the vault customer id
     /// </returns>
-    private async Task<string> GetVaultCustomerIdAsync(PayPalCommerceSettings settings, int customerId)
+    private async Task<string> GetVaultCustomerIdAsync(PayPalCommerceSettings settings, long customerId)
     {
         return (await _tokenService.GetAllTokensAsync(settings.ClientId, customerId))
             .OrderBy(token => token.IsPrimaryMethod ? 0 : 1)
@@ -1225,7 +1225,7 @@ public class PayPalCommerceServiceManager
         (string MessageConfig, string Amount),
         (bool? IsRecurring, bool IsShippable)),
         string Error)>
-        PreparePaymentDetailsAsync(PayPalCommerceSettings settings, ButtonPlacement placement, int? productId)
+        PreparePaymentDetailsAsync(PayPalCommerceSettings settings, ButtonPlacement placement, long? productId)
     {
         return await HandleFunctionAsync(async () =>
         {
@@ -1424,7 +1424,7 @@ public class PayPalCommerceServiceManager
             if (!cart.Any())
                 throw new NopException("Shopping cart is empty");
 
-            await _shoppingCartService.ResetCheckoutDataAsync(customer, store.Id, clearShippingMethod: false);
+            await _customerService.ResetCheckoutDataAsync(customer, store.Id, clearShippingMethod: false);
 
             var checkoutAttributesXml = await _genericAttributeService
                 .GetAttributeAsync<string>(customer, NopCustomerDefaults.CheckoutAttributes, store.Id);
@@ -1455,7 +1455,7 @@ public class PayPalCommerceServiceManager
     /// A task that represents the asynchronous operation
     /// The task result contains the check result; error message if exists
     /// </returns>
-    public async Task<(bool ShippingIsRequired, string Error)> CheckShippingIsRequiredAsync(int? productId)
+    public async Task<(bool ShippingIsRequired, string Error)> CheckShippingIsRequiredAsync(long? productId)
     {
         return await HandleFunctionAsync(async () =>
         {
@@ -1480,7 +1480,7 @@ public class PayPalCommerceServiceManager
     /// A task that represents the asynchronous operation
     /// The task result contains the check result; error message if exists
     /// </returns>
-    public async Task<(bool? IsRecurring, string Error)> CheckShoppingCartIsRecurringAsync(ButtonPlacement placement, int? productId = null)
+    public async Task<(bool? IsRecurring, string Error)> CheckShoppingCartIsRecurringAsync(ButtonPlacement placement, long? productId = null)
     {
         return await HandleFunctionAsync(async () =>
         {
@@ -1624,7 +1624,7 @@ public class PayPalCommerceServiceManager
     /// The task result contains the created order; error message if exists
     /// </returns>
     public async Task<(Order Order, string Error)> CreateOrderAsync(PayPalCommerceSettings settings,
-        ButtonPlacement placement, string paymentSource, int? cardId, bool saveCard)
+        ButtonPlacement placement, string paymentSource, long? cardId, bool saveCard)
     {
         return await HandleFunctionAsync(async () =>
         {
@@ -3013,7 +3013,7 @@ public class PayPalCommerceServiceManager
     /// A task that represents the asynchronous operation
     /// The task result contains the webhook; error message if exists
     /// </returns>
-    public async Task<(Webhook Webhook, string Error)> CreateWebhookAsync(PayPalCommerceSettings settings, int storeId)
+    public async Task<(Webhook Webhook, string Error)> CreateWebhookAsync(PayPalCommerceSettings settings, long storeId)
     {
         return await HandleFunctionAsync(async () =>
         {
@@ -3137,7 +3137,7 @@ public class PayPalCommerceServiceManager
 
                 if (paymentTokenCreated)
                 {
-                    var customerId = int.TryParse(paymentToken.Customer?.MerchantCustomerId, out var id) ? id : (int?)null;
+                    var customerId = long.TryParse(paymentToken.Customer?.MerchantCustomerId, out long id) ? id : (long?)null;
 
                     //try to get associated transaction
                     if (!string.IsNullOrEmpty(paymentToken.Metadata?.OrderId))
@@ -3561,7 +3561,7 @@ public class PayPalCommerceServiceManager
     /// The task result contains the list of payment tokens; error message if exists
     /// </returns>
     public async Task<(List<PayPalToken> PaymentTokens, string Error)>
-        GetPaymentTokensAsync(PayPalCommerceSettings settings, bool withDetails = false, int? deleteTokenId = null, int? defaultTokenId = null)
+        GetPaymentTokensAsync(PayPalCommerceSettings settings, bool withDetails = false, long? deleteTokenId = null, long? defaultTokenId = null)
     {
         return await HandleFunctionAsync(async () =>
         {
@@ -3625,7 +3625,7 @@ public class PayPalCommerceServiceManager
     /// A task that represents the asynchronous operation
     /// The task result contains the delete result; error message if exists
     /// </returns>
-    public async Task<(bool Result, string Error)> DeletePaymentTokensAsync(PayPalCommerceSettings settings, int customerId)
+    public async Task<(bool Result, string Error)> DeletePaymentTokensAsync(PayPalCommerceSettings settings, long customerId)
     {
         return await HandleFunctionAsync(async () =>
         {

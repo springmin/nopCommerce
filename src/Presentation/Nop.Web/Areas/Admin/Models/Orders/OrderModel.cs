@@ -35,7 +35,7 @@ public partial record OrderModel : BaseNopEntityModel
     public bool IsLoggedInAsVendor { get; set; }
 
     //identifiers
-    public override int Id { get; set; }
+    public long Id { get; set; }
     [NopResourceDisplayName("Admin.Orders.Fields.OrderGuid")]
     public Guid OrderGuid { get; set; }
     [NopResourceDisplayName("Admin.Orders.Fields.CustomOrderNumber")]
@@ -47,7 +47,7 @@ public partial record OrderModel : BaseNopEntityModel
 
     //customer info
     [NopResourceDisplayName("Admin.Orders.Fields.Customer")]
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
     [NopResourceDisplayName("Admin.Orders.Fields.Customer")]
     public string CustomerInfo { get; set; }
     [NopResourceDisplayName("Admin.Orders.Fields.CustomerEmail")]
@@ -60,7 +60,7 @@ public partial record OrderModel : BaseNopEntityModel
     public CustomValues CustomValues { get; set; }
 
     [NopResourceDisplayName("Admin.Orders.Fields.Affiliate")]
-    public int AffiliateId { get; set; }
+    public long AffiliateId { get; set; }
     [NopResourceDisplayName("Admin.Orders.Fields.Affiliate")]
     public string AffiliateName { get; set; }
 
@@ -133,19 +133,19 @@ public partial record OrderModel : BaseNopEntityModel
 
     //associated recurring payment id
     [NopResourceDisplayName("Admin.Orders.Fields.RecurringPayment")]
-    public int RecurringPaymentId { get; set; }
+    public long RecurringPaymentId { get; set; }
 
     //order status
     [NopResourceDisplayName("Admin.Orders.Fields.OrderStatus")]
     public string OrderStatus { get; set; }
     [NopResourceDisplayName("Admin.Orders.Fields.OrderStatus")]
-    public int OrderStatusId { get; set; }
+    public long OrderStatusId { get; set; }
 
     //payment info
     [NopResourceDisplayName("Admin.Orders.Fields.PaymentStatus")]
     public string PaymentStatus { get; set; }
     [NopResourceDisplayName("Admin.Orders.Fields.PaymentStatus")]
-    public int PaymentStatusId { get; set; }
+    public long PaymentStatusId { get; set; }
     [NopResourceDisplayName("Admin.Orders.Fields.PaymentMethod")]
     public string PaymentMethod { get; set; }
 
@@ -166,7 +166,7 @@ public partial record OrderModel : BaseNopEntityModel
     [NopResourceDisplayName("Admin.Orders.Fields.ShippingStatus")]
     public string ShippingStatus { get; set; }
     [NopResourceDisplayName("Admin.Orders.Fields.ShippingStatus")]
-    public int ShippingStatusId { get; set; }
+    public long ShippingStatusId { get; set; }
     [NopResourceDisplayName("Admin.Orders.Fields.DesiredDeliveryDate")]
     public string DesiredDeliveryDate { get; set; }
     [NopResourceDisplayName("Admin.Orders.Fields.ShippingAddress")]
@@ -204,7 +204,7 @@ public partial record OrderModel : BaseNopEntityModel
     public bool AddOrderNoteHasDownload { get; set; }
     [NopResourceDisplayName("Admin.Orders.OrderNotes.Fields.Download")]
     [UIHint("Download")]
-    public int AddOrderNoteDownloadId { get; set; }
+    public long AddOrderNoteDownloadId { get; set; }
 
     //refund info
     [NopResourceDisplayName("Admin.Orders.Fields.PartialRefund.AmountToRefund")]
@@ -246,7 +246,7 @@ public partial record OrderModel : BaseNopEntityModel
 
     public partial record UsedDiscountModel : BaseNopModel
     {
-        public int DiscountId { get; set; }
+        public long DiscountId { get; set; }
         public string DiscountName { get; set; }
     }
 

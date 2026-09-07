@@ -37,7 +37,7 @@ public partial class Setting : BaseEntity, ILocalizedEntity
     /// <summary>
     /// Gets or sets the store for which this setting is valid. 0 is set when the setting is for all stores
     /// </summary>
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 
     /// <summary>
     /// To string

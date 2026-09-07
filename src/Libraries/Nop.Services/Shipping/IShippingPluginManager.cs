@@ -18,7 +18,7 @@ public partial interface IShippingPluginManager : IPluginManager<IShippingRateCo
     /// A task that represents the asynchronous operation
     /// The task result contains the list of active shipping providers
     /// </returns>
-    Task<IList<IShippingRateComputationMethod>> LoadActivePluginsAsync(Customer customer = null, int storeId = 0, string systemName = null);
+    Task<IList<IShippingRateComputationMethod>> LoadActivePluginsAsync(Customer customer = null, long storeId = 0, string systemName = null);
 
     /// <summary>
     /// Check whether the passed shipping provider is active
@@ -37,5 +37,5 @@ public partial interface IShippingPluginManager : IPluginManager<IShippingRateCo
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, int storeId = 0);
+    Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, long storeId = 0);
 }

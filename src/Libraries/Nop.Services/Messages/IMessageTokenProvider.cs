@@ -33,7 +33,7 @@ public partial interface IMessageTokenProvider
     /// <param name="emailAccount">Email account</param>
     /// <param name="languageId">Language identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task AddStoreTokensAsync(IList<Token> tokens, Store store, EmailAccount emailAccount, int languageId);
+    Task AddStoreTokensAsync(IList<Token> tokens, Store store, EmailAccount emailAccount, long languageId);
 
     /// <summary>
     /// Add order tokens
@@ -43,7 +43,7 @@ public partial interface IMessageTokenProvider
     /// <param name="languageId">Language identifier</param>
     /// <param name="vendorId">Vendor identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task AddOrderTokensAsync(IList<Token> tokens, Order order, int languageId, int vendorId = 0);
+    Task AddOrderTokensAsync(IList<Token> tokens, Order order, long languageId, long vendorId = 0);
 
     /// <summary>
     /// Add refunded order tokens
@@ -61,7 +61,7 @@ public partial interface IMessageTokenProvider
     /// <param name="shipment">Shipment item</param>
     /// <param name="languageId">Language identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task AddShipmentTokensAsync(IList<Token> tokens, Shipment shipment, int languageId);
+    Task AddShipmentTokensAsync(IList<Token> tokens, Shipment shipment, long languageId);
 
     /// <summary>
     /// Add order note tokens
@@ -88,7 +88,7 @@ public partial interface IMessageTokenProvider
     /// <param name="orderItem">Order item</param>
     /// <param name="languageId">Language identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task AddReturnRequestTokensAsync(IList<Token> tokens, ReturnRequest returnRequest, Order order, OrderItem orderItem, int languageId);
+    Task AddReturnRequestTokensAsync(IList<Token> tokens, ReturnRequest returnRequest, Order order, OrderItem orderItem, long languageId);
 
     /// <summary>
     /// Add gift card tokens
@@ -97,7 +97,7 @@ public partial interface IMessageTokenProvider
     /// <param name="giftCard">Gift card</param>
     /// <param name="languageId">Language identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task AddGiftCardTokensAsync(IList<Token> tokens, GiftCard giftCard, int languageId);
+    Task AddGiftCardTokensAsync(IList<Token> tokens, GiftCard giftCard, long languageId);
 
     /// <summary>
     /// Add customer tokens
@@ -105,7 +105,7 @@ public partial interface IMessageTokenProvider
     /// <param name="tokens">List of already added tokens</param>
     /// <param name="customerId">Customer identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task AddCustomerTokensAsync(IList<Token> tokens, int customerId);
+    Task AddCustomerTokensAsync(IList<Token> tokens, long customerId);
 
     /// <summary>
     /// Add customer tokens
@@ -154,7 +154,7 @@ public partial interface IMessageTokenProvider
     /// <param name="product">Product</param>
     /// <param name="languageId">Language identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task AddProductTokensAsync(IList<Token> tokens, Product product, int languageId);
+    Task AddProductTokensAsync(IList<Token> tokens, Product product, long languageId);
 
     /// <summary>
     /// Add product attribute combination tokens
@@ -163,7 +163,7 @@ public partial interface IMessageTokenProvider
     /// <param name="combination">Product attribute combination</param>
     /// <param name="languageId">Language identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task AddAttributeCombinationTokensAsync(IList<Token> tokens, ProductAttributeCombination combination, int languageId);
+    Task AddAttributeCombinationTokensAsync(IList<Token> tokens, ProductAttributeCombination combination, long languageId);
 
     /// <summary>
     /// Add private message tokens
@@ -188,7 +188,7 @@ public partial interface IMessageTokenProvider
     /// <param name="cart">Shopping cart</param>
     /// <param name="languageId">Language identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task AddShoppingCartTokensAsync(IList<Token> tokens, IList<ShoppingCartItem> cart, int languageId);
+    Task AddShoppingCartTokensAsync(IList<Token> tokens, IList<ShoppingCartItem> cart, long languageId);
 
     /// <summary>
     /// Get collection of allowed (supported) message tokens for campaigns

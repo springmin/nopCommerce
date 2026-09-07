@@ -348,6 +348,9 @@ public partial class InstallController : Controller
             //clear provider settings if something got wrong
             DataSettingsManager.SaveSettings(new DataConfig(), _fileProvider);
 
+            //TEMP DIAG: dump full exception
+            System.IO.File.WriteAllText("/data/storage/el2/base/tmp/opencode/install-error.log", exception.ToString());
+
             ModelState.AddModelError(string.Empty, string.Format(_locService.Value.GetResource("SetupFailed"), exception.Message));
         }
         finally

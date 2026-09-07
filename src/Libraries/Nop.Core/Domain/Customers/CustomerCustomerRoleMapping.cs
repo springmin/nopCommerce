@@ -8,10 +8,10 @@ public partial class CustomerCustomerRoleMapping : BaseEntity
     /// <summary>
     /// Gets or sets the customer identifier
     /// </summary>
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     /// <summary>
     /// Gets or sets the customer role identifier
     /// </summary>
-    public int CustomerRoleId { get; set; }
+    public long CustomerRoleId { get; set; }
 }

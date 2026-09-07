@@ -110,7 +110,7 @@ public partial class AclService : IAclService
     /// A task that represents the asynchronous operation
     /// The task result contains the filtered query
     /// </returns>
-    public virtual async Task<IQueryable<TEntity>> ApplyAcl<TEntity>(IQueryable<TEntity> query, int[] customerRoleIds)
+    public virtual async Task<IQueryable<TEntity>> ApplyAcl<TEntity>(IQueryable<TEntity> query, long[] customerRoleIds)
         where TEntity : BaseEntity, IAclSupported
     {
         ArgumentNullException.ThrowIfNull(query);
@@ -168,7 +168,7 @@ public partial class AclService : IAclService
     /// <param name="entity">Entity</param>
     /// <param name="customerRoleId">Customer role id</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task InsertAclRecordAsync<TEntity>(TEntity entity, int customerRoleId) where TEntity : BaseEntity, IAclSupported
+    public virtual async Task InsertAclRecordAsync<TEntity>(TEntity entity, long customerRoleId) where TEntity : BaseEntity, IAclSupported
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -197,7 +197,7 @@ public partial class AclService : IAclService
     /// A task that represents the asynchronous operation
     /// The task result contains the customer role identifiers
     /// </returns>
-    public virtual async Task<int[]> GetCustomerRoleIdsWithAccessAsync(int entityId, string entityName)
+    public virtual async Task<long[]> GetCustomerRoleIdsWithAccessAsync(long entityId, string entityName)
     {
         if (entityId == 0)
             return [];
@@ -257,7 +257,7 @@ public partial class AclService : IAclService
     /// A task that represents the asynchronous operation
     /// The task result contains true - authorized; otherwise, false
     /// </returns>
-    public virtual async Task<bool> AuthorizeAsync(string entityTypeName, int entityId, Customer customer)
+    public virtual async Task<bool> AuthorizeAsync(string entityTypeName, long entityId, Customer customer)
     {
         if (string.IsNullOrEmpty(entityTypeName))
             return false;
@@ -292,7 +292,7 @@ public partial class AclService : IAclService
     /// A task that represents the asynchronous operation
     /// The task result contains true - authorized; otherwise, false
     /// </returns>
-    public virtual async Task<bool> AuthorizeAsync(Customer customer, IList<int> allowedCustomerRoleIds)
+    public virtual async Task<bool> AuthorizeAsync(Customer customer, IList<long> allowedCustomerRoleIds)
     {
         return _catalogSettings.IgnoreAcl || allowedCustomerRoleIds.Intersect(await _customerService.GetCustomerRoleIdsAsync(customer)).Any();
     }
@@ -304,7 +304,7 @@ public partial class AclService : IAclService
     /// <param name="entity">Entity</param>
     /// <param name="selectedCustomerRoleIds">Customer roles for mapping</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task SaveAclAsync<TEntity>(TEntity entity, IList<int> selectedCustomerRoleIds) where TEntity : BaseEntity, IAclSupported
+    public virtual async Task SaveAclAsync<TEntity>(TEntity entity, IList<long> selectedCustomerRoleIds) where TEntity : BaseEntity, IAclSupported
     {
         if (entity == null)
             return;

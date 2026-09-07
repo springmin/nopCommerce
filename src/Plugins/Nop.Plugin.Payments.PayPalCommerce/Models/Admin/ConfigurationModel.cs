@@ -24,7 +24,7 @@ public record ConfigurationModel : BaseNopModel
 
     public bool IsConfigured { get; set; }
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     public string SandboxSignUpUrl { get; set; }
 
@@ -57,7 +57,7 @@ public record ConfigurationModel : BaseNopModel
     public bool SecretKey_OverrideForStore { get; set; }
 
     [NopResourceDisplayName("Plugins.Payments.PayPalCommerce.Fields.PaymentType")]
-    public int PaymentTypeId { get; set; }
+    public long PaymentTypeId { get; set; }
     public bool PaymentTypeId_OverrideForStore { get; set; }
     public IList<SelectListItem> PaymentTypes { get; set; }
 

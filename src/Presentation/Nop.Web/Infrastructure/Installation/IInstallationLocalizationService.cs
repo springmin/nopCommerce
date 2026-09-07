@@ -42,5 +42,5 @@ public partial interface IInstallationLocalizationService
     /// <param name="valuesToExclude">Values to exclude</param>
     /// <param name="useLocalization">Localize</param>
     /// <returns>SelectList</returns>
-    Dictionary<int, string> GetAvailableProviderTypes(int[] valuesToExclude = null, bool useLocalization = true);
+    Dictionary<long, string> GetAvailableProviderTypes(int[] valuesToExclude = null, bool useLocalization = true);
 }

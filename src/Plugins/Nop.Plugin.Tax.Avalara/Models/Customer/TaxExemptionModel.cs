@@ -25,7 +25,7 @@ public record TaxExemptionModel : BaseNopModel
 
     public string Link { get; set; }
 
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     [NopResourceDisplayName("Plugins.Tax.Avalara.ExemptionCertificates.Add.ExposureZone")]
     public int ExposureZone { get; set; }

@@ -419,7 +419,7 @@ public partial class SitemapModelFactory : ISitemapModelFactory
     /// <param name="fullPath">The path and name of the sitemap file</param>
     /// <param name="id">Sitemap identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    protected virtual async Task GenerateAsync(string fullPath, int id = 0)
+    protected virtual async Task GenerateAsync(string fullPath, long id = 0)
     {
         //generate all URLs for the sitemap
         var sitemapUrls = await GenerateUrlsAsync();
@@ -446,7 +446,7 @@ public partial class SitemapModelFactory : ISitemapModelFactory
                 return;
 
             //otherwise write a certain numbered sitemap file into the stream
-            await WriteSitemapAsync(stream, sitemaps.ElementAt(id - 1));
+            await WriteSitemapAsync(stream, sitemaps.ElementAt((int)(id - 1)));
         }
         else
         {
@@ -675,7 +675,7 @@ public partial class SitemapModelFactory : ISitemapModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the sitemap model with sitemap.xml as string
     /// </returns>
-    public virtual async Task<SitemapXmlModel> PrepareSitemapXmlModelAsync(int id = 0)
+    public virtual async Task<SitemapXmlModel> PrepareSitemapXmlModelAsync(long id = 0)
     {
         var language = await _workContext.GetWorkingLanguageAsync();
         var store = await _storeContext.GetCurrentStoreAsync();
@@ -744,7 +744,7 @@ public partial class SitemapModelFactory : ISitemapModelFactory
     /// The task result contains the localized sitemap URL models
     /// </returns>
     public virtual async Task<SitemapUrlModel> PrepareLocalizedSitemapUrlAsync<TEntity>(TEntity entity,
-        DateTime? dateTimeUpdatedOn = null, UpdateFrequency updateFreq = UpdateFrequency.Weekly, int? languageId = null)
+        DateTime? dateTimeUpdatedOn = null, UpdateFrequency updateFreq = UpdateFrequency.Weekly, long? languageId = null)
         where TEntity : BaseEntity, ISlugSupported
     {
         var url = await _nopUrlHelper

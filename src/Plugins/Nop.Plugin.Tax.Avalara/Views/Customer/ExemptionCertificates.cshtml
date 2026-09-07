@@ -16,7 +16,7 @@
 
 @section left
 {
-    @(await Component.InvokeAsync(typeof(CustomerNavigationViewComponent), new { selectedTabId = AvalaraTaxDefaults.ExemptionCertificatesMenuTab }))
+    @(await Component.InvokeAsync(typeof(CustomerNavigationViewComponent), new { selectedTabId = (long)AvalaraTaxDefaults.ExemptionCertificatesMenuTab }))
 }
 
 <script asp-location="Footer">

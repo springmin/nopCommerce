@@ -43,7 +43,7 @@ public partial interface ICustomerService
     /// </returns>
     Task<IPagedList<Customer>> GetAllCustomersAsync(DateTime? createdFromUtc = null, DateTime? createdToUtc = null,
         DateTime? lastActivityFromUtc = null, DateTime? lastActivityToUtc = null,
-        int affiliateId = 0, int vendorId = 0, int[] customerRoleIds = null,
+        long affiliateId = 0, long vendorId = 0, long[] customerRoleIds = null,
         string email = null, string username = null, string firstName = null, string lastName = null,
         int dayOfBirth = 0, int monthOfBirth = 0,
         string company = null, string phone = null, string zipPostalCode = null, string ipAddress = null,
@@ -61,12 +61,12 @@ public partial interface ICustomerService
     /// The task result contains the customers
     /// </returns>
     Task<IPagedList<Customer>> GetOnlineCustomersAsync(DateTime lastActivityFromUtc,
-        int[] customerRoleIds, int pageIndex = 0, int pageSize = int.MaxValue);
+        long[] customerRoleIds, int pageIndex = 0, int pageSize = int.MaxValue);
 
     /// <summary>
     /// Gets customers with shopping carts
     /// </summary>
-    /// <param name="shoppingCartTypes">Shopping cart types; pass null to load all records</param>
+    /// <param name="shoppingCartType">Shopping cart type; pass null to load all records</param>
     /// <param name="storeId">Store identifier; pass 0 to load all records</param>
     /// <param name="productId">Product identifier; pass null to load all records</param>
     /// <param name="createdFromUtc">Created date from (UTC); pass null to load all records</param>
@@ -78,9 +78,9 @@ public partial interface ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains the customers
     /// </returns>
-    Task<IPagedList<Customer>> GetCustomersWithShoppingCartsAsync(List<int> shoppingCartTypes = null,
-        int storeId = 0, int? productId = null,
-        DateTime? createdFromUtc = null, DateTime? createdToUtc = null, int? countryId = null,
+    Task<IPagedList<Customer>> GetCustomersWithShoppingCartsAsync(ShoppingCartType? shoppingCartType = null,
+        long storeId = 0, long? productId = null,
+        DateTime? createdFromUtc = null, DateTime? createdToUtc = null, long? countryId = null,
         int pageIndex = 0, int pageSize = int.MaxValue);
 
     /// <summary>
@@ -126,7 +126,7 @@ public partial interface ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains a customer
     /// </returns>
-    Task<Customer> GetCustomerByIdAsync(int customerId);
+    Task<Customer> GetCustomerByIdAsync(long customerId);
 
     /// <summary>
     /// Get customers by identifiers
@@ -136,7 +136,7 @@ public partial interface ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains the customers
     /// </returns>
-    Task<IList<Customer>> GetCustomersByIdsAsync(int[] customerIds);
+    Task<IList<Customer>> GetCustomersByIdsAsync(long[] customerIds);
 
     /// <summary>
     /// Get customers by guids
@@ -229,6 +229,22 @@ public partial interface ICustomerService
     /// <param name="customer">Customer</param>
     /// <returns>A task that represents the asynchronous operation</returns>
     Task UpdateCustomerAsync(Customer customer);
+
+    /// <summary>
+    /// Reset data required for checkout
+    /// </summary>
+    /// <param name="customer">Customer</param>
+    /// <param name="storeId">Store identifier</param>
+    /// <param name="clearCouponCodes">A value indicating whether to clear coupon code</param>
+    /// <param name="clearCheckoutAttributes">A value indicating whether to clear selected checkout attributes</param>
+    /// <param name="clearRewardPoints">A value indicating whether to clear "Use reward points" flag</param>
+    /// <param name="clearShippingMethod">A value indicating whether to clear selected shipping method</param>
+    /// <param name="clearPaymentMethod">A value indicating whether to clear selected payment method</param>
+    /// <returns>A task that represents the asynchronous operation</returns>
+    Task ResetCheckoutDataAsync(Customer customer, long storeId,
+        bool clearCouponCodes = false, bool clearCheckoutAttributes = false,
+        bool clearRewardPoints = true, bool clearShippingMethod = true,
+        bool clearPaymentMethod = true);
 
     /// <summary>
     /// Delete guest customer records
@@ -399,7 +415,7 @@ public partial interface ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains the customer role
     /// </returns>
-    Task<CustomerRole> GetCustomerRoleByIdAsync(int customerRoleId);
+    Task<CustomerRole> GetCustomerRoleByIdAsync(long customerRoleId);
 
     /// <summary>
     /// Gets a customer role
@@ -420,7 +436,7 @@ public partial interface ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains the customer role identifiers
     /// </returns>
-    Task<int[]> GetCustomerRoleIdsAsync(Customer customer, bool showHidden = false);
+    Task<long[]> GetCustomerRoleIdsAsync(Customer customer, bool showHidden = false);
 
     /// <summary>
     /// Gets list of customer roles
@@ -527,7 +543,7 @@ public partial interface ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of customer passwords
     /// </returns>
-    Task<IList<CustomerPassword>> GetCustomerPasswordsAsync(int? customerId = null,
+    Task<IList<CustomerPassword>> GetCustomerPasswordsAsync(long? customerId = null,
         PasswordFormat? passwordFormat = null, int? passwordsToReturn = null);
 
     /// <summary>
@@ -538,7 +554,7 @@ public partial interface ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains the customer password
     /// </returns>
-    Task<CustomerPassword> GetCurrentPasswordAsync(int customerId);
+    Task<CustomerPassword> GetCurrentPasswordAsync(long customerId);
 
     /// <summary>
     /// Insert a customer password
@@ -597,7 +613,7 @@ public partial interface ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains the 
     /// </returns>
-    Task<IList<Address>> GetAddressesByCustomerIdAsync(int customerId);
+    Task<IList<Address>> GetAddressesByCustomerIdAsync(long customerId);
 
     /// <summary>
     /// Gets a address mapped to customer
@@ -608,7 +624,7 @@ public partial interface ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    Task<Address> GetCustomerAddressAsync(int customerId, int addressId);
+    Task<Address> GetCustomerAddressAsync(long customerId, long addressId);
 
     /// <summary>
     /// Gets a customer billing address
@@ -665,7 +681,7 @@ public partial interface ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains the private message
     /// </returns>
-    Task<PrivateMessage> GetPrivateMessageByIdAsync(int privateMessageId);
+    Task<PrivateMessage> GetPrivateMessageByIdAsync(long privateMessageId);
 
     /// <summary>
     /// Gets private messages
@@ -683,8 +699,8 @@ public partial interface ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains the private messages
     /// </returns>
-    Task<IPagedList<PrivateMessage>> GetAllPrivateMessagesAsync(int storeId, int fromCustomerId,
-        int toCustomerId, bool? isRead, bool? isDeletedByAuthor, bool? isDeletedByRecipient,
+    Task<IPagedList<PrivateMessage>> GetAllPrivateMessagesAsync(long storeId, long fromCustomerId,
+        long toCustomerId, bool? isRead, bool? isDeletedByAuthor, bool? isDeletedByRecipient,
         string keywords, int pageIndex = 0, int pageSize = int.MaxValue);
 
     /// <summary>

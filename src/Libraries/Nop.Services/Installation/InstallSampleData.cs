@@ -25,9 +25,9 @@ public partial class InstallationService
 {
     #region Fields
 
-    protected int? _defaultLanguageId;
-    protected int? _defaultStoreId;
-    protected int? _defaultCustomerId;
+    protected long? _defaultLanguageId;
+    protected long? _defaultStoreId;
+    protected long? _defaultCustomerId;
     protected FileExtensionContentTypeProvider _fileExtensionContentTypeProvider;
 
     #endregion
@@ -39,7 +39,7 @@ public partial class InstallationService
     /// </summary>
     /// <returns>A task that represents the asynchronous operation
     /// The task result contains the identifier of default language</returns>
-    protected virtual async Task<int> GetDefaultLanguageIdAsync()
+    protected virtual async Task<long> GetDefaultLanguageIdAsync()
     {
         if (_defaultLanguageId.HasValue)
             return _defaultLanguageId.Value;
@@ -56,7 +56,7 @@ public partial class InstallationService
     /// </summary>
     /// <returns>A task that represents the asynchronous operation
     /// The task result contains the identifier of default store</returns>
-    protected virtual async Task<int> GetDefaultStoreIdAsync()
+    protected virtual async Task<long> GetDefaultStoreIdAsync()
     {
         if (_defaultStoreId.HasValue)
             return _defaultStoreId.Value;
@@ -75,7 +75,7 @@ public partial class InstallationService
     /// <param name="getName">Function to getting the name fore creating the slug</param>
     /// <param name="languageId">The language identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    protected virtual async Task InsertSearchEngineNamesAsync<TEntity>(IEnumerable<TEntity> entities, Func<TEntity, string> getName, int languageId = 0) where TEntity : BaseEntity
+    protected virtual async Task InsertSearchEngineNamesAsync<TEntity>(IEnumerable<TEntity> entities, Func<TEntity, string> getName, long languageId = 0) where TEntity : BaseEntity
     {
         await _dataProvider.BulkInsertEntitiesAsync(await entities.SelectAwait(async entity => new UrlRecord
         {
@@ -1164,7 +1164,7 @@ public partial class InstallationService
     /// A task that represents the asynchronous operation
     /// The task result contains the identifier of inserted picture
     /// </returns>
-    protected virtual async Task<int> InsertPictureAsync(string fileName, string name)
+    protected virtual async Task<long> InsertPictureAsync(string fileName, string name)
     {
         var sampleImagesPath = _fileProvider.GetAbsolutePath(NopInstallationDefaults.SampleImagesPath);
 
@@ -1351,7 +1351,7 @@ public partial class InstallationService
     {
         var categoryTemplateInGridAndLines = await Table<CategoryTemplate>().FirstOrDefaultAsync(pt => pt.Name == "Products in Grid or Lines") ?? throw new Exception("Category template cannot be loaded");
 
-        async Task<Category> createCategory(SampleCategory sample, int parentCategoryId = 0)
+        async Task<Category> createCategory(SampleCategory sample, long parentCategoryId = 0)
         {
             var category = new Category
             {
@@ -1383,7 +1383,7 @@ public partial class InstallationService
         var allCategories = new List<Category>();
         var categoryToInsert = new List<Category>();
 
-        async Task saveCategory(SampleCategory sampleCategory, int parentCategoryId = 0)
+        async Task saveCategory(SampleCategory sampleCategory, long parentCategoryId = 0)
         {
             var category = await createCategory(sampleCategory, parentCategoryId);
             allCategories.Add(category);

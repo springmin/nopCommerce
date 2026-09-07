@@ -9,7 +9,7 @@ public partial record CustomerRecurringPaymentModel : BaseNopEntityModel
     public string NextPayment { get; set; }
     public int TotalCycles { get; set; }
     public int CyclesRemaining { get; set; }
-    public int InitialOrderId { get; set; }
+    public long InitialOrderId { get; set; }
     public bool CanRetryLastPayment { get; set; }
     public string InitialOrderNumber { get; set; }
     public bool CanCancel { get; set; }

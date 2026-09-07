@@ -62,7 +62,7 @@ public partial class ProductTemplateService : IProductTemplateService
     /// A task that represents the asynchronous operation
     /// The task result contains the product template
     /// </returns>
-    public virtual async Task<ProductTemplate> GetProductTemplateByIdAsync(int productTemplateId)
+    public virtual async Task<ProductTemplate> GetProductTemplateByIdAsync(long productTemplateId)
     {
         return await _productTemplateRepository.GetByIdAsync(productTemplateId, cache => default);
     }

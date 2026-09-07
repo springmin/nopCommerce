@@ -9,5 +9,5 @@ public partial interface ILocalizedLocaleModel
     /// <summary>
     /// Gets or sets the language identifier
     /// </summary>
-    int LanguageId { get; set; }
+    long LanguageId { get; set; }
 }

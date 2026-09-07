@@ -9,7 +9,7 @@ namespace Nop.Plugin.Misc.RFQ.Models.Customer;
 /// </summary>
 public record RequestQuoteModel : BaseNopEntityModel
 {
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     [NopResourceDisplayName("Plugins.Misc.RFQ.Fields.RequestQuote.CreatedOn")]
     public DateTime CreatedOnUtc { get; set; }
@@ -22,7 +22,7 @@ public record RequestQuoteModel : BaseNopEntityModel
     public string CustomerNotes { get; set; }
 
     [NopResourceDisplayName("Plugins.Misc.RFQ.CustomerQuote.Info")]
-    public int? QuoteId { get; set; }
+    public long? QuoteId { get; set; }
     public QuoteStatus QuoteStatus { get; set; }
 
     public IList<RequestQuoteItemModel> CustomerItems { get; set; }

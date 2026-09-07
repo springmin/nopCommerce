@@ -40,7 +40,7 @@ public partial interface INewsLetterSubscriptionService
     /// A task that represents the asynchronous operation
     /// The task result contains the newsletter subscription
     /// </returns>
-    Task<NewsLetterSubscription> GetNewsLetterSubscriptionByIdAsync(int newsLetterSubscriptionId);
+    Task<NewsLetterSubscription> GetNewsLetterSubscriptionByIdAsync(long newsLetterSubscriptionId);
 
     /// <summary>
     /// Gets the newsletter subscription list by newsletter subscription GUID
@@ -64,7 +64,7 @@ public partial interface INewsLetterSubscriptionService
     /// The task result contains the newsletter subscriptions
     /// </returns>
     Task<IList<NewsLetterSubscription>> GetNewsLetterSubscriptionsByEmailAsync(string email,
-        int storeId = 0, int subscriptionTypeId = 0, bool? isActive = null);
+        long storeId = 0, long subscriptionTypeId = 0, bool? isActive = null);
 
     /// <summary>
     /// Gets the paged newsletter subscription list
@@ -84,6 +84,6 @@ public partial interface INewsLetterSubscriptionService
     /// </returns>
     Task<IPagedList<NewsLetterSubscription>> GetAllNewsLetterSubscriptionsAsync(string email = null,
         DateTime? createdFromUtc = null, DateTime? createdToUtc = null,
-        int storeId = 0, bool? isActive = null, int customerRoleId = 0, int subscriptionTypeId = 0,
+        long storeId = 0, bool? isActive = null, long customerRoleId = 0, long subscriptionTypeId = 0,
         int pageIndex = 0, int pageSize = int.MaxValue);
 }

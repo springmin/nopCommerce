@@ -390,7 +390,7 @@ public partial class CommonController : BaseAdminController
         return View(model);
     }
 
-    public virtual async Task<IActionResult> SetLanguage(int langid, string returnUrl = "")
+    public virtual async Task<IActionResult> SetLanguage(long langid, string returnUrl = "")
     {
         var language = await _languageService.GetLanguageByIdAsync(langid);
         if (language != null)
@@ -474,7 +474,7 @@ public partial class CommonController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.System.MANAGE_MAINTENANCE)]
-    public virtual async Task<IActionResult> DeleteSelectedSeNames(ICollection<int> selectedIds)
+    public virtual async Task<IActionResult> DeleteSelectedSeNames(ICollection<long> selectedIds)
     {
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();

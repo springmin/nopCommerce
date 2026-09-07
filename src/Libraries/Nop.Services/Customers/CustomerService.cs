@@ -6,7 +6,9 @@ using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Orders;
+using Nop.Core.Domain.Shipping;
 using Nop.Core.Domain.Tax;
+using Nop.Core.Events;
 using Nop.Core.Infrastructure;
 using Nop.Data;
 using Nop.Services.Common;
@@ -23,6 +25,7 @@ public partial class CustomerService : ICustomerService
     #region Fields
 
     protected readonly CustomerSettings _customerSettings;
+    protected readonly IEventPublisher _eventPublisher;
     protected readonly IGenericAttributeService _genericAttributeService;
     protected readonly IHtmlFormatter _htmlFormatter;
     protected readonly INopDataProvider _dataProvider;
@@ -50,6 +53,7 @@ public partial class CustomerService : ICustomerService
     #region Ctor
 
     public CustomerService(CustomerSettings customerSettings,
+        IEventPublisher eventPublisher,
         IGenericAttributeService genericAttributeService,
         IHtmlFormatter htmlFormatter,
         INopDataProvider dataProvider,
@@ -73,6 +77,7 @@ public partial class CustomerService : ICustomerService
         TaxSettings taxSettings)
     {
         _customerSettings = customerSettings;
+        _eventPublisher = eventPublisher;
         _genericAttributeService = genericAttributeService;
         _htmlFormatter = htmlFormatter;
         _dataProvider = dataProvider;
@@ -106,7 +111,7 @@ public partial class CustomerService : ICustomerService
     /// <returns>
     /// A task that represents the asynchronous operation and contains a dictionary of all customer roles mapped by ID.
     /// </returns>
-    protected virtual async Task<IDictionary<int, CustomerRole>> GetAllCustomerRolesDictionaryAsync()
+    protected virtual async Task<IDictionary<long, CustomerRole>> GetAllCustomerRolesDictionaryAsync()
     {
         return await _staticCacheManager.GetAsync(
             _staticCacheManager.PrepareKeyForDefaultCache(NopEntityCacheDefaults<CustomerRole>.AllCacheKey),
@@ -149,7 +154,7 @@ public partial class CustomerService : ICustomerService
     /// </returns>
     public virtual async Task<IPagedList<Customer>> GetAllCustomersAsync(DateTime? createdFromUtc = null, DateTime? createdToUtc = null,
         DateTime? lastActivityFromUtc = null, DateTime? lastActivityToUtc = null,
-        int affiliateId = 0, int vendorId = 0, int[] customerRoleIds = null,
+        long affiliateId = 0, long vendorId = 0, long[] customerRoleIds = null,
         string email = null, string username = null, string firstName = null, string lastName = null,
         int dayOfBirth = 0, int monthOfBirth = 0,
         string company = null, string phone = null, string zipPostalCode = null, string ipAddress = null,
@@ -232,7 +237,7 @@ public partial class CustomerService : ICustomerService
     /// The task result contains the customers
     /// </returns>
     public virtual async Task<IPagedList<Customer>> GetOnlineCustomersAsync(DateTime lastActivityFromUtc,
-        int[] customerRoleIds, int pageIndex = 0, int pageSize = int.MaxValue)
+        long[] customerRoleIds, int pageIndex = 0, int pageSize = int.MaxValue)
     {
         var query = _customerRepository.Table;
         query = query.Where(c => lastActivityFromUtc <= c.LastActivityDateUtc);
@@ -250,7 +255,7 @@ public partial class CustomerService : ICustomerService
     /// <summary>
     /// Gets customers with shopping carts
     /// </summary>
-    /// <param name="shoppingCartTypes">Shopping cart types; pass null to load all records</param>
+    /// <param name="shoppingCartType">Shopping cart type; pass null to load all records</param>
     /// <param name="storeId">Store identifier; pass 0 to load all records</param>
     /// <param name="productId">Product identifier; pass null to load all records</param>
     /// <param name="createdFromUtc">Created date from (UTC); pass null to load all records</param>
@@ -262,17 +267,17 @@ public partial class CustomerService : ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains the customers
     /// </returns>
-    public virtual async Task<IPagedList<Customer>> GetCustomersWithShoppingCartsAsync(List<int> shoppingCartTypes = null,
-        int storeId = 0, int? productId = null,
-        DateTime? createdFromUtc = null, DateTime? createdToUtc = null, int? countryId = null,
+    public virtual async Task<IPagedList<Customer>> GetCustomersWithShoppingCartsAsync(ShoppingCartType? shoppingCartType = null,
+        long storeId = 0, long? productId = null,
+        DateTime? createdFromUtc = null, DateTime? createdToUtc = null, long? countryId = null,
         int pageIndex = 0, int pageSize = int.MaxValue)
     {
         //get all shopping cart items
         var items = _shoppingCartRepository.Table;
 
         //filter by type
-        if (shoppingCartTypes is not null)
-            items = items.Where(item => shoppingCartTypes.Contains(item.ShoppingCartTypeId));
+        if (shoppingCartType.HasValue)
+            items = items.Where(item => item.ShoppingCartTypeId == (int)shoppingCartType.Value);
 
         //filter shopping cart items by store
         if (storeId > 0 && !_shoppingCartSettings.CartsSharedBetweenStores)
@@ -294,15 +299,13 @@ public partial class CustomerService : ICustomerService
         //filter customers by billing country
         if (countryId > 0)
         {
-            customers =
-                from c in customers
+            customers = from c in customers
                 join a in _customerAddressRepository.Table on c.BillingAddressId equals a.Id
                 where a.CountryId == countryId
                 select c;
         }
 
-        var customersWithCarts =
-            from c in customers
+        var customersWithCarts = from c in customers
             join item in items on c.Id equals item.CustomerId
             //we change ordering for the MySQL engine to avoid problems with the ONLY_FULL_GROUP_BY server property that is set by default since the 5.7.5 version
             orderby _dataProvider.ConfigurationName == "MySql" ? c.CreatedOnUtc : item.CreatedOnUtc descending
@@ -360,7 +363,7 @@ public partial class CustomerService : ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains a customer
     /// </returns>
-    public virtual async Task<Customer> GetCustomerByIdAsync(int customerId)
+    public virtual async Task<Customer> GetCustomerByIdAsync(long customerId)
     {
         return await _customerRepository.GetByIdAsync(customerId, cache => default, useShortTermCache: true);
     }
@@ -373,7 +376,7 @@ public partial class CustomerService : ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains the customers
     /// </returns>
-    public virtual async Task<IList<Customer>> GetCustomersByIdsAsync(int[] customerIds)
+    public virtual async Task<IList<Customer>> GetCustomersByIdsAsync(long[] customerIds)
     {
         return await _customerRepository.GetByIdsAsync(customerIds, includeDeleted: false);
     }
@@ -391,13 +394,17 @@ public partial class CustomerService : ICustomerService
         if (customerGuids == null)
             return null;
 
-        var query =
-            from c in _customerRepository.Table
-            where customerGuids.Contains(c.CustomerGuid)
-            select c;
-        var customers = await query.ToListAsync();
+        //OHOS: use raw SQL with explicit DataParameter to work around LinqToDB closure parameter
+        //binding failure on OHOS ARM64 .NET 11. Build IN clause with numbered parameters.
+        var parameters = customerGuids
+            .Select((g, i) => new LinqToDB.Data.DataParameter($"guid{i}", g))
+            .ToArray();
+        var placeholders = string.Join(", ", parameters.Select(p => $"@{p.Name}"));
+        var customers = await _dataProvider.QueryAsync<Customer>(
+            $"SELECT * FROM [Customer] WHERE [CustomerGuid] IN ({placeholders})",
+            parameters);
 
-        return customers;
+        return customers.ToList();
     }
 
     /// <summary>
@@ -413,13 +420,15 @@ public partial class CustomerService : ICustomerService
         if (customerGuid == Guid.Empty)
             return null;
 
-        var query =
-            from c in _customerRepository.Table
-            where c.CustomerGuid == customerGuid
-            orderby c.Id
-            select c;
-
-        return await _shortTermCacheManager.GetAsync(async () => await query.FirstOrDefaultAsync(), NopCustomerServicesDefaults.CustomerByGuidCacheKey, customerGuid);
+        //OHOS: use raw SQL with explicit DataParameter to work around LinqToDB closure parameter
+        //binding failure on OHOS ARM64 .NET 11.
+        return await _shortTermCacheManager.GetAsync(async () =>
+        {
+            var customers = await _dataProvider.QueryAsync<Customer>(
+                "SELECT * FROM [Customer] WHERE [CustomerGuid] = @customerGuid ORDER BY [Id] LIMIT 1",
+                new LinqToDB.Data.DataParameter("customerGuid", customerGuid));
+            return customers.FirstOrDefault();
+        }, NopCustomerServicesDefaults.CustomerByGuidCacheKey, customerGuid);
     }
 
     /// <summary>
@@ -435,14 +444,11 @@ public partial class CustomerService : ICustomerService
         if (string.IsNullOrWhiteSpace(email))
             return null;
 
-        var query =
-            from c in _customerRepository.Table
-            orderby c.Id
-            where c.Email == email
-            select c;
-        var customer = await query.FirstOrDefaultAsync();
+        var query = from c in _customerRepository.Table
+                    where c.Email == email
+                    select c;
 
-        return customer;
+        return await query.FirstOrDefaultAsync();
     }
 
     /// <summary>
@@ -458,15 +464,16 @@ public partial class CustomerService : ICustomerService
         if (string.IsNullOrWhiteSpace(systemName))
             return null;
 
-        var query =
-            from c in _customerRepository.Table
-            orderby c.Id
-            where c.SystemName == systemName
-            select c;
+        var systemNameLower = systemName.ToLowerInvariant();
 
-        var customer = await _shortTermCacheManager.GetAsync(async () => await query.FirstOrDefaultAsync(), NopCustomerServicesDefaults.CustomerBySystemNameCacheKey, systemName);
+        return await _shortTermCacheManager.GetAsync(async () =>
+        {
+            var query = from c in _customerRepository.Table
+                        where c.SystemName != null && c.SystemName.ToLower() == systemNameLower
+                        select c;
 
-        return customer;
+            return await query.FirstOrDefaultAsync();
+        }, NopCustomerServicesDefaults.CustomerBySystemNameCacheKey, systemName);
     }
 
     /// <summary>
@@ -558,14 +565,12 @@ public partial class CustomerService : ICustomerService
         if (string.IsNullOrWhiteSpace(username))
             return null;
 
-        var query =
-            from c in _customerRepository.Table
-            orderby c.Id
-            where c.Username == username
-            select c;
-        var customer = await query.FirstOrDefaultAsync();
+        var usernameLower = username.ToLowerInvariant();
+        var query = from c in _customerRepository.Table
+                    where c.Username != null && c.Username.ToLower() == usernameLower
+                    select c;
 
-        return customer;
+        return await query.FirstOrDefaultAsync();
     }
 
     /// <summary>
@@ -580,18 +585,14 @@ public partial class CustomerService : ICustomerService
         if (string.IsNullOrWhiteSpace(phone))
             return null;
 
-        return await _shortTermCacheManager.GetAsync(async () =>
-        {
-            var query =
-                from c in _customerRepository.Table
-                where c.Active && !c.Deleted && c.Phone == phone
-                orderby c.Id
-                select c;
+        var phoneLower = phone.ToLowerInvariant();
+        var query = from c in _customerRepository.Table
+                    where c.Phone != null
+                          && c.Phone.ToLower() == phoneLower
+                          && c.Active && !c.Deleted
+                    select c;
 
-            var customers = await query.ToListAsync();
-
-            return customers.FirstOrDefault(customer => customer.PhoneSmsVerified) ?? customers.FirstOrDefault();
-        }, NopCustomerServicesDefaults.CustomerByPhoneCacheKey, phone);
+        return await query.FirstOrDefaultAsync();
     }
 
     /// <summary>
@@ -662,6 +663,55 @@ public partial class CustomerService : ICustomerService
     }
 
     /// <summary>
+    /// Reset data required for checkout
+    /// </summary>
+    /// <param name="customer">Customer</param>
+    /// <param name="storeId">Store identifier</param>
+    /// <param name="clearCouponCodes">A value indicating whether to clear coupon code</param>
+    /// <param name="clearCheckoutAttributes">A value indicating whether to clear selected checkout attributes</param>
+    /// <param name="clearRewardPoints">A value indicating whether to clear "Use reward points" flag</param>
+    /// <param name="clearShippingMethod">A value indicating whether to clear selected shipping method</param>
+    /// <param name="clearPaymentMethod">A value indicating whether to clear selected payment method</param>
+    /// <returns>A task that represents the asynchronous operation</returns>
+    public virtual async Task ResetCheckoutDataAsync(Customer customer, long storeId,
+        bool clearCouponCodes = false, bool clearCheckoutAttributes = false,
+        bool clearRewardPoints = true, bool clearShippingMethod = true,
+        bool clearPaymentMethod = true)
+    {
+        ArgumentNullException.ThrowIfNull(customer);
+
+        //clear entered coupon codes
+        if (clearCouponCodes)
+        {
+            await _genericAttributeService.SaveAttributeAsync<string>(customer, NopCustomerDefaults.DiscountCouponCodeAttribute, null);
+            await _genericAttributeService.SaveAttributeAsync<string>(customer, NopCustomerDefaults.GiftCardCouponCodesAttribute, null);
+        }
+
+        //clear checkout attributes
+        if (clearCheckoutAttributes)
+            await _genericAttributeService.SaveAttributeAsync<string>(customer, NopCustomerDefaults.CheckoutAttributes, null, storeId);
+
+        //clear reward points flag
+        if (clearRewardPoints)
+            await _genericAttributeService.SaveAttributeAsync(customer, NopCustomerDefaults.UseRewardPointsDuringCheckoutAttribute, false, storeId);
+
+        //clear selected shipping method
+        if (clearShippingMethod)
+        {
+            await _genericAttributeService.SaveAttributeAsync<ShippingOption>(customer, NopCustomerDefaults.SelectedShippingOptionAttribute, null, storeId);
+            await _genericAttributeService.SaveAttributeAsync<ShippingOption>(customer, NopCustomerDefaults.OfferedShippingOptionsAttribute, null, storeId);
+            await _genericAttributeService.SaveAttributeAsync<PickupPoint>(customer, NopCustomerDefaults.SelectedPickupPointAttribute, null, storeId);
+            await _genericAttributeService.SaveAttributeAsync<DateTime?>(customer, NopCustomerDefaults.DesiredDeliveryDate, null, storeId);
+        }
+
+        //clear selected payment method
+        if (clearPaymentMethod)
+            await _genericAttributeService.SaveAttributeAsync<string>(customer, NopCustomerDefaults.SelectedPaymentMethodAttribute, null, storeId);
+
+        await _eventPublisher.PublishAsync(new ResetCheckoutDataEvent(customer, storeId));
+    }
+
+    /// <summary>
     /// Delete guest customer records
     /// </summary>
     /// <param name="createdFromUtc">Created date from (UTC); null to load all records</param>
@@ -675,14 +725,12 @@ public partial class CustomerService : ICustomerService
     {
         var guestRole = await GetCustomerRoleBySystemNameAsync(NopCustomerDefaults.GuestsRoleName);
 
-        var allGuestCustomers =
-            from guest in _customerRepository.Table
+        var allGuestCustomers = from guest in _customerRepository.Table
             join ccm in _customerCustomerRoleMappingRepository.Table on guest.Id equals ccm.CustomerId
             where ccm.CustomerRoleId == guestRole.Id
             select guest;
 
-        var guestsToDelete =
-            from guest in _customerRepository.Table
+        var guestsToDelete = from guest in _customerRepository.Table
             join g in allGuestCustomers on guest.Id equals g.Id
             from sCart in _shoppingCartRepository.Table.Where(sci => sci.CustomerId == guest.Id).DefaultIfEmpty()
             from order in _orderRepository.Table.Where(o => o.CustomerId == guest.Id).DefaultIfEmpty()
@@ -1204,7 +1252,7 @@ public partial class CustomerService : ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains the customer role
     /// </returns>
-    public virtual async Task<CustomerRole> GetCustomerRoleByIdAsync(int customerRoleId)
+    public virtual async Task<CustomerRole> GetCustomerRoleByIdAsync(long customerRoleId)
     {
         var allRolesById = await GetAllCustomerRolesDictionaryAsync();
 
@@ -1226,8 +1274,7 @@ public partial class CustomerService : ICustomerService
 
         var key = _staticCacheManager.PrepareKeyForDefaultCache(NopCustomerServicesDefaults.CustomerRolesBySystemNameCacheKey, systemName);
 
-        var query =
-            from cr in _customerRoleRepository.Table
+        var query = from cr in _customerRoleRepository.Table
             orderby cr.Id
             where cr.SystemName == systemName
             select cr;
@@ -1246,7 +1293,7 @@ public partial class CustomerService : ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains the customer role identifiers
     /// </returns>
-    public virtual async Task<int[]> GetCustomerRoleIdsAsync(Customer customer, bool showHidden = false)
+    public virtual async Task<long[]> GetCustomerRoleIdsAsync(Customer customer, bool showHidden = false)
     {
         ArgumentNullException.ThrowIfNull(customer);
 
@@ -1406,7 +1453,7 @@ public partial class CustomerService : ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of customer passwords
     /// </returns>
-    public virtual async Task<IList<CustomerPassword>> GetCustomerPasswordsAsync(int? customerId = null,
+    public virtual async Task<IList<CustomerPassword>> GetCustomerPasswordsAsync(long? customerId = null,
         PasswordFormat? passwordFormat = null, int? passwordsToReturn = null)
     {
         var query = _customerPasswordRepository.Table;
@@ -1434,7 +1481,7 @@ public partial class CustomerService : ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains the customer password
     /// </returns>
-    public virtual async Task<CustomerPassword> GetCurrentPasswordAsync(int customerId)
+    public virtual async Task<CustomerPassword> GetCurrentPasswordAsync(long customerId)
     {
         if (customerId == 0)
             return null;
@@ -1611,10 +1658,9 @@ public partial class CustomerService : ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public virtual async Task<IList<Address>> GetAddressesByCustomerIdAsync(int customerId)
+    public virtual async Task<IList<Address>> GetAddressesByCustomerIdAsync(long customerId)
     {
-        var query =
-            from address in _customerAddressRepository.Table
+        var query = from address in _customerAddressRepository.Table
             join cam in _customerAddressMappingRepository.Table on address.Id equals cam.AddressId
             where cam.CustomerId == customerId
             select address;
@@ -1631,13 +1677,12 @@ public partial class CustomerService : ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public virtual async Task<Address> GetCustomerAddressAsync(int customerId, int addressId)
+    public virtual async Task<Address> GetCustomerAddressAsync(long customerId, long addressId)
     {
         if (customerId == 0 || addressId == 0)
             return null;
 
-        var query =
-            from address in _customerAddressRepository.Table
+        var query = from address in _customerAddressRepository.Table
             join cam in _customerAddressMappingRepository.Table on address.Id equals cam.AddressId
             where cam.CustomerId == customerId && address.Id == addressId
             select address;
@@ -1697,7 +1742,7 @@ public partial class CustomerService : ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains the private message
     /// </returns>
-    public virtual async Task<PrivateMessage> GetPrivateMessageByIdAsync(int privateMessageId)
+    public virtual async Task<PrivateMessage> GetPrivateMessageByIdAsync(long privateMessageId)
     {
         return await _privateMessageRepository.GetByIdAsync(privateMessageId, cache => default, useShortTermCache: true);
     }
@@ -1718,8 +1763,8 @@ public partial class CustomerService : ICustomerService
     /// A task that represents the asynchronous operation
     /// The task result contains the private messages
     /// </returns>
-    public virtual async Task<IPagedList<PrivateMessage>> GetAllPrivateMessagesAsync(int storeId, int fromCustomerId,
-        int toCustomerId, bool? isRead, bool? isDeletedByAuthor, bool? isDeletedByRecipient,
+    public virtual async Task<IPagedList<PrivateMessage>> GetAllPrivateMessagesAsync(long storeId, long fromCustomerId,
+        long toCustomerId, bool? isRead, bool? isDeletedByAuthor, bool? isDeletedByRecipient,
         string keywords, int pageIndex = 0, int pageSize = int.MaxValue)
     {
         var privateMessages = await _privateMessageRepository.GetAllPagedAsync(query =>

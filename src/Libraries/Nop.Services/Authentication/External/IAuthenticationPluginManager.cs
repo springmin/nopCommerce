@@ -17,7 +17,7 @@ public partial interface IAuthenticationPluginManager : IPluginManager<IExternal
     /// A task that represents the asynchronous operation
     /// The task result contains the list of active authentication methods
     /// </returns>
-    Task<IList<IExternalAuthenticationMethod>> LoadActivePluginsAsync(Customer customer = null, int storeId = 0);
+    Task<IList<IExternalAuthenticationMethod>> LoadActivePluginsAsync(Customer customer = null, long storeId = 0);
 
     /// <summary>
     /// Check whether the passed authentication method is active
@@ -36,5 +36,5 @@ public partial interface IAuthenticationPluginManager : IPluginManager<IExternal
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, int storeId = 0);
+    Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, long storeId = 0);
 }

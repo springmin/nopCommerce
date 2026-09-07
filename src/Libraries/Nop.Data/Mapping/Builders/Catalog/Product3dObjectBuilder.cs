@@ -20,8 +20,8 @@ public partial class Product3dObjectBuilder : NopEntityBuilder<Product3dObject>
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(Product3dObject.ProductId)).AsInt32().ForeignKey<Product>()
-            .WithColumn(nameof(Product3dObject.PreviewPictureId)).AsInt32().Nullable().ForeignKey<Picture>(onDelete: Rule.SetNull);
+            .WithColumn(nameof(Product3dObject.ProductId)).AsInt64().ForeignKey<Product>()
+            .WithColumn(nameof(Product3dObject.PreviewPictureId)).AsInt64().Nullable().ForeignKey<Picture>(onDelete: Rule.SetNull);
     }
 
     #endregion

@@ -10,17 +10,17 @@ public class ForumTopic : BaseEntity
     /// <summary>
     /// Gets or sets the forum identifier
     /// </summary>
-    public int ForumId { get; set; }
+    public long ForumId { get; set; }
 
     /// <summary>
     /// Gets or sets the customer identifier
     /// </summary>
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     /// <summary>
     /// Gets or sets the topic type identifier
     /// </summary>
-    public int TopicTypeId { get; set; }
+    public long TopicTypeId { get; set; }
 
     /// <summary>
     /// Gets or sets the subject
@@ -40,12 +40,12 @@ public class ForumTopic : BaseEntity
     /// <summary>
     /// Gets or sets the last post identifier
     /// </summary>
-    public int LastPostId { get; set; }
+    public long LastPostId { get; set; }
 
     /// <summary>
     /// Gets or sets the last post customer identifier
     /// </summary>
-    public int LastPostCustomerId { get; set; }
+    public long LastPostCustomerId { get; set; }
 
     /// <summary>
     /// Gets or sets the last post date and time

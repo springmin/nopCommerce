@@ -64,7 +64,7 @@ public partial class BackInStockSubscriptionController : BasePublicController
 
     // Product details page > back in stock subscribe
     [CheckLanguageSeoCode(ignore: true)]
-    public virtual async Task<IActionResult> SubscribePopup(int productId)
+    public virtual async Task<IActionResult> SubscribePopup(long productId)
     {
         var product = await _productService.GetProductByIdAsync(productId);
         if (product == null || product.Deleted)
@@ -98,7 +98,7 @@ public partial class BackInStockSubscriptionController : BasePublicController
     }
 
     [HttpPost]
-    public virtual async Task<IActionResult> SubscribePopupPOST(int productId)
+    public virtual async Task<IActionResult> SubscribePopupPOST(long productId)
     {
         var product = await _productService.GetProductByIdAsync(productId);
         if (product == null || product.Deleted)

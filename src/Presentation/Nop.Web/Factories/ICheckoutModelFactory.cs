@@ -17,7 +17,7 @@ public partial interface ICheckoutModelFactory
     /// <param name="overrideAttributesXml">Override attributes xml</param>
     /// <returns>A task that represents the asynchronous operation</returns>
     Task PrepareBillingAddressModelAsync(CheckoutBillingAddressModel model, IList<ShoppingCartItem> cart,
-        int? selectedCountryId = null,
+        long? selectedCountryId = null,
         bool prePopulateNewAddressWithCustomerFields = false,
         string overrideAttributesXml = "");
 
@@ -30,7 +30,7 @@ public partial interface ICheckoutModelFactory
     /// <param name="prePopulateNewAddressWithCustomerFields">Pre populate new address with customer fields</param>
     /// <param name="overrideAttributesXml">Override attributes xml</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task PrepareShippingAddressModelAsync(CheckoutShippingAddressModel model, IList<ShoppingCartItem> cart, int? selectedCountryId = null,
+    Task PrepareShippingAddressModelAsync(CheckoutShippingAddressModel model, IList<ShoppingCartItem> cart, long? selectedCountryId = null,
         bool prePopulateNewAddressWithCustomerFields = false, string overrideAttributesXml = "");
 
     /// <summary>
@@ -53,7 +53,7 @@ public partial interface ICheckoutModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the payment method model
     /// </returns>
-    Task<CheckoutPaymentMethodModel> PreparePaymentMethodModelAsync(IList<ShoppingCartItem> cart, int filterByCountryId);
+    Task<CheckoutPaymentMethodModel> PreparePaymentMethodModelAsync(IList<ShoppingCartItem> cart, long filterByCountryId);
 
     /// <summary>
     /// Prepare payment info model

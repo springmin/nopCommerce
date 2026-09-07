@@ -10,7 +10,7 @@ public class Forum : BaseEntity
     /// <summary>
     /// Gets or sets the forum group identifier
     /// </summary>
-    public int ForumGroupId { get; set; }
+    public long ForumGroupId { get; set; }
 
     /// <summary>
     /// Gets or sets the name
@@ -35,17 +35,17 @@ public class Forum : BaseEntity
     /// <summary>
     /// Gets or sets the last topic identifier
     /// </summary>
-    public int LastTopicId { get; set; }
+    public long LastTopicId { get; set; }
 
     /// <summary>
     /// Gets or sets the last post identifier
     /// </summary>
-    public int LastPostId { get; set; }
+    public long LastPostId { get; set; }
 
     /// <summary>
     /// Gets or sets the last post customer identifier
     /// </summary>
-    public int LastPostCustomerId { get; set; }
+    public long LastPostCustomerId { get; set; }
 
     /// <summary>
     /// Gets or sets the last post date and time

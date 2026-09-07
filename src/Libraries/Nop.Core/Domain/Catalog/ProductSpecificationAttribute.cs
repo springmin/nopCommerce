@@ -10,17 +10,17 @@ public partial class ProductSpecificationAttribute : BaseEntity, ILocalizedEntit
     /// <summary>
     /// Gets or sets the product identifier
     /// </summary>
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     /// <summary>
     /// Gets or sets the attribute type ID
     /// </summary>
-    public int AttributeTypeId { get; set; }
+    public long AttributeTypeId { get; set; }
 
     /// <summary>
     /// Gets or sets the specification attribute identifier
     /// </summary>
-    public int SpecificationAttributeOptionId { get; set; }
+    public long SpecificationAttributeOptionId { get; set; }
 
     /// <summary>
     /// Gets or sets the custom value

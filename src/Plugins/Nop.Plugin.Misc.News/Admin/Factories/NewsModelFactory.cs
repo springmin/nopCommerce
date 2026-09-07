@@ -124,7 +124,7 @@ public class NewsModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the news content model
     /// </returns>
-    public async Task<NewsContentModel> PrepareNewsContentModelAsync(NewsContentModel newsContentModel, int? filterByNewsItemId)
+    public async Task<NewsContentModel> PrepareNewsContentModelAsync(NewsContentModel newsContentModel, long? filterByNewsItemId)
     {
         ArgumentNullException.ThrowIfNull(newsContentModel);
 
@@ -275,7 +275,7 @@ public class NewsModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the news comment list model
     /// </returns>
-    public async Task<NewsCommentListModel> PrepareNewsCommentListModelAsync(NewsCommentSearchModel searchModel, int? newsItemId)
+    public async Task<NewsCommentListModel> PrepareNewsCommentListModelAsync(NewsCommentSearchModel searchModel, long? newsItemId)
     {
         ArgumentNullException.ThrowIfNull(searchModel);
 

@@ -88,7 +88,7 @@ public partial class ReportController : BaseAdminController
 
     [CheckPermission(StandardPermission.Orders.ORDERS_VIEW)]
     [CheckPermission(StandardPermission.Reports.SALES_SUMMARY)]
-    public virtual async Task<IActionResult> SalesSummary(List<int> orderStatuses = null, List<int> paymentStatuses = null)
+    public virtual async Task<IActionResult> SalesSummary(List<long> orderStatuses = null, List<long> paymentStatuses = null)
     {
         //prepare model
         var model = await _reportModelFactory.PrepareSalesSummarySearchModelAsync(new SalesSummarySearchModel

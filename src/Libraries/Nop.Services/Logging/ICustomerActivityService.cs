@@ -33,7 +33,7 @@ public partial interface ICustomerActivityService
     /// A task that represents the asynchronous operation
     /// The task result contains the activity log type item
     /// </returns>
-    Task<ActivityLogType> GetActivityTypeByIdAsync(int activityLogTypeId);
+    Task<ActivityLogType> GetActivityTypeByIdAsync(long activityLogTypeId);
 
     /// <summary>
     /// Inserts an activity log item
@@ -109,7 +109,7 @@ public partial interface ICustomerActivityService
     /// The task result contains the activity log items
     /// </returns>
     Task<IPagedList<ActivityLog>> GetAllActivitiesAsync(DateTime? createdOnFrom = null, DateTime? createdOnTo = null,
-        int? customerId = null, int? activityLogTypeId = null, string ipAddress = null, string entityName = null, int? entityId = null,
+        long? customerId = null, long? activityLogTypeId = null, string ipAddress = null, string entityName = null, long? entityId = null,
         int pageIndex = 0, int pageSize = int.MaxValue);
 
     /// <summary>
@@ -120,7 +120,7 @@ public partial interface ICustomerActivityService
     /// A task that represents the asynchronous operation
     /// The task result contains the activity log item
     /// </returns>
-    Task<ActivityLog> GetActivityByIdAsync(int activityLogId);
+    Task<ActivityLog> GetActivityByIdAsync(long activityLogId);
 
     /// <summary>
     /// Clears activity log

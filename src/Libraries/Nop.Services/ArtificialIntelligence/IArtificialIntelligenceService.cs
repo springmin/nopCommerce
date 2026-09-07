@@ -37,7 +37,7 @@ public partial interface IArtificialIntelligenceService
     /// A task that represents the asynchronous operation
     /// The task result contains the generated product description
     /// </returns>
-    Task<string> CreateProductDescriptionAsync(string productName, string keywords, ToneOfVoiceType toneOfVoice, string instruction, string customToneOfVoice = null, int languageId = 0);
+    Task<string> CreateProductDescriptionAsync(string productName, string keywords, ToneOfVoiceType toneOfVoice, string instruction, string customToneOfVoice = null, long languageId = 0);
 
     /// <summary>
     /// Create meta tags by artificial intelligence
@@ -48,7 +48,7 @@ public partial interface IArtificialIntelligenceService
     /// A task that represents the asynchronous operation
     /// The task result contains the generated meta tags
     /// </returns>
-    Task<(string metaTitle, string metaKeywords, string metaDescription)> CreateMetaTagsForLocalizedEntityAsync<TEntity>(TEntity entity, int languageId)
+    Task<(string metaTitle, string metaKeywords, string metaDescription)> CreateMetaTagsForLocalizedEntityAsync<TEntity>(TEntity entity, long languageId)
         where TEntity : BaseEntity, IMetaTagsSupported, ILocalizedEntity;
 
     /// <summary>
@@ -60,7 +60,7 @@ public partial interface IArtificialIntelligenceService
     /// A task that represents the asynchronous operation
     /// The task result contains the generated meta tags
     /// </returns>
-    Task<(string metaTitle, string metaKeywords, string metaDescription)> CreateMetaTagsAsync<TEntity>(TEntity entity, int languageId = 0)
+    Task<(string metaTitle, string metaKeywords, string metaDescription)> CreateMetaTagsAsync<TEntity>(TEntity entity, long languageId = 0)
         where TEntity : BaseEntity, IMetaTagsSupported;
 
     /// <summary>
@@ -73,5 +73,5 @@ public partial interface IArtificialIntelligenceService
     /// A task that represents the asynchronous operation
     /// The task result contains the generated meta tags
     /// </returns>
-    Task<(string metaTitle, string metaKeywords, string metaDescription)> CreateMetaTagsAsync(string entityTypeName, int entityId, int languageId);
+    Task<(string metaTitle, string metaKeywords, string metaDescription)> CreateMetaTagsAsync(string entityTypeName, long entityId, long languageId);
 }

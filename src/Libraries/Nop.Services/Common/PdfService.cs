@@ -744,7 +744,7 @@ public partial class PdfService : IPdfService
             OrderNotes = await GetOrderNotesAsync(pdfSettingsByStore, order, language),
             FooterTextColumn1 = column1Lines,
             FooterTextColumn2 = column2Lines,
-            GetResourceAsync = async (string resourceKey, int languageId) => await _localizationService.GetResourceAsync(resourceKey, languageId)
+            GetResourceAsync = async (string resourceKey, long languageId) => await _localizationService.GetResourceAsync(resourceKey, languageId)
         };
 
         await using var pdfStream = new MemoryStream();
@@ -862,7 +862,7 @@ public partial class PdfService : IPdfService
             OrderNumberText = order.CustomOrderNumber,
             Address = await GetShippingAddressAsync(language, order),
             Products = await GetOrderProductItemsAsync(order, orderItems, language, shipmentItems),
-            GetResourceAsync = async (string resourceKey, int languageId) => await _localizationService.GetResourceAsync(resourceKey, languageId)
+            GetResourceAsync = async (string resourceKey, long languageId) => await _localizationService.GetResourceAsync(resourceKey, languageId)
         };
 
         document.Generate(pdfStream);
@@ -961,7 +961,7 @@ public partial class PdfService : IPdfService
 
                 return await _fileProvider.ReadAllBytesAsync(path);
             },
-            GetResourceAsync = async (string resourceKey, int languageId) => await _localizationService.GetResourceAsync(resourceKey, languageId)
+            GetResourceAsync = async (string resourceKey, long languageId) => await _localizationService.GetResourceAsync(resourceKey, languageId)
         };
 
 

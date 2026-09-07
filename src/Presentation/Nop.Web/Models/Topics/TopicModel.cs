@@ -23,5 +23,5 @@ public partial record TopicModel : BaseNopEntityModel, IMetaTagsSupportedModel
 
     public string SeName { get; set; }
 
-    public int TopicTemplateId { get; set; }
+    public long TopicTemplateId { get; set; }
 }

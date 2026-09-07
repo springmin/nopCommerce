@@ -125,7 +125,7 @@ public partial class ContactFormAttributeModelFactory : IContactFormAttributeMod
     public virtual async Task<ContactFormAttributeModel> PrepareContactFormAttributeModelAsync(ContactFormAttributeModel model,
         ContactFormAttribute contactFormAttribute, bool excludeProperties = false)
     {
-        Func<ContactFormAttributeLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<ContactFormAttributeLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (contactFormAttribute != null)
         {
@@ -195,7 +195,7 @@ public partial class ContactFormAttributeModelFactory : IContactFormAttributeMod
     {
         ArgumentNullException.ThrowIfNull(contactFormAttribute);
 
-        Func<ContactFormAttributeValueLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<ContactFormAttributeValueLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         if (contactFormAttributeValue != null)
         {

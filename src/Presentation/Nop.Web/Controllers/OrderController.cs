@@ -170,7 +170,7 @@ public partial class OrderController : BasePublicController
     }
 
     //My account / Order details page
-    public virtual async Task<IActionResult> Details(int orderId)
+    public virtual async Task<IActionResult> Details(long orderId)
     {
         var order = await _orderService.GetOrderByIdAsync(orderId);
         var customer = await _workContext.GetCurrentCustomerAsync();
@@ -183,7 +183,7 @@ public partial class OrderController : BasePublicController
     }
 
     //My account / Order details page / Print
-    public virtual async Task<IActionResult> PrintOrderDetails(int orderId)
+    public virtual async Task<IActionResult> PrintOrderDetails(long orderId)
     {
         var order = await _orderService.GetOrderByIdAsync(orderId);
         var customer = await _workContext.GetCurrentCustomerAsync();
@@ -198,7 +198,7 @@ public partial class OrderController : BasePublicController
 
     //My account / Order details page / PDF invoice
     [CheckLanguageSeoCode(ignore: true)]
-    public virtual async Task<IActionResult> GetPdfInvoice(int orderId)
+    public virtual async Task<IActionResult> GetPdfInvoice(long orderId)
     {
         var order = await _orderService.GetOrderByIdAsync(orderId);
         var customer = await _workContext.GetCurrentCustomerAsync();
@@ -214,7 +214,7 @@ public partial class OrderController : BasePublicController
         return File(bytes, MimeTypes.ApplicationPdf, string.Format(await _localizationService.GetResourceAsync("PDFInvoice.FileName"), order.CustomOrderNumber) + ".pdf");
     }
 
-    public async Task<IActionResult> CancelOrder(int orderId)
+    public async Task<IActionResult> CancelOrder(long orderId)
     {
         if(!_orderSettings.AllowCustomersCancelOrders)
             return RedirectToRoute(NopRouteNames.Standard.ORDER_DETAILS, new { orderId });
@@ -242,7 +242,7 @@ public partial class OrderController : BasePublicController
     }
 
     //My account / Order details page / re-order
-    public virtual async Task<IActionResult> ReOrder(int orderId)
+    public virtual async Task<IActionResult> ReOrder(long orderId)
     {
         var order = await _orderService.GetOrderByIdAsync(orderId);
         var customer = await _workContext.GetCurrentCustomerAsync();
@@ -261,7 +261,7 @@ public partial class OrderController : BasePublicController
     [HttpPost, ActionName("Details")]
 
     [FormValueRequired("repost-payment")]
-    public virtual async Task<IActionResult> RePostPayment(int orderId)
+    public virtual async Task<IActionResult> RePostPayment(long orderId)
     {
         var order = await _orderService.GetOrderByIdAsync(orderId);
         var customer = await _workContext.GetCurrentCustomerAsync();
@@ -289,7 +289,7 @@ public partial class OrderController : BasePublicController
     }
 
     //My account / Order details page / Shipment details page
-    public virtual async Task<IActionResult> ShipmentDetails(int shipmentId)
+    public virtual async Task<IActionResult> ShipmentDetails(long shipmentId)
     {
         var shipment = await _shipmentService.GetShipmentByIdAsync(shipmentId);
         if (shipment == null)

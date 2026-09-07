@@ -29,7 +29,7 @@ public partial record MiniShoppingCartModel : BaseNopModel
             Picture = new PictureModel();
         }
 
-        public int ProductId { get; set; }
+        public long ProductId { get; set; }
 
         public string ProductName { get; set; }
 

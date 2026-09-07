@@ -32,7 +32,7 @@ public interface ICountryStateZipService
     /// A task that represents the asynchronous operation
     /// The task result contains the ax rate
     /// </returns>
-    Task<TaxRate> GetTaxRateByIdAsync(int taxRateId);
+    Task<TaxRate> GetTaxRateByIdAsync(long taxRateId);
 
     /// <summary>
     /// Inserts a tax rate

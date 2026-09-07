@@ -144,7 +144,7 @@ public class NewsAdminController : BasePluginController
     }
 
     [CheckPermission(NewsDefaults.Permissions.NEWS_VIEW)]
-    public async Task<IActionResult> NewsItems(int? filterByNewsItemId)
+    public async Task<IActionResult> NewsItems(long? filterByNewsItemId)
     {
         //prepare model
         var model = await _newsModelFactory.PrepareNewsContentModelAsync(new(), filterByNewsItemId);
@@ -208,7 +208,7 @@ public class NewsAdminController : BasePluginController
     }
 
     [CheckPermission(NewsDefaults.Permissions.NEWS_VIEW)]
-    public async Task<IActionResult> NewsItemEdit(int id)
+    public async Task<IActionResult> NewsItemEdit(long id)
     {
         //try to get a news item with the specified id
         var newsItem = await _newsService.GetNewsByIdAsync(id);
@@ -263,7 +263,7 @@ public class NewsAdminController : BasePluginController
 
     [HttpPost]
     [CheckPermission(NewsDefaults.Permissions.NEWS_MANAGE)]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(long id)
     {
         //try to get a news item with the specified id
         var newsItem = await _newsService.GetNewsByIdAsync(id);
@@ -286,7 +286,7 @@ public class NewsAdminController : BasePluginController
     #region Comments
 
     [CheckPermission(NewsDefaults.Permissions.NEWS_COMMENTS_VIEW)]
-    public async Task<IActionResult> NewsComments(int? filterByNewsItemId)
+    public async Task<IActionResult> NewsComments(long? filterByNewsItemId)
     {
         //try to get a news item with the specified id
         var newsItem = await _newsService.GetNewsByIdAsync(filterByNewsItemId ?? 0);
@@ -331,7 +331,7 @@ public class NewsAdminController : BasePluginController
 
     [HttpPost]
     [CheckPermission(NewsDefaults.Permissions.NEWS_COMMENTS_MANAGE)]
-    public async Task<IActionResult> CommentDelete(int id)
+    public async Task<IActionResult> CommentDelete(long id)
     {
         //try to get a news comment with the specified id
         var comment = await _newsService.GetNewsCommentByIdAsync(id)
@@ -348,7 +348,7 @@ public class NewsAdminController : BasePluginController
 
     [HttpPost]
     [CheckPermission(NewsDefaults.Permissions.NEWS_COMMENTS_MANAGE)]
-    public async Task<IActionResult> DeleteSelectedComments(ICollection<int> selectedIds)
+    public async Task<IActionResult> DeleteSelectedComments(ICollection<long> selectedIds)
     {
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();
@@ -367,7 +367,7 @@ public class NewsAdminController : BasePluginController
 
     [HttpPost]
     [CheckPermission(NewsDefaults.Permissions.NEWS_COMMENTS_MANAGE)]
-    public async Task<IActionResult> ApproveSelected(ICollection<int> selectedIds)
+    public async Task<IActionResult> ApproveSelected(ICollection<long> selectedIds)
     {
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();
@@ -393,7 +393,7 @@ public class NewsAdminController : BasePluginController
 
     [HttpPost]
     [CheckPermission(NewsDefaults.Permissions.NEWS_COMMENTS_MANAGE)]
-    public async Task<IActionResult> DisapproveSelected(ICollection<int> selectedIds)
+    public async Task<IActionResult> DisapproveSelected(ICollection<long> selectedIds)
     {
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();

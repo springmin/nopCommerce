@@ -360,7 +360,7 @@ public class NopDataProviderTests : BaseNopTest
         {
             case DataProviderType.Unknown:
                 connStr.Should()
-                    .Be(@$"Data Source={CommonHelper.DefaultFileProvider.MapPath($"~/App_Data/")}test_db.sqlite;Mode=ReadWrite;Cache=Shared;Password=passwd");
+                    .Be(@$"Data Source={CommonHelper.DefaultFileProvider.MapPath($"~/App_Data/")}test_db.sqlite;Mode=ReadWriteCreate;Cache=Default;Password=passwd;Default Timeout=60");
                 break;
             case DataProviderType.SqlServer:
                 connStr.Should()
@@ -368,7 +368,7 @@ public class NopDataProviderTests : BaseNopTest
                 break;
             case DataProviderType.MySql:
                 connStr.Should()
-                    .Be(@"Server=127.0.0.1;User ID=test;Password=passwd;Database=test_db;Allow User Variables=True");
+                    .Be(@"Server=127.0.0.1;User ID=test;Password=passwd;Database=test_db;Connection Idle Timeout=60;Allow User Variables=True;Connection Timeout=60;Use XA Transactions=False");
                 break;
             case DataProviderType.PostgreSQL:
                 connStr.Should()

@@ -1119,7 +1119,7 @@ public partial class UrlRecordService : IUrlRecordService
     /// A task that represents the asynchronous operation
     /// The task result contains the uRL record
     /// </returns>
-    public virtual async Task<IList<UrlRecord>> GetUrlRecordsByIdsAsync(int[] urlRecordIds)
+    public virtual async Task<IList<UrlRecord>> GetUrlRecordsByIdsAsync(long[] urlRecordIds)
     {
         return await _urlRecordRepository.GetByIdsAsync(urlRecordIds, _ => default);
     }
@@ -1198,7 +1198,7 @@ public partial class UrlRecordService : IUrlRecordService
     /// The task result contains the uRL records
     /// </returns>
     public virtual async Task<IPagedList<UrlRecord>> GetAllUrlRecordsAsync(
-        string slug = "", int? languageId = null, bool? isActive = null, int pageIndex = 0, int pageSize = int.MaxValue)
+        string slug = "", long? languageId = null, bool? isActive = null, int pageIndex = 0, int pageSize = int.MaxValue)
     {
         var urlRecords = (await _urlRecordRepository.GetAllAsync(query => query.OrderBy(ur => ur.Slug), _ => default))
             .AsEnumerable();
@@ -1227,12 +1227,12 @@ public partial class UrlRecordService : IUrlRecordService
     /// A task that represents the asynchronous operation
     /// The task result contains the found slug
     /// </returns>
-    public virtual async Task<string> GetActiveSlugAsync(int entityId, string entityName, int languageId)
+    public virtual async Task<string> GetActiveSlugAsync(long entityId, string entityName, long languageId)
     {
         if (_localizationSettings.LoadAllUrlRecordsOnStartup)
         {
             //value tuples aren't json-serializable by default, so we use a string key
-            static string formatKey(string name, int id) => $"{name}:{id}";
+            static string formatKey(string name, long id) => $"{name}:{id}";
 
             var activeSlugs = await _staticCacheManager.GetAsync(
                 _staticCacheManager.PrepareKeyForDefaultCache(NopSeoDefaults.UrlRecordEntityIdLookupCacheKey, languageId),
@@ -1272,7 +1272,7 @@ public partial class UrlRecordService : IUrlRecordService
     /// <param name="slug">Slug</param>
     /// <param name="languageId">Language ID</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task SaveSlugAsync<T>(T entity, string slug, int languageId) where T : BaseEntity, ISlugSupported
+    public virtual async Task SaveSlugAsync<T>(T entity, string slug, long languageId) where T : BaseEntity, ISlugSupported
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -1376,7 +1376,7 @@ public partial class UrlRecordService : IUrlRecordService
     /// A task that represents the asynchronous operation
     /// The task result contains the search engine  name (slug)
     /// </returns>
-    public virtual async Task<string> GetSeNameAsync<T>(T entity, int? languageId = null, bool returnDefaultValue = true,
+    public virtual async Task<string> GetSeNameAsync<T>(T entity, long? languageId = null, bool returnDefaultValue = true,
         bool ensureTwoPublishedLanguages = true) where T : BaseEntity, ISlugSupported
     {
         ArgumentNullException.ThrowIfNull(entity);
@@ -1398,7 +1398,7 @@ public partial class UrlRecordService : IUrlRecordService
     /// A task that represents the asynchronous operation
     /// The task result contains the search engine  name (slug)
     /// </returns>
-    public virtual async Task<string> GetSeNameAsync(int entityId, string entityName, int? languageId = null,
+    public virtual async Task<string> GetSeNameAsync(long entityId, string entityName, long? languageId = null,
         bool returnDefaultValue = true, bool ensureTwoPublishedLanguages = true)
     {
         languageId ??= (await _workContext.GetWorkingLanguageAsync()).Id;
@@ -1488,7 +1488,7 @@ public partial class UrlRecordService : IUrlRecordService
     /// A task that represents the asynchronous operation
     /// The task result contains the valid seName
     /// </returns>
-    public virtual async Task<string> ValidateSeNameAsync(int entityId, string entityName, string seName, string name, bool ensureNotEmpty)
+    public virtual async Task<string> ValidateSeNameAsync(long entityId, string entityName, string seName, string name, bool ensureNotEmpty)
     {
         //use name if seName is not specified
         if (string.IsNullOrWhiteSpace(seName) && !string.IsNullOrWhiteSpace(name))

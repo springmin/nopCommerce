@@ -27,7 +27,7 @@ public partial interface ICatalogModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the category template view path
     /// </returns>
-    Task<string> PrepareCategoryTemplateViewPathAsync(int templateId);
+    Task<string> PrepareCategoryTemplateViewPathAsync(long templateId);
 
     /// <summary>
     /// Prepare category navigation model
@@ -38,8 +38,8 @@ public partial interface ICatalogModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the category navigation model
     /// </returns>
-    Task<CategoryNavigationModel> PrepareCategoryNavigationModelAsync(int currentCategoryId,
-        int currentProductId);
+    Task<CategoryNavigationModel> PrepareCategoryNavigationModelAsync(long currentCategoryId,
+        long currentProductId);
 
     /// <summary>
     /// Prepare homepage category models
@@ -95,7 +95,7 @@ public partial interface ICatalogModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the manufacturer template view path
     /// </returns>
-    Task<string> PrepareManufacturerTemplateViewPathAsync(int templateId);
+    Task<string> PrepareManufacturerTemplateViewPathAsync(long templateId);
 
     /// <summary>
     /// Prepare manufacturer all models
@@ -114,7 +114,7 @@ public partial interface ICatalogModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the manufacturer navigation model
     /// </returns>
-    Task<ManufacturerNavigationModel> PrepareManufacturerNavigationModelAsync(int currentManufacturerId);
+    Task<ManufacturerNavigationModel> PrepareManufacturerNavigationModelAsync(long currentManufacturerId);
 
     #endregion
 

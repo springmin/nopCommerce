@@ -63,7 +63,7 @@ public class DiscountRulesCustomerRolesController : BasePluginController
     #region Methods
 
     [CheckPermission(StandardPermission.Promotions.DISCOUNTS_VIEW)]
-    public async Task<IActionResult> Configure(int discountId, int? discountRequirementId)
+    public async Task<IActionResult> Configure(long discountId, long? discountRequirementId)
     {
         //load the discount
         var discount = await _discountService.GetDiscountByIdAsync(discountId)

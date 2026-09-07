@@ -105,7 +105,7 @@ public partial class TemplateController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.System.MANAGE_MAINTENANCE)]
-    public virtual async Task<IActionResult> CategoryTemplateDelete(int id)
+    public virtual async Task<IActionResult> CategoryTemplateDelete(long id)
     {
         if ((await _categoryTemplateService.GetAllCategoryTemplatesAsync()).Count == 1)
             return ErrorJson(await _localizationService.GetResourceAsync("Admin.System.Templates.NotDeleteOnlyOne"));
@@ -166,7 +166,7 @@ public partial class TemplateController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.System.MANAGE_MAINTENANCE)]
-    public virtual async Task<IActionResult> ManufacturerTemplateDelete(int id)
+    public virtual async Task<IActionResult> ManufacturerTemplateDelete(long id)
     {
         if ((await _manufacturerTemplateService.GetAllManufacturerTemplatesAsync()).Count == 1)
             return ErrorJson(await _localizationService.GetResourceAsync("Admin.System.Templates.NotDeleteOnlyOne"));
@@ -227,7 +227,7 @@ public partial class TemplateController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.System.MANAGE_MAINTENANCE)]
-    public virtual async Task<IActionResult> ProductTemplateDelete(int id)
+    public virtual async Task<IActionResult> ProductTemplateDelete(long id)
     {
         if ((await _productTemplateService.GetAllProductTemplatesAsync()).Count == 1)
             return ErrorJson(await _localizationService.GetResourceAsync("Admin.System.Templates.NotDeleteOnlyOne"));
@@ -288,7 +288,7 @@ public partial class TemplateController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.System.MANAGE_MAINTENANCE)]
-    public virtual async Task<IActionResult> TopicTemplateDelete(int id)
+    public virtual async Task<IActionResult> TopicTemplateDelete(long id)
     {
         if ((await _topicTemplateService.GetAllTopicTemplatesAsync()).Count == 1)
             return ErrorJson(await _localizationService.GetResourceAsync("Admin.System.Templates.NotDeleteOnlyOne"));

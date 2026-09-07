@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Data.Common;
 using System.Text;
+using System.Transactions;
 using LinqToDB;
 using LinqToDB.Data;
 using LinqToDB.DataProvider;
@@ -32,6 +33,13 @@ public partial class MySqlNopDataProvider : BaseDataProvider, INopDataProvider
 
         dataContext.MappingSchema.SetDataType(typeof(Guid), new SqlDataType(DataType.NChar, typeof(Guid), 36));
         dataContext.MappingSchema.SetConvertExpression<string, Guid>(strGuid => new Guid(strGuid));
+
+        //when no explicit SQL command timeout is configured, cap the command
+        //timeout instead of leaving it infinite: a connection silently dropped
+        //by the server/proxy (e.g. TiDB Cloud Serverless) would otherwise hang
+        //the command forever
+        if (DataSettings.SQLCommandTimeout is null)
+            dataContext.CommandTimeout = 300;
 
         return dataContext;
     }
@@ -167,7 +175,7 @@ public partial class MySqlNopDataProvider : BaseDataProvider, INopDataProvider
     /// A task that represents the asynchronous operation
     /// The task result contains the integer identity; null if cannot get the result
     /// </returns>
-    public virtual async Task<int?> GetTableIdentAsync<TEntity>() where TEntity : BaseEntity
+    public virtual async Task<long?> GetTableIdentAsync<TEntity>() where TEntity : BaseEntity
     {
         using var currentConnection = CreateDataConnection();
         var tableName = NopMappingSchema.GetEntityDescriptor(typeof(TEntity)).EntityName;
@@ -202,7 +210,7 @@ public partial class MySqlNopDataProvider : BaseDataProvider, INopDataProvider
         command.CommandText = $"SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = '{databaseName}' AND TABLE_NAME = '{tableName}'";
         await dbConnection.OpenAsync();
 
-        return Convert.ToInt32((await command.ExecuteScalarAsync()) ?? 1);
+        return Convert.ToInt64((await command.ExecuteScalarAsync()) ?? 1);
     }
 
     /// <summary>
@@ -211,7 +219,7 @@ public partial class MySqlNopDataProvider : BaseDataProvider, INopDataProvider
     /// <typeparam name="TEntity">Entity type</typeparam>
     /// <param name="ident">Identity value</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task SetTableIdentAsync<TEntity>(int ident) where TEntity : BaseEntity
+    public virtual async Task SetTableIdentAsync<TEntity>(long ident) where TEntity : BaseEntity
     {
         var currentIdent = await GetTableIdentAsync<TEntity>();
         if (!currentIdent.HasValue || ident <= currentIdent.Value)
@@ -291,16 +299,43 @@ public partial class MySqlNopDataProvider : BaseDataProvider, INopDataProvider
         if (nopConnectionString.IntegratedSecurity)
             throw new NopException("Data provider supports connection only with login and password");
 
+        var server = nopConnectionString.ServerName;
+        var port = 0u;
+
+        //support "host:port" syntax (e.g. for TiDB on port 4000). MySqlConnector
+        //does not parse the port out of the Server option, so split it here.
+        //only split when the part after the last colon is a pure number to avoid
+        //breaking IPv6 literals.
+        var lastColon = server.LastIndexOf(':');
+        if (lastColon > 0 && server.IndexOf(':') == lastColon && int.TryParse(server[(lastColon + 1)..], out var parsedPort))
+        {
+            port = (uint)parsedPort;
+            server = server[..lastColon];
+        }
+
         var builder = new MySqlConnectionStringBuilder
         {
-            Server = nopConnectionString.ServerName,
+            Server = server,
             //Cast DatabaseName to lowercase to avoid case-sensitivity problems
             Database = nopConnectionString.DatabaseName.ToLowerInvariant(),
             AllowUserVariables = true,
             UserID = nopConnectionString.Username,
             Password = nopConnectionString.Password,
-            UseXaTransactions = false
+            UseXaTransactions = false,
+            //TiDB Cloud (and some MySQL proxies) terminate idle connections after
+            //~340 seconds and TCP keepalive cannot prevent it. Recycle pooled
+            //connections well before that so a stale connection is never reused.
+            ConnectionIdleTimeout = 60,
+            //TiDB Cloud Serverless can be slow to accept new connections
+            //(cold start), so allow more time than the 15s default.
+            ConnectionTimeout = 60
         };
+
+        //only set the port when it was explicitly provided in the server name
+        //("host:port"); otherwise keep the builder default so existing connection
+        //strings remain unchanged
+        if (port != 0)
+            builder.Port = port;
 
         return builder.ConnectionString;
     }
@@ -344,6 +379,33 @@ public partial class MySqlNopDataProvider : BaseDataProvider, INopDataProvider
         var connectionBuilder = GetConnectionStringBuilder();
 
         return GetSqlStringValueAsync($"SELECT DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = '{connectionBuilder.Database}';");
+    }
+
+    /// <summary>
+    /// Creates a new <see cref="TransactionScope"/> with appropriate options for bulk database operations
+    /// </summary>
+    /// <returns>The created transaction scope</returns>
+    public override TransactionScope CreateTransactionScope()
+    {
+        var dataSettings = DataSettingsManager.LoadSettings();
+
+        //try to use the SQL command timeout value as the transaction scope timeout
+        var timeout = dataSettings.SQLCommandTimeout is > 0
+            ? TimeSpan.FromSeconds(dataSettings.SQLCommandTimeout.Value)
+            : TransactionManager.DefaultTimeout;
+
+        //TiDB does not support the SERIALIZABLE isolation level (SET
+        //transaction isolation level SERIALIZABLE is rejected unless
+        //tidb_skip_isolation_level_check=1). REPEATABLE READ is the default
+        //isolation level of both MySQL and TiDB and is the closest equivalent,
+        //so use it instead of the base implementation's Serializable.
+        var transactionOptions = new TransactionOptions
+        {
+            IsolationLevel = System.Transactions.IsolationLevel.RepeatableRead,
+            Timeout = timeout
+        };
+
+        return new TransactionScope(TransactionScopeOption.Required, transactionOptions, TransactionScopeAsyncFlowOption.Enabled);
     }
 
     #endregion

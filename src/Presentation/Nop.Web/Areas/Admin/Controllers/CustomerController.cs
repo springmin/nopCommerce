@@ -196,7 +196,7 @@ public partial class CustomerController : BaseAdminController
                     ctrlAttributes = form[controlId];
                     if (!StringValues.IsNullOrEmpty(ctrlAttributes))
                     {
-                        var selectedAttributeId = int.Parse(ctrlAttributes);
+                        var selectedAttributeId = long.Parse(ctrlAttributes);
                         if (selectedAttributeId > 0)
                         {
                             attributesXml = _customerAttributeParser.AddAttribute(attributesXml,
@@ -212,7 +212,7 @@ public partial class CustomerController : BaseAdminController
                         foreach (var item in cblAttributes.ToString()
                                      .Split(_separator, StringSplitOptions.RemoveEmptyEntries))
                         {
-                            var selectedAttributeId = int.Parse(item);
+                            var selectedAttributeId = long.Parse(item);
                             if (selectedAttributeId > 0)
                             {
                                 attributesXml = _customerAttributeParser.AddAttribute(attributesXml,
@@ -525,7 +525,7 @@ public partial class CustomerController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Customers.CUSTOMERS_VIEW)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         //try to get a customer with the specified id
         var customer = await _customerService.GetCustomerByIdAsync(id);
@@ -870,7 +870,7 @@ public partial class CustomerController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Customers.CUSTOMERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> RemoveBindMFA(int id)
+    public virtual async Task<IActionResult> RemoveBindMFA(long id)
     {
         //try to get a customer with the specified id
         var customer = await _customerService.GetCustomerByIdAsync(id);
@@ -889,7 +889,7 @@ public partial class CustomerController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Customers.CUSTOMERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get a customer with the specified id
         var customer = await _customerService.GetCustomerByIdAsync(id);
@@ -941,7 +941,7 @@ public partial class CustomerController : BaseAdminController
     [HttpPost, ActionName("Edit")]
     [FormValueRequired("impersonate")]
     [CheckPermission(StandardPermission.Customers.CUSTOMERS_IMPERSONATION)]
-    public virtual async Task<IActionResult> Impersonate(int id)
+    public virtual async Task<IActionResult> Impersonate(long id)
     {
         //try to get a customer with the specified id
         var customer = await _customerService.GetCustomerByIdAsync(id);
@@ -973,7 +973,7 @@ public partial class CustomerController : BaseAdminController
         //ensure login is not required
         customer.RequireReLogin = false;
         await _customerService.UpdateCustomerAsync(customer);
-        await _genericAttributeService.SaveAttributeAsync<int?>(currentCustomer, NopCustomerDefaults.ImpersonatedCustomerIdAttribute, customer.Id);
+        await _genericAttributeService.SaveAttributeAsync<long?>(currentCustomer, NopCustomerDefaults.ImpersonatedCustomerIdAttribute, customer.Id);
 
         return RedirectToAction("Index", "Home", new { area = string.Empty });
     }
@@ -1107,7 +1107,7 @@ public partial class CustomerController : BaseAdminController
 
             //Email notification
             if (_privateMessageSettings.NotifyAboutPrivateMessages)
-                await _workflowMessageService.SendPrivateMessageNotificationAsync(privateMessage, customerTo.LanguageId ?? 0);
+                await _workflowMessageService.SendPrivateMessageNotificationAsync(privateMessage, (await _workContext.GetWorkingLanguageAsync())?.Id ?? 0);
 
             _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Customers.Customers.SendPM.Sent"));
         }
@@ -1194,7 +1194,7 @@ public partial class CustomerController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Customers.CUSTOMERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> AddressDelete(int id, int customerId)
+    public virtual async Task<IActionResult> AddressDelete(long id, long customerId)
     {
         //try to get a customer with the specified id
         var customer = await _customerService.GetCustomerByIdAsync(customerId)
@@ -1216,7 +1216,7 @@ public partial class CustomerController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Customers.CUSTOMERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> AddressCreate(int customerId)
+    public virtual async Task<IActionResult> AddressCreate(long customerId)
     {
         //try to get a customer with the specified id
         var customer = await _customerService.GetCustomerByIdAsync(customerId);
@@ -1273,7 +1273,7 @@ public partial class CustomerController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Customers.CUSTOMERS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> AddressEdit(int addressId, int customerId)
+    public virtual async Task<IActionResult> AddressEdit(long addressId, long customerId)
     {
         //try to get a customer with the specified id
         var customer = await _customerService.GetCustomerByIdAsync(customerId);
@@ -1516,7 +1516,7 @@ public partial class CustomerController : BaseAdminController
     [HttpPost]
     [CheckPermission(StandardPermission.Customers.CUSTOMERS_CREATE_EDIT_DELETE)]
     [CheckPermission(StandardPermission.Customers.GDPR_MANAGE)]
-    public virtual async Task<IActionResult> GdprDelete(int id)
+    public virtual async Task<IActionResult> GdprDelete(long id)
     {
         //try to get a customer with the specified id
         var customer = await _customerService.GetCustomerByIdAsync(id);
@@ -1562,7 +1562,7 @@ public partial class CustomerController : BaseAdminController
 
     [CheckPermission(StandardPermission.Customers.CUSTOMERS_VIEW)]
     [CheckPermission(StandardPermission.Customers.GDPR_MANAGE)]
-    public virtual async Task<IActionResult> GdprExport(int id)
+    public virtual async Task<IActionResult> GdprExport(long id)
     {
         //try to get a customer with the specified id
         var customer = await _customerService.GetCustomerByIdAsync(id);
@@ -1630,7 +1630,7 @@ public partial class CustomerController : BaseAdminController
         {
             var ids = selectedIds
                 .Split(_separator, StringSplitOptions.RemoveEmptyEntries)
-                .Select(x => Convert.ToInt32(x))
+                .Select(x => Convert.ToInt64(x))
                 .ToArray();
             customers.AddRange(await _customerService.GetCustomersByIdsAsync(ids));
         }
@@ -1687,7 +1687,7 @@ public partial class CustomerController : BaseAdminController
         {
             var ids = selectedIds
                 .Split(_separator, StringSplitOptions.RemoveEmptyEntries)
-                .Select(x => Convert.ToInt32(x))
+                .Select(x => Convert.ToInt64(x))
                 .ToArray();
             customers.AddRange(await _customerService.GetCustomersByIdsAsync(ids));
         }

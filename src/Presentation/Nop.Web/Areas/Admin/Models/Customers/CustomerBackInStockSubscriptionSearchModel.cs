@@ -9,7 +9,7 @@ public partial record CustomerBackInStockSubscriptionSearchModel : BaseSearchMod
 {
     #region Properties
 
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     #endregion
 }

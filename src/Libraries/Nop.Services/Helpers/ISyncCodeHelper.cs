@@ -84,7 +84,7 @@ public partial interface ISyncCodeHelper
     /// <param name="storeId">Load records allowed only in a specified store; pass 0 to load all records</param>
     /// <param name="showHidden">A value indicating whether to show hidden records</param>
     /// <returns>The languages</returns>
-    IList<Language> GetAllLanguages(bool showHidden = false, int storeId = 0);
+    IList<Language> GetAllLanguages(bool showHidden = false, long storeId = 0);
 
     #endregion
 

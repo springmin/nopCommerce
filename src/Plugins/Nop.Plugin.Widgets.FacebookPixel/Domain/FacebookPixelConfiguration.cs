@@ -35,7 +35,7 @@ public class FacebookPixelConfiguration : BaseEntity
     /// <summary>
     /// Gets or sets a store identifier in which Pixel is used
     /// </summary>
-    public int StoreId { get; set; }
+    public long StoreId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether to pass customer data

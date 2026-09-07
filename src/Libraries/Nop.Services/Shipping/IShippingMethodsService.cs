@@ -22,7 +22,7 @@ public partial interface IShippingMethodsService
     /// A task that represents the asynchronous operation
     /// The task result contains the shipping method
     /// </returns>
-    Task<ShippingMethod> GetShippingMethodByIdAsync(int shippingMethodId);
+    Task<ShippingMethod> GetShippingMethodByIdAsync(long shippingMethodId);
 
     /// <summary>
     /// Gets all shipping methods
@@ -32,7 +32,7 @@ public partial interface IShippingMethodsService
     /// A task that represents the asynchronous operation
     /// The task result contains the shipping methods
     /// </returns>
-    Task<IList<ShippingMethod>> GetAllShippingMethodsAsync(int? filterByCountryId = null);
+    Task<IList<ShippingMethod>> GetAllShippingMethodsAsync(long? filterByCountryId = null);
 
     /// <summary>
     /// Inserts a shipping method
@@ -57,7 +57,7 @@ public partial interface IShippingMethodsService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    Task<bool> CountryRestrictionExistsAsync(ShippingMethod shippingMethod, int countryId);
+    Task<bool> CountryRestrictionExistsAsync(ShippingMethod shippingMethod, long countryId);
 
     /// <summary>
     /// Gets shipping country mappings
@@ -68,7 +68,7 @@ public partial interface IShippingMethodsService
     /// A task that represents the asynchronous operation
     /// The task result contains the shipping country mappings
     /// </returns>
-    Task<IList<ShippingMethodCountryMapping>> GetShippingMethodCountryMappingAsync(int shippingMethodId, int countryId);
+    Task<IList<ShippingMethodCountryMapping>> GetShippingMethodCountryMappingAsync(long shippingMethodId, long countryId);
 
     /// <summary>
     /// Inserts a shipping country mapping

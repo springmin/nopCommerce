@@ -11,7 +11,7 @@ public partial record LanguageSelectorModel : BaseNopModel
 
     public IList<LanguageModel> AvailableLanguages { get; set; }
 
-    public int CurrentLanguageId { get; set; }
+    public long CurrentLanguageId { get; set; }
 
     public bool UseImages { get; set; }
 }

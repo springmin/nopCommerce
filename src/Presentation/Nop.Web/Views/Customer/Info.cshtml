@@ -14,7 +14,7 @@
 
 @section left
 {
-    @await Component.InvokeAsync(typeof(CustomerNavigationViewComponent), new { selectedTabId = CustomerNavigationEnum.Info })
+    @await Component.InvokeAsync(typeof(CustomerNavigationViewComponent), new { selectedTabId = (long)CustomerNavigationEnum.Info })
 }
 
 <div class="page account-page customer-info-page">

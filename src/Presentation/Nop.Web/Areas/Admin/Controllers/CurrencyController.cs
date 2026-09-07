@@ -134,7 +134,7 @@ public partial class CurrencyController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_CURRENCIES)]
-    public virtual async Task<IActionResult> MarkAsPrimaryExchangeRateCurrency(int id)
+    public virtual async Task<IActionResult> MarkAsPrimaryExchangeRateCurrency(long id)
     {
         _currencySettings.PrimaryExchangeRateCurrencyId = id;
         await _settingService.SaveSettingAsync(_currencySettings);
@@ -144,7 +144,7 @@ public partial class CurrencyController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_CURRENCIES)]
-    public virtual async Task<IActionResult> MarkAsPrimaryStoreCurrency(int id)
+    public virtual async Task<IActionResult> MarkAsPrimaryStoreCurrency(long id)
     {
         _currencySettings.PrimaryStoreCurrencyId = id;
         await _settingService.SaveSettingAsync(_currencySettings);
@@ -202,7 +202,7 @@ public partial class CurrencyController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_CURRENCIES)]
-    public virtual async Task<IActionResult> Edit(int id)
+    public virtual async Task<IActionResult> Edit(long id)
     {
         //try to get a currency with the specified id
         var currency = await _currencyService.GetCurrencyByIdAsync(id);
@@ -265,7 +265,7 @@ public partial class CurrencyController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_CURRENCIES)]
-    public virtual async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(long id)
     {
         //try to get a currency with the specified id
         var currency = await _currencyService.GetCurrencyByIdAsync(id);

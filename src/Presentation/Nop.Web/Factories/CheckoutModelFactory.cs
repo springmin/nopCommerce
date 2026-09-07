@@ -246,7 +246,7 @@ public partial class CheckoutModelFactory : ICheckoutModelFactory
     /// <param name="overrideAttributesXml">Override attributes xml</param>
     /// <returns>A task that represents the asynchronous operation</returns>
     public virtual async Task PrepareBillingAddressModelAsync(CheckoutBillingAddressModel model, IList<ShoppingCartItem> cart,
-        int? selectedCountryId = null,
+        long? selectedCountryId = null,
         bool prePopulateNewAddressWithCustomerFields = false,
         string overrideAttributesXml = "")
     {
@@ -311,7 +311,7 @@ public partial class CheckoutModelFactory : ICheckoutModelFactory
     /// <param name="overrideAttributesXml">Override attributes xml</param>
     /// <returns>A task that represents the asynchronous operation</returns>
     public virtual async Task PrepareShippingAddressModelAsync(CheckoutShippingAddressModel model, IList<ShoppingCartItem> cart,
-        int? selectedCountryId = null, bool prePopulateNewAddressWithCustomerFields = false, string overrideAttributesXml = "")
+        long? selectedCountryId = null, bool prePopulateNewAddressWithCustomerFields = false, string overrideAttributesXml = "")
     {
         model.DisplayPickupInStore = !_orderSettings.DisplayPickupInStoreOnShippingMethodPage;
 
@@ -501,7 +501,7 @@ public partial class CheckoutModelFactory : ICheckoutModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the payment method model
     /// </returns>
-    public virtual async Task<CheckoutPaymentMethodModel> PreparePaymentMethodModelAsync(IList<ShoppingCartItem> cart, int filterByCountryId)
+    public virtual async Task<CheckoutPaymentMethodModel> PreparePaymentMethodModelAsync(IList<ShoppingCartItem> cart, long filterByCountryId)
     {
         var model = new CheckoutPaymentMethodModel();
 

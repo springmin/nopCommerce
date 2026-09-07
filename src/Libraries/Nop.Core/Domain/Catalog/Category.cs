@@ -25,7 +25,7 @@ public partial class Category : BaseEntity, ILocalizedEntity, ISlugSupported, IA
     /// <summary>
     /// Gets or sets a value of used category template identifier
     /// </summary>
-    public int CategoryTemplateId { get; set; }
+    public long CategoryTemplateId { get; set; }
 
     /// <summary>
     /// Gets or sets the meta keywords
@@ -45,12 +45,12 @@ public partial class Category : BaseEntity, ILocalizedEntity, ISlugSupported, IA
     /// <summary>
     /// Gets or sets the parent category identifier
     /// </summary>
-    public int ParentCategoryId { get; set; }
+    public long ParentCategoryId { get; set; }
 
     /// <summary>
     /// Gets or sets the picture identifier
     /// </summary>
-    public int PictureId { get; set; }
+    public long PictureId { get; set; }
 
     /// <summary>
     /// Gets or sets the page size

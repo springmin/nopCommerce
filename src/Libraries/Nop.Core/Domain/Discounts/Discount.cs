@@ -18,7 +18,7 @@ public partial class Discount : BaseEntity
     /// <summary>
     /// Gets or sets the discount type identifier
     /// </summary>
-    public int DiscountTypeId { get; set; }
+    public long DiscountTypeId { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether to use percentage
@@ -68,7 +68,7 @@ public partial class Discount : BaseEntity
     /// <summary>
     /// Gets or sets the discount limitation identifier
     /// </summary>
-    public int DiscountLimitationId { get; set; }
+    public long DiscountLimitationId { get; set; }
 
     /// <summary>
     /// Gets or sets the discount limitation times (used when Limitation is set to "N Times Only" or "N Times Per Customer")
@@ -95,7 +95,7 @@ public partial class Discount : BaseEntity
     /// <summary>
     /// Gets or sets a vendor identifier
     /// </summary>
-    public int? VendorId { get; set; }
+    public long? VendorId { get; set; }
 
     /// <summary>
     /// Gets or sets the discount type

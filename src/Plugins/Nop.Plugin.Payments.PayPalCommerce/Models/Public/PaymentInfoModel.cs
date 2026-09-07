@@ -12,7 +12,7 @@ public record PaymentInfoModel : BaseNopModel
 
     public ButtonPlacement Placement { get; set; }
 
-    public int? ProductId { get; set; }
+    public long? ProductId { get; set; }
 
     public (string Url, string ClientToken, string UserToken) Script { get; set; } = new();
 

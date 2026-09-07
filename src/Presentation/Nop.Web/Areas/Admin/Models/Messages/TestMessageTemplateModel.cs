@@ -10,7 +10,7 @@ public partial record TestMessageTemplateModel : BaseNopEntityModel
         Tokens = new List<string>();
     }
 
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.ContentManagement.MessageTemplates.Test.Tokens")]
     public List<string> Tokens { get; set; }

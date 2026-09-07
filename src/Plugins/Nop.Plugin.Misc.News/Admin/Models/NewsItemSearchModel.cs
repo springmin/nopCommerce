@@ -21,7 +21,7 @@ public record NewsItemSearchModel : BaseSearchModel
     #region Properties
 
     [NopResourceDisplayName("Plugins.Misc.News.NewsItems.List.SearchStore")]
-    public int SearchStoreId { get; set; }
+    public long SearchStoreId { get; set; }
 
     public IList<SelectListItem> AvailableStores { get; set; }
 

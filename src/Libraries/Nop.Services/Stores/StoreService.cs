@@ -94,7 +94,7 @@ public partial class StoreService : IStoreService
     /// A task that represents the asynchronous operation
     /// The task result contains the store
     /// </returns>
-    public virtual async Task<Store> GetStoreByIdAsync(int storeId)
+    public virtual async Task<Store> GetStoreByIdAsync(long storeId)
     {
         return await _storeRepository.GetByIdAsync(storeId, cache => default, false);
     }

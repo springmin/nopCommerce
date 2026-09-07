@@ -84,7 +84,7 @@ public class TaxTransactionLogController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_TAX_SETTINGS)]
-    public async Task<IActionResult> DeleteSelected(ICollection<int> selectedIds)
+    public async Task<IActionResult> DeleteSelected(ICollection<long> selectedIds)
     {
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();
@@ -95,7 +95,7 @@ public class TaxTransactionLogController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Configuration.MANAGE_TAX_SETTINGS)]
-    public async Task<IActionResult> View(int id)
+    public async Task<IActionResult> View(long id)
     {
         //try to get log item with the passed identifier
         var logItem = await _taxTransactionLogService.GetTaxTransactionLogByIdAsync(id);
@@ -119,7 +119,7 @@ public class TaxTransactionLogController : BaseAdminController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_TAX_SETTINGS)]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(long id)
     {
         //try to get log item with the passed identifier
         var logItem = await _taxTransactionLogService.GetTaxTransactionLogByIdAsync(id);

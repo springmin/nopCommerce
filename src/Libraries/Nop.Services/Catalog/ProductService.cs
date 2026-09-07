@@ -483,7 +483,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the cross-sell products
     /// </returns>
-    protected virtual async Task<IList<CrossSellProduct>> GetCrossSellProductsByProductIdsAsync(int[] productIds, bool showHidden = false)
+    protected virtual async Task<IList<CrossSellProduct>> GetCrossSellProductsByProductIdsAsync(long[] productIds, bool showHidden = false)
     {
         if (productIds == null || productIds.Length == 0)
             return new List<CrossSellProduct>();
@@ -556,7 +556,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the product
     /// </returns>
-    public virtual async Task<Product> GetProductByIdAsync(int productId)
+    public virtual async Task<Product> GetProductByIdAsync(long productId)
     {
         return await _productRepository.GetByIdAsync(productId, cache => default);
     }
@@ -569,7 +569,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the products
     /// </returns>
-    public virtual async Task<IList<Product>> GetProductsByIdsAsync(int[] productIds)
+    public virtual async Task<IList<Product>> GetProductsByIdsAsync(long[] productIds)
     {
         return await _productRepository.GetByIdsAsync(productIds, cache => default, false);
     }
@@ -623,7 +623,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of featured products
     /// </returns>
-    public virtual async Task<IList<Product>> GetCategoryFeaturedProductsAsync(int categoryId, int storeId = 0)
+    public virtual async Task<IList<Product>> GetCategoryFeaturedProductsAsync(long categoryId, long storeId = 0)
     {
         IList<Product> featuredProducts = new List<Product>();
 
@@ -670,7 +670,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of featured products
     /// </returns>
-    public virtual async Task<IList<Product>> GetManufacturerFeaturedProductsAsync(int manufacturerId, int storeId = 0)
+    public virtual async Task<IList<Product>> GetManufacturerFeaturedProductsAsync(long manufacturerId, long storeId = 0)
     {
         IList<Product> featuredProducts = new List<Product>();
 
@@ -716,7 +716,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of new products
     /// </returns>
-    public virtual async Task<IPagedList<Product>> GetProductsMarkedAsNewAsync(int storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
+    public virtual async Task<IPagedList<Product>> GetProductsMarkedAsNewAsync(long storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
     {
         var query = from p in _productRepository.Table
             where p.Published && p.VisibleIndividually && p.MarkAsNew && !p.Deleted &&
@@ -745,7 +745,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the number of products
     /// </returns>
-    public virtual async Task<int> GetNumberOfProductsInCategoryAsync(IList<int> categoryIds = null, int storeId = 0)
+    public virtual async Task<int> GetNumberOfProductsInCategoryAsync(IList<long> categoryIds = null, long storeId = 0)
     {
         //validate "categoryIds" parameter
         if (categoryIds != null && categoryIds.Contains(0))
@@ -814,23 +814,23 @@ public partial class ProductService : IProductService
     public virtual async Task<IPagedList<Product>> SearchProductsAsync(
         int pageIndex = 0,
         int pageSize = int.MaxValue,
-        IList<int> categoryIds = null,
-        IList<int> manufacturerIds = null,
-        int storeId = 0,
-        int vendorId = 0,
-        int warehouseId = 0,
+        IList<long> categoryIds = null,
+        IList<long> manufacturerIds = null,
+        long storeId = 0,
+        long vendorId = 0,
+        long warehouseId = 0,
         ProductType? productType = null,
         bool visibleIndividuallyOnly = false,
         bool excludeFeaturedProducts = false,
         decimal? priceMin = null,
         decimal? priceMax = null,
-        int productTagId = 0,
+        long productTagId = 0,
         string keywords = null,
         bool searchDescriptions = false,
         bool searchManufacturerPartNumber = true,
         bool searchSku = true,
         bool searchProductTags = false,
-        int languageId = 0,
+        long languageId = 0,
         IList<SpecificationAttributeOption> filteredSpecOptions = null,
         ProductSortingEnum orderBy = ProductSortingEnum.Position,
         bool showHidden = false,
@@ -883,7 +883,7 @@ public partial class ProductService : IProductService
             select p;
 
         var activeSearchProvider = await _searchPluginManager.LoadPrimaryPluginAsync(customer, storeId);
-        var providerResults = new List<int>();
+        var providerResults = new List<long>();
 
         if (!string.IsNullOrEmpty(keywords))
         {
@@ -891,7 +891,7 @@ public partial class ProductService : IProductService
 
             //Set a flag which will to points need to search in localized properties. If showHidden doesn't set to true should be at least two published languages.
             var searchLocalizedValue = languageId > 0 && langs.Count >= 2 && (showHidden || langs.Count(l => l.Published) >= 2);
-            var productsByKeywords = new List<int>().AsQueryable();
+            var productsByKeywords = new List<long>().AsQueryable();
             var runStandardSearch = activeSearchProvider is null || showHidden;
 
             try
@@ -1152,7 +1152,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the products
     /// </returns>
-    public virtual async Task<IPagedList<Product>> GetProductsByProductAttributeIdAsync(int productAttributeId,
+    public virtual async Task<IPagedList<Product>> GetProductsByProductAttributeIdAsync(long productAttributeId,
         int pageIndex = 0, int pageSize = int.MaxValue)
     {
         var query = from p in _productRepository.Table
@@ -1177,8 +1177,8 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the products
     /// </returns>
-    public virtual async Task<IList<Product>> GetAssociatedProductsAsync(int parentGroupedProductId,
-        int storeId = 0, int vendorId = 0, bool showHidden = false)
+    public virtual async Task<IList<Product>> GetAssociatedProductsAsync(long parentGroupedProductId,
+        long storeId = 0, long vendorId = 0, bool showHidden = false)
     {
         var query = _productRepository.Table;
         query = query.Where(x => x.ParentGroupedProductId == parentGroupedProductId);
@@ -1224,7 +1224,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the products
     /// </returns>
-    public virtual async Task<IPagedList<Product>> GetLowStockProductsAsync(int? vendorId = null, bool? loadPublishedOnly = true,
+    public virtual async Task<IPagedList<Product>> GetLowStockProductsAsync(long? vendorId = null, bool? loadPublishedOnly = true,
         int pageIndex = 0, int pageSize = int.MaxValue, bool getOnlyTotalCount = false)
     {
         var query = _productRepository.Table;
@@ -1268,7 +1268,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the product combinations
     /// </returns>
-    public virtual async Task<IPagedList<ProductAttributeCombination>> GetLowStockProductCombinationsAsync(int? vendorId = null, bool? loadPublishedOnly = true,
+    public virtual async Task<IPagedList<ProductAttributeCombination>> GetLowStockProductCombinationsAsync(long? vendorId = null, bool? loadPublishedOnly = true,
         int pageIndex = 0, int pageSize = int.MaxValue, bool getOnlyTotalCount = false)
     {
         var combinations = from pac in _productAttributeCombinationRepository.Table
@@ -1326,7 +1326,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the products
     /// </returns>
-    public virtual async Task<IList<Product>> GetProductsBySkuAsync(string[] skuArray, int vendorId = 0)
+    public virtual async Task<IList<Product>> GetProductsBySkuAsync(string[] skuArray, long vendorId = 0)
     {
         ArgumentNullException.ThrowIfNull(skuArray);
 
@@ -1347,7 +1347,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the number of products
     /// </returns>
-    public virtual async Task<int> GetNumberOfProductsByVendorIdAsync(int vendorId)
+    public virtual async Task<long> GetNumberOfProductsByVendorIdAsync(long vendorId)
     {
         if (vendorId == 0)
             return 0;
@@ -1360,14 +1360,14 @@ public partial class ProductService : IProductService
     /// </summary>
     /// <param name="product">Product</param>
     /// <returns>A list of required product IDs</returns>
-    public virtual int[] ParseRequiredProductIds(Product product)
+    public virtual long[] ParseRequiredProductIds(Product product)
     {
         ArgumentNullException.ThrowIfNull(product);
 
         if (string.IsNullOrEmpty(product.RequiredProductIds))
-            return Array.Empty<int>();
+            return Array.Empty<long>();
 
-        var ids = new List<int>();
+        var ids = new List<long>();
 
         foreach (var idStr in product.RequiredProductIds
                      .Split(_separator, StringSplitOptions.RemoveEmptyEntries)
@@ -1442,7 +1442,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public virtual async Task<int> GetTotalStockQuantityAsync(Product product, bool useReservedQuantity = true, int warehouseId = 0)
+    public virtual async Task<int> GetTotalStockQuantityAsync(Product product, bool useReservedQuantity = true, long warehouseId = 0)
     {
         ArgumentNullException.ThrowIfNull(product);
 
@@ -1635,7 +1635,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public virtual async Task<bool> HasAnyDownloadableProductAsync(int[] productIds)
+    public virtual async Task<bool> HasAnyDownloadableProductAsync(long[] productIds)
     {
         return await _productRepository.Table
             .AnyAsync(p => productIds.Contains(p.Id) && p.IsDownload);
@@ -1649,7 +1649,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public virtual async Task<bool> HasAnyGiftCardProductAsync(int[] productIds)
+    public virtual async Task<bool> HasAnyGiftCardProductAsync(long[] productIds)
     {
         return await _productRepository.Table
             .AnyAsync(p => productIds.Contains(p.Id) && p.IsGiftCard);
@@ -1663,7 +1663,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public virtual async Task<bool> HasAnyRecurringProductAsync(int[] productIds)
+    public virtual async Task<bool> HasAnyRecurringProductAsync(long[] productIds)
     {
         return await _productRepository.Table
             .AnyAsync(p => productIds.Contains(p.Id) && p.IsRecurring);
@@ -1854,7 +1854,7 @@ public partial class ProductService : IProductService
     /// <param name="quantity">Quantity, must be negative</param>
     /// <param name="message">Message for the stock quantity history</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task BookReservedInventoryAsync(Product product, int warehouseId, int quantity, string message = "")
+    public virtual async Task BookReservedInventoryAsync(Product product, long warehouseId, int quantity, string message = "")
     {
         ArgumentNullException.ThrowIfNull(product);
 
@@ -1946,7 +1946,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the related products
     /// </returns>
-    public virtual async Task<IList<RelatedProduct>> GetRelatedProductsByProductId1Async(int productId, bool showHidden = false)
+    public virtual async Task<IList<RelatedProduct>> GetRelatedProductsByProductId1Async(long productId, bool showHidden = false)
     {
         var query = from rp in _relatedProductRepository.Table
             join p in _productRepository.Table on rp.ProductId2 equals p.Id
@@ -1969,7 +1969,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the related product
     /// </returns>
-    public virtual async Task<RelatedProduct> GetRelatedProductByIdAsync(int relatedProductId)
+    public virtual async Task<RelatedProduct> GetRelatedProductByIdAsync(long relatedProductId)
     {
         return await _relatedProductRepository.GetByIdAsync(relatedProductId, cache => default);
     }
@@ -2001,7 +2001,7 @@ public partial class ProductService : IProductService
     /// <param name="productId1">The first product identifier</param>
     /// <param name="productId2">The second product identifier</param>
     /// <returns>Related product</returns>
-    public virtual RelatedProduct FindRelatedProduct(IList<RelatedProduct> source, int productId1, int productId2)
+    public virtual RelatedProduct FindRelatedProduct(IList<RelatedProduct> source, long productId1, long productId2)
     {
         return source.FirstOrDefault(rp => rp.ProductId1 == productId1 && rp.ProductId2 == productId2);
     }
@@ -2029,7 +2029,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the cross-sell products
     /// </returns>
-    public virtual async Task<IList<CrossSellProduct>> GetCrossSellProductsByProductId1Async(int productId1, bool showHidden = false)
+    public virtual async Task<IList<CrossSellProduct>> GetCrossSellProductsByProductId1Async(long productId1, bool showHidden = false)
     {
         return await GetCrossSellProductsByProductIdsAsync([productId1], showHidden);
     }
@@ -2042,7 +2042,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the cross-sell product
     /// </returns>
-    public virtual async Task<CrossSellProduct> GetCrossSellProductByIdAsync(int crossSellProductId)
+    public virtual async Task<CrossSellProduct> GetCrossSellProductByIdAsync(long crossSellProductId)
     {
         return await _crossSellProductRepository.GetByIdAsync(crossSellProductId, cache => default);
     }
@@ -2090,7 +2090,7 @@ public partial class ProductService : IProductService
     /// <param name="productId1">The first product identifier</param>
     /// <param name="productId2">The second product identifier</param>
     /// <returns>Cross-sell product</returns>
-    public virtual CrossSellProduct FindCrossSellProduct(IList<CrossSellProduct> source, int productId1, int productId2)
+    public virtual CrossSellProduct FindCrossSellProduct(IList<CrossSellProduct> source, long productId1, long productId2)
     {
         return source.FirstOrDefault(csp => csp.ProductId1 == productId1 && csp.ProductId2 == productId2);
     }
@@ -2126,7 +2126,7 @@ public partial class ProductService : IProductService
     /// </summary>
     /// <param name="productId">Product identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task<IList<TierPrice>> GetTierPricesByProductAsync(int productId)
+    public virtual async Task<IList<TierPrice>> GetTierPricesByProductAsync(long productId)
     {
         return await _staticCacheManager.GetAsync(
             _staticCacheManager.PrepareKeyForDefaultCache(NopCatalogDefaults.TierPricesByProductCacheKey, productId),
@@ -2151,7 +2151,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the ier price
     /// </returns>
-    public virtual async Task<TierPrice> GetTierPriceByIdAsync(int tierPriceId)
+    public virtual async Task<TierPrice> GetTierPriceByIdAsync(long tierPriceId)
     {
         return await _tierPriceRepository.GetByIdAsync(tierPriceId, cache => default);
     }
@@ -2218,7 +2218,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the product pictures
     /// </returns>
-    public virtual async Task<IList<ProductPicture>> GetProductPicturesByProductIdAsync(int productId)
+    public virtual async Task<IList<ProductPicture>> GetProductPicturesByProductIdAsync(long productId)
     {
         var query = from pp in _productPictureRepository.Table
             where pp.ProductId == productId
@@ -2238,7 +2238,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the product picture
     /// </returns>
-    public virtual async Task<ProductPicture> GetProductPictureByIdAsync(int productPictureId)
+    public virtual async Task<ProductPicture> GetProductPictureByIdAsync(long productPictureId)
     {
         return await _productPictureRepository.GetByIdAsync(productPictureId, cache => default);
     }
@@ -2271,7 +2271,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the all picture identifiers grouped by product ID
     /// </returns>
-    public virtual async Task<IDictionary<int, int[]>> GetProductsImagesIdsAsync(int[] productsIds)
+    public virtual async Task<IDictionary<long, long[]>> GetProductsImagesIdsAsync(long[] productsIds)
     {
         var productPictures = await _productPictureRepository.Table
             .Where(p => productsIds.Contains(p.ProductId))
@@ -2291,7 +2291,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of products
     /// </returns>
-    public virtual async Task<IPagedList<Product>> GetProductsWithAppliedDiscountAsync(int? discountId = null,
+    public virtual async Task<IPagedList<Product>> GetProductsWithAppliedDiscountAsync(long? discountId = null,
         bool showHidden = false, int pageIndex = 0, int pageSize = int.MaxValue)
     {
         var products = _productRepository.Table;
@@ -2334,7 +2334,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the product videos
     /// </returns>
-    public virtual async Task<IList<ProductVideo>> GetProductVideosByProductIdAsync(int productId)
+    public virtual async Task<IList<ProductVideo>> GetProductVideosByProductIdAsync(long productId)
     {
         var query = from pvm in _productVideoRepository.Table
             where pvm.ProductId == productId
@@ -2354,7 +2354,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the product video
     /// </returns>
-    public virtual async Task<ProductVideo> GetProductVideoByIdAsync(int productVideoId)
+    public virtual async Task<ProductVideo> GetProductVideoByIdAsync(long productVideoId)
     {
         return await _productVideoRepository.GetByIdAsync(productVideoId, cache => default);
     }
@@ -2388,7 +2388,7 @@ public partial class ProductService : IProductService
     /// </summary>
     /// <param name="productId">Product identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task<IList<ProductWarehouseInventory>> GetAllProductWarehouseInventoryRecordsAsync(int productId)
+    public virtual async Task<IList<ProductWarehouseInventory>> GetAllProductWarehouseInventoryRecordsAsync(long productId)
     {
         return await _productWarehouseInventoryRepository.GetAllAsync(query => query.Where(pwi => pwi.ProductId == productId));
     }
@@ -2448,7 +2448,7 @@ public partial class ProductService : IProductService
     /// <param name="combinationId">Product attribute combination identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
     public virtual async Task AddStockQuantityHistoryEntryAsync(Product product, int quantityAdjustment, int stockQuantity,
-        int warehouseId = 0, string message = "", int? combinationId = null)
+        long warehouseId = 0, string message = "", long? combinationId = null)
     {
         ArgumentNullException.ThrowIfNull(product);
 
@@ -2481,7 +2481,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the list of stock quantity change entries
     /// </returns>
-    public virtual async Task<IPagedList<StockQuantityHistory>> GetStockQuantityHistoryAsync(Product product, int warehouseId = 0, int combinationId = 0,
+    public virtual async Task<IPagedList<StockQuantityHistory>> GetStockQuantityHistoryAsync(Product product, long warehouseId = 0, long combinationId = 0,
         int pageIndex = 0, int pageSize = int.MaxValue)
     {
         ArgumentNullException.ThrowIfNull(product);
@@ -2524,7 +2524,7 @@ public partial class ProductService : IProductService
     /// </summary>
     /// <param name="productId">Product identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task<IList<DiscountProductMapping>> GetAllDiscountsAppliedToProductAsync(int productId)
+    public virtual async Task<IList<DiscountProductMapping>> GetAllDiscountsAppliedToProductAsync(long productId)
     {
         return await _discountProductMappingRepository.GetAllAsync(query => query.Where(dcm => dcm.EntityId == productId));
     }
@@ -2538,7 +2538,7 @@ public partial class ProductService : IProductService
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public virtual async Task<DiscountProductMapping> GetDiscountAppliedToProductAsync(int productId, int discountId)
+    public virtual async Task<DiscountProductMapping> GetDiscountAppliedToProductAsync(long productId, long discountId)
     {
         return await _discountProductMappingRepository.Table
             .FirstOrDefaultAsync(dcm => dcm.EntityId == productId && dcm.DiscountId == discountId);

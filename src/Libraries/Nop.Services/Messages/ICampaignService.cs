@@ -47,7 +47,7 @@ public partial interface ICampaignService
     /// A task that represents the asynchronous operation
     /// The task result contains the campaign
     /// </returns>
-    Task<Campaign> GetCampaignByIdAsync(int campaignId);
+    Task<Campaign> GetCampaignByIdAsync(long campaignId);
 
     /// <summary>
     /// Gets all campaigns
@@ -57,7 +57,7 @@ public partial interface ICampaignService
     /// A task that represents the asynchronous operation
     /// The task result contains the campaigns
     /// </returns>
-    Task<IList<Campaign>> GetAllCampaignsAsync(int storeId = 0);
+    Task<IList<Campaign>> GetAllCampaignsAsync(long storeId = 0);
 
     /// <summary>
     /// Sends a campaign to specified emails
@@ -80,5 +80,5 @@ public partial interface ICampaignService
     /// <param name="email">Email</param>
     /// <param name="languageId">Language identifier</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    Task SendCampaignAsync(Campaign campaign, EmailAccount emailAccount, string email, int languageId);
+    Task SendCampaignAsync(Campaign campaign, EmailAccount emailAccount, string email, long languageId);
 }

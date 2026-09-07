@@ -159,7 +159,7 @@ public partial class MsSqlNopDataProvider : BaseDataProvider, INopDataProvider
     /// A task that represents the asynchronous operation
     /// The task result contains the integer identity; null if cannot get the result
     /// </returns>
-    public virtual Task<int?> GetTableIdentAsync<TEntity>() where TEntity : BaseEntity
+    public virtual Task<long?> GetTableIdentAsync<TEntity>() where TEntity : BaseEntity
     {
         using var currentConnection = CreateDataConnection();
         var tableName = NopMappingSchema.GetEntityDescriptor(typeof(TEntity)).EntityName;
@@ -167,7 +167,7 @@ public partial class MsSqlNopDataProvider : BaseDataProvider, INopDataProvider
         var result = currentConnection.Query<decimal?>($"SELECT IDENT_CURRENT('[{tableName}]') as Value")
             .FirstOrDefault();
 
-        return Task.FromResult<int?>(result.HasValue ? Convert.ToInt32(result) : 1);
+        return Task.FromResult<long?>(result.HasValue ? Convert.ToInt64(result) : 1);
     }
 
     /// <summary>
@@ -176,7 +176,7 @@ public partial class MsSqlNopDataProvider : BaseDataProvider, INopDataProvider
     /// <typeparam name="TEntity">Entity type</typeparam>
     /// <param name="ident">Identity value</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task SetTableIdentAsync<TEntity>(int ident) where TEntity : BaseEntity
+    public virtual async Task SetTableIdentAsync<TEntity>(long ident) where TEntity : BaseEntity
     {
         using var currentConnection = CreateDataConnection();
         var currentIdent = await GetTableIdentAsync<TEntity>();

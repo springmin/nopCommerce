@@ -166,7 +166,7 @@ public class AvalaraTaxController : TaxController
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_TAX_SETTINGS)]
-    public override async Task<IActionResult> CategoryDelete(int id)
+    public override async Task<IActionResult> CategoryDelete(long id)
     {
         //ensure that Avalara tax provider is active
         if (!await _taxPluginManager.IsPluginActiveAsync(AvalaraTaxDefaults.SystemName))

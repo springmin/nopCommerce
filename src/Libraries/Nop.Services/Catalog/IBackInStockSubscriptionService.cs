@@ -26,8 +26,8 @@ public partial interface IBackInStockSubscriptionService
     /// A task that represents the asynchronous operation
     /// The task result contains the subscriptions
     /// </returns>
-    Task<IPagedList<BackInStockSubscription>> GetAllSubscriptionsByCustomerIdAsync(int customerId,
-        int storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue);
+    Task<IPagedList<BackInStockSubscription>> GetAllSubscriptionsByCustomerIdAsync(long customerId,
+        long storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue);
 
     /// <summary>
     /// Gets all subscriptions
@@ -39,7 +39,7 @@ public partial interface IBackInStockSubscriptionService
     /// A task that represents the asynchronous operation
     /// The task result contains the subscriptions
     /// </returns>
-    Task<BackInStockSubscription> FindSubscriptionAsync(int customerId, int productId, int storeId);
+    Task<BackInStockSubscription> FindSubscriptionAsync(long customerId, long productId, long storeId);
 
     /// <summary>
     /// Gets a subscription
@@ -49,7 +49,7 @@ public partial interface IBackInStockSubscriptionService
     /// A task that represents the asynchronous operation
     /// The task result contains the subscription
     /// </returns>
-    Task<BackInStockSubscription> GetSubscriptionByIdAsync(int subscriptionId);
+    Task<BackInStockSubscription> GetSubscriptionByIdAsync(long subscriptionId);
 
     /// <summary>
     /// Inserts subscription
@@ -79,6 +79,6 @@ public partial interface IBackInStockSubscriptionService
     /// A task that represents the asynchronous operation
     /// The task result contains the subscriptions
     /// </returns>
-    Task<IPagedList<BackInStockSubscription>> GetAllSubscriptionsByProductIdAsync(int productId,
-        int storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue);
+    Task<IPagedList<BackInStockSubscription>> GetAllSubscriptionsByProductIdAsync(long productId,
+        long storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue);
 }

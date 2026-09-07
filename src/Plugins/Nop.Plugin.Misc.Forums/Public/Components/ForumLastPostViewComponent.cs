@@ -26,7 +26,7 @@ public class ForumLastPostViewComponent : NopViewComponent
 
     #region Methods
 
-    public async Task<IViewComponentResult> InvokeAsync(int forumPostId, bool showTopic)
+    public async Task<IViewComponentResult> InvokeAsync(long forumPostId, bool showTopic)
     {
         var forumPost = await _forumService.GetPostByIdAsync(forumPostId);
         var model = await _forumModelFactory.PrepareLastPostModelAsync(forumPost, showTopic);

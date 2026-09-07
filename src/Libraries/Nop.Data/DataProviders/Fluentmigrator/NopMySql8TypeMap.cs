@@ -9,7 +9,7 @@ public partial class NopMySql8TypeMap : MySql8TypeMap
     {
         var dataSettings = DataSettingsManager.LoadSettings();
 
-        if (dataSettings.DataProvider != DataProviderType.MySql)
+        if (dataSettings.DataProvider is not (DataProviderType.MySql or DataProviderType.Tidb))
             return;
 
         base.SetupMySqlTypeMaps();

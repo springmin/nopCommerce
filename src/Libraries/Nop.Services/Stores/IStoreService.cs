@@ -31,7 +31,7 @@ public partial interface IStoreService
     /// A task that represents the asynchronous operation
     /// The task result contains the store
     /// </returns>
-    Task<Store> GetStoreByIdAsync(int storeId);
+    Task<Store> GetStoreByIdAsync(long storeId);
 
     /// <summary>
     /// Inserts a store

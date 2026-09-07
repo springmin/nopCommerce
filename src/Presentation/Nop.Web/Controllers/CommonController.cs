@@ -191,7 +191,7 @@ public partial class CommonController : BasePublicController
     [CheckAccessClosedStore(ignore: true)]
     //available even when navigation is not allowed
     [CheckAccessPublicStore(ignore: true)]
-    public virtual async Task<IActionResult> SetLanguage(int langid, string returnUrl = "")
+    public virtual async Task<IActionResult> SetLanguage(long langid, string returnUrl = "")
     {
         var language = await _languageService.GetLanguageByIdAsync(langid);
         if (!language?.Published ?? false)
@@ -308,7 +308,7 @@ public partial class CommonController : BasePublicController
     }
 
     //contact vendor page
-    public virtual async Task<IActionResult> ContactVendor(int vendorId)
+    public virtual async Task<IActionResult> ContactVendor(long vendorId)
     {
         if (!_vendorSettings.AllowCustomersToContactVendors)
             return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
@@ -375,7 +375,7 @@ public partial class CommonController : BasePublicController
     [CheckAccessPublicStore(ignore: true)]
     //ignore SEO friendly URLs checks
     [CheckLanguageSeoCode(ignore: true)]
-    public virtual async Task<IActionResult> SitemapXml(int? id)
+    public virtual async Task<IActionResult> SitemapXml(long? id)
     {
         if (!_sitemapXmlSettings.SitemapXmlEnabled)
             return StatusCode(StatusCodes.Status403Forbidden);

@@ -36,7 +36,7 @@ public partial interface INewsLetterSubscriptionTypeService
     /// A task that represents the asynchronous operation
     /// The task result contains the newsletter subscription type
     /// </returns>
-    Task<NewsLetterSubscriptionType> GetNewsLetterSubscriptionTypeByIdAsync(int newsLetterSubscriptionTypeId);
+    Task<NewsLetterSubscriptionType> GetNewsLetterSubscriptionTypeByIdAsync(long newsLetterSubscriptionTypeId);
 
     /// <summary>
     /// Gets the newsletter subscription type list
@@ -46,5 +46,5 @@ public partial interface INewsLetterSubscriptionTypeService
     /// A task that represents the asynchronous operation
     /// The task result contains the newsletter subscription types
     /// </returns>
-    Task<IList<NewsLetterSubscriptionType>> GetAllNewsLetterSubscriptionTypesAsync(int storeId = 0);
+    Task<IList<NewsLetterSubscriptionType>> GetAllNewsLetterSubscriptionTypesAsync(long storeId = 0);
 }

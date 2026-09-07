@@ -40,7 +40,7 @@ public partial class ShippingPluginManager : PluginManager<IShippingRateComputat
     /// The task result contains the list of active shipping providers
     /// </returns>
     public virtual async Task<IList<IShippingRateComputationMethod>> LoadActivePluginsAsync(Customer customer = null,
-        int storeId = 0, string systemName = null)
+        long storeId = 0, string systemName = null)
     {
         var shippingProviders = await LoadActivePluginsAsync(_shippingSettings.ActiveShippingRateComputationMethodSystemNames, customer, storeId);
 
@@ -75,7 +75,7 @@ public partial class ShippingPluginManager : PluginManager<IShippingRateComputat
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    public virtual async Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, int storeId = 0)
+    public virtual async Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, long storeId = 0)
     {
         var shippingProvider = await LoadPluginBySystemNameAsync(systemName, customer, storeId);
         return IsPluginActive(shippingProvider);

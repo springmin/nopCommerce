@@ -36,7 +36,7 @@ public partial record StoreModel : BaseNopEntityModel, ILocalizedModel<StoreLoca
 
     //default language
     [NopResourceDisplayName("Admin.Configuration.Stores.Fields.DefaultLanguage")]
-    public int DefaultLanguageId { get; set; }
+    public long DefaultLanguageId { get; set; }
 
     public IList<SelectListItem> AvailableLanguages { get; set; }
 
@@ -78,7 +78,7 @@ public partial record StoreModel : BaseNopEntityModel, ILocalizedModel<StoreLoca
 
 public partial record StoreLocalizedModel : ILocalizedLocaleModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Stores.Fields.Name")]
     public string Name { get; set; }

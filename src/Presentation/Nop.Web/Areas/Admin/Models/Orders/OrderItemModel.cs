@@ -12,7 +12,7 @@ public partial record OrderItemModel : BaseNopEntityModel
 
     public OrderItemModel()
     {
-        PurchasedGiftCardIds = new List<int>();
+        PurchasedGiftCardIds = new List<long>();
         ReturnRequests = new List<ReturnRequestBriefModel>();
     }
 
@@ -20,7 +20,7 @@ public partial record OrderItemModel : BaseNopEntityModel
 
     #region Properties
 
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
     public string ProductName { get; set; }
 
@@ -64,7 +64,7 @@ public partial record OrderItemModel : BaseNopEntityModel
 
     public IList<ReturnRequestBriefModel> ReturnRequests { get; set; }
 
-    public IList<int> PurchasedGiftCardIds { get; set; }
+    public IList<long> PurchasedGiftCardIds { get; set; }
 
     public bool IsDownload { get; set; }
 

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net11.0</TargetFramework>
     <Copyright>Copyright © Nop Solutions, Ltd</Copyright>
     <Company>Nop Solutions, Ltd</Company>
     <Authors>Nop Solutions, Ltd</Authors>
@@ -9,7 +9,7 @@
     <PackageProjectUrl>https://www.nopcommerce.com/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/nopSolutions/nopCommerce</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
-    <OutputPath>$(SolutionDir)\Presentation\Nop.Web\Plugins\Shipping.FixedByWeightByTotal</OutputPath>
+    <OutputPath>$(SolutionDir)/Presentation/Nop.Web/Plugins/Shipping.FixedByWeightByTotal</OutputPath>
     <OutDir>$(OutputPath)</OutDir>
     <!--Set this parameter to true to get the dlls copied from the NuGet cache to the output of your project.
     You need to set this parameter to true if your plugin has a nuget package 
@@ -21,14 +21,14 @@
   <ItemGroup>
     <None Remove="logo.png" />
     <None Remove="plugin.json" />
-    <None Remove="Views\AddRateByWeightByTotalPopup.cshtml" />
-    <None Remove="Views\Configure.cshtml" />
-    <None Remove="Views\EditRateByWeightByTotalPopup.cshtml" />
-    <None Remove="Views\_ByWeightByTotal.cshtml" />
-    <None Remove="Views\_CreateOrUpdateRateByWeightByTotal.cshtml" />
-    <None Remove="Views\_FixedRate.cshtml" />
-    <None Remove="Views\_FixedRate.Tour.cshtml" />
-    <None Remove="Views\_ViewImports.cshtml" />
+    <None Remove="Views/AddRateByWeightByTotalPopup.cshtml" />
+    <None Remove="Views/Configure.cshtml" />
+    <None Remove="Views/EditRateByWeightByTotalPopup.cshtml" />
+    <None Remove="Views/_ByWeightByTotal.cshtml" />
+    <None Remove="Views/_CreateOrUpdateRateByWeightByTotal.cshtml" />
+    <None Remove="Views/_FixedRate.cshtml" />
+    <None Remove="Views/_FixedRate.Tour.cshtml" />
+    <None Remove="Views/_ViewImports.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,35 +38,35 @@
     <Content Include="plugin.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Views\AddRateByWeightByTotalPopup.cshtml">
+    <Content Include="Views/AddRateByWeightByTotalPopup.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Views\Configure.cshtml">
+    <Content Include="Views/Configure.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Views\EditRateByWeightByTotalPopup.cshtml">
+    <Content Include="Views/EditRateByWeightByTotalPopup.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Views\_ByWeightByTotal.cshtml">
+    <Content Include="Views/_ByWeightByTotal.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Views\_CreateOrUpdateRateByWeightByTotal.cshtml">
+    <Content Include="Views/_CreateOrUpdateRateByWeightByTotal.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Views\_FixedRate.cshtml">
+    <Content Include="Views/_FixedRate.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Views\_FixedRate.Tour.cshtml">
+    <Content Include="Views/_FixedRate.Tour.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Views\_ViewImports.cshtml">
+    <Content Include="Views/_ViewImports.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="$(SolutionDir)\Presentation\Nop.Web\Nop.Web.csproj" />
-    <ClearPluginAssemblies Include="$(SolutionDir)\Build\ClearPluginAssemblies.proj" />
+    <ProjectReference Include="$(SolutionDir)/Presentation/Nop.Web/Nop.Web.csproj" />
+    <ClearPluginAssemblies Include="$(SolutionDir)/Build/ClearPluginAssemblies.proj" />
   </ItemGroup>
 
   <!-- This target execute after "Build" target -->

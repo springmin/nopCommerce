@@ -223,16 +223,16 @@ public partial class PostgreSqlDataProvider : BaseDataProvider, INopDataProvider
     /// A task that represents the asynchronous operation
     /// The task result contains the integer identity; null if cannot get the result
     /// </returns>
-    public virtual Task<int?> GetTableIdentAsync<TEntity>() where TEntity : BaseEntity
+    public virtual Task<long?> GetTableIdentAsync<TEntity>() where TEntity : BaseEntity
     {
         using var currentConnection = CreateDataConnection();
 
         var seqName = GetSequenceName<TEntity>(currentConnection);
 
-        var result = currentConnection.Query<int>($"SELECT COALESCE(last_value + CASE WHEN is_called THEN 1 ELSE 0 END, 1) as Value FROM {seqName};")
+        var result = currentConnection.Query<long>($"SELECT COALESCE(last_value + CASE WHEN is_called THEN 1 ELSE 0 END, 1) as Value FROM {seqName};")
             .FirstOrDefault();
 
-        return Task.FromResult<int?>(result);
+        return Task.FromResult<long?>(result);
     }
 
     /// <summary>
@@ -241,7 +241,7 @@ public partial class PostgreSqlDataProvider : BaseDataProvider, INopDataProvider
     /// <typeparam name="TEntity">Entity type</typeparam>
     /// <param name="ident">Identity value</param>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public virtual async Task SetTableIdentAsync<TEntity>(int ident) where TEntity : BaseEntity
+    public virtual async Task SetTableIdentAsync<TEntity>(long ident) where TEntity : BaseEntity
     {
         var currentIdent = await GetTableIdentAsync<TEntity>();
         if (!currentIdent.HasValue || ident <= currentIdent.Value)
@@ -272,11 +272,21 @@ public partial class PostgreSqlDataProvider : BaseDataProvider, INopDataProvider
     public override TEntity InsertEntity<TEntity>(TEntity entity)
     {
         using var dataContext = CreateDataConnection();
+
+        //pre-assigned id strategy (e.g. Tinyid/Yitter): generate the id before insert
+        if (IdGenerator.PreGenerateIds)
+        {
+            entity.Id = IdGenerator.NextId();
+            dataContext.Insert(entity);
+
+            return entity;
+        }
+
         try
         {
-            entity.Id = dataContext.InsertWithInt32Identity(entity);
+            entity.Id = dataContext.InsertWithInt64Identity(entity);
         }
-        // Ignore when we try insert foreign entity via InsertWithInt32IdentityAsync method
+        // Ignore when we try insert foreign entity via InsertWithInt64IdentityAsync method
         catch (LinqToDBException ex) when (ex.Message.StartsWith("Identity field must be defined for"))
         {
             dataContext.Insert(entity);
@@ -297,11 +307,21 @@ public partial class PostgreSqlDataProvider : BaseDataProvider, INopDataProvider
     public override async Task<TEntity> InsertEntityAsync<TEntity>(TEntity entity)
     {
         using var dataContext = CreateDataConnection();
+
+        //pre-assigned id strategy (e.g. Tinyid/Yitter): generate the id before insert
+        if (IdGenerator.PreGenerateIds)
+        {
+            entity.Id = IdGenerator.NextId();
+            await dataContext.InsertAsync(entity);
+
+            return entity;
+        }
+
         try
         {
-            entity.Id = await dataContext.InsertWithInt32IdentityAsync(entity);
+            entity.Id = await dataContext.InsertWithInt64IdentityAsync(entity);
         }
-        // Ignore when we try insert foreign entity via InsertWithInt32IdentityAsync method
+        // Ignore when we try insert foreign entity via InsertWithInt64IdentityAsync method
         catch (LinqToDBException ex) when (ex.Message.StartsWith("Identity field must be defined for"))
         {
             await dataContext.InsertAsync(entity);
@@ -370,14 +390,34 @@ public partial class PostgreSqlDataProvider : BaseDataProvider, INopDataProvider
         if (nopConnectionString.IntegratedSecurity)
             throw new NopException("Data provider supports connection only with login and password");
 
+        var server = nopConnectionString.ServerName;
+        var port = 0;
+
+        //support "host:port" syntax (e.g. GaussDB default port 8000, openGauss 5432).
+        //Npgsql does not parse the port out of the Host option, so split it here.
+        //only split when the part after the last colon is a pure number to avoid
+        //breaking IPv6 literals.
+        var lastColon = server.LastIndexOf(':');
+        if (lastColon > 0 && server.IndexOf(':') == lastColon && int.TryParse(server[(lastColon + 1)..], out var parsedPort))
+        {
+            port = parsedPort;
+            server = server[..lastColon];
+        }
+
         var builder = new NpgsqlConnectionStringBuilder
         {
-            Host = nopConnectionString.ServerName,
+            Host = server,
             //Cast DatabaseName to lowercase to avoid case-sensitivity problems
             Database = nopConnectionString.DatabaseName.ToLowerInvariant(),
             Username = nopConnectionString.Username,
             Password = nopConnectionString.Password,
         };
+
+        //only set the port when it was explicitly provided in the server name;
+        //otherwise keep the builder default so existing connection strings remain
+        //unchanged
+        if (port != 0)
+            builder.Port = port;
 
         return builder.ConnectionString;
     }

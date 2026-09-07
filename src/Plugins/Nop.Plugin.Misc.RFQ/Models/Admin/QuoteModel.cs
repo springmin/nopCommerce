@@ -7,7 +7,7 @@ namespace Nop.Plugin.Misc.RFQ.Models.Admin;
 
 public record QuoteModel : BaseNopEntityModel
 {
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
 
     [NopResourceDisplayName("Plugins.Misc.RFQ.Fields.CustomerEmail")]
     public string CustomerEmail { get; set; }
@@ -28,10 +28,10 @@ public record QuoteModel : BaseNopEntityModel
     public string AdminNotes { get; set; }
 
     [NopResourceDisplayName("Plugins.Misc.RFQ.Fields.RequestQuoteId")]
-    public int? RequestQuoteId { get; set; }
+    public long? RequestQuoteId { get; set; }
 
     [NopResourceDisplayName("Plugins.Misc.RFQ.Fields.Order")]
-    public int? OrderId { get; set; }
+    public long? OrderId { get; set; }
 
     public bool DisplayAddNewProductButton =>
         StatusType == QuoteStatus.CreatedFromRequestQuote ||

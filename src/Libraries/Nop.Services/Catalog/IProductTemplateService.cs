@@ -31,7 +31,7 @@ public partial interface IProductTemplateService
     /// A task that represents the asynchronous operation
     /// The task result contains the product template
     /// </returns>
-    Task<ProductTemplate> GetProductTemplateByIdAsync(int productTemplateId);
+    Task<ProductTemplate> GetProductTemplateByIdAsync(long productTemplateId);
 
     /// <summary>
     /// Inserts product template

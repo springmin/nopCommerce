@@ -11,7 +11,7 @@ public partial record SearchBoxModel : BaseNopModel
     public int SearchTermMinimumLength { get; set; }
     public bool ShowSearchBox { get; set; }
     public bool ShowSearchBoxCategories { get; set; }
-    public int SearchCategoryId { get; set; }
+    public long SearchCategoryId { get; set; }
     public bool SearchHistoryEnabled { get; set; }
     public List<SelectListItem> AvailableCategories { get; set; } = new();
 }

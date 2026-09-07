@@ -119,7 +119,7 @@ public class RfqMessageService : WorkflowMessageService
     /// A task that represents the asynchronous operation
     /// The task result contains the queued email identifier
     /// </returns>
-    public async Task<IList<int>> CustomerSentNewRequestQuoteAsync(RequestQuote requestQuote)
+    public async Task<IList<long>> CustomerSentNewRequestQuoteAsync(RequestQuote requestQuote)
     {
         ArgumentNullException.ThrowIfNull(requestQuote);
 
@@ -127,7 +127,7 @@ public class RfqMessageService : WorkflowMessageService
 
         var messageTemplates = await GetActiveMessageTemplatesAsync(RfqDefaults.CUSTOMER_SENT_NEW_REQUEST_QUOTE, store.Id);
         if (!messageTemplates.Any())
-            return new List<int>();
+            return new List<long>();
 
         var languageId = await EnsureLanguageIsActiveAsync(_localizationSettings.DefaultAdminLanguageId, store.Id);
         var language = await _languageService.GetLanguageByIdAsync(languageId);
@@ -164,7 +164,7 @@ public class RfqMessageService : WorkflowMessageService
     /// A task that represents the asynchronous operation
     /// The task result contains the queued email identifier
     /// </returns>
-    public async Task<IList<int>> AdminSentNewQuoteAsync(Quote quote)
+    public async Task<IList<long>> AdminSentNewQuoteAsync(Quote quote)
     {
         ArgumentNullException.ThrowIfNull(quote);
 
@@ -172,7 +172,7 @@ public class RfqMessageService : WorkflowMessageService
 
         var messageTemplates = await GetActiveMessageTemplatesAsync(RfqDefaults.ADMIN_SENT_NEW_QUOTE, store.Id);
         if (!messageTemplates.Any())
-            return new List<int>();
+            return new List<long>();
 
         var customer = await _customerService.GetCustomerByIdAsync(quote.CustomerId);
         var languageId = await EnsureLanguageIsActiveAsync(customer.LanguageId ?? 0, store.Id);

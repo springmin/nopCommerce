@@ -17,7 +17,7 @@ public partial interface ISmsPluginManager : IPluginManager<ISmsProvider>
     /// A task that represents the asynchronous operation
     /// The task result contains the primary sms provider
     /// </returns>
-    Task<ISmsProvider> LoadPrimaryPluginAsync(Customer customer = null, int storeId = 0);
+    Task<ISmsProvider> LoadPrimaryPluginAsync(Customer customer = null, long storeId = 0);
 
     /// <summary>
     /// Check whether the passed sms provider is active
@@ -36,5 +36,5 @@ public partial interface ISmsPluginManager : IPluginManager<ISmsProvider>
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, int storeId = 0);
+    Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, long storeId = 0);
 }

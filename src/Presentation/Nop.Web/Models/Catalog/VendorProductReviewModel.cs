@@ -4,7 +4,7 @@ namespace Nop.Web.Models.Catalog;
 
 public partial record VendorProductReviewModel : BaseNopModel
 {
-    public int CustomerId { get; set; }
+    public long CustomerId { get; set; }
     public string CustomerAvatarUrl { get; set; }
     public string CustomerName { get; set; }
     public string ProductSeName { get; set; }

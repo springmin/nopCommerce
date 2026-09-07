@@ -16,8 +16,8 @@ public partial class PluginDescriptor : PluginDescriptorBaseInfo, IDescriptor, I
     public PluginDescriptor()
     {
         SupportedVersions = new List<string>();
-        LimitedToStores = new List<int>();
-        LimitedToCustomerRoles = new List<int>();
+        LimitedToStores = new List<long>();
+        LimitedToCustomerRoles = new List<long>();
         DependsOn = new List<string>();
     }
 
@@ -158,13 +158,13 @@ public partial class PluginDescriptor : PluginDescriptorBaseInfo, IDescriptor, I
     /// Gets or sets the list of store identifiers in which this plugin is available. If empty, then this plugin is available in all stores
     /// </summary>
     [JsonProperty(PropertyName = "LimitedToStores")]
-    public virtual IList<int> LimitedToStores { get; set; }
+    public virtual IList<long> LimitedToStores { get; set; }
 
     /// <summary>
     /// Gets or sets the list of customer role identifiers for which this plugin is available. If empty, then this plugin is available for all ones.
     /// </summary>
     [JsonProperty(PropertyName = "LimitedToCustomerRoles")]
-    public virtual IList<int> LimitedToCustomerRoles { get; set; }
+    public virtual IList<long> LimitedToCustomerRoles { get; set; }
 
     /// <summary>
     /// Gets or sets the list of plugins' system name that this plugin depends on

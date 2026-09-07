@@ -294,7 +294,7 @@ public partial class SettingModelFactory : ISettingModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the address settings model
     /// </returns>
-    protected virtual async Task<AddressSettingsModel> PrepareAddressSettingsModelAsync(int storeId)
+    protected virtual async Task<AddressSettingsModel> PrepareAddressSettingsModelAsync(long storeId)
     {
         //load settings
         var addressSettings = await _settingService.LoadSettingAsync<AddressSettings>(storeId);
@@ -313,7 +313,7 @@ public partial class SettingModelFactory : ISettingModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the customer settings model
     /// </returns>
-    protected virtual async Task<CustomerSettingsModel> PrepareCustomerSettingsModelAsync(int storeId)
+    protected virtual async Task<CustomerSettingsModel> PrepareCustomerSettingsModelAsync(long storeId)
     {
         //load settings
         var customerSettings = await _settingService.LoadSettingAsync<CustomerSettings>(storeId);
@@ -332,7 +332,7 @@ public partial class SettingModelFactory : ISettingModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the private messages settings model
     /// </returns>
-    protected virtual async Task<PrivateMessageSettingsModel> PreparePrivateMessageModelAsync(int storeId)
+    protected virtual async Task<PrivateMessageSettingsModel> PreparePrivateMessageModelAsync(long storeId)
     {
         //load settings
         var privateMessageSettings = await _settingService.LoadSettingAsync<PrivateMessageSettings>(storeId);
@@ -358,7 +358,7 @@ public partial class SettingModelFactory : ISettingModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the multiFactorAuthenticationSettingsModel
     /// </returns>
-    protected virtual async Task<MultiFactorAuthenticationSettingsModel> PrepareMultiFactorAuthenticationSettingsModelAsync(int storeId)
+    protected virtual async Task<MultiFactorAuthenticationSettingsModel> PrepareMultiFactorAuthenticationSettingsModelAsync(long storeId)
     {
         //load settings
         var multiFactorAuthenticationSettings = await _settingService.LoadSettingAsync<MultiFactorAuthenticationSettings>(storeId);
@@ -375,7 +375,7 @@ public partial class SettingModelFactory : ISettingModelFactory
     /// <param name="storeId">The store identifier</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains an <see cref="OtpSettingsModel"/>
     /// populated with the OTP settings for the specified store.</returns>
-    protected virtual async Task<OtpSettingsModel> PrepareOtpSettingsModelAsync(int storeId)
+    protected virtual async Task<OtpSettingsModel> PrepareOtpSettingsModelAsync(long storeId)
     {
         //load settings for a chosen store scope
         var otpSettings = await _settingService.LoadSettingAsync<OtpSettings>(storeId);
@@ -395,7 +395,7 @@ public partial class SettingModelFactory : ISettingModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the date time settings model
     /// </returns>
-    protected virtual async Task<DateTimeSettingsModel> PrepareDateTimeSettingsModelAsync(int storeId)
+    protected virtual async Task<DateTimeSettingsModel> PrepareDateTimeSettingsModelAsync(long storeId)
     {
         //load settings
         var dateTimeSettings = await _settingService.LoadSettingAsync<DateTimeSettings>(storeId);
@@ -423,7 +423,7 @@ public partial class SettingModelFactory : ISettingModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the external authentication settings model
     /// </returns>
-    protected virtual async Task<ExternalAuthenticationSettingsModel> PrepareExternalAuthenticationSettingsModelAsync(int storeId)
+    protected virtual async Task<ExternalAuthenticationSettingsModel> PrepareExternalAuthenticationSettingsModelAsync(long storeId)
     {
         //load settings
         var externalAuthenticationSettings = await _settingService.LoadSettingAsync<ExternalAuthenticationSettings>(storeId);
@@ -769,7 +769,7 @@ public partial class SettingModelFactory : ISettingModelFactory
         {
             AllowPreTranslate = translationSettings.AllowPreTranslate,
             TranslateFromLanguageId = translationSettings.TranslateFromLanguageId,
-            NotTranslateLanguages = translationSettings.NotTranslateLanguages ?? new List<int>(),
+            NotTranslateLanguages = translationSettings.NotTranslateLanguages ?? new List<long>(),
             GoogleApiKey = translationSettings.GoogleApiKey,
             DeepLAuthKey = translationSettings.DeepLAuthKey,
             TranslationServiceId = translationSettings.TranslationServiceId
@@ -1371,7 +1371,7 @@ public partial class SettingModelFactory : ISettingModelFactory
     /// </returns>
     public virtual async Task<FilterLevelModel> PrepareFilterLevelModelAsync(FilterLevelModel model, FilterLevelEnum filterLevel, bool excludeProperties = false)
     {
-        Func<FilterLevelLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<FilterLevelLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         //fill in model values from settings
         model ??= new FilterLevelModel { Id = (int)filterLevel };
@@ -1640,8 +1640,6 @@ public partial class SettingModelFactory : ISettingModelFactory
         model.MiniShoppingCartProductNumber_OverrideForStore = await _settingService.SettingExistsAsync(shoppingCartSettings, x => x.MiniShoppingCartProductNumber, storeId);
         model.AllowCartItemEditing_OverrideForStore = await _settingService.SettingExistsAsync(shoppingCartSettings, x => x.AllowCartItemEditing, storeId);
         model.GroupTierPricesForDistinctShoppingCartItems_OverrideForStore = await _settingService.SettingExistsAsync(shoppingCartSettings, x => x.GroupTierPricesForDistinctShoppingCartItems, storeId);
-        model.VendorEnabled_OverrideForStore = await _settingService.SettingExistsAsync(shoppingCartSettings, x => x.VendorEnabled, storeId);
-        model.VendorRequired_OverrideForStore = await _settingService.SettingExistsAsync(shoppingCartSettings, x => x.VendorRequired, storeId);
 
         return model;
     }
@@ -1829,7 +1827,7 @@ public partial class SettingModelFactory : ISettingModelFactory
     /// </returns>
     public virtual async Task<GdprConsentModel> PrepareGdprConsentModelAsync(GdprConsentModel model, GdprConsent gdprConsent, bool excludeProperties = false)
     {
-        Func<GdprConsentLocalizedModel, int, Task> localizedModelConfiguration = null;
+        Func<GdprConsentLocalizedModel, long, Task> localizedModelConfiguration = null;
 
         //fill in model values from the entity
         if (gdprConsent != null)

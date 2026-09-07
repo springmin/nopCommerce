@@ -8,7 +8,7 @@ public partial class OrderByCountryReportLine
     /// <summary>
     /// Country identifier; null for unknown country
     /// </summary>
-    public int? CountryId { get; set; }
+    public long? CountryId { get; set; }
 
     /// <summary>
     /// Country name; null for unknown country

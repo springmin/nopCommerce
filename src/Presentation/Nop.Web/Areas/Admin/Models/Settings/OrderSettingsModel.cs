@@ -22,7 +22,7 @@ public partial record OrderSettingsModel : BaseNopModel, ISettingsModel
 
     #region Properties
 
-    public int ActiveStoreScopeConfiguration { get; set; }
+    public long ActiveStoreScopeConfiguration { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Order.IsReOrderAllowed")]
     public bool IsReOrderAllowed { get; set; }
@@ -111,7 +111,7 @@ public partial record OrderSettingsModel : BaseNopModel, ISettingsModel
     public string PrimaryStoreCurrencyCode { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Order.OrderIdent")]
-    public int? OrderIdent { get; set; }
+    public long? OrderIdent { get; set; }
 
     [NopResourceDisplayName("Admin.Configuration.Settings.Order.CustomOrderNumberMask")]
     public string CustomOrderNumberMask { get; set; }

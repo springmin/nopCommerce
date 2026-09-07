@@ -98,7 +98,7 @@ public partial class PriceFormatter : IPriceFormatter
     /// The task result contains the price
     /// </returns>
     protected virtual async Task<string> FormatShippingPriceAsync(decimal price, bool showCurrency,
-        Currency targetCurrency, int languageId, bool priceIncludesTax, bool showTax)
+        Currency targetCurrency, long languageId, bool priceIncludesTax, bool showTax)
     {
         return await FormatPriceAsync(price, showCurrency, targetCurrency, languageId, priceIncludesTax, showTax);
     }
@@ -117,7 +117,7 @@ public partial class PriceFormatter : IPriceFormatter
     /// The task result contains the price
     /// </returns>
     protected virtual async Task<string> FormatPaymentMethodAdditionalFeeAsync(decimal price, bool showCurrency,
-        Currency targetCurrency, int languageId, bool priceIncludesTax, bool showTax)
+        Currency targetCurrency, long languageId, bool priceIncludesTax, bool showTax)
     {
         return await FormatPriceAsync(price, showCurrency, targetCurrency, languageId,
             priceIncludesTax, showTax);
@@ -185,7 +185,7 @@ public partial class PriceFormatter : IPriceFormatter
     /// The task result contains the price
     /// </returns>
     public virtual async Task<string> FormatPriceAsync(decimal price, bool showCurrency,
-        string currencyCode, bool showTax, int languageId)
+        string currencyCode, bool showTax, long languageId)
     {
         var currency = await _currencyService.GetCurrencyByCodeAsync(currencyCode) ?? new Currency
         {
@@ -213,7 +213,7 @@ public partial class PriceFormatter : IPriceFormatter
     /// </returns>
     public virtual async Task<string> FormatOrderPriceAsync(decimal price,
         decimal currencyRate, string customerCurrencyCode, bool displayCustomerCurrency,
-        Currency primaryStoreCurrency, int languageId, bool? priceIncludesTax = null, bool? showTax = null)
+        Currency primaryStoreCurrency, long languageId, bool? priceIncludesTax = null, bool? showTax = null)
     {
         var needAddPriceOnCustomerCurrency = primaryStoreCurrency.CurrencyCode != customerCurrencyCode && displayCustomerCurrency;
         var includesTax = priceIncludesTax ?? await _workContext.GetTaxDisplayTypeAsync() == TaxDisplayType.IncludingTax;
@@ -244,7 +244,7 @@ public partial class PriceFormatter : IPriceFormatter
     /// The task result contains the price
     /// </returns>
     public virtual async Task<string> FormatPriceAsync(decimal price, bool showCurrency,
-        string currencyCode, int languageId, bool priceIncludesTax)
+        string currencyCode, long languageId, bool priceIncludesTax)
     {
         var currency = await _currencyService.GetCurrencyByCodeAsync(currencyCode)
                        ?? new Currency
@@ -267,7 +267,7 @@ public partial class PriceFormatter : IPriceFormatter
     /// The task result contains the price
     /// </returns>
     public virtual async Task<string> FormatPriceAsync(decimal price, bool showCurrency,
-        Currency targetCurrency, int languageId, bool priceIncludesTax)
+        Currency targetCurrency, long languageId, bool priceIncludesTax)
     {
         return await FormatPriceAsync(price, showCurrency, targetCurrency, languageId,
             priceIncludesTax, _taxSettings.DisplayTaxSuffix);
@@ -287,7 +287,7 @@ public partial class PriceFormatter : IPriceFormatter
     /// The task result contains the price
     /// </returns>
     public virtual async Task<string> FormatPriceAsync(decimal price, bool showCurrency,
-        Currency targetCurrency, int languageId, bool priceIncludesTax, bool showTax)
+        Currency targetCurrency, long languageId, bool priceIncludesTax, bool showTax)
     {
         //we should round it no matter of "ShoppingCartSettings.RoundPricesDuringCalculation" setting
         price = await _priceCalculationService.RoundPriceAsync(price, targetCurrency);
@@ -371,7 +371,7 @@ public partial class PriceFormatter : IPriceFormatter
     /// The task result contains the price
     /// </returns>
     public virtual async Task<string> FormatShippingPriceAsync(decimal price, bool showCurrency,
-        Currency targetCurrency, int languageId, bool priceIncludesTax)
+        Currency targetCurrency, long languageId, bool priceIncludesTax)
     {
         var showTax = _taxSettings.ShippingIsTaxable && _taxSettings.DisplayTaxSuffix;
         return await FormatShippingPriceAsync(price, showCurrency, targetCurrency, languageId, priceIncludesTax, showTax);
@@ -390,7 +390,7 @@ public partial class PriceFormatter : IPriceFormatter
     /// The task result contains the price
     /// </returns>
     public virtual async Task<string> FormatShippingPriceAsync(decimal price, bool showCurrency,
-        string currencyCode, int languageId, bool priceIncludesTax)
+        string currencyCode, long languageId, bool priceIncludesTax)
     {
         var currency = await _currencyService.GetCurrencyByCodeAsync(currencyCode)
                        ?? new Currency
@@ -430,7 +430,7 @@ public partial class PriceFormatter : IPriceFormatter
     /// The task result contains the price
     /// </returns>
     public virtual async Task<string> FormatPaymentMethodAdditionalFeeAsync(decimal price, bool showCurrency,
-        Currency targetCurrency, int languageId, bool priceIncludesTax)
+        Currency targetCurrency, long languageId, bool priceIncludesTax)
     {
         var showTax = _taxSettings.PaymentMethodAdditionalFeeIsTaxable && _taxSettings.DisplayTaxSuffix;
         return await FormatPaymentMethodAdditionalFeeAsync(price, showCurrency, targetCurrency, languageId, priceIncludesTax, showTax);
@@ -449,7 +449,7 @@ public partial class PriceFormatter : IPriceFormatter
     /// The task result contains the price
     /// </returns>
     public virtual async Task<string> FormatPaymentMethodAdditionalFeeAsync(decimal price, bool showCurrency,
-        string currencyCode, int languageId, bool priceIncludesTax)
+        string currencyCode, long languageId, bool priceIncludesTax)
     {
         var currency = await _currencyService.GetCurrencyByCodeAsync(currencyCode)
                        ?? new Currency

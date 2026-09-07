@@ -271,8 +271,8 @@ public partial class NopHttpClient
     /// A task that represents the asynchronous operation
     /// The task result contains the asynchronous task whose result contains the result string
     /// </returns>
-    public virtual async Task<string> GetExtensionsAsync(int categoryId = 0,
-        int versionId = 0, int price = 0, string searchTerm = null,
+    public virtual async Task<string> GetExtensionsAsync(long categoryId = 0,
+        long versionId = 0, int price = 0, string searchTerm = null,
         int pageIndex = 0, int pageSize = int.MaxValue)
     {
         //prepare URL to request

@@ -29,5 +29,35 @@ public enum DataProviderType
     /// PostgreSQL
     /// </summary>
     [EnumMember(Value = "postgresql")]
-    PostgreSQL
+    PostgreSQL,
+
+    /// <summary>
+    /// SQLite
+    /// </summary>
+    [EnumMember(Value = "sqlite")]
+    Sqlite,
+
+    /// <summary>
+    /// TiDB (MySQL protocol compatible)
+    /// </summary>
+    [EnumMember(Value = "tidb")]
+    Tidb,
+
+    /// <summary>
+    /// Oracle
+    /// </summary>
+    [EnumMember(Value = "oracle")]
+    Oracle,
+
+    /// <summary>
+    /// openGauss (PostgreSQL protocol compatible, derived from PostgreSQL)
+    /// </summary>
+    [EnumMember(Value = "opengauss")]
+    OpenGauss,
+
+    /// <summary>
+    /// Huawei Cloud GaussDB (PostgreSQL-compatible edition)
+    /// </summary>
+    [EnumMember(Value = "gaussdb")]
+    GaussDB
 }

@@ -16,7 +16,7 @@ public record NewsItemModel : BaseNopEntityModel, IStoreMappingSupportedModel, I
     public NewsItemModel()
     {
         AvailableLanguages = new List<SelectListItem>();
-        SelectedStoreIds = new List<int>();
+        SelectedStoreIds = new List<long>();
         AvailableStores = new List<SelectListItem>();
     }
 
@@ -25,7 +25,7 @@ public record NewsItemModel : BaseNopEntityModel, IStoreMappingSupportedModel, I
     #region Properties
 
     [NopResourceDisplayName("Plugins.Misc.News.NewsItems.Fields.Language")]
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     public IList<SelectListItem> AvailableLanguages { get; set; }
 
@@ -33,7 +33,7 @@ public record NewsItemModel : BaseNopEntityModel, IStoreMappingSupportedModel, I
     public string LanguageName { get; set; }
 
     [NopResourceDisplayName("Plugins.Misc.News.NewsItems.Fields.LimitedToStores")]
-    public IList<int> SelectedStoreIds { get; set; }
+    public IList<long> SelectedStoreIds { get; set; }
 
     public IList<SelectListItem> AvailableStores { get; set; }
 

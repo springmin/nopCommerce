@@ -23,9 +23,9 @@ public partial record AddProductToOrderModel : BaseNopModel
 
     #region Properties
 
-    public int ProductId { get; set; }
+    public long ProductId { get; set; }
 
-    public int OrderId { get; set; }
+    public long OrderId { get; set; }
 
     public ProductType ProductType { get; set; }
 
@@ -72,7 +72,7 @@ public partial record AddProductToOrderModel : BaseNopModel
             Values = new List<ProductAttributeValueModel>();
         }
 
-        public int ProductAttributeId { get; set; }
+        public long ProductAttributeId { get; set; }
 
         public string Name { get; set; }
 

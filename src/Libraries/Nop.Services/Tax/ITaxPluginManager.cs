@@ -17,7 +17,7 @@ public partial interface ITaxPluginManager : IPluginManager<ITaxProvider>
     /// A task that represents the asynchronous operation
     /// The task result contains the ax provider
     /// </returns>
-    Task<ITaxProvider> LoadPrimaryPluginAsync(Customer customer = null, int storeId = 0);
+    Task<ITaxProvider> LoadPrimaryPluginAsync(Customer customer = null, long storeId = 0);
 
     /// <summary>
     /// Check whether the passed tax provider is active
@@ -36,5 +36,5 @@ public partial interface ITaxPluginManager : IPluginManager<ITaxProvider>
     /// A task that represents the asynchronous operation
     /// The task result contains the result
     /// </returns>
-    Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, int storeId = 0);
+    Task<bool> IsPluginActiveAsync(string systemName, Customer customer = null, long storeId = 0);
 }

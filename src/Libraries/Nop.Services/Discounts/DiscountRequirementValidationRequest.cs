@@ -11,7 +11,7 @@ public partial class DiscountRequirementValidationRequest
     /// <summary>
     /// Gets or sets the appropriate discount requirement ID (identifier)
     /// </summary>
-    public int DiscountRequirementId { get; set; }
+    public long DiscountRequirementId { get; set; }
 
     /// <summary>
     /// Gets or sets the customer

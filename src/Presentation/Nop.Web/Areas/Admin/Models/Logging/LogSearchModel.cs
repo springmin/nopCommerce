@@ -33,7 +33,7 @@ public partial record LogSearchModel : BaseSearchModel
     public string Message { get; set; }
 
     [NopResourceDisplayName("Admin.System.Log.List.LogLevel")]
-    public int LogLevelId { get; set; }
+    public long LogLevelId { get; set; }
 
     public IList<SelectListItem> AvailableLogLevels { get; set; }
 

@@ -31,7 +31,7 @@ public partial interface ITaxCategoryService
     /// A task that represents the asynchronous operation
     /// The task result contains the ax category
     /// </returns>
-    Task<TaxCategory> GetTaxCategoryByIdAsync(int taxCategoryId);
+    Task<TaxCategory> GetTaxCategoryByIdAsync(long taxCategoryId);
 
     /// <summary>
     /// Inserts a tax category

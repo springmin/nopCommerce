@@ -18,7 +18,7 @@ public partial class RewardPointsHistoryBuilder : NopEntityBuilder<RewardPointsH
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(RewardPointsHistory.CustomerId)).AsInt32().ForeignKey<Customer>();
+            .WithColumn(nameof(RewardPointsHistory.CustomerId)).AsInt64().ForeignKey<Customer>();
     }
 
     #endregion

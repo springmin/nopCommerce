@@ -24,7 +24,7 @@ public partial record ProductTagModel : BaseNopEntityModel, ILocalizedModel<Prod
     public string Name { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.ProductTags.Fields.ProductCount")]
-    public int ProductCount { get; set; }
+    public long ProductCount { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.ProductTags.Fields.MetaKeywords")]
     public string MetaKeywords { get; set; }
@@ -44,7 +44,7 @@ public partial record ProductTagModel : BaseNopEntityModel, ILocalizedModel<Prod
 
 public partial record ProductTagLocalizedModel : ILocalizedLocaleModel, IMetaTagsSupportedModel
 {
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.ProductTags.Fields.Name")]
     public string Name { get; set; }

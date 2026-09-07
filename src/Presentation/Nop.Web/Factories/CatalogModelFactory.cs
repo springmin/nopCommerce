@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using System.Globalization;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using Nop.Core;
 using Nop.Core.Caching;
@@ -159,11 +160,11 @@ public partial class CatalogModelFactory : ICatalogModelFactory
         if (fromTo.Length == 2)
         {
             var rawFromPrice = fromTo[0]?.Trim();
-            if (!string.IsNullOrEmpty(rawFromPrice) && decimal.TryParse(rawFromPrice, out var from))
+            if (!string.IsNullOrEmpty(rawFromPrice) && decimal.TryParse(rawFromPrice, NumberStyles.Any, CultureInfo.InvariantCulture, out var from))
                 result.From = from;
 
             var rawToPrice = fromTo[1]?.Trim();
-            if (!string.IsNullOrEmpty(rawToPrice) && decimal.TryParse(rawToPrice, out var to))
+            if (!string.IsNullOrEmpty(rawToPrice) && decimal.TryParse(rawToPrice, NumberStyles.Any, CultureInfo.InvariantCulture, out var to))
                 result.To = to;
 
             if (result.From > result.To)
@@ -190,7 +191,7 @@ public partial class CatalogModelFactory : ICatalogModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the specification filter model
     /// </returns>
-    protected virtual async Task<SpecificationFilterModel> PrepareSpecificationFilterModel(IList<int> selectedOptions, IList<SpecificationAttributeOption> availableOptions)
+    protected virtual async Task<SpecificationFilterModel> PrepareSpecificationFilterModel(IList<long> selectedOptions, IList<SpecificationAttributeOption> availableOptions)
     {
         var model = new SpecificationFilterModel();
 
@@ -239,7 +240,7 @@ public partial class CatalogModelFactory : ICatalogModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the specification filter model
     /// </returns>
-    protected virtual async Task<ManufacturerFilterModel> PrepareManufacturerFilterModel(IList<int> selectedManufacturers, IList<Manufacturer> availableManufacturers)
+    protected virtual async Task<ManufacturerFilterModel> PrepareManufacturerFilterModel(IList<long> selectedManufacturers, IList<Manufacturer> availableManufacturers)
     {
         var model = new ManufacturerFilterModel();
 
@@ -480,7 +481,7 @@ public partial class CatalogModelFactory : ICatalogModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the list of category (simple) models
     /// </returns>
-    protected virtual async Task<List<CategorySimpleModel>> PrepareCategorySimpleModelsAsync(int rootCategoryId, bool loadSubCategories = true)
+    protected virtual async Task<List<CategorySimpleModel>> PrepareCategorySimpleModelsAsync(long rootCategoryId, bool loadSubCategories = true)
     {
         var result = new List<CategorySimpleModel>();
 
@@ -504,7 +505,7 @@ public partial class CatalogModelFactory : ICatalogModelFactory
             //number of products in each category
             if (_catalogSettings.ShowCategoryProductNumber)
             {
-                var categoryIds = new List<int> { category.Id };
+                var categoryIds = new List<long> { category.Id };
                 //include subcategories
                 if (_catalogSettings.ShowCategoryProductNumberIncludingSubcategories)
                 {
@@ -617,7 +618,7 @@ public partial class CatalogModelFactory : ICatalogModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the category template view path
     /// </returns>
-    public virtual async Task<string> PrepareCategoryTemplateViewPathAsync(int templateId)
+    public virtual async Task<string> PrepareCategoryTemplateViewPathAsync(long templateId)
     {
         var template = (await _categoryTemplateService.GetCategoryTemplateByIdAsync(templateId) ??
                         (await _categoryTemplateService.GetAllCategoryTemplatesAsync()).FirstOrDefault()) ?? throw new Exception("No default template could be loaded");
@@ -634,10 +635,10 @@ public partial class CatalogModelFactory : ICatalogModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the category navigation model
     /// </returns>
-    public virtual async Task<CategoryNavigationModel> PrepareCategoryNavigationModelAsync(int currentCategoryId, int currentProductId)
+    public virtual async Task<CategoryNavigationModel> PrepareCategoryNavigationModelAsync(long currentCategoryId, long currentProductId)
     {
         //get active category
-        var activeCategoryId = 0;
+        long activeCategoryId = 0;
         if (currentCategoryId > 0)
         {
             //category details page
@@ -732,7 +733,7 @@ public partial class CatalogModelFactory : ICatalogModelFactory
         await PreparePageSizeOptionsAsync(model, command, category.AllowCustomersToSelectPageSize,
             category.PageSizeOptions, category.PageSize);
 
-        var categoryIds = new List<int> { category.Id };
+        var categoryIds = new List<long> { category.Id };
 
         //include subcategories
         if (_catalogSettings.ShowProductsFromSubcategories)
@@ -879,7 +880,7 @@ public partial class CatalogModelFactory : ICatalogModelFactory
             UseAjaxLoading = _catalogSettings.UseAjaxCatalogProductsLoading
         };
 
-        var manufacturerIds = new List<int> { manufacturer.Id };
+        var manufacturerIds = new List<long> { manufacturer.Id };
         var currentStore = await _storeContext.GetCurrentStoreAsync();
 
         //sorting
@@ -965,7 +966,7 @@ public partial class CatalogModelFactory : ICatalogModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the manufacturer template view path
     /// </returns>
-    public virtual async Task<string> PrepareManufacturerTemplateViewPathAsync(int templateId)
+    public virtual async Task<string> PrepareManufacturerTemplateViewPathAsync(long templateId)
     {
         var template = (await _manufacturerTemplateService.GetManufacturerTemplateByIdAsync(templateId) ??
                         (await _manufacturerTemplateService.GetAllManufacturerTemplatesAsync()).FirstOrDefault()) ?? throw new Exception("No default template could be loaded");
@@ -1015,7 +1016,7 @@ public partial class CatalogModelFactory : ICatalogModelFactory
     /// A task that represents the asynchronous operation
     /// The task result contains the manufacturer navigation model
     /// </returns>
-    public virtual async Task<ManufacturerNavigationModel> PrepareManufacturerNavigationModelAsync(int currentManufacturerId)
+    public virtual async Task<ManufacturerNavigationModel> PrepareManufacturerNavigationModelAsync(long currentManufacturerId)
     {
         var language = await _workContext.GetWorkingLanguageAsync();
         var customer = await _workContext.GetCurrentCustomerAsync();
@@ -1682,11 +1683,11 @@ public partial class CatalogModelFactory : ICatalogModelFactory
             }
             else
             {
-                var categoryIds = new List<int>();
-                var manufacturerId = 0;
+                var categoryIds = new List<long>();
+                long manufacturerId = 0;
                 var searchInDescriptions = false;
                 var searchInProductTags = false;
-                var vendorId = 0;
+                long vendorId = 0;
 
                 if (searchModel.advs)
                 {
@@ -1725,7 +1726,7 @@ public partial class CatalogModelFactory : ICatalogModelFactory
                     {
                         var products = await _productService.SearchProductsAsync(0, 1,
                             categoryIds: categoryIds,
-                            manufacturerIds: new List<int> { manufacturerId },
+                            manufacturerIds: new List<long> { manufacturerId },
                             storeId: currentStore.Id,
                             visibleIndividuallyOnly: true,
                             keywords: searchTerms,
@@ -1765,7 +1766,7 @@ public partial class CatalogModelFactory : ICatalogModelFactory
                     command.PageNumber - 1,
                     command.PageSize,
                     categoryIds: categoryIds,
-                    manufacturerIds: new List<int> { manufacturerId },
+                    manufacturerIds: new List<long> { manufacturerId },
                     storeId: currentStore.Id,
                     visibleIndividuallyOnly: true,
                     keywords: searchTerms,
@@ -1942,7 +1943,7 @@ public partial class CatalogModelFactory : ICatalogModelFactory
     public virtual async Task PrepareSortingOptionsAsync(CatalogProductsModel model, CatalogProductsCommand command)
     {
         //get active sorting options
-        var activeSortingOptionsIds = Enum.GetValues(typeof(ProductSortingEnum)).Cast<int>()
+        var activeSortingOptionsIds = Enum.GetValues(typeof(ProductSortingEnum)).Cast<int>().Select(x => (long)x)
             .Except(_catalogSettings.ProductSortingEnumDisabled).ToList();
 
         //order sorting options
@@ -1952,7 +1953,7 @@ public partial class CatalogModelFactory : ICatalogModelFactory
 
         //set the default option
         model.OrderBy = command.OrderBy;
-        command.OrderBy = orderedActiveSortingOptions.FirstOrDefault()?.Id ?? (int)ProductSortingEnum.Position;
+        command.OrderBy = (int)(orderedActiveSortingOptions.FirstOrDefault()?.Id ?? (long)ProductSortingEnum.Position);
 
         //ensure that product sorting is enabled
         if (!_catalogSettings.AllowProductSorting)

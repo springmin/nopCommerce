@@ -9,7 +9,7 @@ public partial record ProductTagProductSearchModel : BaseSearchModel
 {
     #region Properties
 
-    public int ProductTagId { get; set; }
+    public long ProductTagId { get; set; }
 
     #endregion
 }

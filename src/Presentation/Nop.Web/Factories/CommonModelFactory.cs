@@ -232,7 +232,7 @@ public partial class CommonModelFactory : ICommonModelFactory
                         {
                             foreach (var attributeId in ctrlAttributes)
                             {
-                                var selectedAttributeId = int.Parse(attributeId);
+                                var selectedAttributeId = long.Parse(attributeId);
                                 if (selectedAttributeId == 0)
                                     continue;
 

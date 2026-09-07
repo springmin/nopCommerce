@@ -21,7 +21,7 @@ public partial record ArtificialIntelligenceFullDescriptionModel : BaseNopModel
     public string Keywords { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.AiFullDescription.ToneOfVoice")]
-    public int ToneOfVoiceId { get; set; }
+    public long ToneOfVoiceId { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.AiFullDescription.CustomToneOfVoice")]
     public string CustomToneOfVoice { get; set; }
@@ -33,10 +33,10 @@ public partial record ArtificialIntelligenceFullDescriptionModel : BaseNopModel
     public string GeneratedDescription { get; set; }
 
     [NopResourceDisplayName("Admin.Catalog.Products.AiFullDescription.Language")]
-    public int TargetLanguageId { get; set; }
+    public long TargetLanguageId { get; set; }
     public IList<SelectListItem> AvailableLanguages { get; set; }
 
-    public int LanguageId { get; set; }
+    public long LanguageId { get; set; }
 
     public bool SaveButtonClicked { get; set; }
 }
