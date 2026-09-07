@@ -6,13 +6,16 @@
     codesigned (no usable section header table) and abort the whole build.
     Remove non-arm64 native runtime directories before codesign runs so only the
     arm64 natives remain. Harmless for plugins (they have no runtimes/ dir).
+    NOTE: target/property names follow the SDK (11.0.100-rc.1) spelling:
+    _OpenHarmonyCodesignBuildOutputs / _OpenHarmonyCodesignEnabled.
   -->
   <Target Name="_RemoveNonArmNativeRuntimes"
-          BeforeTargets="_OhosCodesignBuildOutputs"
-          Condition="'$(_OhosCodesignEnabled)' == 'true'">
+          BeforeTargets="_OpenHarmonyCodesignBuildOutputs;_OpenHarmonyCodesignPublishOutputs"
+          Condition="'$(_OpenHarmonyCodesignEnabled)' == 'true'">
     <ItemGroup>
       <_NonArmRid Include="browser-wasm;linux-arm;linux-armel;linux-loongarch64;linux-mips64;linux-musl-arm;linux-musl-loongarch64;linux-musl-riscv64;linux-musl-s390x;linux-musl-x64;linux-ppc64le;linux-riscv64;linux-s390x;linux-x64;linux-x86;maccatalyst-arm64;maccatalyst-x64;osx;osx-arm64;osx-x64;unix;win;win-arm;win-arm64;win-x64;win-x86" />
     </ItemGroup>
     <RemoveDir Directories="$(TargetDir)runtimes/%(_NonArmRid.Identity)" Condition="Exists('$(TargetDir)runtimes/%(_NonArmRid.Identity)')" />
+    <RemoveDir Directories="$(PublishDir)runtimes/%(_NonArmRid.Identity)" Condition="'$(PublishDir)' != '' and Exists('$(PublishDir)runtimes/%(_NonArmRid.Identity)')" />
   </Target>
 </Project>
